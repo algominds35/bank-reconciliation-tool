@@ -81,14 +81,103 @@ export default function LandingPage() {
               No bloat, no confusion - just the tools you need
             </p>
           </div>
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-lg shadow-2xl p-8">
-              <div className="bg-gray-200 rounded-lg h-64 md:h-96 flex items-center justify-center">
-                <div className="text-gray-500 text-center">
-                  <div className="w-16 h-16 bg-gray-300 rounded-lg mx-auto mb-4"></div>
-                  <p className="text-lg font-medium">App Screenshot</p>
-                  <p className="text-sm">Coming Soon</p>
+          <div className="max-w-5xl mx-auto">
+            <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
+              {/* Dashboard Header */}
+              <div className="bg-gray-50 px-6 py-4 border-b">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-gray-900">Bank Reconciliation Tool</h3>
+                  <span className="text-sm text-gray-600">Welcome, user@example.com</span>
                 </div>
+              </div>
+
+              {/* Summary Bar */}
+              <div className="bg-blue-600 text-white px-6 py-4">
+                <div className="flex justify-between items-center">
+                  <div className="text-lg font-medium">2 of 16 transactions reconciled</div>
+                  <div className="flex space-x-6 text-sm">
+                    <span>Total: 16</span>
+                    <span>Reconciled: 2</span>
+                    <span>Unreconciled: 14</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Controls */}
+              <div className="px-6 py-4 bg-gray-50 border-b">
+                <div className="flex flex-wrap gap-3 items-center justify-between">
+                  <div className="flex gap-3 items-center">
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                      Upload CSV
+                    </button>
+                    <select className="border border-gray-300 rounded-md px-3 py-2 text-sm">
+                      <option>All Transactions</option>
+                    </select>
+                  </div>
+                  <div className="flex gap-3">
+                    <button className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                      Reconcile Selected (0)
+                    </button>
+                    <button className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                      Export Reconciled
+                    </button>
+                    <button className="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                      Export as PDF
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Transaction Table */}
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Select</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reconciled</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    <tr>
+                      <td className="px-4 py-3"><input type="checkbox" className="h-4 w-4 text-blue-600 rounded" /></td>
+                      <td className="px-4 py-3 text-sm text-gray-900">1/23/2024</td>
+                      <td className="px-4 py-3 text-sm text-gray-900">Income - Consulting Services</td>
+                      <td className="px-4 py-3 text-sm text-gray-900">$1500.00</td>
+                      <td className="px-4 py-3"><span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Yes</span></td>
+                    </tr>
+                    <tr className="bg-gray-50">
+                      <td className="px-4 py-3"><input type="checkbox" className="h-4 w-4 text-blue-600 rounded" /></td>
+                      <td className="px-4 py-3 text-sm text-gray-900">1/23/2024</td>
+                      <td className="px-4 py-3 text-sm text-gray-900">Marketing Expenses - Google Ads</td>
+                      <td className="px-4 py-3 text-sm text-gray-900">$-200.00</td>
+                      <td className="px-4 py-3"><span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Yes</span></td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3"><input type="checkbox" className="h-4 w-4 text-blue-600 rounded" /></td>
+                      <td className="px-4 py-3 text-sm text-gray-900">1/22/2024</td>
+                      <td className="px-4 py-3 text-sm text-gray-900">Client Refund Processing</td>
+                      <td className="px-4 py-3 text-sm text-gray-900">$500.00</td>
+                      <td className="px-4 py-3"><span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">No</span></td>
+                    </tr>
+                    <tr className="bg-gray-50">
+                      <td className="px-4 py-3"><input type="checkbox" className="h-4 w-4 text-blue-600 rounded" /></td>
+                      <td className="px-4 py-3 text-sm text-gray-900">1/22/2024</td>
+                      <td className="px-4 py-3 text-sm text-gray-900">Parking Fee</td>
+                      <td className="px-4 py-3 text-sm text-gray-900">$-8.00</td>
+                      <td className="px-4 py-3"><span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">No</span></td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3"><input type="checkbox" className="h-4 w-4 text-blue-600 rounded" /></td>
+                      <td className="px-4 py-3 text-sm text-gray-900">1/20/2024</td>
+                      <td className="px-4 py-3 text-sm text-gray-900">Client Payment - DEF Inc</td>
+                      <td className="px-4 py-3 text-sm text-gray-900">$750.00</td>
+                      <td className="px-4 py-3"><span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">No</span></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
