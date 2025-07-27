@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
-import { OAuthButtons } from '@/components/oauth-buttons'
 
 export default function Login() {
   const [email, setEmail] = useState('')
