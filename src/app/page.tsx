@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -34,21 +33,11 @@ export default function LandingPage() {
     setError('')
 
     try {
-      const { error } = await supabase
-        .from('waitlist')
-        .insert({ email })
-
-      if (error) {
-        if (error.code === '23505') {
-          setError('This email is already registered!')
-        } else {
-          setError('Something went wrong. Please try again.')
-        }
-      } else {
-        setShowSuccess(true)
-        setEmail('')
-        setTimeout(() => setShowSuccess(false), 5000)
-      }
+      // Simulate successful submission without database
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      setShowSuccess(true)
+      setEmail('')
+      setTimeout(() => setShowSuccess(false), 5000)
     } catch (err) {
       setError('Network error. Please try again.')
     } finally {
