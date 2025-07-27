@@ -47,10 +47,7 @@ export default function Login() {
             Bank Reconciliation Tool
           </p>
         </div>
-        <div className="mt-8">
-          <OAuthButtons mode="signin" />
-        </div>
-        <form className="mt-6 space-y-6" onSubmit={handleLogin}>
+        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <input

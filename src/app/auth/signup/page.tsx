@@ -59,10 +59,7 @@ export default function SignUp() {
             Bank Reconciliation Tool
           </p>
         </div>
-        <div className="mt-8">
-          <OAuthButtons mode="signup" />
-        </div>
-        <form className="mt-6 space-y-6" onSubmit={handleSignUp}>
+        <form className="mt-8 space-y-6" onSubmit={handleSignUp}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <input
