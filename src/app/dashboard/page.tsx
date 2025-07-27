@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { Transaction, ReconciliationSummary, Client } from '@/types'
 import { ClientSelector } from '@/components/client-selector'
@@ -24,7 +25,8 @@ import {
   DollarSign,
   CheckCircle,
   AlertCircle,
-  LogOut
+  LogOut,
+  Settings
 } from 'lucide-react'
 
 export default function Dashboard() {
@@ -34,7 +36,7 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([])
   const [selectedTransactions, setSelectedTransactions] = useState<string[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [filter, setFilter] = useState<'all' | 'reconciled' | 'unreconciled'>('all')
   const [transactionTypeFilter, setTransactionTypeFilter] = useState<'all' | 'bank' | 'bookkeeping'>('all')
@@ -81,8 +83,6 @@ export default function Dashboard() {
   }
 
   const fetchClients = async () => {
-    if (!isSupabaseConfigured) return
-    
     try {
       const { data, error } = await supabase
         .from('clients')
@@ -91,9 +91,8 @@ export default function Dashboard() {
         .order('business_name')
 
       if (error) {
-        // If table doesn't exist, fall back to demo mode
         if (error.code === 'PGRST116' || error.message.includes('does not exist')) {
-          console.warn('Database tables not found, using demo mode')
+          console.warn('Database tables not found')
           return
         }
         throw error
@@ -106,8 +105,6 @@ export default function Dashboard() {
   }
 
   const fetchTransactions = async () => {
-    if (!isSupabaseConfigured) return
-    
     try {
       let query = supabase
         .from('transactions')
@@ -121,9 +118,8 @@ export default function Dashboard() {
       const { data, error } = await query.order('date', { ascending: false })
 
       if (error) {
-        // If table doesn't exist, fall back to demo mode
         if (error.code === 'PGRST116' || error.message.includes('does not exist')) {
-          console.warn('Database tables not found, using demo mode')
+          console.warn('Database tables not found')
           return
         }
         throw error
@@ -200,7 +196,6 @@ export default function Dashboard() {
 
           console.log('CSV validation passed, processing rows...')
           
-          const newTransactions: Transaction[] = []
           let processedCount = 0
           
           for (const row of results.data as any[]) {
@@ -318,24 +313,16 @@ export default function Dashboard() {
     const reconciliationGroup = crypto.randomUUID()
     
     try {
-      if (isSupabaseConfigured) {
-        const { error } = await supabase
-          .from('transactions')
-          .update({ 
-            is_reconciled: true, 
-            reconciliation_group: reconciliationGroup 
-          })
-          .in('id', [bankId, bookkeepingId])
+      const { error } = await supabase
+        .from('transactions')
+        .update({ 
+          is_reconciled: true, 
+          reconciliation_group: reconciliationGroup 
+        })
+        .in('id', [bankId, bookkeepingId])
 
-        if (error) throw error
-        fetchTransactions()
-      } else {
-        setTransactions(prev => prev.map(t => 
-          [bankId, bookkeepingId].includes(t.id)
-            ? { ...t, is_reconciled: true, reconciliation_group: reconciliationGroup }
-            : t
-        ))
-      }
+      if (error) throw error
+      fetchTransactions()
     } catch (error) {
       console.error('Error matching transactions:', error)
     }
@@ -350,25 +337,16 @@ export default function Dashboard() {
     const reconciliationGroup = crypto.randomUUID()
     
     try {
-      if (isSupabaseConfigured) {
-        const { error } = await supabase
-          .from('transactions')
-          .update({ 
-            is_reconciled: true, 
-            reconciliation_group: reconciliationGroup 
-          })
-          .in('id', selectedTransactions)
+      const { error } = await supabase
+        .from('transactions')
+        .update({ 
+          is_reconciled: true, 
+          reconciliation_group: reconciliationGroup 
+        })
+        .in('id', selectedTransactions)
 
-        if (error) throw error
-        fetchTransactions()
-      } else {
-        setTransactions(prev => prev.map(t => 
-          selectedTransactions.includes(t.id)
-            ? { ...t, is_reconciled: true, reconciliation_group: reconciliationGroup }
-            : t
-        ))
-      }
-      
+      if (error) throw error
+      fetchTransactions()
       setSelectedTransactions([])
     } catch (error) {
       console.error('Error reconciling transactions:', error)
@@ -377,24 +355,16 @@ export default function Dashboard() {
 
   const unreconcileGroup = async (reconciliationGroup: string) => {
     try {
-      if (isSupabaseConfigured) {
-        const { error } = await supabase
-          .from('transactions')
-          .update({ 
-            is_reconciled: false, 
-            reconciliation_group: null 
-          })
-          .eq('reconciliation_group', reconciliationGroup)
+      const { error } = await supabase
+        .from('transactions')
+        .update({ 
+          is_reconciled: false, 
+          reconciliation_group: null 
+        })
+        .eq('reconciliation_group', reconciliationGroup)
 
-        if (error) throw error
-        fetchTransactions()
-      } else {
-        setTransactions(prev => prev.map(t => 
-          t.reconciliation_group === reconciliationGroup
-            ? { ...t, is_reconciled: false, reconciliation_group: null }
-            : t
-        ))
-      }
+      if (error) throw error
+      fetchTransactions()
     } catch (error) {
       console.error('Error unreconciling transactions:', error)
     }
@@ -524,12 +494,8 @@ export default function Dashboard() {
   }
 
   const handleSignOut = async () => {
-    if (isSupabaseConfigured) {
-      await supabase.auth.signOut()
-      router.push('/auth/login')
-    } else {
-      router.push('/')
-    }
+    await supabase.auth.signOut()
+    router.push('/auth/login')
   }
 
   if (loading) {
@@ -557,11 +523,6 @@ export default function Dashboard() {
               <Badge variant="outline" className="text-xs">
                 {user?.email}
               </Badge>
-              {!isSupabaseConfigured && (
-                <Badge variant="secondary" className="text-xs">
-                  Demo Mode
-                </Badge>
-              )}
             </div>
 
             <div className="flex items-center space-x-4">
@@ -571,6 +532,20 @@ export default function Dashboard() {
                 onClientChange={setSelectedClientId}
                 loading={loading}
               />
+              
+              <Link href="/team">
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                  <Users className="h-4 w-4" />
+                  <span>Team</span>
+                </Button>
+              </Link>
+
+              <Link href="/settings/security">
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                  <Settings className="h-4 w-4" />
+                  <span>Settings</span>
+                </Button>
+              </Link>
               
               <Button
                 variant="outline"
@@ -585,20 +560,6 @@ export default function Dashboard() {
           </div>
         </div>
       </header>
-
-      {/* Demo Mode Notice */}
-      {!isSupabaseConfigured && (
-        <div className="bg-blue-50 border-b border-blue-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <div className="flex items-center space-x-2 text-blue-800">
-              <AlertCircle className="h-4 w-4" />
-              <span className="text-sm">
-                <strong>Demo Mode:</strong> Upload CSV files to test all features. Data won't persist between sessions.
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Summary Cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">

@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import { OAuthButtons } from '@/components/oauth-buttons'
 
 export default function SignUp() {
   const [email, setEmail] = useState('')
@@ -58,7 +59,10 @@ export default function SignUp() {
             Bank Reconciliation Tool
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSignUp}>
+        <div className="mt-8">
+          <OAuthButtons mode="signup" />
+        </div>
+        <form className="mt-6 space-y-6" onSubmit={handleSignUp}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <input
