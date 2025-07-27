@@ -1,162 +1,270 @@
 # Bank Reconciliation Tool
 
-A private bank reconciliation tool for small business owners built with Next.js, Supabase, and Tailwind CSS.
+A comprehensive React application for bank transaction reconciliation with client management, built with Next.js, TailwindCSS, and shadcn/ui components.
 
 ## Features
 
-- 🔐 **Authentication**: Secure email/password login and signup with Supabase
-- 📥 **CSV Upload**: Upload transaction CSV files with date, description, and amount
-- 🗃️ **Data Management**: Store transactions in Supabase PostgreSQL database
-- 📄 **Transaction View**: Scrollable table with filtering options
-- ✅ **Manual Matching**: Select and reconcile multiple transactions
-- 📊 **Summary Dashboard**: Real-time reconciliation progress tracking
-- 📤 **Export**: Download reconciled transactions as CSV or PDF
+### ✨ Core Functionality
+- **CSV Upload**: Upload bank and bookkeeping transactions separately
+- **Manual Matching**: Side-by-side transaction matching interface
+- **Client Management**: Switch between different business clients
+- **PDF Export**: Generate professional reconciliation reports
+- **Smart Filtering**: Filter by reconciliation status and transaction type
 
-## Setup Instructions
+### 🎨 Modern UI/UX
+- Clean, professional interface using shadcn/ui components
+- Responsive design that works on all devices
+- Intuitive navigation with tabbed interface
+- Real-time summary cards showing reconciliation progress
 
-### 1. Clone and Install
+### 👥 Multi-Client Support
+- Client switcher in the header
+- Separate transaction sets per client
+- Client management dashboard
+- Add, edit, and delete business clients
 
-```bash
-git clone <your-repo>
-cd quickbooks-tool
-npm install
-```
+### 📊 Advanced Features
+- Side-by-side transaction matching
+- Bulk reconciliation options
+- Comprehensive PDF reports with client information
+- Transaction categorization and notes
+- Bank vs Bookkeeping transaction types
 
-### 2. Supabase Setup
+## Quick Start
 
-1. Create a new project at [supabase.com](https://supabase.com)
-2. Go to Settings > API to get your project URL and anon key
-3. Create a `.env.local` file in the root directory:
+### Prerequisites
+- Node.js 18+ installed
+- Supabase account for database (optional for demo)
 
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
+### Installation
 
-### 3. Database Schema
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd quickbooks-tool
+   ```
 
-Run this SQL in your Supabase SQL editor:
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-```sql
--- Create transactions table
-CREATE TABLE transactions (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-    date DATE NOT NULL,
-    description TEXT NOT NULL,
-    amount DECIMAL(10,2) NOT NULL,
-    is_reconciled BOOLEAN DEFAULT FALSE,
-    reconciliation_group UUID,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
-);
+3. **Set up environment variables**
+   Create a `.env.local` file in the root directory:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
--- Enable RLS
-ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+4. **Run the development server**
+   ```bash
+   npm run dev
+   ```
 
--- Create policy for users to only see their own transactions
-CREATE POLICY "Users can only see their own transactions" ON transactions
-    FOR ALL USING (auth.uid() = user_id);
+5. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
--- Create policy for users to insert their own transactions
-CREATE POLICY "Users can insert their own transactions" ON transactions
-    FOR INSERT WITH CHECK (auth.uid() = user_id);
+## Usage Guide
 
--- Create policy for users to update their own transactions
-CREATE POLICY "Users can update their own transactions" ON transactions
-    FOR UPDATE USING (auth.uid() = user_id);
+### 1. Getting Started
+- Visit the homepage at `/`
+- Navigate to the dashboard at `/dashboard`
+- The app works without authentication for demo purposes
 
--- Create waitlist table for landing page
-CREATE TABLE waitlist (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    role VARCHAR(100),
-    feature_interest TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
-);
+### 2. Client Management
+- Use the client selector in the header to switch between clients
+- Click "Add Client" to create new business clients
+- Each client has separate transaction data
 
--- Enable RLS for waitlist
-ALTER TABLE waitlist ENABLE ROW LEVEL SECURITY;
+### 3. Uploading Transactions
 
--- Allow anyone to insert into waitlist (public form)
-CREATE POLICY "Anyone can join waitlist" ON waitlist
-    FOR INSERT WITH CHECK (true);
-```
+#### Bank Transactions
+1. Click "Upload Bank CSV" in the dashboard
+2. Use the provided `sample-bank-transactions.csv` or your own data
+3. Required columns: `date`, `description`, `amount`
+4. Optional columns: `category`
 
-### 4. Run the Application
+#### Bookkeeping Transactions
+1. Click "Upload Bookkeeping CSV" in the dashboard
+2. Use the provided `sample-bookkeeping-transactions.csv` or your own data
+3. Required columns: `date`, `description`, `amount`
+4. Optional columns: `category`
 
-```bash
-npm run dev
-```
+### 4. Reconciling Transactions
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+#### Manual Bulk Reconciliation
+1. Go to the "All Transactions" tab
+2. Select multiple transactions using checkboxes
+3. Click "Reconcile Selected" to group them together
 
-## Usage
+#### Smart Matching (Recommended)
+1. Go to the "Smart Matching" tab
+2. View bank transactions on the left, bookkeeping on the right
+3. Click transactions to select them (one from each side)
+4. Click "Match Transactions" to reconcile the pair
 
-### CSV Upload Format
+### 5. Exporting Reports
+- **CSV Export**: Click "Export CSV" to download reconciled transactions
+- **PDF Export**: Click "Export PDF" to generate a professional report
+- Reports include client information when a client is selected
 
-Your CSV file should have these columns:
-- `date` - Transaction date (YYYY-MM-DD format)
-- `description` - Transaction description
-- `amount` - Transaction amount (positive or negative number)
+## CSV File Format
 
-Example:
+### Bank Transactions
 ```csv
-date,description,amount
-2024-01-15,Office Supplies,-45.67
-2024-01-15,Client Payment,1200.00
-2024-01-16,Internet Bill,-89.99
+date,description,amount,category
+2024-01-15,Client Payment,1500.00,Income
+2024-01-16,Office Rent,-1200.00,Rent
 ```
 
-### Manual Reconciliation
-
-1. Upload your CSV files
-2. Select 2 or more transactions using checkboxes
-3. Click "Reconcile Selected" to group them
-4. Use "Unreconcile" to undo a reconciliation group
-5. Export reconciled transactions when ready
-
-## Deployment
-
-### Vercel Deployment
-
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Add your environment variables in Vercel dashboard
-4. Deploy
-
-### Environment Variables for Production
-
-Make sure to set these in your Vercel environment variables:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-
-## Tech Stack
-
-- **Frontend**: Next.js 15, React 19, TypeScript
-- **Styling**: Tailwind CSS
-- **Backend**: Supabase (Auth, Database, API)
-- **CSV Parsing**: Papa Parse
-- **PDF Generation**: jsPDF
-- **Deployment**: Vercel (Frontend), Supabase (Backend)
-
-## Project Structure
-
+### Bookkeeping Transactions
+```csv
+date,description,amount,category
+2024-01-15,Service Revenue,1500.00,Revenue
+2024-01-16,Rent Expense,-1200.00,Rent
 ```
-src/
-├── app/                 # Next.js 13+ app directory
-│   ├── auth/           # Authentication pages
-│   ├── dashboard/      # Main application dashboard
-│   └── globals.css     # Global styles
-├── components/         # Reusable React components
-├── lib/               # Utilities and configurations
-│   └── supabase.ts    # Supabase client setup
-└── types/             # TypeScript type definitions
+
+### Required Fields
+- `date`: Date in YYYY-MM-DD format
+- `description`: Transaction description
+- `amount`: Positive for income, negative for expenses
+
+### Optional Fields
+- `category`: Transaction category for organization
+- `notes`: Additional transaction notes
+
+## Database Schema (Supabase)
+
+### Tables Required
+
+#### `clients`
+```sql
+CREATE TABLE clients (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id),
+  name TEXT NOT NULL,
+  business_name TEXT NOT NULL,
+  email TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
 ```
+
+#### `transactions`
+```sql
+CREATE TABLE transactions (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id),
+  client_id UUID REFERENCES clients(id),
+  date DATE NOT NULL,
+  description TEXT NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  transaction_type TEXT CHECK (transaction_type IN ('bank', 'bookkeeping')),
+  category TEXT,
+  notes TEXT,
+  is_reconciled BOOLEAN DEFAULT false,
+  reconciliation_group UUID,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+```
+
+## Technology Stack
+
+- **Frontend**: Next.js 15, React 18, TypeScript
+- **Styling**: TailwindCSS, shadcn/ui components
+- **Database**: Supabase (PostgreSQL)
+- **File Processing**: PapaParse for CSV handling
+- **PDF Generation**: jsPDF with autoTable
+- **Icons**: Lucide React
+
+## Component Architecture
+
+### Core Components
+- `ClientSelector`: Multi-client switching interface
+- `TransactionTable`: Enhanced transaction display with filtering
+- `MatchingInterface`: Side-by-side transaction matching
+- `ClientManagement`: Full CRUD for business clients
+
+### UI Components (shadcn/ui)
+- `Button`, `Card`, `Table`, `Select`, `Badge`
+- `Dialog`, `Tabs`, `Checkbox`, `Separator`
+
+## Features in Detail
+
+### Smart Matching Interface
+- Visual side-by-side comparison
+- Click-to-select interaction
+- Real-time selection feedback
+- Automatic reconciliation grouping
+
+### PDF Export Features
+- Professional report formatting
+- Client information inclusion
+- Transaction grouping by reconciliation
+- Summary totals and statistics
+
+### Client Management
+- Add/edit/delete business clients
+- Client-specific transaction isolation
+- Business name and contact tracking
+- Optional email integration
+
+## Development
+
+### Building for Production
+```bash
+npm run build
+npm start
+```
+
+### Linting
+```bash
+npm run lint
+```
+
+### Key Files
+- `/src/app/dashboard/page.tsx` - Main dashboard
+- `/src/components/` - Reusable components
+- `/src/types/index.ts` - TypeScript definitions
+- `/src/lib/supabase.ts` - Database configuration
+
+## Troubleshooting
+
+### Common Issues
+
+1. **CSV Upload Fails**
+   - Ensure CSV has required columns: date, description, amount
+   - Check date format (YYYY-MM-DD)
+   - Verify amount is numeric
+
+2. **Transactions Not Showing**
+   - Check client selection in header
+   - Verify database connection
+   - Check browser console for errors
+
+3. **PDF Export Issues**
+   - Large datasets may take time to generate
+   - Check browser popup blockers
+   - Ensure reconciled transactions exist
+
+### Sample Data
+Use the provided sample CSV files to test the application:
+- `sample-bank-transactions.csv`
+- `sample-bookkeeping-transactions.csv`
+
+These files contain matching transactions that can be easily reconciled for demonstration purposes.
 
 ## Contributing
 
-This is a private tool for small business bank reconciliation. No external contributions are needed at this time.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## License
 
-Private project - All rights reserved. 
+This project is licensed under the ISC License.
+
+---
+
+**Need Help?** Check the sample data files and follow the usage guide above. The application is designed to work out of the box with the provided sample transactions. 

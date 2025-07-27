@@ -1,0 +1,17 @@
+date,description,amount,category
+2024-01-15,Capital Contribution,5000.00,Equity
+2024-01-16,Rent Expense,-1200.00,Rent
+2024-01-17,Service Revenue - ABC Corp,2500.00,Revenue
+2024-01-18,Advertising Expense,-150.00,Marketing
+2024-01-19,Office Supplies Expense,-85.50,Office Supplies
+2024-01-20,Service Revenue - XYZ LLC,1800.00,Revenue
+2024-01-21,Internet Expense,-79.99,Utilities
+2024-01-22,Business Meal,-12.50,Meals & Entertainment
+2024-01-23,Software License,-29.99,Software
+2024-01-24,Transfer to Savings Account,-1000.00,Transfer
+2024-01-25,Contract Labor Expense,-500.00,Professional Services
+2024-01-26,Service Revenue - DEF Inc,3200.00,Revenue
+2024-01-27,Vehicle Fuel Expense,-45.00,Vehicle
+2024-01-28,Telephone Expense,-65.00,Utilities
+2024-01-29,Customer Refund,-150.00,Refunds
+2024-01-30,Bank Service Charge,-25.00,Bank Fees 

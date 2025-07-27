@@ -1,0 +1,168 @@
+'use client'
+
+import React from 'react'
+import { Transaction } from '@/types'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Card, CardContent } from '@/components/ui/card'
+import { Calendar, DollarSign, FileText, Unlink } from 'lucide-react'
+
+interface TransactionTableProps {
+  transactions: Transaction[]
+  selectedTransactions: string[]
+  onTransactionSelect: (transactionId: string) => void
+  onUnreconcileGroup?: (reconciliationGroup: string) => void
+  loading?: boolean
+}
+
+export function TransactionTable({ 
+  transactions, 
+  selectedTransactions, 
+  onTransactionSelect,
+  onUnreconcileGroup,
+  loading 
+}: TransactionTableProps) {
+  const formatAmount = (amount: number) => {
+    const formatted = Math.abs(amount).toFixed(2)
+    return amount >= 0 ? `$${formatted}` : `-$${formatted}`
+  }
+
+  const getAmountColor = (amount: number) => {
+    return amount >= 0 ? 'text-green-600' : 'text-red-600'
+  }
+
+  const getTransactionTypeBadge = (type: 'bank' | 'bookkeeping' | undefined) => {
+    if (!type) {
+      return (
+        <Badge variant="outline">
+          Unknown
+        </Badge>
+      )
+    }
+    return (
+      <Badge variant={type === 'bank' ? 'default' : 'secondary'}>
+        {type === 'bank' ? 'Bank' : 'Books'}
+      </Badge>
+    )
+  }
+
+  if (loading) {
+    return (
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span className="ml-2 text-gray-600">Loading transactions...</span>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  if (transactions.length === 0) {
+    return (
+      <Card>
+        <CardContent className="p-12 text-center">
+          <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No transactions found</h3>
+          <p className="text-gray-500">Upload a CSV file to get started with reconciliation.</p>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  return (
+    <Card>
+      <CardContent className="p-0">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-12">
+                  <span className="sr-only">Select</span>
+                </TableHead>
+                <TableHead>
+                  <div className="flex items-center space-x-1">
+                    <Calendar className="h-4 w-4" />
+                    <span>Date</span>
+                  </div>
+                </TableHead>
+                <TableHead>Description</TableHead>
+                <TableHead>
+                  <div className="flex items-center space-x-1">
+                    <DollarSign className="h-4 w-4" />
+                    <span>Amount</span>
+                  </div>
+                </TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="w-24">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {transactions.map((transaction) => (
+                <TableRow 
+                  key={transaction.id}
+                  className={selectedTransactions.includes(transaction.id) ? 'bg-blue-50' : ''}
+                >
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedTransactions.includes(transaction.id)}
+                      onCheckedChange={() => onTransactionSelect(transaction.id)}
+                    />
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {new Date(transaction.date).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    <div className="max-w-xs truncate" title={transaction.description}>
+                      {transaction.description}
+                    </div>
+                    {transaction.notes && (
+                      <div className="text-xs text-gray-500 mt-1 truncate">
+                        {transaction.notes}
+                      </div>
+                    )}
+                  </TableCell>
+                  <TableCell className={`font-semibold ${getAmountColor(transaction.amount)}`}>
+                    {formatAmount(transaction.amount)}
+                  </TableCell>
+                  <TableCell>
+                    {getTransactionTypeBadge(transaction.transaction_type)}
+                  </TableCell>
+                  <TableCell>
+                    {transaction.category && (
+                      <Badge variant="outline" className="text-xs">
+                        {transaction.category}
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={transaction.is_reconciled ? 'default' : 'destructive'}>
+                      {transaction.is_reconciled ? 'Reconciled' : 'Unreconciled'}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {transaction.is_reconciled && transaction.reconciliation_group && onUnreconcileGroup && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => onUnreconcileGroup(transaction.reconciliation_group!)}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <Unlink className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
+  )
+} 
