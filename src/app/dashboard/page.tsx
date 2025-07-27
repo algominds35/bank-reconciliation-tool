@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { Transaction, ReconciliationSummary, Client } from '@/types'
 import { ClientSelector } from '@/components/client-selector'
 import { TransactionTable } from '@/components/transaction-table'
@@ -27,10 +27,6 @@ import {
   LogOut
 } from 'lucide-react'
 
-// Check if Supabase is configured
-const isSupabaseConfigured = process.env.NEXT_PUBLIC_SUPABASE_URL && 
-  process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co'
-
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null)
   const [clients, setClients] = useState<Client[]>([])
@@ -38,7 +34,7 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([])
   const [selectedTransactions, setSelectedTransactions] = useState<string[]>([])
-  const [loading, setLoading] = useState(false) // Set to false for demo mode
+  const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [filter, setFilter] = useState<'all' | 'reconciled' | 'unreconciled'>('all')
   const [transactionTypeFilter, setTransactionTypeFilter] = useState<'all' | 'bank' | 'bookkeeping'>('all')
@@ -53,7 +49,6 @@ export default function Dashboard() {
   const router = useRouter()
 
   useEffect(() => {
-    // Skip authentication check if Supabase isn't configured
     if (isSupabaseConfigured) {
       checkUser()
     } else {
@@ -108,7 +103,6 @@ export default function Dashboard() {
       setClients(data || [])
     } catch (error) {
       console.warn('Error fetching clients:', error)
-      // Demo mode - use mock clients
       setClients([])
     }
   }
@@ -132,7 +126,6 @@ export default function Dashboard() {
       setTransactions(data || [])
     } catch (error) {
       console.warn('Error fetching transactions:', error)
-      // Demo mode - start with empty transactions
       setTransactions([])
     }
   }
@@ -140,14 +133,12 @@ export default function Dashboard() {
   const applyFilters = () => {
     let filtered = transactions
 
-    // Apply reconciliation filter
     if (filter === 'reconciled') {
       filtered = filtered.filter(t => t.is_reconciled)
     } else if (filter === 'unreconciled') {
       filtered = filtered.filter(t => !t.is_reconciled)
     }
 
-    // Apply transaction type filter
     if (transactionTypeFilter !== 'all') {
       filtered = filtered.filter(t => t.transaction_type === transactionTypeFilter)
     }
@@ -193,14 +184,12 @@ export default function Dashboard() {
               }
 
               if (isSupabaseConfigured) {
-                // Save to Supabase
                 const { error } = await supabase
                   .from('transactions')
                   .insert(transaction)
 
                 if (error) throw error
               } else {
-                // Demo mode - add to local state
                 newTransactions.push(transaction)
               }
             }
@@ -209,12 +198,11 @@ export default function Dashboard() {
           if (isSupabaseConfigured) {
             fetchTransactions()
           } else {
-            // Demo mode - update local state
             setTransactions(prev => [...prev, ...newTransactions])
           }
         } catch (error) {
           console.error('Error uploading transactions:', error)
-          alert('Error uploading transactions. Using demo mode.')
+          alert('Error uploading transactions. Please try again.')
         } finally {
           setUploading(false)
         }
@@ -246,7 +234,6 @@ export default function Dashboard() {
         if (error) throw error
         fetchTransactions()
       } else {
-        // Demo mode - update local state
         setTransactions(prev => prev.map(t => 
           [bankId, bookkeepingId].includes(t.id)
             ? { ...t, is_reconciled: true, reconciliation_group: reconciliationGroup }
@@ -279,7 +266,6 @@ export default function Dashboard() {
         if (error) throw error
         fetchTransactions()
       } else {
-        // Demo mode - update local state
         setTransactions(prev => prev.map(t => 
           selectedTransactions.includes(t.id)
             ? { ...t, is_reconciled: true, reconciliation_group: reconciliationGroup }
@@ -307,7 +293,6 @@ export default function Dashboard() {
         if (error) throw error
         fetchTransactions()
       } else {
-        // Demo mode - update local state
         setTransactions(prev => prev.map(t => 
           t.reconciliation_group === reconciliationGroup
             ? { ...t, is_reconciled: false, reconciliation_group: null }
@@ -355,12 +340,10 @@ export default function Dashboard() {
     try {
       const doc = new jsPDF()
       
-      // Header
       doc.setFontSize(20)
       doc.setFont('helvetica', 'bold')
       doc.text('Bank Reconciliation Report', 20, 25)
       
-      // Metadata
       doc.setFontSize(12)
       doc.setFont('helvetica', 'normal')
       const exportDate = new Date().toLocaleDateString()
@@ -376,12 +359,10 @@ export default function Dashboard() {
       
       doc.text(`Total Reconciled Transactions: ${reconciledTransactions.length}`, 20, 65)
       
-      // Table setup
       let currentY = 80
       doc.setFontSize(10)
       doc.setFont('helvetica', 'bold')
       
-      // Headers
       doc.setFillColor(59, 130, 246)
       doc.rect(20, currentY - 5, 170, 12, 'F')
       doc.setTextColor(255, 255, 255)
@@ -393,7 +374,6 @@ export default function Dashboard() {
       
       currentY += 15
       
-      // Data rows
       doc.setTextColor(0, 0, 0)
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(9)
@@ -426,13 +406,11 @@ export default function Dashboard() {
         }
       })
       
-      // Total
       const totalAmount = reconciledTransactions.reduce((sum, t) => sum + t.amount, 0)
       doc.setFontSize(12)
       doc.setFont('helvetica', 'bold')
       doc.text(`Total Amount: $${totalAmount.toFixed(2)}`, 20, currentY + 15)
       
-      // Download
       const pdfBlob = doc.output('blob')
       const url = window.URL.createObjectURL(pdfBlob)
       const link = document.createElement('a')
@@ -454,7 +432,6 @@ export default function Dashboard() {
       await supabase.auth.signOut()
       router.push('/auth/login')
     } else {
-      // Demo mode - just redirect to home
       router.push('/')
     }
   }
