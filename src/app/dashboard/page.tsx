@@ -164,34 +164,59 @@ export default function Dashboard() {
     
     Papa.parse(file, {
       header: true,
+      skipEmptyLines: true,
       complete: async (results) => {
         try {
           const newTransactions: Transaction[] = []
           
+          // Check if CSV has data
+          if (!results.data || results.data.length === 0) {
+            throw new Error('CSV file is empty or has no valid data')
+          }
+
+          // Check for required columns
+          const firstRow = results.data[0] as any
+          if (!firstRow.date || !firstRow.description || !firstRow.amount) {
+            throw new Error('CSV must have columns: date, description, amount')
+          }
+          
           for (const row of results.data as any[]) {
-            if (row.date && row.description && row.amount) {
-              const transaction: Transaction = {
-                id: crypto.randomUUID(),
-                user_id: user?.id || 'demo-user',
-                client_id: selectedClientId || undefined,
-                date: row.date,
-                description: row.description,
-                amount: parseFloat(row.amount),
-                transaction_type: transactionType,
-                category: row.category || null,
-                notes: row.notes || null,
-                is_reconciled: false
-              }
+            // Skip empty rows
+            if (!row.date || !row.description || !row.amount) {
+              continue
+            }
 
-              if (isSupabaseConfigured) {
-                const { error } = await supabase
-                  .from('transactions')
-                  .insert(transaction)
+            // Validate and parse amount
+            const amount = typeof row.amount === 'string' 
+              ? parseFloat(row.amount.replace(/[,$]/g, '')) 
+              : parseFloat(row.amount)
+            
+            if (isNaN(amount)) {
+              console.warn(`Skipping row with invalid amount: ${row.amount}`)
+              continue
+            }
 
-                if (error) throw error
-              } else {
-                newTransactions.push(transaction)
-              }
+            const transaction: Transaction = {
+              id: crypto.randomUUID(),
+              user_id: user?.id || 'demo-user',
+              client_id: selectedClientId || undefined,
+              date: row.date,
+              description: row.description.toString(),
+              amount: amount,
+              transaction_type: transactionType,
+              category: row.category ? row.category.toString() : null,
+              notes: row.notes ? row.notes.toString() : null,
+              is_reconciled: false
+            }
+
+            if (isSupabaseConfigured) {
+              const { error } = await supabase
+                .from('transactions')
+                .insert(transaction)
+
+              if (error) throw error
+            } else {
+              newTransactions.push(transaction)
             }
           }
           
@@ -200,12 +225,25 @@ export default function Dashboard() {
           } else {
             setTransactions(prev => [...prev, ...newTransactions])
           }
+
+          // Success message
+          alert(`Successfully uploaded ${newTransactions.length || 'all'} transactions!`)
+          
         } catch (error) {
           console.error('Error uploading transactions:', error)
-          alert('Error uploading transactions. Please try again.')
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+          alert(`Error uploading transactions: ${errorMessage}. Please check your CSV format.`)
         } finally {
           setUploading(false)
+          // Reset file input
+          event.target.value = ''
         }
+      },
+      error: (error) => {
+        console.error('CSV parsing error:', error)
+        alert(`Error reading CSV file: ${error.message}. Please check your file format.`)
+        setUploading(false)
+        event.target.value = ''
       }
     })
   }
