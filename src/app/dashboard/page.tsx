@@ -27,6 +27,10 @@ import {
   LogOut
 } from 'lucide-react'
 
+// Check if Supabase is configured
+const isSupabaseConfigured = process.env.NEXT_PUBLIC_SUPABASE_URL && 
+  process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co'
+
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null)
   const [clients, setClients] = useState<Client[]>([])
@@ -34,7 +38,7 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([])
   const [selectedTransactions, setSelectedTransactions] = useState<string[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false) // Set to false for demo mode
   const [uploading, setUploading] = useState(false)
   const [filter, setFilter] = useState<'all' | 'reconciled' | 'unreconciled'>('all')
   const [transactionTypeFilter, setTransactionTypeFilter] = useState<'all' | 'bank' | 'bookkeeping'>('all')
@@ -49,11 +53,18 @@ export default function Dashboard() {
   const router = useRouter()
 
   useEffect(() => {
-    checkUser()
+    // Skip authentication check if Supabase isn't configured
+    if (isSupabaseConfigured) {
+      checkUser()
+    } else {
+      // Demo mode - set a dummy user
+      setUser({ id: 'demo-user', email: 'demo@example.com' })
+      setLoading(false)
+    }
   }, [])
 
   useEffect(() => {
-    if (user) {
+    if (user && isSupabaseConfigured) {
       fetchClients()
       fetchTransactions()
     }
@@ -65,15 +76,27 @@ export default function Dashboard() {
   }, [transactions, filter, transactionTypeFilter])
 
   const checkUser = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
-      router.push('/auth/login')
-    } else {
-      setUser(session.user)
+    if (!isSupabaseConfigured) return
+    
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        router.push('/auth/login')
+      } else {
+        setUser(session.user)
+      }
+    } catch (error) {
+      console.warn('Supabase auth check failed:', error)
+      // Fallback to demo mode
+      setUser({ id: 'demo-user', email: 'demo@example.com' })
+    } finally {
+      setLoading(false)
     }
   }
 
   const fetchClients = async () => {
+    if (!isSupabaseConfigured) return
+    
     try {
       const { data, error } = await supabase
         .from('clients')
@@ -84,11 +107,15 @@ export default function Dashboard() {
       if (error) throw error
       setClients(data || [])
     } catch (error) {
-      console.error('Error fetching clients:', error)
+      console.warn('Error fetching clients:', error)
+      // Demo mode - use mock clients
+      setClients([])
     }
   }
 
   const fetchTransactions = async () => {
+    if (!isSupabaseConfigured) return
+    
     try {
       let query = supabase
         .from('transactions')
@@ -104,9 +131,9 @@ export default function Dashboard() {
       if (error) throw error
       setTransactions(data || [])
     } catch (error) {
-      console.error('Error fetching transactions:', error)
-    } finally {
-      setLoading(false)
+      console.warn('Error fetching transactions:', error)
+      // Demo mode - start with empty transactions
+      setTransactions([])
     }
   }
 
@@ -148,29 +175,46 @@ export default function Dashboard() {
       header: true,
       complete: async (results) => {
         try {
+          const newTransactions: Transaction[] = []
+          
           for (const row of results.data as any[]) {
             if (row.date && row.description && row.amount) {
-              const { error } = await supabase
-                .from('transactions')
-                .insert({
-                  user_id: user.id,
-                  client_id: selectedClientId,
-                  date: row.date,
-                  description: row.description,
-                  amount: parseFloat(row.amount),
-                  transaction_type: transactionType,
-                  category: row.category || null,
-                  notes: row.notes || null,
-                  is_reconciled: false
-                })
+              const transaction: Transaction = {
+                id: crypto.randomUUID(),
+                user_id: user?.id || 'demo-user',
+                client_id: selectedClientId || undefined,
+                date: row.date,
+                description: row.description,
+                amount: parseFloat(row.amount),
+                transaction_type: transactionType,
+                category: row.category || null,
+                notes: row.notes || null,
+                is_reconciled: false
+              }
 
-              if (error) throw error
+              if (isSupabaseConfigured) {
+                // Save to Supabase
+                const { error } = await supabase
+                  .from('transactions')
+                  .insert(transaction)
+
+                if (error) throw error
+              } else {
+                // Demo mode - add to local state
+                newTransactions.push(transaction)
+              }
             }
           }
           
-          fetchTransactions()
+          if (isSupabaseConfigured) {
+            fetchTransactions()
+          } else {
+            // Demo mode - update local state
+            setTransactions(prev => [...prev, ...newTransactions])
+          }
         } catch (error) {
           console.error('Error uploading transactions:', error)
+          alert('Error uploading transactions. Using demo mode.')
         } finally {
           setUploading(false)
         }
@@ -190,17 +234,25 @@ export default function Dashboard() {
     const reconciliationGroup = crypto.randomUUID()
     
     try {
-      const { error } = await supabase
-        .from('transactions')
-        .update({ 
-          is_reconciled: true, 
-          reconciliation_group: reconciliationGroup 
-        })
-        .in('id', [bankId, bookkeepingId])
+      if (isSupabaseConfigured) {
+        const { error } = await supabase
+          .from('transactions')
+          .update({ 
+            is_reconciled: true, 
+            reconciliation_group: reconciliationGroup 
+          })
+          .in('id', [bankId, bookkeepingId])
 
-      if (error) throw error
-      
-      fetchTransactions()
+        if (error) throw error
+        fetchTransactions()
+      } else {
+        // Demo mode - update local state
+        setTransactions(prev => prev.map(t => 
+          [bankId, bookkeepingId].includes(t.id)
+            ? { ...t, is_reconciled: true, reconciliation_group: reconciliationGroup }
+            : t
+        ))
+      }
     } catch (error) {
       console.error('Error matching transactions:', error)
     }
@@ -215,18 +267,27 @@ export default function Dashboard() {
     const reconciliationGroup = crypto.randomUUID()
     
     try {
-      const { error } = await supabase
-        .from('transactions')
-        .update({ 
-          is_reconciled: true, 
-          reconciliation_group: reconciliationGroup 
-        })
-        .in('id', selectedTransactions)
+      if (isSupabaseConfigured) {
+        const { error } = await supabase
+          .from('transactions')
+          .update({ 
+            is_reconciled: true, 
+            reconciliation_group: reconciliationGroup 
+          })
+          .in('id', selectedTransactions)
 
-      if (error) throw error
+        if (error) throw error
+        fetchTransactions()
+      } else {
+        // Demo mode - update local state
+        setTransactions(prev => prev.map(t => 
+          selectedTransactions.includes(t.id)
+            ? { ...t, is_reconciled: true, reconciliation_group: reconciliationGroup }
+            : t
+        ))
+      }
       
       setSelectedTransactions([])
-      fetchTransactions()
     } catch (error) {
       console.error('Error reconciling transactions:', error)
     }
@@ -234,16 +295,25 @@ export default function Dashboard() {
 
   const unreconcileGroup = async (reconciliationGroup: string) => {
     try {
-      const { error } = await supabase
-        .from('transactions')
-        .update({ 
-          is_reconciled: false, 
-          reconciliation_group: null 
-        })
-        .eq('reconciliation_group', reconciliationGroup)
+      if (isSupabaseConfigured) {
+        const { error } = await supabase
+          .from('transactions')
+          .update({ 
+            is_reconciled: false, 
+            reconciliation_group: null 
+          })
+          .eq('reconciliation_group', reconciliationGroup)
 
-      if (error) throw error
-      fetchTransactions()
+        if (error) throw error
+        fetchTransactions()
+      } else {
+        // Demo mode - update local state
+        setTransactions(prev => prev.map(t => 
+          t.reconciliation_group === reconciliationGroup
+            ? { ...t, is_reconciled: false, reconciliation_group: null }
+            : t
+        ))
+      }
     } catch (error) {
       console.error('Error unreconciling transactions:', error)
     }
@@ -380,8 +450,13 @@ export default function Dashboard() {
   }
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.push('/auth/login')
+    if (isSupabaseConfigured) {
+      await supabase.auth.signOut()
+      router.push('/auth/login')
+    } else {
+      // Demo mode - just redirect to home
+      router.push('/')
+    }
   }
 
   if (loading) {
@@ -409,6 +484,11 @@ export default function Dashboard() {
               <Badge variant="outline" className="text-xs">
                 {user?.email}
               </Badge>
+              {!isSupabaseConfigured && (
+                <Badge variant="secondary" className="text-xs">
+                  Demo Mode
+                </Badge>
+              )}
             </div>
 
             <div className="flex items-center space-x-4">
@@ -432,6 +512,20 @@ export default function Dashboard() {
           </div>
         </div>
       </header>
+
+      {/* Demo Mode Notice */}
+      {!isSupabaseConfigured && (
+        <div className="bg-blue-50 border-b border-blue-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div className="flex items-center space-x-2 text-blue-800">
+              <AlertCircle className="h-4 w-4" />
+              <span className="text-sm">
+                <strong>Demo Mode:</strong> Upload CSV files to test all features. Data won't persist between sessions.
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Summary Cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
