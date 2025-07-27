@@ -29,7 +29,8 @@ export function PaymentButton({
     setLoading(true)
     
     try {
-      // Always redirect to signup first - users must create account before paying
+      // Payments temporarily disabled - redirect to signup
+      alert('Payments are temporarily disabled while we fix technical issues. Please sign up for updates!')
       router.push('/auth/signup')
     } catch (error) {
       console.error('Navigation error:', error)
