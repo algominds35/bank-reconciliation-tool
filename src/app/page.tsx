@@ -19,6 +19,8 @@ import {
   ArrowRight,
   Play
 } from 'lucide-react'
+import { PaymentButton } from '@/components/payment-button'
+import { PRICING_PLANS } from '@/lib/stripe'
 
 export default function LandingPage() {
   const [email, setEmail] = useState('')
@@ -464,9 +466,13 @@ export default function LandingPage() {
                     <span>Email support</span>
                   </li>
                 </ul>
-                <Button className="w-full" variant="outline">
-                  Start Free Trial
-                </Button>
+                <PaymentButton 
+                  priceId={PRICING_PLANS.starter.priceId}
+                  planName="Starter"
+                  buttonText="Start Free Trial"
+                  className="w-full"
+                  variant="outline"
+                />
               </CardContent>
             </Card>
 
@@ -506,9 +512,12 @@ export default function LandingPage() {
                     <span>API access</span>
                   </li>
                 </ul>
-                <Button className="w-full">
-                  Start Free Trial
-                </Button>
+                <PaymentButton 
+                  priceId={PRICING_PLANS.professional.priceId}
+                  planName="Professional"
+                  buttonText="Start Free Trial"
+                  className="w-full"
+                />
               </CardContent>
             </Card>
 
@@ -545,9 +554,13 @@ export default function LandingPage() {
                     <span>Dedicated support</span>
                   </li>
                 </ul>
-                <Button className="w-full" variant="outline">
-                  Contact Sales
-                </Button>
+                <PaymentButton 
+                  priceId={PRICING_PLANS.enterprise.priceId}
+                  planName="Enterprise"
+                  buttonText="Start Free Trial"
+                  className="w-full"
+                  variant="outline"
+                />
               </CardContent>
             </Card>
           </div>
