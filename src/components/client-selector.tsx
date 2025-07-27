@@ -24,24 +24,26 @@ export function ClientSelector({ clients, selectedClientId, onClientChange, load
       </div>
       
       <Select
-        value={selectedClientId || ''}
-        onValueChange={(value) => onClientChange(value || null)}
+        value={selectedClientId || 'all'}
+        onValueChange={(value) => onClientChange(value === 'all' ? null : value)}
         disabled={loading}
       >
         <SelectTrigger className="w-64">
           <SelectValue placeholder="Select a client">
-            {selectedClient && (
+            {selectedClient ? (
               <div className="flex items-center space-x-2">
                 <span>{selectedClient.business_name}</span>
                 <Badge variant="secondary" className="text-xs">
                   {selectedClient.name}
                 </Badge>
               </div>
+            ) : (
+              <span>All Clients</span>
             )}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="">All Clients</SelectItem>
+          <SelectItem value="all">All Clients</SelectItem>
           {clients.map((client) => (
             <SelectItem key={client.id} value={client.id}>
               <div className="flex flex-col">
