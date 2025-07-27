@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 import { Transaction, ReconciliationSummary, Client } from '@/types'
 import { ClientSelector } from '@/components/client-selector'
 import { TransactionTable } from '@/components/transaction-table'
@@ -49,17 +49,11 @@ export default function Dashboard() {
   const router = useRouter()
 
   useEffect(() => {
-    if (isSupabaseConfigured) {
-      checkUser()
-    } else {
-      // Demo mode - set a dummy user
-      setUser({ id: 'demo-user', email: 'demo@example.com' })
-      setLoading(false)
-    }
+    checkUser()
   }, [])
 
   useEffect(() => {
-    if (user && isSupabaseConfigured) {
+    if (user) {
       fetchClients()
       fetchTransactions()
     }
@@ -71,8 +65,6 @@ export default function Dashboard() {
   }, [transactions, filter, transactionTypeFilter])
 
   const checkUser = async () => {
-    if (!isSupabaseConfigured) return
-    
     try {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
@@ -81,9 +73,8 @@ export default function Dashboard() {
         setUser(session.user)
       }
     } catch (error) {
-      console.warn('Supabase auth check failed:', error)
-      // Fallback to demo mode
-      setUser({ id: 'demo-user', email: 'demo@example.com' })
+      console.error('Supabase auth check failed:', error)
+      router.push('/auth/login')
     } finally {
       setLoading(false)
     }
@@ -174,96 +165,141 @@ export default function Dashboard() {
     const file = event.target.files?.[0]
     if (!file) return
 
+    console.log('Starting file upload:', file.name, 'Type:', transactionType)
     setUploading(true)
     
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
       complete: async (results) => {
+        console.log('CSV parsing completed:', results)
+        
         try {
-          const newTransactions: Transaction[] = []
-          
           // Check if CSV has data
           if (!results.data || results.data.length === 0) {
             throw new Error('CSV file is empty or has no valid data')
           }
 
-          // Check for required columns
+          console.log('CSV data found:', results.data.length, 'rows')
+
+          // Check for required columns in first row
           const firstRow = results.data[0] as any
-          if (!firstRow.date || !firstRow.description || !firstRow.amount) {
-            throw new Error('CSV must have columns: date, description, amount')
+          console.log('First row:', firstRow)
+          
+          if (!firstRow || typeof firstRow !== 'object') {
+            throw new Error('Invalid CSV format - no valid data rows found')
           }
+
+          const hasDate = firstRow.date || firstRow.Date || firstRow.DATE
+          const hasDescription = firstRow.description || firstRow.Description || firstRow.DESCRIPTION
+          const hasAmount = firstRow.amount || firstRow.Amount || firstRow.AMOUNT
+
+          if (!hasDate || !hasDescription || !hasAmount) {
+            throw new Error(`CSV must have columns: date, description, amount. Found columns: ${Object.keys(firstRow).join(', ')}`)
+          }
+
+          console.log('CSV validation passed, processing rows...')
+          
+          const newTransactions: Transaction[] = []
+          let processedCount = 0
           
           for (const row of results.data as any[]) {
             // Skip empty rows
-            if (!row.date || !row.description || !row.amount) {
+            if (!row || typeof row !== 'object') {
               continue
             }
 
-            // Validate and parse amount
-            const amount = typeof row.amount === 'string' 
-              ? parseFloat(row.amount.replace(/[,$]/g, '')) 
-              : parseFloat(row.amount)
-            
-            if (isNaN(amount)) {
-              console.warn(`Skipping row with invalid amount: ${row.amount}`)
+            // Get values from row (case insensitive)
+            const date = row.date || row.Date || row.DATE
+            const description = row.description || row.Description || row.DESCRIPTION
+            const amountStr = row.amount || row.Amount || row.AMOUNT
+
+            if (!date || !description || !amountStr) {
+              console.warn('Skipping incomplete row:', row)
+              continue
+            }
+
+            // Parse amount - handle currency symbols and commas
+            let amount: number
+            try {
+              const cleanAmount = String(amountStr).replace(/[$,\s]/g, '')
+              amount = parseFloat(cleanAmount)
+              
+              if (isNaN(amount)) {
+                console.warn(`Skipping row with invalid amount: ${amountStr}`)
+                continue
+              }
+            } catch (e) {
+              console.warn(`Error parsing amount ${amountStr}:`, e)
               continue
             }
 
             const transaction: Transaction = {
               id: crypto.randomUUID(),
-              user_id: user?.id || 'demo-user',
+              user_id: user?.id || 'anonymous',
               client_id: selectedClientId || undefined,
-              date: row.date,
-              description: row.description.toString(),
+              date: String(date),
+              description: String(description),
               amount: amount,
               transaction_type: transactionType,
-              category: row.category ? row.category.toString() : null,
-              notes: row.notes ? row.notes.toString() : null,
+              category: row.category || row.Category || null,
+              notes: row.notes || row.Notes || null,
               is_reconciled: false
             }
 
-            if (isSupabaseConfigured) {
+            console.log('Processing transaction:', transaction)
+
+            try {
               const { error } = await supabase
                 .from('transactions')
                 .insert(transaction)
 
               if (error) {
-                // If table doesn't exist, fall back to local storage
-                if (error.code === 'PGRST116' || error.message.includes('does not exist')) {
-                  console.warn('Database tables not found, using local storage')
-                  newTransactions.push(transaction)
-                } else {
-                  throw error
-                }
+                console.error('Supabase insert error:', error)
+                throw new Error(`Database error: ${error.message}`)
               }
-            } else {
-              newTransactions.push(transaction)
+              
+              processedCount++
+            } catch (dbError) {
+              console.error('Database error for transaction:', transaction, dbError)
+              throw dbError
             }
           }
+
+          console.log(`Successfully processed ${processedCount} transactions`)
           
-          if (isSupabaseConfigured) {
-            fetchTransactions()
-          } else {
-            setTransactions(prev => [...prev, ...newTransactions])
+          if (processedCount === 0) {
+            throw new Error('No valid transactions found in CSV file')
           }
 
+          // Refresh the transactions list
+          await fetchTransactions()
+
           // Success message
-          alert(`Successfully uploaded ${newTransactions.length || 'all'} transactions!`)
+          alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!`)
           
         } catch (error) {
-          console.error('Error uploading transactions:', error)
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
-          alert(`Error uploading transactions: ${errorMessage}. Please check your CSV format.`)
+          console.error('Upload error details:', error)
+          
+          let errorMessage = 'Unknown error occurred'
+          if (error instanceof Error) {
+            errorMessage = error.message
+          } else if (typeof error === 'string') {
+            errorMessage = error
+          } else if (error && typeof error === 'object' && 'message' in error) {
+            errorMessage = String(error.message)
+          }
+          
+          alert(`Error uploading transactions: ${errorMessage}`)
         } finally {
           setUploading(false)
           // Reset file input
           event.target.value = ''
         }
       },
-      error: (error) => {
-        console.error('CSV parsing error:', error)
-        alert(`Error reading CSV file: ${error.message}. Please check your file format.`)
+      error: (parseError) => {
+        console.error('CSV parsing error:', parseError)
+        alert(`Error reading CSV file: ${parseError.message}. Please check your file format.`)
         setUploading(false)
         event.target.value = ''
       }
