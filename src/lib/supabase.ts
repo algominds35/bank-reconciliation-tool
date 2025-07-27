@@ -1,25 +1,22 @@
-import { createClient } from '@supabase/supabase-js'
+// TEMPORARILY DISABLED SUPABASE TO FIX LANDING PAGE CRASH
+// This creates a mock object that won't crash but won't work for dashboard
 
-// Ensure environment variables are properly accessed
-const supabaseUrl = String(process.env.NEXT_PUBLIC_SUPABASE_URL || '').trim()
-const supabaseAnonKey = String(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim()
-
-console.log('Supabase setup:', {
-  hasUrl: !!supabaseUrl,
-  hasKey: !!supabaseAnonKey,
-  urlLength: supabaseUrl.length,
-  keyLength: supabaseAnonKey.length,
-  urlStart: supabaseUrl.substring(0, 20),
-  keyStart: supabaseAnonKey.substring(0, 20)
-})
-
-if (!supabaseUrl || !supabaseAnonKey || supabaseUrl === 'undefined' || supabaseAnonKey === 'undefined') {
-  throw new Error(`Supabase env vars invalid: URL=${!!supabaseUrl}, Key=${!!supabaseAnonKey}`)
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+export const supabase = {
   auth: {
-    persistSession: true,
-    autoRefreshToken: true,
+    getSession: async () => ({ data: { session: null }, error: null }),
+    signUp: async () => ({ data: null, error: { message: 'Auth disabled' } }),
+    signInWithPassword: async () => ({ data: null, error: { message: 'Auth disabled' } }),
+    signOut: async () => ({ error: null }),
+    resetPasswordForEmail: async () => ({ error: null }),
+    updateUser: async () => ({ error: null }),
+    signInWithOAuth: async () => ({ error: null })
   },
-}) 
+  from: () => ({
+    select: () => ({ data: [], error: null }),
+    insert: () => ({ data: null, error: null }),
+    update: () => ({ data: null, error: null }),
+    delete: () => ({ data: null, error: null }),
+    eq: () => ({ data: [], error: null }),
+    order: () => ({ data: [], error: null })
+  })
+} 
