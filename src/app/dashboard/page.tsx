@@ -99,7 +99,14 @@ export default function Dashboard() {
         .eq('user_id', user.id)
         .order('business_name')
 
-      if (error) throw error
+      if (error) {
+        // If table doesn't exist, fall back to demo mode
+        if (error.code === 'PGRST116' || error.message.includes('does not exist')) {
+          console.warn('Database tables not found, using demo mode')
+          return
+        }
+        throw error
+      }
       setClients(data || [])
     } catch (error) {
       console.warn('Error fetching clients:', error)
@@ -122,7 +129,14 @@ export default function Dashboard() {
 
       const { data, error } = await query.order('date', { ascending: false })
 
-      if (error) throw error
+      if (error) {
+        // If table doesn't exist, fall back to demo mode
+        if (error.code === 'PGRST116' || error.message.includes('does not exist')) {
+          console.warn('Database tables not found, using demo mode')
+          return
+        }
+        throw error
+      }
       setTransactions(data || [])
     } catch (error) {
       console.warn('Error fetching transactions:', error)
@@ -214,7 +228,15 @@ export default function Dashboard() {
                 .from('transactions')
                 .insert(transaction)
 
-              if (error) throw error
+              if (error) {
+                // If table doesn't exist, fall back to local storage
+                if (error.code === 'PGRST116' || error.message.includes('does not exist')) {
+                  console.warn('Database tables not found, using local storage')
+                  newTransactions.push(transaction)
+                } else {
+                  throw error
+                }
+              }
             } else {
               newTransactions.push(transaction)
             }
