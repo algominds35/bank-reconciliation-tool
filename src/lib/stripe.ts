@@ -8,7 +8,7 @@ export const getStripe = () => {
 
 // Server-side Stripe
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-06-20',
+  apiVersion: '2025-06-30.basil',
 })
 
 // Pricing data matching your landing page
