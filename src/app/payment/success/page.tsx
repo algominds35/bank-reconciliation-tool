@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, ArrowRight, Mail, Lock } from 'lucide-react'
+import { CheckCircle, ArrowRight, UserPlus, LogIn } from 'lucide-react'
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams()
@@ -47,63 +47,61 @@ function PaymentSuccessContent() {
           </CardHeader>
           <CardContent className="space-y-6">
             <p className="text-xl text-gray-600">
-              Welcome to ReconcilePro! Your subscription is now active.
+              Your subscription is active! Now create your account to access your dashboard.
             </p>
             
             <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="font-semibold text-blue-900 mb-4">🚀 Your Account is Ready!</h3>
+              <h3 className="font-semibold text-blue-900 mb-4">✅ What's Next?</h3>
               <div className="text-left space-y-3 text-blue-800">
                 <div className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5" />
-                  <span>Your account has been created automatically</span>
+                  <span>Your payment has been processed successfully</span>
                 </div>
                 <div className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5" />
-                  <span>All premium features are now unlocked</span>
+                  <span>Your subscription is now active</span>
                 </div>
                 <div className="flex items-start">
-                  <Mail className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
-                  <span>Check your email for login instructions</span>
+                  <UserPlus className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
+                  <span><strong>Next:</strong> Create your account to access the dashboard</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
-              <h3 className="font-semibold text-yellow-900 mb-2 flex items-center">
-                <Lock className="h-5 w-5 mr-2" />
-                Set Up Your Password
+            <div className="bg-green-50 p-6 rounded-lg border border-green-200">
+              <h3 className="font-semibold text-green-900 mb-2 flex items-center justify-center">
+                <UserPlus className="h-5 w-5 mr-2" />
+                Create Your Account
               </h3>
-              <p className="text-yellow-800 text-sm mb-4">
-                To access your dashboard, you'll need to set up a password for your account.
+              <p className="text-green-800 text-sm mb-4">
+                Use the same email address you used for payment to link your subscription.
               </p>
-              <Link href="/auth/reset-password">
-                <Button variant="outline" className="w-full border-yellow-300 text-yellow-800 hover:bg-yellow-100">
-                  Set Up Password →
+              <Link href="/auth/signup">
+                <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                  Create Account & Access Dashboard
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="border-t pt-6">
+              <p className="text-sm text-gray-600 mb-4">
+                <strong>Already have an account?</strong>
+              </p>
               <Link href="/auth/login">
-                <Button size="lg" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full">
+                  <LogIn className="mr-2 h-4 w-4" />
                   Login to Dashboard
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="/">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                  Back to Home
                 </Button>
               </Link>
             </div>
 
             <div className="text-sm text-gray-500 pt-4 border-t">
-              <p className="font-semibold mb-2">What's Next?</p>
-              <ol className="text-left space-y-1">
-                <li>1. Set up your password using the button above</li>
-                <li>2. Login to your dashboard</li>
-                <li>3. Start uploading CSVs and reconciling transactions</li>
-              </ol>
+              <p className="font-semibold mb-2">Need Help?</p>
+              <p>
+                💬 Questions? Contact us at support@yourapp.com<br/>
+                📧 Receipt sent to your email address
+              </p>
             </div>
           </CardContent>
         </Card>

@@ -61,7 +61,7 @@ export default function LandingPage() {
               <a href="#testimonials" className="text-gray-600 hover:text-gray-900">Reviews</a>
               <Link href="/auth/login" className="text-gray-600 hover:text-gray-900">Login</Link>
               <Link href="/auth/signup">
-                <Button>Start Free Trial</Button>
+                <Button variant="outline">Try Free (14 Days)</Button>
               </Link>
             </div>
           </div>
@@ -87,20 +87,22 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link href="/auth/signup">
+              <a href="https://buy.stripe.com/test_28EbJ32nA0ALezn1HI0Fi08" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="text-lg px-8 py-6">
-                  Start Free 14-Day Trial
+                  Get Professional $79/mo
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-            </Link>
-              <Button variant="outline" size="lg" className="text-lg px-8 py-6">
-                <Play className="mr-2 h-5 w-5" />
-                Watch Demo (2 min)
-              </Button>
+              </a>
+              <Link href="/auth/signup">
+                <Button variant="outline" size="lg" className="text-lg px-8 py-6">
+                  <Clock className="mr-2 h-5 w-5" />
+                  Try Free (14 Days)
+                </Button>
+              </Link>
             </div>
 
             <p className="text-sm text-gray-500">
-              ✅ No credit card required • ✅ Full access for 14 days • ✅ Cancel anytime
+              💳 Instant access after payment • 🔒 Secure checkout • ✅ Cancel anytime
             </p>
           </div>
         </div>
@@ -411,11 +413,11 @@ export default function LandingPage() {
                     <span>Email support</span>
                   </li>
                 </ul>
-                <Link href="/auth/signup">
+                <a href="https://buy.stripe.com/test_6oU3cx6DQ1EP0Ix5XY0Fi07" target="_blank" rel="noopener noreferrer">
                   <Button className="w-full" variant="outline">
-                    Start Free Trial
+                    Get Starter - $29/mo
                   </Button>
-                </Link>
+                </a>
               </CardContent>
             </Card>
 
@@ -455,11 +457,11 @@ export default function LandingPage() {
                     <span>API access</span>
                   </li>
                 </ul>
-                <Link href="/auth/signup">
+                <a href="https://buy.stripe.com/test_28EbJ32nA0ALezn1HI0Fi08" target="_blank" rel="noopener noreferrer">
                   <Button className="w-full">
-                    Start Free Trial
+                    Get Professional - $79/mo
                   </Button>
-                </Link>
+                </a>
               </CardContent>
             </Card>
 
@@ -481,10 +483,6 @@ export default function LandingPage() {
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                    <span>Unlimited clients</span>
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                     <span>Team collaboration</span>
                   </li>
                   <li className="flex items-center">
@@ -496,21 +494,21 @@ export default function LandingPage() {
                     <span>Dedicated support</span>
                   </li>
                 </ul>
-                <Link href="/auth/signup">
+                <a href="https://buy.stripe.com/test_aFa9AV4vIdnxgHv2LM0Fi09" target="_blank" rel="noopener noreferrer">
                   <Button className="w-full" variant="outline">
-                    Start Free Trial
+                    Get Enterprise - $199/mo
                   </Button>
-                </Link>
+                </a>
               </CardContent>
             </Card>
           </div>
 
           <div className="text-center mt-12">
             <p className="text-gray-600 mb-4">
-              🛡️ All plans include bank-grade security and 99.9% uptime guarantee
+              💳 Instant access after payment • 🛡️ Bank-grade security • 🔒 99.9% uptime guarantee
             </p>
             <p className="text-sm text-gray-500">
-              * All plans come with a 14-day free trial. No credit card required.
+              Want to try first? <Link href="/auth/signup" className="text-blue-600 hover:underline">Start 14-day free trial</Link> • Cancel anytime
             </p>
           </div>
         </div>

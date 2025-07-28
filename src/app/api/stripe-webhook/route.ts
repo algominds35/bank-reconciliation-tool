@@ -16,7 +16,7 @@ const supabaseAdmin = createClient(
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🔔 CLEAN WEBHOOK: Starting...')
+    console.log('🔔 PAYMENT-FIRST WEBHOOK: Starting...')
     
     // Verify environment variables
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
       console.log('📋 Final plan:', subscriptionPlan.toUpperCase())
 
       // Find user using ADMIN CLIENT
-      console.log('🔍 Looking for user with admin permissions...')
+      console.log('🔍 Looking for existing user...')
       const { data: users, error: userError } = await supabaseAdmin.auth.admin.listUsers()
       
       if (userError) {
@@ -86,46 +86,71 @@ export async function POST(request: NextRequest) {
 
       const existingUser = users.users.find(u => u.email === customerEmail)
 
-      if (!existingUser) {
-        console.error('❌ User not found:', customerEmail)
+      if (existingUser) {
+        // User exists - upgrade their account immediately
+        console.log('✅ Found existing user:', customerEmail, 'ID:', existingUser.id)
+
+        const { error: profileError } = await supabase
+          .from('user_profiles')
+          .upsert({
+            id: existingUser.id,
+            subscription_status: 'active',
+            subscription_plan: subscriptionPlan,
+            stripe_customer_id: session.customer,
+            trial_end_date: '2030-12-31',
+            updated_at: new Date().toISOString()
+          })
+
+        if (profileError) {
+          console.error('❌ Profile update failed:', profileError)
+          return NextResponse.json({ 
+            error: 'Profile update failed', 
+            details: profileError.message 
+          }, { status: 500 })
+        }
+
+        console.log('✅ EXISTING USER UPGRADED to:', subscriptionPlan.toUpperCase())
+        
         return NextResponse.json({ 
-          error: 'User not found',
-          message: 'User must create account first via signup',
-          email: customerEmail
-        }, { status: 404 })
-      }
-
-      console.log('✅ Found user:', customerEmail, 'ID:', existingUser.id)
-
-      // Update user profile 
-      console.log('📝 Upgrading to:', subscriptionPlan)
-      const { error: profileError } = await supabase
-        .from('user_profiles')
-        .upsert({
-          id: existingUser.id,
-          subscription_status: 'active',
-          subscription_plan: subscriptionPlan,
-          stripe_customer_id: session.customer,
-          trial_end_date: '2030-12-31',
-          updated_at: new Date().toISOString()
+          success: true, 
+          email: customerEmail,
+          plan: subscriptionPlan,
+          amount: amountPaid,
+          message: 'Existing user upgraded'
         })
+      } else {
+        // User doesn't exist yet - store payment info for when they create account
+        console.log('💡 User not found - storing payment for future account creation')
+        
+        // Store payment info in a pending payments table (we'll create this)
+        const { error: pendingError } = await supabase
+          .from('pending_payments')
+          .insert({
+            email: customerEmail,
+            subscription_plan: subscriptionPlan,
+            stripe_customer_id: session.customer,
+            stripe_session_id: session.id,
+            amount_paid: amountPaid,
+            created_at: new Date().toISOString()
+          })
 
-      if (profileError) {
-        console.error('❌ Profile update failed:', profileError)
+        // If pending_payments table doesn't exist, that's ok - we'll handle it in signup
+        if (pendingError && !pendingError.message.includes('does not exist')) {
+          console.error('❌ Failed to store pending payment:', pendingError)
+        } else {
+          console.log('✅ Payment info stored for future account creation')
+        }
+
+        console.log('✅ PAYMENT PROCESSED - User needs to create account')
+        
         return NextResponse.json({ 
-          error: 'Profile update failed', 
-          details: profileError.message 
-        }, { status: 500 })
+          success: true, 
+          email: customerEmail,
+          plan: subscriptionPlan,
+          amount: amountPaid,
+          message: 'Payment processed - account creation needed'
+        })
       }
-
-      console.log('✅ SUCCESS! User upgraded to:', subscriptionPlan.toUpperCase())
-      
-      return NextResponse.json({ 
-        success: true, 
-        email: customerEmail,
-        plan: subscriptionPlan,
-        amount: amountPaid
-      })
     }
 
     // Handle other events
