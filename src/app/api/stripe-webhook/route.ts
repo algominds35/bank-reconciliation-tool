@@ -61,13 +61,13 @@ export async function POST(request: NextRequest) {
       // Update user to active subscription
       const { error: updateError } = await supabase
         .from('user_profiles')
-        .upsert({
-          id: user.id,
+        .update({
           subscription_status: 'active',
           subscription_plan: subscriptionPlan,
           stripe_customer_id: session.customer,
           updated_at: new Date().toISOString()
         })
+        .eq('id', user.id)
 
       if (updateError) {
         console.error('❌ Failed to update user:', updateError)
