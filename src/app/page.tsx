@@ -18,8 +18,6 @@ import {
   ArrowRight,
   Play
 } from 'lucide-react'
-import { PaymentButton } from '@/components/payment-button'
-import { PRICING_PLANS } from '@/lib/stripe'
 
 export default function LandingPage() {
   const [email, setEmail] = useState('')
@@ -455,13 +453,11 @@ export default function LandingPage() {
                     <span>Email support</span>
                   </li>
                 </ul>
-                <PaymentButton 
-                  priceId={PRICING_PLANS.starter.priceId}
-                  planName="Starter"
-                  buttonText="Start Free Trial"
-                  className="w-full"
-                  variant="outline"
-                />
+                <a href="https://buy.stripe.com/test_6oU3cx6DQ1EP0Ix5XY0Fi07" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full" variant="outline">
+                    Start Free Trial
+                  </Button>
+                </a>
               </CardContent>
             </Card>
 
@@ -501,12 +497,11 @@ export default function LandingPage() {
                     <span>API access</span>
                   </li>
                 </ul>
-                <PaymentButton 
-                  priceId={PRICING_PLANS.professional.priceId}
-                  planName="Professional"
-                  buttonText="Start Free Trial"
-                  className="w-full"
-                />
+                <a href="https://buy.stripe.com/test_28EbJ32nA0ALezn1HI0Fi08" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full">
+                    Start Free Trial
+                  </Button>
+                </a>
               </CardContent>
             </Card>
 
@@ -543,13 +538,11 @@ export default function LandingPage() {
                     <span>Dedicated support</span>
                   </li>
                 </ul>
-                <PaymentButton 
-                  priceId={PRICING_PLANS.enterprise.priceId}
-                  planName="Enterprise"
-                  buttonText="Start Free Trial"
-                  className="w-full"
-                  variant="outline"
-                />
+                <a href="https://buy.stripe.com/test_aFa9AV4vIdnxgHv2LM0Fi09" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full" variant="outline">
+                    Start Free Trial
+                  </Button>
+                </a>
               </CardContent>
             </Card>
           </div>
