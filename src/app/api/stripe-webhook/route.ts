@@ -16,9 +16,9 @@ const supabaseAdmin = createClient(
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🔔 WEBHOOK: Checking admin permissions...')
+    console.log('🔔 CLEAN WEBHOOK: Starting...')
     
-    // Verify admin client is configured
+    // Verify environment variables
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
       console.error('❌ Missing SUPABASE_SERVICE_ROLE_KEY')
       return NextResponse.json({ 
@@ -28,7 +28,6 @@ export async function POST(request: NextRequest) {
     }
     
     const body = await request.text()
-    console.log('📦 Webhook body length:', body.length)
     
     // Parse the webhook event
     let event
@@ -41,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     console.log('🔔 Stripe webhook received:', event.type)
 
-    // Handle successful payments from Payment Links
+    // Handle successful payments
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object
       const customerEmail = session.customer_details?.email
@@ -54,13 +53,10 @@ export async function POST(request: NextRequest) {
       console.log('💰 Payment successful for:', customerEmail)
       console.log('💵 Amount paid:', session.amount_total / 100, 'USD')
 
-      // BULLETPROOF PLAN DETECTION - Exact amount matching
-      const amountPaid = session.amount_total / 100 // Convert cents to dollars
-      let subscriptionPlan = 'starter' // Default fallback
+      // Plan detection based on amount paid
+      const amountPaid = session.amount_total / 100
+      let subscriptionPlan = 'starter'
       
-      console.log('🔍 Detecting plan for amount:', amountPaid)
-      
-      // Exact plan detection with tolerance for floating point issues
       if (amountPaid >= 199 - 0.01) {
         subscriptionPlan = 'enterprise'
         console.log('✅ Plan detected: ENTERPRISE ($199+)')
@@ -72,17 +68,16 @@ export async function POST(request: NextRequest) {
         console.log('✅ Plan detected: STARTER ($29-$78)')
       } else {
         console.error('❌ UNKNOWN AMOUNT:', amountPaid, '- Defaulting to starter')
-        subscriptionPlan = 'starter'
       }
 
-      console.log('📋 Final assigned plan:', subscriptionPlan.toUpperCase())
+      console.log('📋 Final plan:', subscriptionPlan.toUpperCase())
 
-      // Find existing user using ADMIN CLIENT (has proper permissions)
-      console.log('🔍 Looking for existing user with admin permissions...')
+      // Find user using ADMIN CLIENT
+      console.log('🔍 Looking for user with admin permissions...')
       const { data: users, error: userError } = await supabaseAdmin.auth.admin.listUsers()
       
       if (userError) {
-        console.error('❌ Error fetching users with admin client:', userError)
+        console.error('❌ Admin lookup failed:', userError)
         return NextResponse.json({ 
           error: 'Admin user lookup failed', 
           details: userError.message 
@@ -93,7 +88,6 @@ export async function POST(request: NextRequest) {
 
       if (!existingUser) {
         console.error('❌ User not found:', customerEmail)
-        console.log('💡 User must sign up first before paying')
         return NextResponse.json({ 
           error: 'User not found',
           message: 'User must create account first via signup',
@@ -101,10 +95,10 @@ export async function POST(request: NextRequest) {
         }, { status: 404 })
       }
 
-      console.log('✅ Found existing user:', customerEmail, 'ID:', existingUser.id)
+      console.log('✅ Found user:', customerEmail, 'ID:', existingUser.id)
 
-      // Update user profile using regular client (for database operations)
-      console.log('📝 Upgrading user to:', subscriptionPlan)
+      // Update user profile 
+      console.log('📝 Upgrading to:', subscriptionPlan)
       const { error: profileError } = await supabase
         .from('user_profiles')
         .upsert({
@@ -117,36 +111,29 @@ export async function POST(request: NextRequest) {
         })
 
       if (profileError) {
-        console.error('❌ Failed to update profile:', profileError)
+        console.error('❌ Profile update failed:', profileError)
         return NextResponse.json({ 
           error: 'Profile update failed', 
           details: profileError.message 
         }, { status: 500 })
       }
 
-      console.log('✅ User upgraded successfully!')
-      console.log('🎉 WEBHOOK SUCCESS:', customerEmail, '→', subscriptionPlan.toUpperCase())
+      console.log('✅ SUCCESS! User upgraded to:', subscriptionPlan.toUpperCase())
       
       return NextResponse.json({ 
         success: true, 
         email: customerEmail,
         plan: subscriptionPlan,
-        amount: amountPaid,
-        message: 'User upgraded successfully'
+        amount: amountPaid
       })
     }
 
-    // Handle other webhook events
-    console.log('ℹ️ Unhandled webhook event:', event.type)
+    // Handle other events
+    console.log('ℹ️ Unhandled event:', event.type)
     return NextResponse.json({ received: true })
 
   } catch (error) {
     console.error('💥 Webhook error:', error)
-    console.error('💥 Error details:', {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined
-    })
-    
     return NextResponse.json({ 
       error: 'Webhook failed',
       details: error instanceof Error ? error.message : 'Unknown error'
