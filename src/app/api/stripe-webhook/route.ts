@@ -2,28 +2,49 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { createClient } from '@supabase/supabase-js'
 
-// Admin client for user creation
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!, // This is the secret admin key
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
-    }
-  }
-)
-
 export async function POST(request: NextRequest) {
   try {
+    console.log('🔔 Webhook started - checking environment variables...')
+    
+    // Debug environment variables
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    
+    console.log('🔍 Supabase URL:', supabaseUrl ? 'Found' : 'MISSING')
+    console.log('🔍 Service Role Key:', serviceRoleKey ? 'Found' : 'MISSING')
+    
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.error('❌ Missing environment variables')
+      return NextResponse.json({ 
+        error: 'Server configuration error',
+        details: {
+          supabaseUrl: !!supabaseUrl,
+          serviceRoleKey: !!serviceRoleKey
+        }
+      }, { status: 500 })
+    }
+
+    // Admin client for user creation
+    const supabaseAdmin = createClient(
+      supabaseUrl,
+      serviceRoleKey,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
+
     const body = await request.text()
+    console.log('📦 Webhook body length:', body.length)
     
     // Parse the webhook event
     let event
     try {
       event = JSON.parse(body)
     } catch (err) {
-      console.error('Invalid JSON:', err)
+      console.error('❌ Invalid JSON:', err)
       return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
     }
 
@@ -66,7 +87,17 @@ export async function POST(request: NextRequest) {
       console.log('📋 Final assigned plan:', subscriptionPlan.toUpperCase())
 
       // Check if user already exists
+      console.log('🔍 Checking if user exists...')
       const { data: existingUser, error: lookupError } = await supabaseAdmin.auth.admin.listUsers()
+      
+      if (lookupError) {
+        console.error('❌ Error listing users:', lookupError)
+        return NextResponse.json({ 
+          error: 'User lookup failed', 
+          details: lookupError.message 
+        }, { status: 500 })
+      }
+
       const userExists = existingUser?.users?.find(u => u.email === customerEmail)
 
       let userId: string
@@ -91,7 +122,10 @@ export async function POST(request: NextRequest) {
 
         if (createError) {
           console.error('❌ Failed to create user:', createError)
-          return NextResponse.json({ error: 'User creation failed' }, { status: 500 })
+          return NextResponse.json({ 
+            error: 'User creation failed', 
+            details: createError.message 
+          }, { status: 500 })
         }
 
         userId = newUser.user!.id
@@ -100,6 +134,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Update user profile with subscription info
+      console.log('📝 Updating user profile...')
       const { error: profileError } = await supabase
         .from('user_profiles')
         .upsert({
@@ -113,7 +148,10 @@ export async function POST(request: NextRequest) {
 
       if (profileError) {
         console.error('❌ Failed to update profile:', profileError)
-        return NextResponse.json({ error: 'Profile update failed' }, { status: 500 })
+        return NextResponse.json({ 
+          error: 'Profile update failed', 
+          details: profileError.message 
+        }, { status: 500 })
       }
 
       console.log('✅ User profile updated successfully')
@@ -134,6 +172,14 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('💥 Webhook error:', error)
-    return NextResponse.json({ error: 'Webhook failed' }, { status: 500 })
+    console.error('💥 Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    })
+    
+    return NextResponse.json({ 
+      error: 'Webhook failed',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 })
   }
 } 
