@@ -71,10 +71,10 @@ function PaymentSuccessContent() {
             <div className="bg-green-50 p-6 rounded-lg border border-green-200">
               <h3 className="font-semibold text-green-900 mb-2 flex items-center justify-center">
                 <UserPlus className="h-5 w-5 mr-2" />
-                Create Your Account
+                Create Your Account Now
               </h3>
               <p className="text-green-800 text-sm mb-4">
-                Use the same email address you used for payment to link your subscription.
+                <strong>Important:</strong> Use the same email address you used for payment to automatically link your subscription.
               </p>
               <Link href="/auth/signup">
                 <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
@@ -94,6 +94,16 @@ function PaymentSuccessContent() {
                   Login to Dashboard
                 </Button>
               </Link>
+            </div>
+
+            <div className="text-sm text-gray-500 pt-4 border-t">
+              <p className="font-semibold mb-2">✅ What Happens Next?</p>
+              <div className="text-left space-y-1">
+                <p>1. Create your account with the same email</p>
+                <p>2. We'll automatically link your payment</p>
+                <p>3. Get instant access to your dashboard</p>
+                <p>4. Start reconciling transactions immediately</p>
+              </div>
             </div>
 
             <div className="text-sm text-gray-500 pt-4 border-t">

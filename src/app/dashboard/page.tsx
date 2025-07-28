@@ -70,11 +70,11 @@ export default function Dashboard() {
 
   const checkUser = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        router.push('/auth/login')
-      } else {
-        setUser(session.user)
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      router.push('/auth/login')
+    } else {
+      setUser(session.user)
       }
     } catch (error) {
       console.error('Supabase auth check failed:', error)
@@ -264,7 +264,7 @@ export default function Dashboard() {
           }
 
           console.log(`Successfully processed ${processedCount} transactions`)
-          
+
           if (processedCount === 0) {
             throw new Error('No valid transactions found in CSV file')
           }
@@ -516,7 +516,7 @@ export default function Dashboard() {
 
   return (
     <TrialGuard>
-      <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -612,7 +612,7 @@ export default function Dashboard() {
                   <p className="text-sm font-medium text-gray-600">Bank</p>
                   <p className="text-2xl font-bold text-blue-600">{summary.bankTransactions}</p>
                 </div>
-              </div>
+            </div>
             </CardContent>
           </Card>
 
@@ -623,8 +623,8 @@ export default function Dashboard() {
                 <div>
                   <p className="text-sm font-medium text-gray-600">Bookkeeping</p>
                   <p className="text-2xl font-bold text-green-600">{summary.bookkeepingTransactions}</p>
-                </div>
-              </div>
+            </div>
+          </div>
             </CardContent>
           </Card>
         </div>
@@ -637,14 +637,14 @@ export default function Dashboard() {
           </TabsList>
 
           <TabsContent value="transactions" className="space-y-6">
-            {/* Controls */}
+        {/* Controls */}
             <Card>
               <CardContent className="p-6">
-                <div className="flex flex-wrap gap-4 items-center justify-between">
+          <div className="flex flex-wrap gap-4 items-center justify-between">
                   <div className="flex gap-4 items-center flex-wrap">
                     {/* Upload Buttons */}
                     <div className="flex gap-2">
-                      <div>
+              <div>
                         <label htmlFor="bank-upload" className="cursor-pointer">
                           <Button asChild disabled={uploading}>
                             <span className="flex items-center space-x-2">
@@ -652,16 +652,16 @@ export default function Dashboard() {
                               <span>{uploading ? 'Uploading...' : 'Upload Bank CSV'}</span>
                             </span>
                           </Button>
-                        </label>
-                        <input
+                </label>
+                <input
                           id="bank-upload"
-                          type="file"
-                          accept=".csv"
-                          className="hidden"
+                  type="file"
+                  accept=".csv"
+                  className="hidden"
                           onChange={(e) => handleFileUpload(e, 'bank')}
-                          disabled={uploading}
-                        />
-                      </div>
+                  disabled={uploading}
+                />
+              </div>
 
                       <div>
                         <label htmlFor="bookkeeping-upload" className="cursor-pointer">
@@ -685,7 +685,7 @@ export default function Dashboard() {
 
                     {/* Filters */}
                     <Select
-                      value={filter}
+                value={filter}
                       onValueChange={(value) => setFilter(value as any)}
                     >
                       <SelectTrigger className="w-40">
@@ -711,44 +711,44 @@ export default function Dashboard() {
                         <SelectItem value="bookkeeping">Bookkeeping Only</SelectItem>
                       </SelectContent>
                     </Select>
-                  </div>
+            </div>
 
                   {/* Action Buttons */}
                   <div className="flex gap-2 flex-wrap">
                     <Button
-                      onClick={reconcileSelected}
-                      disabled={selectedTransactions.length < 2}
+                onClick={reconcileSelected}
+                disabled={selectedTransactions.length < 2}
                       className="flex items-center space-x-2"
-                    >
+              >
                       <CheckCircle className="h-4 w-4" />
                       <span>Reconcile Selected ({selectedTransactions.length})</span>
                     </Button>
 
                     <Button
                       variant="outline"
-                      onClick={exportReconciled}
-                      disabled={summary.reconciled === 0}
+                onClick={exportReconciled}
+                disabled={summary.reconciled === 0}
                       className="flex items-center space-x-2"
-                    >
+              >
                       <Download className="h-4 w-4" />
                       <span>Export CSV</span>
                     </Button>
 
                     <Button
                       variant="outline"
-                      onClick={exportReconciledPDF}
-                      disabled={summary.reconciled === 0}
+                onClick={exportReconciledPDF}
+                disabled={summary.reconciled === 0}
                       className="flex items-center space-x-2"
-                    >
+              >
                       <FileText className="h-4 w-4" />
                       <span>Export PDF</span>
                     </Button>
-                  </div>
-                </div>
+            </div>
+          </div>
               </CardContent>
             </Card>
 
-            {/* Transactions Table */}
+        {/* Transactions Table */}
             <TransactionTable
               transactions={filteredTransactions}
               selectedTransactions={selectedTransactions}
