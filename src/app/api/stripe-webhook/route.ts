@@ -1,9 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
+
+// Create admin client with service role key for user lookup
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
+)
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🔔 SIMPLIFIED Webhook started...')
+    console.log('🔔 WEBHOOK: Checking admin permissions...')
+    
+    // Verify admin client is configured
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('❌ Missing SUPABASE_SERVICE_ROLE_KEY')
+      return NextResponse.json({ 
+        error: 'Server configuration error',
+        details: 'Service role key not configured'
+      }, { status: 500 })
+    }
     
     const body = await request.text()
     console.log('📦 Webhook body length:', body.length)
@@ -55,14 +77,14 @@ export async function POST(request: NextRequest) {
 
       console.log('📋 Final assigned plan:', subscriptionPlan.toUpperCase())
 
-      // Find existing user in our database (they must have signed up first)
-      console.log('🔍 Looking for existing user...')
-      const { data: users, error: userError } = await supabase.auth.admin.listUsers()
+      // Find existing user using ADMIN CLIENT (has proper permissions)
+      console.log('🔍 Looking for existing user with admin permissions...')
+      const { data: users, error: userError } = await supabaseAdmin.auth.admin.listUsers()
       
       if (userError) {
-        console.error('❌ Error fetching users:', userError)
+        console.error('❌ Error fetching users with admin client:', userError)
         return NextResponse.json({ 
-          error: 'User lookup failed', 
+          error: 'Admin user lookup failed', 
           details: userError.message 
         }, { status: 500 })
       }
@@ -81,7 +103,7 @@ export async function POST(request: NextRequest) {
 
       console.log('✅ Found existing user:', customerEmail, 'ID:', existingUser.id)
 
-      // Update user profile with subscription info (SIMPLE!)
+      // Update user profile using regular client (for database operations)
       console.log('📝 Upgrading user to:', subscriptionPlan)
       const { error: profileError } = await supabase
         .from('user_profiles')
