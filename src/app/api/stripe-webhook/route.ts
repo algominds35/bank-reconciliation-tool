@@ -1,5 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
+
+// Admin client for user creation
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!, // This is the secret admin key
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
+)
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,36 +65,66 @@ export async function POST(request: NextRequest) {
 
       console.log('📋 Final assigned plan:', subscriptionPlan.toUpperCase())
 
-      // Verify plan assignment is correct
-      const expectedPlans = {
-        29: 'starter',
-        79: 'professional', 
-        199: 'enterprise'
+      // Check if user already exists
+      const { data: existingUser, error: lookupError } = await supabaseAdmin.auth.admin.listUsers()
+      const userExists = existingUser?.users?.find(u => u.email === customerEmail)
+
+      let userId: string
+      let accountCreated = false
+
+      if (userExists) {
+        console.log('✅ User exists:', customerEmail)
+        userId = userExists.id
+      } else {
+        console.log('🔄 Creating new user account for:', customerEmail)
+        
+        // Create user using Supabase Admin API
+        const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
+          email: customerEmail,
+          password: `TempPass_${Date.now()}`, // Temporary password - user will reset it
+          email_confirm: true, // Auto-confirm since they paid
+          user_metadata: {
+            created_via: 'stripe_payment',
+            stripe_customer_id: session.customer
+          }
+        })
+
+        if (createError) {
+          console.error('❌ Failed to create user:', createError)
+          return NextResponse.json({ error: 'User creation failed' }, { status: 500 })
+        }
+
+        userId = newUser.user!.id
+        accountCreated = true
+        console.log('✅ User account created:', customerEmail, 'ID:', userId)
       }
-      
-      console.log('🎯 Expected plans mapping:', expectedPlans)
-      console.log('💡 Amount paid:', amountPaid, '→ Plan:', subscriptionPlan)
 
-      // BULLETPROOF: Find user and activate account in one query
-      const { data: result, error: updateError } = await supabase.rpc('activate_user_by_email', {
-        user_email: customerEmail,
-        plan: subscriptionPlan,
-        stripe_customer: session.customer
-      })
+      // Update user profile with subscription info
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .upsert({
+          id: userId,
+          subscription_status: 'active',
+          subscription_plan: subscriptionPlan,
+          stripe_customer_id: session.customer,
+          trial_end_date: '2030-12-31',
+          updated_at: new Date().toISOString()
+        })
 
-      if (updateError) {
-        console.error('❌ Failed to update user:', updateError)
-        return NextResponse.json({ error: 'Update failed' }, { status: 500 })
+      if (profileError) {
+        console.error('❌ Failed to update profile:', profileError)
+        return NextResponse.json({ error: 'Profile update failed' }, { status: 500 })
       }
 
-      console.log('✅ User activated successfully:', result)
+      console.log('✅ User profile updated successfully')
       console.log('🎉 WEBHOOK SUCCESS:', customerEmail, '→', subscriptionPlan.toUpperCase())
       
       return NextResponse.json({ 
         success: true, 
         email: customerEmail,
         plan: subscriptionPlan,
-        amount: amountPaid
+        amount: amountPaid,
+        account_created: accountCreated
       })
     }
 
