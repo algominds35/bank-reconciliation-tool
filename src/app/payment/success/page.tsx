@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, ArrowRight } from 'lucide-react'
+import { CheckCircle, ArrowRight, Mail, Lock } from 'lucide-react'
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams()
@@ -51,27 +51,42 @@ function PaymentSuccessContent() {
             </p>
             
             <div className="bg-blue-50 p-6 rounded-lg">
-              <h3 className="font-semibold text-blue-900 mb-2">What happens next?</h3>
-              <ul className="text-left space-y-2 text-blue-800">
-                <li className="flex items-start">
-                  <span className="mr-2">1.</span>
-                  <span>You'll receive a confirmation email with your receipt</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2">2.</span>
-                  <span>Your account is now upgraded with all premium features</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2">3.</span>
-                  <span>Start uploading CSVs and reconciling transactions</span>
-                </li>
-              </ul>
+              <h3 className="font-semibold text-blue-900 mb-4">🚀 Your Account is Ready!</h3>
+              <div className="text-left space-y-3 text-blue-800">
+                <div className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5" />
+                  <span>Your account has been created automatically</span>
+                </div>
+                <div className="flex items-start">
+                  <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5" />
+                  <span>All premium features are now unlocked</span>
+                </div>
+                <div className="flex items-start">
+                  <Mail className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
+                  <span>Check your email for login instructions</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
+              <h3 className="font-semibold text-yellow-900 mb-2 flex items-center">
+                <Lock className="h-5 w-5 mr-2" />
+                Set Up Your Password
+              </h3>
+              <p className="text-yellow-800 text-sm mb-4">
+                To access your dashboard, you'll need to set up a password for your account.
+              </p>
+              <Link href="/auth/reset-password">
+                <Button variant="outline" className="w-full border-yellow-300 text-yellow-800 hover:bg-yellow-100">
+                  Set Up Password →
+                </Button>
+              </Link>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/dashboard">
+              <Link href="/auth/login">
                 <Button size="lg" className="w-full sm:w-auto">
-                  Go to Dashboard
+                  Login to Dashboard
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -83,8 +98,12 @@ function PaymentSuccessContent() {
             </div>
 
             <div className="text-sm text-gray-500 pt-4 border-t">
-              <p>Need help getting started?</p>
-              <p>Check out our documentation or contact support.</p>
+              <p className="font-semibold mb-2">What's Next?</p>
+              <ol className="text-left space-y-1">
+                <li>1. Set up your password using the button above</li>
+                <li>2. Login to your dashboard</li>
+                <li>3. Start uploading CSVs and reconciling transactions</li>
+              </ol>
             </div>
           </CardContent>
         </Card>
