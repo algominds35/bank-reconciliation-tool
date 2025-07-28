@@ -43,31 +43,12 @@ export async function POST(request: NextRequest) {
 
       console.log('📋 Assigned plan:', subscriptionPlan)
 
-      // Find and update user account
-      const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers()
-      
-      if (authError) {
-        console.error('❌ Database error:', authError)
-        return NextResponse.json({ error: 'Database error' }, { status: 500 })
-      }
-
-      const user = authUsers.users.find(u => u.email === customerEmail)
-      
-      if (!user) {
-        console.error('❌ User not found:', customerEmail)
-        return NextResponse.json({ error: 'User not found' }, { status: 404 })
-      }
-
-      // Update user to active subscription
-      const { error: updateError } = await supabase
-        .from('user_profiles')
-        .update({
-          subscription_status: 'active',
-          subscription_plan: subscriptionPlan,
-          stripe_customer_id: session.customer,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', user.id)
+      // BULLETPROOF: Find user and activate account in one query
+      const { data: result, error: updateError } = await supabase.rpc('activate_user_by_email', {
+        user_email: customerEmail,
+        plan: subscriptionPlan,
+        stripe_customer: session.customer
+      })
 
       if (updateError) {
         console.error('❌ Failed to update user:', updateError)
