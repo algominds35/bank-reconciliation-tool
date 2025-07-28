@@ -33,9 +33,9 @@ export default function LandingPage() {
     try {
       // Simulate successful submission without database
       await new Promise(resolve => setTimeout(resolve, 1000))
-      setShowSuccess(true)
-      setEmail('')
-      setTimeout(() => setShowSuccess(false), 5000)
+        setShowSuccess(true)
+        setEmail('')
+        setTimeout(() => setShowSuccess(false), 5000)
     } catch (err) {
       setError('Network error. Please try again.')
     } finally {
@@ -439,7 +439,7 @@ export default function LandingPage() {
                 <div className="mt-4">
                   <span className="text-4xl font-bold">$79</span>
                   <span className="text-gray-600">/month</span>
-                </div>
+            </div>
                 <p className="text-gray-600 mt-2">For growing businesses & bookkeepers</p>
               </CardHeader>
               <CardContent>
@@ -522,7 +522,7 @@ export default function LandingPage() {
                       Try Enterprise Free (14 Days)
                     </Button>
                   </a>
-                </div>
+              </div>
               </CardContent>
             </Card>
           </div>
