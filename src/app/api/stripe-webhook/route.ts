@@ -1,41 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
-import { createClient } from '@supabase/supabase-js'
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🔔 Webhook started - checking environment variables...')
+    console.log('🔔 SIMPLIFIED Webhook started...')
     
-    // Debug environment variables
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-    
-    console.log('🔍 Supabase URL:', supabaseUrl ? 'Found' : 'MISSING')
-    console.log('🔍 Service Role Key:', serviceRoleKey ? 'Found' : 'MISSING')
-    
-    if (!supabaseUrl || !serviceRoleKey) {
-      console.error('❌ Missing environment variables')
-      return NextResponse.json({ 
-        error: 'Server configuration error',
-        details: {
-          supabaseUrl: !!supabaseUrl,
-          serviceRoleKey: !!serviceRoleKey
-        }
-      }, { status: 500 })
-    }
-
-    // Admin client for user creation
-    const supabaseAdmin = createClient(
-      supabaseUrl,
-      serviceRoleKey,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
-
     const body = await request.text()
     console.log('📦 Webhook body length:', body.length)
     
@@ -86,59 +55,38 @@ export async function POST(request: NextRequest) {
 
       console.log('📋 Final assigned plan:', subscriptionPlan.toUpperCase())
 
-      // Check if user already exists
-      console.log('🔍 Checking if user exists...')
-      const { data: existingUser, error: lookupError } = await supabaseAdmin.auth.admin.listUsers()
+      // Find existing user in our database (they must have signed up first)
+      console.log('🔍 Looking for existing user...')
+      const { data: users, error: userError } = await supabase.auth.admin.listUsers()
       
-      if (lookupError) {
-        console.error('❌ Error listing users:', lookupError)
+      if (userError) {
+        console.error('❌ Error fetching users:', userError)
         return NextResponse.json({ 
           error: 'User lookup failed', 
-          details: lookupError.message 
+          details: userError.message 
         }, { status: 500 })
       }
 
-      const userExists = existingUser?.users?.find(u => u.email === customerEmail)
+      const existingUser = users.users.find(u => u.email === customerEmail)
 
-      let userId: string
-      let accountCreated = false
-
-      if (userExists) {
-        console.log('✅ User exists:', customerEmail)
-        userId = userExists.id
-      } else {
-        console.log('🔄 Creating new user account for:', customerEmail)
-        
-        // Create user using Supabase Admin API
-        const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
-          email: customerEmail,
-          password: `TempPass_${Date.now()}`, // Temporary password - user will reset it
-          email_confirm: true, // Auto-confirm since they paid
-          user_metadata: {
-            created_via: 'stripe_payment',
-            stripe_customer_id: session.customer
-          }
-        })
-
-        if (createError) {
-          console.error('❌ Failed to create user:', createError)
-          return NextResponse.json({ 
-            error: 'User creation failed', 
-            details: createError.message 
-          }, { status: 500 })
-        }
-
-        userId = newUser.user!.id
-        accountCreated = true
-        console.log('✅ User account created:', customerEmail, 'ID:', userId)
+      if (!existingUser) {
+        console.error('❌ User not found:', customerEmail)
+        console.log('💡 User must sign up first before paying')
+        return NextResponse.json({ 
+          error: 'User not found',
+          message: 'User must create account first via signup',
+          email: customerEmail
+        }, { status: 404 })
       }
 
-      // Update user profile with subscription info
-      console.log('📝 Updating user profile...')
+      console.log('✅ Found existing user:', customerEmail, 'ID:', existingUser.id)
+
+      // Update user profile with subscription info (SIMPLE!)
+      console.log('📝 Upgrading user to:', subscriptionPlan)
       const { error: profileError } = await supabase
         .from('user_profiles')
         .upsert({
-          id: userId,
+          id: existingUser.id,
           subscription_status: 'active',
           subscription_plan: subscriptionPlan,
           stripe_customer_id: session.customer,
@@ -154,7 +102,7 @@ export async function POST(request: NextRequest) {
         }, { status: 500 })
       }
 
-      console.log('✅ User profile updated successfully')
+      console.log('✅ User upgraded successfully!')
       console.log('🎉 WEBHOOK SUCCESS:', customerEmail, '→', subscriptionPlan.toUpperCase())
       
       return NextResponse.json({ 
@@ -162,7 +110,7 @@ export async function POST(request: NextRequest) {
         email: customerEmail,
         plan: subscriptionPlan,
         amount: amountPaid,
-        account_created: accountCreated
+        message: 'User upgraded successfully'
       })
     }
 

@@ -99,51 +99,9 @@ export default function LandingPage() {
               </Button>
             </div>
 
-            <div className="text-sm text-gray-500 mb-16">
-              ✅ No credit card required • ✅ Setup in under 2 minutes • ✅ Cancel anytime
-            </div>
-
-            {/* Hero Image/Video Placeholder */}
-            <div className="max-w-6xl mx-auto">
-              <div className="bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
-                <div className="bg-gray-50 px-6 py-4 border-b flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex space-x-1">
-                      <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                      <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                      <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                    </div>
-                    <span className="text-gray-600 font-medium">ReconcilePro Dashboard</span>
-                  </div>
-                  <Badge variant="secondary">Live Demo</Badge>
-                </div>
-                <div className="p-8">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <Card>
-                      <CardContent className="p-6 text-center">
-                        <div className="text-3xl font-bold text-green-600 mb-2">$125,847</div>
-                        <div className="text-gray-600">Reconciled This Month</div>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-6 text-center">
-                        <div className="text-3xl font-bold text-blue-600 mb-2">847</div>
-                        <div className="text-gray-600">Transactions Matched</div>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-6 text-center">
-                        <div className="text-3xl font-bold text-purple-600 mb-2">23m</div>
-                        <div className="text-gray-600">Time Saved</div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                  <div className="text-center text-gray-500">
-                    📊 Real-time dashboard showing your reconciliation progress
-                  </div>
-                </div>
-              </div>
-            </div>
+            <p className="text-sm text-gray-500">
+              ✅ No credit card required • ✅ Full access for 14 days • ✅ Cancel anytime
+            </p>
           </div>
         </div>
       </section>
@@ -453,11 +411,11 @@ export default function LandingPage() {
                     <span>Email support</span>
                   </li>
                 </ul>
-                <a href="https://buy.stripe.com/test_6oU3cx6DQ1EP0Ix5XY0Fi07" target="_blank" rel="noopener noreferrer">
+                <Link href="/auth/signup">
                   <Button className="w-full" variant="outline">
                     Start Free Trial
                   </Button>
-                </a>
+                </Link>
               </CardContent>
             </Card>
 
@@ -497,11 +455,11 @@ export default function LandingPage() {
                     <span>API access</span>
                   </li>
                 </ul>
-                <a href="https://buy.stripe.com/test_28EbJ32nA0ALezn1HI0Fi08" target="_blank" rel="noopener noreferrer">
+                <Link href="/auth/signup">
                   <Button className="w-full">
                     Start Free Trial
                   </Button>
-                </a>
+                </Link>
               </CardContent>
             </Card>
 
@@ -538,11 +496,11 @@ export default function LandingPage() {
                     <span>Dedicated support</span>
                   </li>
                 </ul>
-                <a href="https://buy.stripe.com/test_aFa9AV4vIdnxgHv2LM0Fi09" target="_blank" rel="noopener noreferrer">
+                <Link href="/auth/signup">
                   <Button className="w-full" variant="outline">
                     Start Free Trial
                   </Button>
-                </a>
+                </Link>
               </CardContent>
             </Card>
           </div>

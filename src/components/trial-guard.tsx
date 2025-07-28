@@ -1,11 +1,16 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useTrialStatus } from '@/hooks/useTrialStatus'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { AlertTriangle, Clock, Crown, Zap } from 'lucide-react'
+import { 
+  Clock, 
+  AlertTriangle,
+  Loader2
+} from 'lucide-react'
 
 interface TrialGuardProps {
   children: React.ReactNode
@@ -13,125 +18,69 @@ interface TrialGuardProps {
 
 export function TrialGuard({ children }: TrialGuardProps) {
   const trialStatus = useTrialStatus()
+  const router = useRouter()
 
-  // Show loading state
+  // Redirect expired users to upgrade page
+  useEffect(() => {
+    if (!trialStatus.isLoading && trialStatus.subscriptionStatus === 'expired') {
+      router.push('/upgrade')
+    }
+  }, [trialStatus.isLoading, trialStatus.subscriptionStatus, router])
+
+  // Loading state
   if (trialStatus.isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your account...</p>
+          <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Loading your account status...</p>
         </div>
       </div>
     )
   }
 
-  // Block access if trial expired and no active subscription
-  if (!trialStatus.isTrialActive && trialStatus.subscriptionStatus !== 'active') {
+  // Trial expired - redirect to upgrade (this shouldn't render due to useEffect)
+  if (trialStatus.subscriptionStatus === 'expired') {
     return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto">
-          <Card className="text-center border-red-200">
-            <CardHeader className="pb-6">
-              <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <AlertTriangle className="h-12 w-12 text-red-600" />
-              </div>
-              <CardTitle className="text-3xl font-bold text-gray-900">
-                Trial Expired
-              </CardTitle>
-              <p className="text-xl text-gray-600 mt-4">
-                Your 14-day free trial has ended. Upgrade now to continue using ReconcilePro.
-              </p>
-            </CardHeader>
-            <CardContent className="space-y-8">
-              
-              <div className="bg-blue-50 p-6 rounded-lg">
-                <h3 className="font-semibold text-blue-900 mb-4 flex items-center justify-center">
-                  <Crown className="h-5 w-5 mr-2" />
-                  Choose Your Plan
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  
-                  {/* Starter Plan */}
-                  <div className="bg-white p-4 rounded-lg border">
-                    <h4 className="font-semibold text-gray-900">Starter</h4>
-                    <p className="text-2xl font-bold text-gray-900">$29<span className="text-sm text-gray-500">/month</span></p>
-                    <p className="text-sm text-gray-600 mb-3">Up to 1,000 transactions/month</p>
-                    <a href="https://buy.stripe.com/test_6oU3cx6DQ1EP0Ix5XY0Fi07" target="_blank" rel="noopener noreferrer">
-                      <Button className="w-full" size="sm">
-                        Choose Plan
-                      </Button>
-                    </a>
-                  </div>
-
-                  {/* Professional Plan */}
-                  <div className="bg-white p-4 rounded-lg border-2 border-blue-500 relative">
-                    <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-blue-500">Popular</Badge>
-                    <h4 className="font-semibold text-gray-900">Professional</h4>
-                    <p className="text-2xl font-bold text-gray-900">$79<span className="text-sm text-gray-500">/month</span></p>
-                    <p className="text-sm text-gray-600 mb-3">Up to 10,000 transactions/month</p>
-                    <a href="https://buy.stripe.com/test_28EbJ32nA0ALezn1HI0Fi08" target="_blank" rel="noopener noreferrer">
-                      <Button className="w-full" size="sm">
-                        Choose Plan
-                      </Button>
-                    </a>
-                  </div>
-
-                  {/* Enterprise Plan */}
-                  <div className="bg-white p-4 rounded-lg border">
-                    <h4 className="font-semibold text-gray-900">Enterprise</h4>
-                    <p className="text-2xl font-bold text-gray-900">$199<span className="text-sm text-gray-500">/month</span></p>
-                    <p className="text-sm text-gray-600 mb-3">Unlimited transactions</p>
-                    <a href="https://buy.stripe.com/test_aFa9AV4vIdnxgHv2LM0Fi09" target="_blank" rel="noopener noreferrer">
-                      <Button className="w-full" size="sm" variant="outline">
-                        Choose Plan
-                      </Button>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="text-sm text-gray-500 pt-4 border-t">
-                <p className="mb-2">
-                  🔐 All your data is safely stored and will be restored immediately after payment
-                </p>
-                <p>
-                  💬 Questions? Email us at support@getconnectflows.com
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600">Redirecting to upgrade page...</p>
         </div>
       </div>
     )
   }
 
-  // Show trial warning if less than 3 days remaining
-  const showWarning = trialStatus.subscriptionStatus === 'trial' && trialStatus.daysRemaining <= 3
+  // Show trial warning if less than 3 days remaining (but still active)
+  const showTrialWarning = trialStatus.subscriptionStatus === 'trial' && trialStatus.daysRemaining <= 3
 
   return (
     <div>
-      {showWarning && (
-        <div className="bg-orange-50 border-l-4 border-orange-400 p-4">
-          <div className="flex items-center justify-between">
+      {/* Trial Warning Banner */}
+      {showTrialWarning && (
+        <div className="bg-yellow-50 border-b border-yellow-200 px-4 py-3">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center">
-              <Clock className="h-5 w-5 text-orange-500 mr-2" />
-              <p className="text-orange-800">
-                <strong>{trialStatus.daysRemaining} days left</strong> in your free trial. 
-                <span className="ml-1">Upgrade now to continue access.</span>
-              </p>                              
+              <AlertTriangle className="h-5 w-5 text-yellow-600 mr-2" />
+              <span className="text-yellow-800 font-medium">
+                Trial expires in {trialStatus.daysRemaining} day{trialStatus.daysRemaining !== 1 ? 's' : ''}!
+              </span>
+              <span className="text-yellow-700 ml-2">
+                Choose a plan to continue accessing your data.
+              </span>
             </div>
-            <div className="flex gap-2">
-              <a href="https://buy.stripe.com/test_28EbJ32nA0ALezn1HI0Fi08" target="_blank" rel="noopener noreferrer">
-                <Button size="sm" className="flex items-center">
-                  <Zap className="h-4 w-4 mr-1" />
-                  Upgrade Now
-                </Button>
-              </a>
-            </div>
+            <Button 
+              size="sm" 
+              onClick={() => router.push('/upgrade')}
+              className="bg-yellow-600 hover:bg-yellow-700 text-white"
+            >
+              Upgrade Now
+            </Button>
           </div>
         </div>
       )}
+
+      {/* Render children (dashboard content) */}
       {children}
     </div>
   )
