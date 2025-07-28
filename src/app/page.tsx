@@ -60,9 +60,9 @@ export default function LandingPage() {
               <a href="#pricing" className="text-gray-600 hover:text-gray-900">Pricing</a>
               <a href="#testimonials" className="text-gray-600 hover:text-gray-900">Reviews</a>
               <Link href="/auth/login" className="text-gray-600 hover:text-gray-900">Login</Link>
-              <Link href="/auth/signup">
-                <Button variant="outline">Try Free (14 Days)</Button>
-              </Link>
+              <a href="https://buy.stripe.com/test_TRIAL_PROFESSIONAL_LINK_HERE" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline">Try Professional Free (14 Days)</Button>
+              </a>
             </div>
           </div>
         </div>
@@ -93,16 +93,16 @@ export default function LandingPage() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </a>
-              <Link href="/auth/signup">
+              <a href="https://buy.stripe.com/test_TRIAL_PROFESSIONAL_LINK_HERE" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="lg" className="text-lg px-8 py-6">
                   <Clock className="mr-2 h-5 w-5" />
-                  Try Free (14 Days)
+                  Try Professional Free (14 Days)
                 </Button>
-              </Link>
+              </a>
             </div>
 
             <p className="text-sm text-gray-500">
-              💳 Instant access after payment • 🔒 Secure checkout • ✅ Cancel anytime
+              💳 Credit card required for trial • 🔒 Cancel anytime • ✅ Auto-billing after 14 days
             </p>
           </div>
         </div>
@@ -413,11 +413,19 @@ export default function LandingPage() {
                     <span>Email support</span>
                   </li>
                 </ul>
-                <a href="https://buy.stripe.com/test_6oU3cx6DQ1EP0Ix5XY0Fi07" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full" variant="outline">
-                    Get Starter - $29/mo
-                  </Button>
-                </a>
+                <div className="space-y-3">
+                  <a href="https://buy.stripe.com/test_6oU3cx6DQ1EP0Ix5XY0Fi07" target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full" variant="outline">
+                      Get Starter - $29/mo
+                    </Button>
+                  </a>
+                  <a href="https://buy.stripe.com/test_TRIAL_STARTER_LINK_HERE" target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full" variant="ghost">
+                      <Clock className="mr-2 h-4 w-4" />
+                      Try Starter Free (14 Days)
+                    </Button>
+                  </a>
+                </div>
               </CardContent>
             </Card>
 
@@ -457,11 +465,19 @@ export default function LandingPage() {
                     <span>API access</span>
                   </li>
                 </ul>
-                <a href="https://buy.stripe.com/test_28EbJ32nA0ALezn1HI0Fi08" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full">
-                    Get Professional - $79/mo
-                  </Button>
-                </a>
+                <div className="space-y-3">
+                  <a href="https://buy.stripe.com/test_28EbJ32nA0ALezn1HI0Fi08" target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full">
+                      Get Professional - $79/mo
+                    </Button>
+                  </a>
+                  <a href="https://buy.stripe.com/test_TRIAL_PROFESSIONAL_LINK_HERE" target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full" variant="outline">
+                      <Clock className="mr-2 h-4 w-4" />
+                      Try Professional Free (14 Days)
+                    </Button>
+                  </a>
+                </div>
               </CardContent>
             </Card>
 
@@ -494,21 +510,29 @@ export default function LandingPage() {
                     <span>Dedicated support</span>
                   </li>
                 </ul>
-                <a href="https://buy.stripe.com/test_aFa9AV4vIdnxgHv2LM0Fi09" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full" variant="outline">
-                    Get Enterprise - $199/mo
-                  </Button>
-                </a>
+                <div className="space-y-3">
+                  <a href="https://buy.stripe.com/test_aFa9AV4vIdnxgHv2LM0Fi09" target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full" variant="outline">
+                      Get Enterprise - $199/mo
+                    </Button>
+                  </a>
+                  <a href="https://buy.stripe.com/test_TRIAL_ENTERPRISE_LINK_HERE" target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full" variant="ghost">
+                      <Clock className="mr-2 h-4 w-4" />
+                      Try Enterprise Free (14 Days)
+                    </Button>
+                  </a>
+                </div>
               </CardContent>
             </Card>
           </div>
 
           <div className="text-center mt-12">
             <p className="text-gray-600 mb-4">
-              💳 Instant access after payment • 🛡️ Bank-grade security • 🔒 99.9% uptime guarantee
+              💳 Credit card required for trials • 🛡️ Bank-grade security • 🔒 99.9% uptime guarantee
             </p>
             <p className="text-sm text-gray-500">
-              Want to try first? <Link href="/auth/signup" className="text-blue-600 hover:underline">Start 14-day free trial</Link> • Cancel anytime
+              🆓 14-day free trials • ⚡ Instant access • 🚫 Cancel anytime before billing
             </p>
           </div>
         </div>
