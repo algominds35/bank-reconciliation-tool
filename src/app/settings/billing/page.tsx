@@ -21,8 +21,7 @@ export default function BillingPage() {
   const [user, setUser] = useState<any>(null)
   const [subscription, setSubscription] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-  const [cancelling, setCancelling] = useState(false)
-  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+
 
   useEffect(() => {
     checkUser()
@@ -63,32 +62,8 @@ export default function BillingPage() {
     }
   }
 
-  const handleCancelSubscription = async () => {
-    setCancelling(true)
-    try {
-      // Update subscription status to cancelled
-      const { error } = await supabase
-        .from('user_profiles')
-        .update({
-          subscription_status: 'cancelled',
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', user.id)
-
-      if (error) {
-        console.error('Error cancelling subscription:', error)
-        alert('Error cancelling subscription. Please contact support.')
-      } else {
-        setSubscription({ ...subscription, subscription_status: 'cancelled' })
-        setShowCancelConfirm(false)
-        alert('Subscription cancelled successfully. You will not be charged again.')
-      }
-    } catch (error) {
-      console.error('Error:', error)
-      alert('Error cancelling subscription. Please contact support.')
-    } finally {
-      setCancelling(false)
-    }
+  const handleContactSupport = () => {
+    window.open('mailto:support@reconcilepro.com?subject=Cancel Subscription Request', '_blank')
   }
 
   const getPlanDisplayName = (plan: string) => {
@@ -195,7 +170,7 @@ export default function BillingPage() {
             </CardContent>
           </Card>
 
-          {/* Cancellation */}
+          {/* Cancellation - Support Only */}
           {subscription?.subscription_status === 'active' && (
             <Card>
               <CardHeader>
@@ -206,48 +181,40 @@ export default function BillingPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <p className="text-gray-700">
-                    Cancelling your subscription will:
-                  </p>
-                  <ul className="list-disc pl-6 text-gray-700 space-y-1">
-                    <li>Stop all future billing</li>
-                    <li>Allow you to continue using the service until the end of your current billing period</li>
-                    <li>Delete your data after 30 days</li>
-                  </ul>
-                  
-                  {!showCancelConfirm ? (
-                    <Button 
-                      variant="destructive" 
-                      onClick={() => setShowCancelConfirm(true)}
-                      className="mt-4"
-                    >
-                      Cancel Subscription
-                    </Button>
-                  ) : (
-                    <div className="mt-4 space-y-4">
-                      <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-                        <p className="text-red-800 font-medium">Are you sure you want to cancel?</p>
-                        <p className="text-red-700 text-sm mt-1">
-                          This action cannot be undone. You'll lose access to all premium features.
-                        </p>
-                      </div>
-                      <div className="flex space-x-3">
-                        <Button 
-                          variant="destructive" 
-                          onClick={handleCancelSubscription}
-                          disabled={cancelling}
-                        >
-                          {cancelling ? 'Cancelling...' : 'Yes, Cancel My Subscription'}
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          onClick={() => setShowCancelConfirm(false)}
-                        >
-                          No, Keep My Subscription
-                        </Button>
-                      </div>
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <AlertTriangle className="h-4 w-4 text-blue-600" />
+                      <span className="font-medium text-blue-900">Contact Support Required</span>
                     </div>
-                  )}
+                    <p className="text-blue-700 text-sm">
+                      To cancel your subscription, please contact our support team. This helps us understand your needs and potentially offer better solutions.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <p className="text-gray-700">
+                      <strong>Why contact support?</strong>
+                    </p>
+                    <ul className="list-disc pl-6 text-gray-700 space-y-1">
+                      <li>We can offer better pricing or features</li>
+                      <li>Help resolve any issues you're experiencing</li>
+                      <li>Provide data export assistance</li>
+                      <li>Ensure smooth account closure</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <Button 
+                      onClick={handleContactSupport}
+                      className="w-full"
+                    >
+                      Contact Support to Cancel
+                    </Button>
+                    
+                    <p className="text-sm text-gray-500 text-center">
+                      Response within 24 hours • We're here to help!
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
