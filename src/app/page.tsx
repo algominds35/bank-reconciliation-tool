@@ -60,8 +60,8 @@ export default function LandingPage() {
               <a href="#pricing" className="text-gray-600 hover:text-gray-900">Pricing</a>
               <a href="#testimonials" className="text-gray-600 hover:text-gray-900">Reviews</a>
               <Link href="/auth/login" className="text-gray-600 hover:text-gray-900">Login</Link>
-              <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline">Try Starter Free (14 Days)</Button>
+              <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline">Try Professional Free (14 Days)</Button>
               </a>
             </div>
           </div>
@@ -87,16 +87,16 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+              <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="text-lg px-8 py-6">
-                  Get Starter $29/mo
+                  Get Professional $79/mo
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </a>
-              <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+              <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="lg" className="text-lg px-8 py-6">
                   <Clock className="mr-2 h-5 w-5" />
-                  Try Starter Free (14 Days)
+                  Try Professional Free (14 Days)
                 </Button>
               </a>
             </div>
@@ -466,12 +466,12 @@ export default function LandingPage() {
                   </li>
                 </ul>
                 <div className="space-y-3">
-                  <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                  <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                     <Button className="w-full">
                       Get Professional - $79/mo
                     </Button>
                   </a>
-                  <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                  <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                     <Button className="w-full" variant="outline">
                       <Clock className="mr-2 h-4 w-4" />
                       Try Professional Free (14 Days)
@@ -511,12 +511,12 @@ export default function LandingPage() {
                   </li>
                 </ul>
                 <div className="space-y-3">
-                  <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                  <a href="https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c" target="_blank" rel="noopener noreferrer">
                     <Button className="w-full" variant="outline">
                       Get Enterprise - $199/mo
                     </Button>
                   </a>
-                  <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                  <a href="https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c" target="_blank" rel="noopener noreferrer">
                     <Button className="w-full" variant="ghost">
                       <Clock className="mr-2 h-4 w-4" />
                       Try Enterprise Free (14 Days)

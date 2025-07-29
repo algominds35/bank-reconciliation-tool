@@ -36,7 +36,7 @@ export const PRICING_PLANS = {
     name: 'Professional',
     price: 79,
     priceId: 'price_professional_live',
-    paymentLink: 'https://buy.stripe.com/professional_live_link', // You'll need to create this
+    paymentLink: 'https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b',
     features: [
       'Up to 10,000 transactions/month',
       'Multi-client management',
@@ -49,7 +49,7 @@ export const PRICING_PLANS = {
     name: 'Enterprise',
     price: 199,
     priceId: 'price_enterprise_live',
-    paymentLink: 'https://buy.stripe.com/enterprise_live_link', // You'll need to create this
+    paymentLink: 'https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c',
     features: [
       'Unlimited transactions',
       'Unlimited clients',

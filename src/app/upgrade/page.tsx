@@ -105,7 +105,7 @@ export default function UpgradePage() {
                   <span>API access</span>
                 </li>
               </ul>
-              <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+              <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                 <Button className="w-full">
                   Get Professional - $79/mo
                 </Button>
@@ -146,7 +146,7 @@ export default function UpgradePage() {
                   <span>Dedicated support</span>
                 </li>
               </ul>
-              <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+              <a href="https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c" target="_blank" rel="noopener noreferrer">
                 <Button className="w-full">
                   Get Enterprise - $199/mo
                 </Button>

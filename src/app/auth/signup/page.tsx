@@ -90,7 +90,7 @@ export default function SignUp() {
               </div>
 
               <div className="grid gap-4">
-                <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                   <Button className="w-full">
                     Get Professional - $79/mo
                   </Button>
@@ -102,7 +102,7 @@ export default function SignUp() {
                   </Button>
                 </a>
 
-                <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                <a href="https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c" target="_blank" rel="noopener noreferrer">
                   <Button className="w-full" variant="outline">
                     Get Enterprise - $199/mo
                   </Button>
