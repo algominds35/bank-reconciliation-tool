@@ -28,7 +28,8 @@ import {
   CheckCircle,
   AlertCircle,
   LogOut,
-  Settings
+  Settings,
+  CreditCard
 } from 'lucide-react'
 
 export default function Dashboard() {
@@ -544,6 +545,13 @@ export default function Dashboard() {
                 </Button>
               </Link>
 
+              <Link href="/settings/billing">
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                  <CreditCard className="h-4 w-4" />
+                  <span>Billing</span>
+                </Button>
+              </Link>
+              
               <Link href="/settings/security">
                 <Button variant="outline" size="sm" className="flex items-center space-x-2">
                   <Settings className="h-4 w-4" />
