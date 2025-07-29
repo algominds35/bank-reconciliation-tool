@@ -47,7 +47,7 @@ function PaymentSuccessContent() {
           </CardHeader>
           <CardContent className="space-y-6">
             <p className="text-xl text-gray-600">
-              Your subscription is active! Now create your account to access your dashboard.
+              Welcome to ReconcileBook! Your subscription is active and ready.
             </p>
             
             <div className="bg-blue-50 p-6 rounded-lg">
@@ -59,7 +59,7 @@ function PaymentSuccessContent() {
                 </div>
                 <div className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5" />
-                  <span>Your subscription is now active</span>
+                  <span>Your ReconcileBook subscription is now active</span>
                 </div>
                 <div className="flex items-start">
                   <UserPlus className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
@@ -71,7 +71,7 @@ function PaymentSuccessContent() {
             <div className="bg-green-50 p-6 rounded-lg border border-green-200">
               <h3 className="font-semibold text-green-900 mb-2 flex items-center justify-center">
                 <UserPlus className="h-5 w-5 mr-2" />
-                Create Your Account Now
+                Create Your ReconcileBook Account
               </h3>
               <p className="text-green-800 text-sm mb-4">
                 <strong>Important:</strong> Use the same email address you used for payment to automatically link your subscription.
@@ -91,7 +91,7 @@ function PaymentSuccessContent() {
               <Link href="/auth/login">
                 <Button variant="outline" className="w-full">
                   <LogIn className="mr-2 h-4 w-4" />
-                  Login to Dashboard
+                  Login to ReconcileBook Dashboard
                 </Button>
               </Link>
             </div>
@@ -101,16 +101,17 @@ function PaymentSuccessContent() {
               <div className="text-left space-y-1">
                 <p>1. Create your account with the same email</p>
                 <p>2. We'll automatically link your payment</p>
-                <p>3. Get instant access to your dashboard</p>
+                <p>3. Get instant access to your ReconcileBook dashboard</p>
                 <p>4. Start reconciling transactions immediately</p>
               </div>
             </div>
 
-            <div className="text-sm text-gray-500 pt-4 border-t">
-              <p className="font-semibold mb-2">Need Help?</p>
-              <p>
-                💬 Questions? Contact us at support@yourapp.com<br/>
-                📧 Receipt sent to your email address
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="text-sm text-gray-600">
+                <strong>Need help?</strong> Contact us at{' '}
+                <a href="mailto:alex@usealgomind.com" className="text-blue-600 hover:underline">
+                  alex@usealgomind.com
+                </a>
               </p>
             </div>
           </CardContent>
@@ -126,7 +127,7 @@ export default function PaymentSuccess() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading payment confirmation...</p>
+          <p className="text-gray-600">Loading...</p>
         </div>
       </div>
     }>
