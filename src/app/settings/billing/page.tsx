@@ -63,7 +63,7 @@ export default function BillingPage() {
   }
 
   const handleContactSupport = () => {
-    window.open('mailto:support@reconcilepro.com?subject=Cancel Subscription Request', '_blank')
+    window.open('mailto:alex@usealgomind.com?subject=Cancel Subscription Request', '_blank')
   }
 
   const getPlanDisplayName = (plan: string) => {
@@ -232,7 +232,7 @@ export default function BillingPage() {
               </p>
               <div className="space-y-2">
                 <p className="text-sm text-gray-600">
-                  <strong>Email:</strong> support@reconcilepro.com
+                  <strong>Email:</strong> alex@usealgomind.com
                 </p>
                 <p className="text-sm text-gray-600">
                   <strong>Response time:</strong> Within 24 hours

@@ -80,7 +80,7 @@ export default function TermsOfService() {
                 <ul className="list-disc pl-6 text-gray-700 space-y-2">
                   <li><strong>Free Trial:</strong> 14-day free trial with credit card required</li>
                   <li><strong>Billing:</strong> Automatic billing after trial period</li>
-                  <li><strong>Cancellation:</strong> Cancel anytime through your account</li>
+                  <li><strong>Cancellation:</strong> Contact support to cancel your subscription</li>
                   <li><strong>Refunds:</strong> No refunds for partial months</li>
                   <li><strong>Price Changes:</strong> 30-day notice for price increases</li>
                 </ul>
@@ -156,8 +156,8 @@ export default function TermsOfService() {
                 </h2>
                 <p className="text-gray-700">
                   For questions about these Terms of Service, please contact us at:{' '}
-                  <a href="mailto:legal@reconcilepro.com" className="text-blue-600 hover:underline">
-                    legal@reconcilepro.com
+                  <a href="mailto:alex@usealgomind.com" className="text-blue-600 hover:underline">
+                    alex@usealgomind.com
                   </a>
                 </p>
               </section>

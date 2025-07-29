@@ -113,8 +113,8 @@ export default function PrivacyPolicy() {
                 </h2>
                 <p className="text-gray-700">
                   If you have questions about this Privacy Policy, please contact us at:{' '}
-                  <a href="mailto:privacy@reconcilepro.com" className="text-blue-600 hover:underline">
-                    privacy@reconcilepro.com
+                  <a href="mailto:alex@usealgomind.com" className="text-blue-600 hover:underline">
+                    alex@usealgomind.com
                   </a>
                 </p>
               </section>

@@ -90,7 +90,7 @@ export function AccessGuard({ children }: AccessGuardProps) {
   }
 
   const handleContactSupport = () => {
-    window.open('mailto:support@reconcilepro.com', '_blank')
+    window.open('mailto:alex@usealgomind.com', '_blank')
   }
 
   if (loading) {
@@ -149,9 +149,9 @@ export function AccessGuard({ children }: AccessGuardProps) {
                 </Button>
               </div>
 
-              <div className="text-center text-sm text-gray-500">
-                <p>Need help? Contact us at support@reconcilepro.com</p>
-              </div>
+                                        <div className="text-center text-sm text-gray-500">
+                            <p>Need help? Contact us at alex@usealgomind.com</p>
+                          </div>
             </CardContent>
           </Card>
         </div>
