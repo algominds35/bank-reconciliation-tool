@@ -53,7 +53,7 @@ export default function LandingPage() {
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <TrendingUp className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900">ReconcilePro</span>
+              <span className="text-xl font-bold text-gray-900">ReconcileBook</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-gray-600 hover:text-gray-900">Features</a>
@@ -77,13 +77,13 @@ export default function LandingPage() {
             </Badge>
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
-              Stop Wasting Hours on{' '}
-              <span className="text-blue-600">Bank Reconciliation</span>
+              Reconcile Your Books{' '}
+              <span className="text-blue-600">Faster Than QuickBooks</span>
             </h1>
             
             <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto">
-              Turn 8-hour reconciliation nightmares into 30-minute breeze sessions. 
-              Professional-grade bank reconciliation without the enterprise price tag.
+              Professional bank reconciliation software for bookkeepers, accountants, and small businesses. 
+              Turn 8-hour reconciliation nightmares into 30-minute breeze sessions.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -310,7 +310,7 @@ export default function LandingPage() {
                   ))}
                 </div>
                 <p className="text-gray-700 mb-4 italic">
-                  "Cut my monthly reconciliation from 6 hours to 45 minutes. This tool paid for itself in the first month."
+                  "Cut my monthly reconciliation from 6 hours to 45 minutes. ReconcileBook paid for itself in the first month."
                 </p>
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
@@ -586,7 +586,7 @@ export default function LandingPage() {
                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                   <TrendingUp className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-xl font-bold">ReconcilePro</span>
+                <span className="text-xl font-bold">ReconcileBook</span>
               </div>
               <p className="text-gray-400 mb-4">
                 Professional bank reconciliation software that saves you time and reduces errors.
@@ -636,7 +636,7 @@ export default function LandingPage() {
         </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 ReconcilePro. All rights reserved.</p>
+            <p>&copy; 2024 ReconcileBook. All rights reserved.</p>
           </div>
         </div>
       </footer>

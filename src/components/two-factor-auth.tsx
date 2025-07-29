@@ -76,7 +76,7 @@ export function TwoFactorAuth({ userId, userEmail }: TwoFactorAuthProps) {
     setSecretKey(secret)
     
     // Generate QR code URL for authenticator apps
-    const issuer = 'ReconcilePro'
+    const issuer = 'ReconcileBook'
     const label = `${issuer}:${userEmail}`
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=otpauth://totp/${encodeURIComponent(label)}?secret=${secret}&issuer=${encodeURIComponent(issuer)}`
     

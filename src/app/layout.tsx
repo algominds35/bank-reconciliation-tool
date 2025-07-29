@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Bank Reconciliation Tool',
-  description: 'A private bank reconciliation tool for small business owners',
+  title: 'ReconcileBook - Professional Bank Reconciliation Software',
+  description: 'Professional bank reconciliation software for small businesses, bookkeepers, and accountants. Reconcile your books faster and more accurately than QuickBooks.',
 }
 
 export default function RootLayout({

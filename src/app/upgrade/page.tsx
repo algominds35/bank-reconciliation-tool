@@ -5,33 +5,41 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { 
-  CheckCircle, 
-  Crown, 
-  Zap,
-  ArrowLeft,
-  Clock
-} from 'lucide-react'
+import { CheckCircle, Clock, ArrowRight, TrendingUp } from 'lucide-react'
 
 export default function UpgradePage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Clock className="h-12 w-12 text-orange-600" />
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="border-b bg-white/95 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <TrendingUp className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl font-bold text-gray-900">ReconcileBook</span>
+            </div>
+            <div className="hidden md:flex items-center space-x-8">
+              <Link href="/" className="text-gray-600 hover:text-gray-900">Home</Link>
+              <Link href="/auth/login" className="text-gray-600 hover:text-gray-900">Login</Link>
+            </div>
           </div>
+        </div>
+      </header>
+
+      {/* Content */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Your Free Trial Has Expired
+            Upgrade Your Account
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            You've experienced the power of ReconcilePro! Choose a plan to continue accessing your dashboard and all premium features.
+          <p className="text-xl text-gray-600">
+            You've experienced the power of ReconcileBook! Choose a plan to continue accessing your dashboard and all premium features.
           </p>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-12">
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {/* Starter Plan */}
           <Card className="relative">
             <CardHeader className="text-center pb-8">
@@ -61,11 +69,19 @@ export default function UpgradePage() {
                   <span>Email support</span>
                 </li>
               </ul>
-              <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
-                <Button className="w-full">
-                  Get Starter - $29/mo
-                </Button>
-              </a>
+              <div className="space-y-3">
+                <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full" variant="outline">
+                    Get Starter - $29/mo
+                  </Button>
+                </a>
+                <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full" variant="ghost">
+                    <Clock className="mr-2 h-4 w-4" />
+                    Try Starter Free (14 Days)
+                  </Button>
+                </a>
+              </div>
             </CardContent>
           </Card>
 
@@ -105,11 +121,19 @@ export default function UpgradePage() {
                   <span>API access</span>
                 </li>
               </ul>
-              <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-                <Button className="w-full">
-                  Get Professional - $79/mo
-                </Button>
-              </a>
+              <div className="space-y-3">
+                <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full">
+                    Get Professional - $79/mo
+                  </Button>
+                </a>
+                <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full" variant="outline">
+                    <Clock className="mr-2 h-4 w-4" />
+                    Try Professional Free (14 Days)
+                  </Button>
+                </a>
+              </div>
             </CardContent>
           </Card>
 
@@ -131,10 +155,6 @@ export default function UpgradePage() {
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
-                  <span>Unlimited clients</span>
-                </li>
-                <li className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-green-500 mr-3" />
                   <span>Team collaboration</span>
                 </li>
                 <li className="flex items-center">
@@ -146,40 +166,38 @@ export default function UpgradePage() {
                   <span>Dedicated support</span>
                 </li>
               </ul>
-              <a href="https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c" target="_blank" rel="noopener noreferrer">
-                <Button className="w-full">
-                  Get Enterprise - $199/mo
-                </Button>
-              </a>
+              <div className="space-y-3">
+                <a href="https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full" variant="outline">
+                    Get Enterprise - $199/mo
+                  </Button>
+                </a>
+                <a href="https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full" variant="ghost">
+                    <Clock className="mr-2 h-4 w-4" />
+                    Try Enterprise Free (14 Days)
+                  </Button>
+                </a>
+              </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Bottom Actions */}
-        <div className="text-center">
-          <div className="bg-blue-50 p-6 rounded-lg max-w-2xl mx-auto mb-8">
-            <Crown className="h-8 w-8 text-blue-600 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-blue-900 mb-2">
-              Continue Where You Left Off
-            </h3>
-            <p className="text-blue-800">
-              Your data and settings are preserved. Choose a plan above to instantly restore access to your dashboard.
-            </p>
-          </div>
+        <div className="text-center mt-12">
+          <p className="text-gray-600 mb-4">
+            💳 Credit card required for trials • 🛡️ Bank-grade security • 🔒 99.9% uptime guarantee
+          </p>
+          <p className="text-sm text-gray-500">
+            🆓 14-day free trials • ⚡ Instant access • 🚫 Cancel anytime before billing
+          </p>
+        </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/dashboard">
-              <Button variant="outline" className="flex items-center">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Dashboard
-              </Button>
-            </Link>
-            <Link href="/">
-              <Button variant="ghost">
-                Return to Homepage
-              </Button>
-            </Link>
-          </div>
+        <div className="text-center mt-8">
+          <Link href="/">
+            <Button variant="ghost">
+              Back to Home
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
