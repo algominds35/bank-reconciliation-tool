@@ -108,6 +108,68 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Demo Video Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              See How It Works in 2 Minutes
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Watch how ReconcileBook transforms 4-5 hours of manual reconciliation into an 8-minute automated process.
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden">
+              {/* Replace this with your actual video embed */}
+              <div className="aspect-video bg-gray-100 flex items-center justify-center">
+                <div className="text-center">
+                  <Play className="h-16 w-16 text-blue-600 mx-auto mb-4" />
+                  <p className="text-gray-600 text-lg">Demo Video Coming Soon</p>
+                  <p className="text-gray-500 text-sm mt-2">Upload your 2-minute demo video here</p>
+                </div>
+              </div>
+              
+              {/* Video Description */}
+              <div className="p-8">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">What You'll See:</h3>
+                <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-600">
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>Upload bank and bookkeeping CSV files</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>Smart matching interface</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>One-click reconciliation</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>Professional PDF reports</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>QuickBooks CSV export</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span>95% time savings</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Social Proof */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
