@@ -16,9 +16,9 @@ const supabaseAdmin = createClient(
 )
 
 // Initialize Stripe with live keys
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_LIVE!, {
+const stripe = process.env.STRIPE_SECRET_KEY_LIVE ? new Stripe(process.env.STRIPE_SECRET_KEY_LIVE, {
   apiVersion: '2025-06-30.basil',
-})
+}) : null
 
 export async function POST(request: NextRequest) {
   try {
@@ -50,6 +50,11 @@ export async function POST(request: NextRequest) {
     }
     
     // Verify webhook signature
+    if (!stripe) {
+      console.error('❌ Stripe not configured')
+      return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 })
+    }
+
     let event: Stripe.Event
     try {
       event = stripe.webhooks.constructEvent(
