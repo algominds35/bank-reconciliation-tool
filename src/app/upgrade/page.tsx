@@ -61,9 +61,9 @@ export default function UpgradePage() {
                   <span>Email support</span>
                 </li>
               </ul>
-              <a href="https://buy.stripe.com/test_6oU3cx6DQ1EP0Ix5XY0Fi07" target="_blank" rel="noopener noreferrer">
-                <Button className="w-full" variant="outline">
-                  Choose Starter
+              <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                <Button className="w-full">
+                  Get Starter - $29/mo
                 </Button>
               </a>
             </CardContent>
@@ -105,9 +105,9 @@ export default function UpgradePage() {
                   <span>API access</span>
                 </li>
               </ul>
-              <a href="https://buy.stripe.com/test_28EbJ32nA0ALezn1HI0Fi08" target="_blank" rel="noopener noreferrer">
+              <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
                 <Button className="w-full">
-                  Choose Professional
+                  Get Professional - $79/mo
                 </Button>
               </a>
             </CardContent>
@@ -146,9 +146,9 @@ export default function UpgradePage() {
                   <span>Dedicated support</span>
                 </li>
               </ul>
-              <a href="https://buy.stripe.com/test_aFa9AV4vIdnxgHv2LM0Fi09" target="_blank" rel="noopener noreferrer">
-                <Button className="w-full" variant="outline">
-                  Choose Enterprise
+              <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                <Button className="w-full">
+                  Get Enterprise - $199/mo
                 </Button>
               </a>
             </CardContent>

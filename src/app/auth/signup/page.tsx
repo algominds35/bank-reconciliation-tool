@@ -90,33 +90,21 @@ export default function SignUp() {
               </div>
 
               <div className="grid gap-4">
-                <a href="https://buy.stripe.com/test_28EbJ32nA0ALezn1HI0Fi08" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full h-16 text-lg">
-                    <div className="flex flex-col items-center">
-                      <span className="font-bold">Try Professional Free (14 Days)</span>
-                      <span className="text-sm opacity-90">Then $79/month • Most Popular</span>
-                    </div>
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full">
+                    Get Professional - $79/mo
                   </Button>
                 </a>
                 
-                <a href="https://buy.stripe.com/test_6oU3cx6DQ1EP0Ix5XY0Fi07" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full h-16 text-lg" variant="outline">
-                    <div className="flex flex-col items-center">
-                      <span className="font-bold">Try Starter Free (14 Days)</span>
-                      <span className="text-sm opacity-90">Then $29/month</span>
-                    </div>
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full" variant="outline">
+                    Get Starter - $29/mo
                   </Button>
                 </a>
 
-                <a href="https://buy.stripe.com/test_aFa9AV4vIdnxgHv2LM0Fi09" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full h-16 text-lg" variant="outline">
-                    <div className="flex flex-col items-center">
-                      <span className="font-bold">Try Enterprise Free (14 Days)</span>
-                      <span className="text-sm opacity-90">Then $199/month</span>
-                    </div>
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                <a href="https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full" variant="outline">
+                    Get Enterprise - $199/mo
                   </Button>
                 </a>
               </div>
