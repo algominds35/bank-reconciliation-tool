@@ -9,6 +9,8 @@ import { ClientSelector } from '@/components/client-selector'
 import { TransactionTable } from '@/components/transaction-table'
 import { MatchingInterface } from '@/components/matching-interface'
 import { TrialGuard } from '@/components/trial-guard'
+import { AccessGuard } from '@/components/access-guard'
+import { AccessWarning } from '@/components/access-warning'
 import { TrialStatusBadge } from '@/components/trial-status-badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -516,6 +518,7 @@ export default function Dashboard() {
   const bookkeepingTransactions = transactions.filter(t => t.transaction_type === 'bookkeeping')
 
   return (
+    <AccessGuard>
     <TrialGuard>
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -572,6 +575,11 @@ export default function Dashboard() {
           </div>
         </div>
       </header>
+
+      {/* Access Warning */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <AccessWarning />
+      </div>
 
       {/* Summary Cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -778,5 +786,6 @@ export default function Dashboard() {
       </div>
     </div>
     </TrialGuard>
+    </AccessGuard>
   )
 } 
