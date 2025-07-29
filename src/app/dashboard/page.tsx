@@ -30,7 +30,8 @@ import {
   CheckCircle,
   AlertCircle,
   LogOut,
-  Settings
+  Settings,
+  Trash2
 } from 'lucide-react'
 
 export default function Dashboard() {
@@ -371,6 +372,31 @@ export default function Dashboard() {
       fetchTransactions()
     } catch (error) {
       console.error('Error unreconciling transactions:', error)
+    }
+  }
+
+  const clearAllTransactions = async () => {
+    if (!confirm('Are you sure you want to clear all transactions? This cannot be undone.')) {
+      return
+    }
+
+    try {
+      const { error } = await supabase
+        .from('transactions')
+        .delete()
+        .eq('user_id', user.id)
+
+      if (error) {
+        console.error('Error clearing transactions:', error)
+        return
+      }
+
+      setTransactions([])
+      setFilteredTransactions([])
+      setSelectedTransactions([])
+      calculateSummary()
+    } catch (error) {
+      console.error('Error clearing transactions:', error)
     }
   }
 
@@ -750,6 +776,16 @@ export default function Dashboard() {
               >
                       <FileText className="h-4 w-4" />
                       <span>Export PDF</span>
+                    </Button>
+
+                    <Button
+                      variant="destructive"
+                      onClick={clearAllTransactions}
+                      disabled={transactions.length === 0}
+                      className="flex items-center space-x-2"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span>Clear All</span>
                     </Button>
             </div>
           </div>

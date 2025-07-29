@@ -1,17 +1,11 @@
 date,description,amount,category
-2024-01-15,Initial Business Deposit,5000.00,Income
-2024-01-16,Office Rent Payment,-1200.00,Rent
-2024-01-17,Client Payment - ABC Corp,2500.00,Income
-2024-01-18,Marketing - Google Ads,-150.00,Marketing
-2024-01-19,Supplies - Office Depot,-85.50,Office Supplies
-2024-01-20,Client Payment - XYZ LLC,1800.00,Income
-2024-01-21,Internet Service,-79.99,Utilities
-2024-01-22,Coffee Meeting Expense,-12.50,Meals
-2024-01-23,Software Subscription,-29.99,Software
-2024-01-24,Bank Transfer to Savings,-1000.00,Transfer
-2024-01-25,Freelancer Payment - Design,-500.00,Contractors
-2024-01-26,Client Payment - DEF Inc,3200.00,Income
-2024-01-27,Gas Station,-45.00,Fuel
-2024-01-28,Phone Bill,-65.00,Utilities
-2024-01-29,Client Refund,-150.00,Refunds
-2024-01-30,Late Fee Charge,-25.00,Fees 
+2024-01-15,Client Payment,1500.00,Income
+2024-01-16,Office Rent,-1200.00,Rent
+2024-01-17,Software Subscription,-99.00,Technology
+2024-01-18,Consulting Fee,2500.00,Income
+2024-01-19,Internet Bill,-89.00,Utilities
+2024-01-20,Phone Bill,-65.00,Utilities
+2024-01-21,Marketing Expense,-250.00,Marketing
+2024-01-22,Equipment Purchase,-500.00,Equipment
+2024-01-23,Service Revenue,1800.00,Income
+2024-01-24,Insurance Payment,-150.00,Insurance 
