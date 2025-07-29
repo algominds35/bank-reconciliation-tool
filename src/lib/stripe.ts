@@ -15,9 +15,9 @@ export const getStripe = () => {
 }
 
 // Server-side Stripe
-export const stripe = new Stripe(stripeSecretKey!, {
+export const stripe = stripeSecretKey ? new Stripe(stripeSecretKey, {
   apiVersion: '2025-06-30.basil',
-})
+}) : null
 
 // Pricing data - Update these with your actual Stripe price IDs
 export const PRICING_PLANS = {

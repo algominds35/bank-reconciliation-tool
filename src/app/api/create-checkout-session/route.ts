@@ -13,6 +13,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    if (!stripe) {
+      return NextResponse.json(
+        { error: 'Stripe not configured' },
+        { status: 500 }
+      )
+    }
+
     // Create Stripe checkout session
     const sessionConfig: any = {
       mode: 'subscription',
