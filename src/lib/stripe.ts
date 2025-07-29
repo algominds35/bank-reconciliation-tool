@@ -1,17 +1,14 @@
 import { loadStripe } from '@stripe/stripe-js'
 import Stripe from 'stripe'
 
-// STRIPE CONFIGURATION - Try live mode first, fallback to test mode
-const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_LIVE || 
-                             process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY_LIVE || 
-                       process.env.STRIPE_SECRET_KEY
+// LIVE MODE STRIPE CONFIGURATION ONLY
+const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY_LIVE
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY_LIVE
 
 // Client-side Stripe
 export const getStripe = () => {
   if (!stripePublishableKey) {
-    console.error('Missing Stripe publishable key')
+    console.error('Missing Stripe live publishable key')
     return null
   }
   return loadStripe(stripePublishableKey)

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { createClient } from '@supabase/supabase-js'
+import Stripe from 'stripe'
 
 // Create admin client with service role key for user lookup
 const supabaseAdmin = createClient(
@@ -14,9 +15,14 @@ const supabaseAdmin = createClient(
   }
 )
 
+// Initialize Stripe with live keys
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_LIVE!, {
+  apiVersion: '2025-06-30.basil',
+})
+
 export async function POST(request: NextRequest) {
   try {
-    console.log('🔔 PAYMENT-FIRST WEBHOOK: Starting...')
+    console.log('🔔 LIVE PAYMENT WEBHOOK: Starting...')
     
     // Verify environment variables
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
@@ -26,23 +32,41 @@ export async function POST(request: NextRequest) {
         details: 'Service role key not configured'
       }, { status: 500 })
     }
+
+    if (!process.env.STRIPE_WEBHOOK_SECRET_LIVE) {
+      console.error('❌ Missing STRIPE_WEBHOOK_SECRET_LIVE')
+      return NextResponse.json({ 
+        error: 'Server configuration error',
+        details: 'Live webhook secret not configured'
+      }, { status: 500 })
+    }
     
     const body = await request.text()
+    const signature = request.headers.get('stripe-signature')
     
-    // Parse the webhook event
-    let event
+    if (!signature) {
+      console.error('❌ No Stripe signature found')
+      return NextResponse.json({ error: 'No signature' }, { status: 400 })
+    }
+    
+    // Verify webhook signature
+    let event: Stripe.Event
     try {
-      event = JSON.parse(body)
+      event = stripe.webhooks.constructEvent(
+        body,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET_LIVE!
+      )
     } catch (err) {
-      console.error('❌ Invalid JSON:', err)
-      return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+      console.error('❌ Webhook signature verification failed:', err)
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
     }
 
-    console.log('🔔 Stripe webhook received:', event.type)
+    console.log('🔔 Live Stripe webhook received:', event.type)
 
     // Handle successful payments
     if (event.type === 'checkout.session.completed') {
-      const session = event.data.object
+      const session = event.data.object as Stripe.Checkout.Session
       const customerEmail = session.customer_details?.email
       
       if (!customerEmail) {
@@ -50,11 +74,11 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'No customer email' }, { status: 400 })
       }
 
-      console.log('💰 Payment successful for:', customerEmail)
-      console.log('💵 Amount paid:', session.amount_total / 100, 'USD')
+      console.log('💰 LIVE Payment successful for:', customerEmail)
+      console.log('💵 Amount paid:', session.amount_total! / 100, 'USD')
 
       // Plan detection based on amount paid
-      const amountPaid = session.amount_total / 100
+      const amountPaid = session.amount_total! / 100
       let subscriptionPlan = 'starter'
       
       if (amountPaid >= 199 - 0.01) {
@@ -96,7 +120,7 @@ export async function POST(request: NextRequest) {
             id: existingUser.id,
             subscription_status: 'active',
             subscription_plan: subscriptionPlan,
-            stripe_customer_id: session.customer,
+            stripe_customer_id: session.customer as string,
             trial_end_date: '2030-12-31',
             updated_at: new Date().toISOString()
           })
@@ -129,7 +153,7 @@ export async function POST(request: NextRequest) {
             email_confirm: true, // Auto-confirm email since they paid
             password: `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, // Temporary password
             user_metadata: {
-              created_via: 'stripe_payment',
+              created_via: 'stripe_live_payment',
               payment_amount: amountPaid,
               subscription_plan: subscriptionPlan
             }
@@ -157,7 +181,7 @@ export async function POST(request: NextRequest) {
               id: newUser.user.id,
               subscription_status: 'active',
               subscription_plan: subscriptionPlan,
-              stripe_customer_id: session.customer,
+              stripe_customer_id: session.customer as string,
               trial_end_date: '2030-12-31',
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString()
@@ -202,7 +226,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true })
 
   } catch (error) {
-    console.error('💥 Webhook error:', error)
+    console.error('💥 Live webhook error:', error)
     return NextResponse.json({ 
       error: 'Webhook failed',
       details: error instanceof Error ? error.message : 'Unknown error'
@@ -211,14 +235,14 @@ export async function POST(request: NextRequest) {
 }
 
 // Helper function to store pending payment
-async function storePendingPayment(email: string, plan: string, session: any, amount: number) {
+async function storePendingPayment(email: string, plan: string, session: Stripe.Checkout.Session, amount: number) {
   try {
     const { error: pendingError } = await supabase
       .from('pending_payments')
       .insert({
         email: email,
         subscription_plan: plan,
-        stripe_customer_id: session.customer,
+        stripe_customer_id: session.customer as string,
         stripe_session_id: session.id,
         amount_paid: amount,
         created_at: new Date().toISOString()
