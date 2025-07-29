@@ -29,12 +29,40 @@ export function PaymentButton({
     setLoading(true)
     
     try {
-      // Payments temporarily disabled - redirect to signup
-      alert('Payments are temporarily disabled while we fix technical issues. Please sign up for updates!')
-      router.push('/auth/signup')
+      // Get Stripe instance
+      const stripe = await getStripe()
+      if (!stripe) {
+        throw new Error('Stripe failed to load')
+      }
+
+      // Create checkout session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId,
+          planName,
+          userEmail: '', // Will be collected by Stripe
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to create checkout session')
+      }
+
+      const { sessionId } = await response.json()
+
+      // Redirect to Stripe checkout
+      const { error } = await stripe.redirectToCheckout({ sessionId })
+      
+      if (error) {
+        throw error
+      }
     } catch (error) {
-      console.error('Navigation error:', error)
-      alert('Something went wrong. Please try again.')
+      console.error('Payment error:', error)
+      alert('Payment failed. Please try again.')
     } finally {
       setLoading(false)
     }

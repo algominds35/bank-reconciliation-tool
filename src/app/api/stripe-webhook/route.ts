@@ -119,37 +119,81 @@ export async function POST(request: NextRequest) {
           message: 'Existing user upgraded'
         })
       } else {
-        // User doesn't exist yet - store payment info for when they create account
-        console.log('💡 User not found - storing payment for future account creation')
+        // User doesn't exist - CREATE ACCOUNT AUTOMATICALLY
+        console.log('🚀 Creating new account for:', customerEmail)
         
-        // Store payment info in a pending payments table (we'll create this)
-        const { error: pendingError } = await supabase
-          .from('pending_payments')
-          .insert({
+        try {
+          // Create user account using admin client
+          const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
             email: customerEmail,
-            subscription_plan: subscriptionPlan,
-            stripe_customer_id: session.customer,
-            stripe_session_id: session.id,
-            amount_paid: amountPaid,
-            created_at: new Date().toISOString()
+            email_confirm: true, // Auto-confirm email since they paid
+            password: `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, // Temporary password
+            user_metadata: {
+              created_via: 'stripe_payment',
+              payment_amount: amountPaid,
+              subscription_plan: subscriptionPlan
+            }
           })
 
-        // If pending_payments table doesn't exist, that's ok - we'll handle it in signup
-        if (pendingError && !pendingError.message.includes('does not exist')) {
-          console.error('❌ Failed to store pending payment:', pendingError)
-        } else {
-          console.log('✅ Payment info stored for future account creation')
-        }
+          if (createError) {
+            console.error('❌ Failed to create user account:', createError)
+            // Fallback: store payment for later account creation
+            await storePendingPayment(customerEmail, subscriptionPlan, session, amountPaid)
+            return NextResponse.json({ 
+              success: true, 
+              email: customerEmail,
+              plan: subscriptionPlan,
+              amount: amountPaid,
+              message: 'Payment processed - account creation needed'
+            })
+          }
 
-        console.log('✅ PAYMENT PROCESSED - User needs to create account')
-        
-        return NextResponse.json({ 
-          success: true, 
-          email: customerEmail,
-          plan: subscriptionPlan,
-          amount: amountPaid,
-          message: 'Payment processed - account creation needed'
-        })
+          console.log('✅ New user account created:', newUser.user.id)
+
+          // Create user profile with active subscription
+          const { error: profileError } = await supabase
+            .from('user_profiles')
+            .insert({
+              id: newUser.user.id,
+              subscription_status: 'active',
+              subscription_plan: subscriptionPlan,
+              stripe_customer_id: session.customer,
+              trial_end_date: '2030-12-31',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            })
+
+          if (profileError) {
+            console.error('❌ Profile creation failed:', profileError)
+            return NextResponse.json({ 
+              error: 'Profile creation failed', 
+              details: profileError.message 
+            }, { status: 500 })
+          }
+
+          console.log('✅ NEW USER ACCOUNT CREATED AND ACTIVATED for:', subscriptionPlan.toUpperCase())
+          
+          return NextResponse.json({ 
+            success: true, 
+            email: customerEmail,
+            plan: subscriptionPlan,
+            amount: amountPaid,
+            user_id: newUser.user.id,
+            message: 'New account created and activated'
+          })
+
+        } catch (error) {
+          console.error('❌ Account creation failed:', error)
+          // Fallback: store payment for later account creation
+          await storePendingPayment(customerEmail, subscriptionPlan, session, amountPaid)
+          return NextResponse.json({ 
+            success: true, 
+            email: customerEmail,
+            plan: subscriptionPlan,
+            amount: amountPaid,
+            message: 'Payment processed - account creation needed'
+          })
+        }
       }
     }
 
@@ -163,5 +207,29 @@ export async function POST(request: NextRequest) {
       error: 'Webhook failed',
       details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 })
+  }
+}
+
+// Helper function to store pending payment
+async function storePendingPayment(email: string, plan: string, session: any, amount: number) {
+  try {
+    const { error: pendingError } = await supabase
+      .from('pending_payments')
+      .insert({
+        email: email,
+        subscription_plan: plan,
+        stripe_customer_id: session.customer,
+        stripe_session_id: session.id,
+        amount_paid: amount,
+        created_at: new Date().toISOString()
+      })
+
+    if (pendingError && !pendingError.message.includes('does not exist')) {
+      console.error('❌ Failed to store pending payment:', pendingError)
+    } else {
+      console.log('✅ Payment info stored for future account creation')
+    }
+  } catch (error) {
+    console.error('❌ Error storing pending payment:', error)
   }
 } 
