@@ -58,6 +58,7 @@ export default function LandingPage() {
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-gray-600 hover:text-gray-900">Features</a>
               <a href="#pricing" className="text-gray-600 hover:text-gray-900">Pricing</a>
+              <Link href="/blog" className="text-gray-600 hover:text-gray-900">Blog</Link>
               <a href="#testimonials" className="text-gray-600 hover:text-gray-900">Reviews</a>
               <Link href="/auth/login" className="text-gray-600 hover:text-gray-900">Login</Link>
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
