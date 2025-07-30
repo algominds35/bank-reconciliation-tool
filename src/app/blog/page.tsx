@@ -10,6 +10,16 @@ export default function BlogPage() {
   const blogPosts = [
     {
       id: 1,
+      title: "How to Fix QuickBooks Reconciliation Fast: Complete Guide",
+      excerpt: "Stop struggling with QuickBooks reconciliation. Learn proven methods to fix reconciliation issues quickly and get your books balanced in minutes, not hours.",
+      date: "2024-01-16",
+      readTime: "8 min read",
+      author: "Alex",
+      slug: "fix-quickbooks-reconciliation-fast",
+      category: "QuickBooks"
+    },
+    {
+      id: 2,
       title: "How to Reconcile Bank Statements in 8 Minutes",
       excerpt: "Learn the step-by-step process to automate your bank reconciliation and save 4-5 hours every month.",
       date: "2024-01-15",
@@ -19,7 +29,7 @@ export default function BlogPage() {
       category: "Tutorial"
     },
     {
-      id: 2,
+      id: 3,
       title: "5 Common Bank Reconciliation Errors and How to Fix Them",
       excerpt: "Discover the most common reconciliation mistakes and learn how to prevent them with automated tools.",
       date: "2024-01-10",
@@ -29,7 +39,7 @@ export default function BlogPage() {
       category: "Tips"
     },
     {
-      id: 3,
+      id: 4,
       title: "QuickBooks vs Manual Reconciliation: Time Comparison",
       excerpt: "See the dramatic time savings when you switch from manual reconciliation to automated tools.",
       date: "2024-01-05",
@@ -39,7 +49,7 @@ export default function BlogPage() {
       category: "Comparison"
     },
     {
-      id: 4,
+      id: 5,
       title: "Professional Bank Reconciliation Reports for Clients",
       excerpt: "Learn how to create professional reconciliation reports that impress your clients and build trust.",
       date: "2024-01-01",
