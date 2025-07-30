@@ -10,53 +10,63 @@ export default function BlogPage() {
   const blogPosts = [
     {
       id: 1,
+      title: "QuickBooks Auto-Matching Problems: 5 Solutions That Actually Work",
+      excerpt: "Stop fighting with QuickBooks' unpredictable auto-matching. Learn proven solutions to fix reconciliation issues and get better results.",
+      date: "2024-01-16",
+      readTime: "10 min read",
+      author: "Alex",
+      slug: "quickbooks-auto-matching-problems",
+      category: "QuickBooks"
+    },
+    {
+      id: 2,
+      title: "How to Export Bank Transactions from QuickBooks Desktop in 3 Steps",
+      excerpt: "Get your QuickBooks data ready for faster reconciliation with these simple export steps.",
+      date: "2024-01-16",
+      readTime: "6 min read",
+      author: "Alex",
+      slug: "export-quickbooks-bank-transactions",
+      category: "Tutorial"
+    },
+    {
+      id: 3,
+      title: "Manual vs Automated Bank Reconciliation: Time and Cost Comparison",
+      excerpt: "See the dramatic time and cost savings when you switch from manual reconciliation to smart automation.",
+      date: "2024-01-16",
+      readTime: "8 min read",
+      author: "Alex",
+      slug: "manual-vs-automated-reconciliation",
+      category: "Comparison"
+    },
+    {
+      id: 4,
       title: "How to Fix QuickBooks Reconciliation Fast: Complete Guide",
       excerpt: "Stop struggling with QuickBooks reconciliation. Learn proven methods to fix reconciliation issues quickly and get your books balanced in minutes, not hours.",
-      date: "2024-01-16",
+      date: "2024-01-15",
       readTime: "8 min read",
       author: "Alex",
       slug: "fix-quickbooks-reconciliation-fast",
       category: "QuickBooks"
     },
     {
-      id: 2,
+      id: 5,
       title: "How to Reconcile Bank Statements in 8 Minutes",
       excerpt: "Learn the step-by-step process to automate your bank reconciliation and save 4-5 hours every month.",
-      date: "2024-01-15",
+      date: "2024-01-14",
       readTime: "5 min read",
       author: "Alex",
       slug: "how-to-reconcile-bank-statements-8-minutes",
       category: "Tutorial"
     },
     {
-      id: 3,
+      id: 6,
       title: "5 Common Bank Reconciliation Errors and How to Fix Them",
       excerpt: "Discover the most common reconciliation mistakes and learn how to prevent them with automated tools.",
-      date: "2024-01-10",
+      date: "2024-01-13",
       readTime: "7 min read",
       author: "Alex",
       slug: "common-bank-reconciliation-errors-fix",
       category: "Tips"
-    },
-    {
-      id: 4,
-      title: "QuickBooks vs Manual Reconciliation: Time Comparison",
-      excerpt: "See the dramatic time savings when you switch from manual reconciliation to automated tools.",
-      date: "2024-01-05",
-      readTime: "6 min read",
-      author: "Alex",
-      slug: "quickbooks-vs-manual-reconciliation-comparison",
-      category: "Comparison"
-    },
-    {
-      id: 5,
-      title: "Professional Bank Reconciliation Reports for Clients",
-      excerpt: "Learn how to create professional reconciliation reports that impress your clients and build trust.",
-      date: "2024-01-01",
-      readTime: "4 min read",
-      author: "Alex",
-      slug: "professional-bank-reconciliation-reports-clients",
-      category: "Reports"
     }
   ]
 
