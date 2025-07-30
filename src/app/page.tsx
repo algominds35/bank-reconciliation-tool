@@ -122,13 +122,16 @@ export default function LandingPage() {
           
           <div className="max-w-4xl mx-auto">
             <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden">
-              {/* Replace this with your actual video embed */}
-              <div className="aspect-video bg-gray-100 flex items-center justify-center">
-                <div className="text-center">
-                  <Play className="h-16 w-16 text-blue-600 mx-auto mb-4" />
-                  <p className="text-gray-600 text-lg">Demo Video Coming Soon</p>
-                  <p className="text-gray-500 text-sm mt-2">Upload your 2-minute demo video here</p>
-                </div>
+              {/* YouTube Video Embed */}
+              <div className="aspect-video">
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube.com/embed/pgd2QIQcbOk"
+                  title="ReconcileBook Demo - Bank Reconciliation in 2 Minutes"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
               </div>
               
               {/* Video Description */}
