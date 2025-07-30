@@ -1,0 +1,20 @@
+date,description,amount,category
+2024-01-15,Client Payment - ABC Corp,1500.00,Revenue
+2024-01-16,Office Rent Payment,-1200.00,Rent
+2024-01-17,Office Supplies Purchase,-45.67,Supplies
+2024-01-18,Internet Service Payment,-89.99,Utilities
+2024-01-19,Consulting Fee - XYZ Inc,2500.00,Revenue
+2024-01-20,Employee Salary Payment,-2000.00,Payroll
+2024-01-21,Marketing Services,-350.00,Marketing
+2024-01-22,Software Subscription,-29.99,Technology
+2024-01-23,Client Payment - DEF Ltd,1800.00,Revenue
+2024-01-24,Insurance Premium,-150.00,Insurance
+2024-01-25,Travel Expenses,-125.50,Travel
+2024-01-26,Professional Services,-500.00,Professional
+2024-01-27,Client Payment - GHI Corp,2200.00,Revenue
+2024-01-28,Office Maintenance,-75.00,Maintenance
+2024-01-29,Phone Bill Payment,-65.00,Utilities
+2024-01-30,Client Payment - JKL Inc,1900.00,Revenue
+2024-01-31,Equipment Purchase,-450.00,Equipment
+2024-02-01,Client Payment - MNO Corp,1600.00,Revenue
+2024-02-02,Office Cleaning Services,-120.00,Maintenance 
