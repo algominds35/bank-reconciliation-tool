@@ -10,6 +10,26 @@ export default function BlogPage() {
   const blogPosts = [
     {
       id: 1,
+      title: "QuickBooks Bank Feed Not Working? 5 Fast Fixes",
+      excerpt: "Tired of QuickBooks bank feeds failing? Here's how to fix them fast and get back to reconciling.",
+      date: "2024-01-16",
+      readTime: "8 min read",
+      author: "Alex",
+      slug: "quickbooks-bank-feed-not-working",
+      category: "QuickBooks"
+    },
+    {
+      id: 2,
+      title: "How to Export Transactions from QuickBooks Online",
+      excerpt: "Step-by-step guide to export your QuickBooks Online transactions for reconciliation.",
+      date: "2024-01-16",
+      readTime: "6 min read",
+      author: "Alex",
+      slug: "export-quickbooks-online-transactions",
+      category: "Tutorial"
+    },
+    {
+      id: 3,
       title: "QuickBooks Auto-Matching Problems: 5 Solutions That Actually Work",
       excerpt: "Stop fighting with QuickBooks' unpredictable auto-matching. Learn proven solutions to fix reconciliation issues and get better results.",
       date: "2024-01-16",
@@ -19,7 +39,7 @@ export default function BlogPage() {
       category: "QuickBooks"
     },
     {
-      id: 2,
+      id: 4,
       title: "How to Export Bank Transactions from QuickBooks Desktop in 3 Steps",
       excerpt: "Get your QuickBooks data ready for faster reconciliation with these simple export steps.",
       date: "2024-01-16",
@@ -29,7 +49,7 @@ export default function BlogPage() {
       category: "Tutorial"
     },
     {
-      id: 3,
+      id: 5,
       title: "Manual vs Automated Bank Reconciliation: Time and Cost Comparison",
       excerpt: "See the dramatic time and cost savings when you switch from manual reconciliation to smart automation.",
       date: "2024-01-16",
@@ -39,7 +59,7 @@ export default function BlogPage() {
       category: "Comparison"
     },
     {
-      id: 4,
+      id: 6,
       title: "How to Fix QuickBooks Reconciliation Fast: Complete Guide",
       excerpt: "Stop struggling with QuickBooks reconciliation. Learn proven methods to fix reconciliation issues quickly and get your books balanced in minutes, not hours.",
       date: "2024-01-15",
@@ -49,7 +69,7 @@ export default function BlogPage() {
       category: "QuickBooks"
     },
     {
-      id: 5,
+      id: 7,
       title: "How to Reconcile Bank Statements in 8 Minutes",
       excerpt: "Learn the step-by-step process to automate your bank reconciliation and save 4-5 hours every month.",
       date: "2024-01-14",
@@ -59,7 +79,7 @@ export default function BlogPage() {
       category: "Tutorial"
     },
     {
-      id: 6,
+      id: 8,
       title: "5 Common Bank Reconciliation Errors and How to Fix Them",
       excerpt: "Discover the most common reconciliation mistakes and learn how to prevent them with automated tools.",
       date: "2024-01-13",
