@@ -573,6 +573,13 @@ export default function Dashboard() {
                 </Button>
               </Link>
               
+              <a href="mailto:alex@usealgomind.com">
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>Support</span>
+                </Button>
+              </a>
+              
               <Link href="/settings/security">
                 <Button variant="outline" size="sm" className="flex items-center space-x-2">
                   <Settings className="h-4 w-4" />

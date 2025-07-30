@@ -682,8 +682,8 @@ export default function LandingPage() {
               <div>
               <h3 className="font-semibold mb-4">Support</h3>
               <ul className="space-y-2 text-gray-400">
+                <li><a href="mailto:alex@usealgomind.com" className="hover:text-white">Contact Support</a></li>
                 <li><a href="#" className="hover:text-white">Help Center</a></li>
-                <li><a href="#" className="hover:text-white">Contact Us</a></li>
                 <li><a href="#" className="hover:text-white">API Docs</a></li>
                 <li><a href="#" className="hover:text-white">Status</a></li>
               </ul>
