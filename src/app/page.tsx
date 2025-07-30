@@ -78,13 +78,12 @@ export default function LandingPage() {
             </Badge>
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
-              Reconcile Your Books{' '}
-              <span className="text-blue-600">Faster Than QuickBooks</span>
+              Tired of QuickBooks Messing Up Bank Feeds?{' '}
+              <span className="text-blue-600">Reconcile 10x Faster — Without Touching a Spreadsheet.</span>
             </h1>
             
             <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto">
-              Professional bank reconciliation software for bookkeepers, accountants, and small businesses. 
-              Turn 8-hour reconciliation nightmares into 30-minute breeze sessions.
+              Whether you're a business owner, bookkeeper, or accountant — ReconcileBook helps you fix messy data, match transactions, and close your books 10x faster.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
