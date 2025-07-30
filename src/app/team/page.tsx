@@ -165,7 +165,7 @@ export default function TeamPage() {
               </CardContent>
             </Card>
 
-            {/* Upgrade Notice */}
+            {/* Team Features */}
             <Card className="mt-6">
               <CardHeader>
                 <CardTitle className="text-lg">Team Features</CardTitle>
@@ -190,8 +190,8 @@ export default function TeamPage() {
                   </div>
                 </div>
                 
-                <Button className="w-full mt-4" size="sm">
-                  Upgrade to Professional
+                <Button className="w-full mt-4" size="sm" variant="outline">
+                  Invite Team Member
                 </Button>
               </CardContent>
             </Card>
