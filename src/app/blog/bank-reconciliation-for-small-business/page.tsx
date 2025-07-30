@@ -281,6 +281,7 @@ export default function BlogPost() {
           </ol>
 
           <h3>Week 3: Optimization</h3>
+          <ol>
             <li>Refine your process</li>
             <li>Set up monthly reminders</li>
             <li>Create documentation</li>

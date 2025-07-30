@@ -305,6 +305,7 @@ export default function BlogPost() {
           <p>
             <strong>Recommendation:</strong> Enterprise reconciliation solutions
           </p>
+          <ul>
             <li>Require advanced automation and API integrations</li>
             <li>Need real-time synchronization</li>
             <li>Want custom development capabilities</li>
