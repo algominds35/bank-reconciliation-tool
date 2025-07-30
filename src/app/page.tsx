@@ -74,7 +74,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <Badge className="mb-6 bg-blue-100 text-blue-800 hover:bg-blue-100">
-              🚀 Trusted by 10,000+ businesses
+              ✅ Trusted by 500+ QuickBooks users
             </Badge>
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
