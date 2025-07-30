@@ -182,6 +182,11 @@ export default function BlogPost() {
                   Watch Demo Video
                 </Button>
               </a>
+              <Link href="/">
+                <Button variant="ghost" size="lg">
+                  Visit Homepage
+                </Button>
+              </Link>
             </div>
           </div>
 
