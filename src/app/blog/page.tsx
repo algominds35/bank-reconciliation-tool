@@ -10,6 +10,66 @@ export default function BlogPage() {
   const blogPosts = [
     {
       id: 1,
+      title: "QuickBooks Bank Feed Issues? Here's the Complete Fix (2024)",
+      excerpt: "QuickBooks bank feed issues are the #1 frustration for business owners. Here's the step-by-step fix that actually works.",
+      date: "2024-01-16",
+      readTime: "12 min read",
+      author: "Alex",
+      slug: "quickbooks-bank-feed-issues-fix-2024",
+      category: "QuickBooks"
+    },
+    {
+      id: 2,
+      title: "QuickBooks Auto Match Wrong? Here's How to Fix It (2024)",
+      excerpt: "QuickBooks keeps matching the wrong transactions? You're not alone. Here's the complete solution to fix incorrect matches.",
+      date: "2024-01-16",
+      readTime: "10 min read",
+      author: "Alex",
+      slug: "quickbooks-auto-match-wrong-fix",
+      category: "QuickBooks"
+    },
+    {
+      id: 3,
+      title: "QuickBooks Duplicate Transactions? Here's the Complete Fix (2024)",
+      excerpt: "QuickBooks keeps creating duplicate transactions? This is a common nightmare. Here's the step-by-step fix that actually works.",
+      date: "2024-01-16",
+      readTime: "11 min read",
+      author: "Alex",
+      slug: "quickbooks-duplicate-transactions-fix",
+      category: "QuickBooks"
+    },
+    {
+      id: 4,
+      title: "How to Reconcile PayPal in QuickBooks: Complete Guide (2024)",
+      excerpt: "PayPal reconciliation in QuickBooks is notoriously difficult. Here's the step-by-step process that actually works for e-commerce businesses.",
+      date: "2024-01-16",
+      readTime: "15 min read",
+      author: "Alex",
+      slug: "how-to-reconcile-paypal-in-quickbooks",
+      category: "E-commerce"
+    },
+    {
+      id: 5,
+      title: "Best Reconciliation Software for QuickBooks: 2024 Comparison",
+      excerpt: "Tired of QuickBooks reconciliation headaches? Here's the complete comparison of the best reconciliation software for QuickBooks users.",
+      date: "2024-01-16",
+      readTime: "8 min read",
+      author: "Alex",
+      slug: "best-reconciliation-software-quickbooks",
+      category: "Software"
+    },
+    {
+      id: 6,
+      title: "QuickBooks CSV Import Reconciliation: Complete Guide (2024)",
+      excerpt: "Bank feed issues? CSV import is often more reliable. Here's the complete guide to importing and reconciling CSV files in QuickBooks.",
+      date: "2024-01-16",
+      readTime: "10 min read",
+      author: "Alex",
+      slug: "quickbooks-csv-import-reconciliation",
+      category: "Tutorial"
+    },
+    {
+      id: 7,
       title: "QuickBooks Bank Rules: How to Set Them Up Right",
       excerpt: "Learn how to configure QuickBooks bank rules for automatic transaction categorization and faster reconciliation.",
       date: "2024-01-16",
@@ -19,7 +79,7 @@ export default function BlogPage() {
       category: "QuickBooks"
     },
     {
-      id: 2,
+      id: 8,
       title: "Restaurant Bank Reconciliation: Special Considerations",
       excerpt: "Restaurant reconciliation is uniquely challenging. Learn how to handle high transaction volumes, multiple payment methods, and cash management.",
       date: "2024-01-16",
@@ -29,7 +89,7 @@ export default function BlogPage() {
       category: "Industry Guide"
     },
     {
-      id: 3,
+      id: 9,
       title: "E-commerce Reconciliation: Handling Multiple Payment Methods",
       excerpt: "E-commerce businesses face unique challenges with multiple payment processors, refunds, and international transactions. Here's how to handle it all.",
       date: "2024-01-16",
@@ -39,7 +99,7 @@ export default function BlogPage() {
       category: "E-commerce"
     },
     {
-      id: 4,
+      id: 10,
       title: "Reconciliation for Multiple Bank Accounts: Complete Guide",
       excerpt: "Managing multiple bank accounts adds complexity to reconciliation. Learn how to handle multiple accounts efficiently and avoid common pitfalls.",
       date: "2024-01-16",
@@ -49,7 +109,7 @@ export default function BlogPage() {
       category: "Advanced"
     },
     {
-      id: 5,
+      id: 11,
       title: "Year-End Reconciliation: Complete Checklist",
       excerpt: "Year-end reconciliation is crucial for accurate financial statements and tax preparation. Use this comprehensive checklist to ensure nothing is missed.",
       date: "2024-01-16",
@@ -59,7 +119,7 @@ export default function BlogPage() {
       category: "Year-End"
     },
     {
-      id: 6,
+      id: 12,
       title: "QuickBooks Bank Feed Not Working? 5 Fast Fixes",
       excerpt: "Tired of QuickBooks bank feeds failing? Here's how to fix them fast and get back to reconciling.",
       date: "2024-01-16",
@@ -69,7 +129,7 @@ export default function BlogPage() {
       category: "QuickBooks"
     },
     {
-      id: 7,
+      id: 13,
       title: "How to Export Transactions from QuickBooks Online",
       excerpt: "Step-by-step guide to export your QuickBooks Online transactions for reconciliation.",
       date: "2024-01-16",
@@ -79,7 +139,7 @@ export default function BlogPage() {
       category: "Tutorial"
     },
     {
-      id: 8,
+      id: 14,
       title: "QuickBooks Auto-Matching Problems: 5 Solutions That Actually Work",
       excerpt: "Stop fighting with QuickBooks' unpredictable auto-matching. Learn proven solutions to fix reconciliation issues and get better results.",
       date: "2024-01-16",
@@ -89,7 +149,7 @@ export default function BlogPage() {
       category: "QuickBooks"
     },
     {
-      id: 9,
+      id: 15,
       title: "How to Export Bank Transactions from QuickBooks Desktop in 3 Steps",
       excerpt: "Get your QuickBooks data ready for faster reconciliation with these simple export steps.",
       date: "2024-01-16",
