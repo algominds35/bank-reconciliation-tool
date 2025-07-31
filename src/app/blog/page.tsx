@@ -100,161 +100,271 @@ export default function BlogPage() {
     },
     {
       id: 10,
-      title: "Reconciliation for Multiple Bank Accounts: Complete Guide",
-      excerpt: "Managing multiple bank accounts adds complexity to reconciliation. Learn how to handle multiple accounts efficiently and avoid common pitfalls.",
+      title: "QuickBooks Bank Feed Not Syncing? Here's the Complete Fix (2024)",
+      excerpt: "QuickBooks bank feed not syncing is a nightmare that wastes hours every month. Here's the step-by-step fix that actually works.",
       date: "2024-01-16",
-      readTime: "9 min read",
+      readTime: "12 min read",
       author: "Alex",
-      slug: "multiple-bank-accounts-reconciliation",
-      category: "Advanced"
+      slug: "quickbooks-bank-feed-not-syncing-fix",
+      category: "QuickBooks"
     },
     {
       id: 11,
-      title: "Year-End Reconciliation: Complete Checklist",
-      excerpt: "Year-end reconciliation is crucial for accurate financial statements and tax preparation. Use this comprehensive checklist to ensure nothing is missed.",
+      title: "QuickBooks Duplicate Transactions? Here's How to Remove Them (2024)",
+      excerpt: "QuickBooks duplicate transactions can destroy your reconciliation and waste hours of cleanup time. Here's how to find and remove them quickly.",
       date: "2024-01-16",
-      readTime: "8 min read",
+      readTime: "11 min read",
       author: "Alex",
-      slug: "year-end-reconciliation-checklist",
-      category: "Year-End"
+      slug: "quickbooks-duplicate-transactions-remove",
+      category: "QuickBooks"
     },
     {
       id: 12,
-      title: "QuickBooks Bank Feed Not Working? 5 Fast Fixes",
-      excerpt: "Tired of QuickBooks bank feeds failing? Here's how to fix them fast and get back to reconciling.",
+      title: "QuickBooks Reconciliation Balance Not Matching? Here's the Fix (2024)",
+      excerpt: "QuickBooks reconciliation balance not matching can drive you crazy. Here's the systematic approach to identify and fix the root cause quickly.",
       date: "2024-01-16",
-      readTime: "8 min read",
+      readTime: "13 min read",
       author: "Alex",
-      slug: "quickbooks-bank-feed-not-working",
+      slug: "quickbooks-reconciliation-balance-not-matching",
       category: "QuickBooks"
     },
     {
       id: 13,
-      title: "How to Export Transactions from QuickBooks Online",
-      excerpt: "Step-by-step guide to export your QuickBooks Online transactions for reconciliation.",
+      title: "Multiple Bank Accounts Reconciliation: Complete Guide",
+      excerpt: "Managing multiple bank accounts in QuickBooks? Here's how to reconcile them efficiently and avoid common pitfalls.",
       date: "2024-01-16",
-      readTime: "6 min read",
+      readTime: "14 min read",
       author: "Alex",
-      slug: "export-quickbooks-online-transactions",
+      slug: "multiple-bank-accounts-reconciliation",
       category: "Tutorial"
     },
     {
       id: 14,
-      title: "QuickBooks Auto-Matching Problems: 5 Solutions That Actually Work",
-      excerpt: "Stop fighting with QuickBooks' unpredictable auto-matching. Learn proven solutions to fix reconciliation issues and get better results.",
+      title: "Year-End Reconciliation Checklist: Don't Miss These Steps",
+      excerpt: "Year-end reconciliation is critical for accurate financial statements. Here's the complete checklist to ensure nothing is missed.",
+      date: "2024-01-16",
+      readTime: "15 min read",
+      author: "Alex",
+      slug: "year-end-reconciliation-checklist",
+      category: "Checklist"
+    },
+    {
+      id: 15,
+      title: "Monthly Reconciliation Checklist: Stay on Track",
+      excerpt: "Monthly reconciliation keeps your books clean and accurate. Here's the step-by-step checklist for consistent results.",
       date: "2024-01-16",
       readTime: "10 min read",
+      author: "Alex",
+      slug: "monthly-reconciliation-checklist",
+      category: "Checklist"
+    },
+    {
+      id: 16,
+      title: "Bank Reconciliation for Small Business: Complete Guide",
+      excerpt: "Small business bank reconciliation doesn't have to be complicated. Here's the simplified process that works for any business size.",
+      date: "2024-01-16",
+      readTime: "12 min read",
+      author: "Alex",
+      slug: "bank-reconciliation-for-small-business",
+      category: "Small Business"
+    },
+    {
+      id: 17,
+      title: "Step-by-Step Bank Reconciliation Guide",
+      excerpt: "New to bank reconciliation? Here's the complete step-by-step guide that will make you an expert in no time.",
+      date: "2024-01-16",
+      readTime: "16 min read",
+      author: "Alex",
+      slug: "step-by-step-bank-reconciliation-guide",
+      category: "Tutorial"
+    },
+    {
+      id: 18,
+      title: "Automated Reconciliation: Complete Tutorial",
+      excerpt: "Automate your bank reconciliation process and save hours every month. Here's how to set it up properly.",
+      date: "2024-01-16",
+      readTime: "14 min read",
+      author: "Alex",
+      slug: "automated-reconciliation-complete-tutorial",
+      category: "Automation"
+    },
+    {
+      id: 19,
+      title: "QuickBooks Integration Best Practices",
+      excerpt: "Integrating QuickBooks with other systems? Here's how to do it right and avoid common integration problems.",
+      date: "2024-01-16",
+      readTime: "13 min read",
+      author: "Alex",
+      slug: "quickbooks-integration-best-practices",
+      category: "Integration"
+    },
+    {
+      id: 20,
+      title: "Multi-Client Reconciliation Strategies",
+      excerpt: "Managing multiple clients? Here's how to handle their reconciliations efficiently without getting overwhelmed.",
+      date: "2024-01-16",
+      readTime: "15 min read",
+      author: "Alex",
+      slug: "multi-client-reconciliation-strategies",
+      category: "Multi-Client"
+    },
+    {
+      id: 21,
+      title: "Reconciliation Software Comparison: 2024 Guide",
+      excerpt: "Comparing reconciliation software options? Here's the complete guide to choosing the right tool for your needs.",
+      date: "2024-01-16",
+      readTime: "12 min read",
+      author: "Alex",
+      slug: "reconciliation-software-comparison",
+      category: "Software"
+    },
+    {
+      id: 22,
+      title: "Accounting Automation Guide: Save Hours Every Month",
+      excerpt: "Automate your accounting processes and save hours every month. Here's the complete guide to getting started.",
+      date: "2024-01-16",
+      readTime: "18 min read",
+      author: "Alex",
+      slug: "accounting-automation-guide",
+      category: "Automation"
+    },
+    {
+      id: 23,
+      title: "Professional Report Templates for Reconciliation",
+      excerpt: "Create professional reconciliation reports that impress clients and auditors. Here are the templates you need.",
+      date: "2024-01-16",
+      readTime: "11 min read",
+      author: "Alex",
+      slug: "professional-report-templates",
+      category: "Reports"
+    },
+    {
+      id: 24,
+      title: "Client Communication Best Practices for Reconciliation",
+      excerpt: "Communicating reconciliation issues to clients? Here's how to do it professionally and maintain trust.",
+      date: "2024-01-16",
+      readTime: "10 min read",
+      author: "Alex",
+      slug: "client-communication-best-practices",
+      category: "Communication"
+    },
+    {
+      id: 25,
+      title: "Reconciliation Best Practices: Industry Standards",
+      excerpt: "Follow industry best practices for bank reconciliation and ensure your books are always accurate and compliant.",
+      date: "2024-01-16",
+      readTime: "14 min read",
+      author: "Alex",
+      slug: "reconciliation-best-practices",
+      category: "Best Practices"
+    },
+    {
+      id: 26,
+      title: "Reconciliation Time Savings: How to Cut Hours",
+      excerpt: "Save hours every month on reconciliation. Here are the proven strategies that actually work.",
+      date: "2024-01-16",
+      readTime: "12 min read",
+      author: "Alex",
+      slug: "reconciliation-time-savings",
+      category: "Productivity"
+    },
+    {
+      id: 27,
+      title: "Fix QuickBooks Reconciliation Fast: Emergency Guide",
+      excerpt: "QuickBooks reconciliation emergency? Here's how to fix it fast and get your books back on track.",
+      date: "2024-01-16",
+      readTime: "9 min read",
+      author: "Alex",
+      slug: "fix-quickbooks-reconciliation-fast",
+      category: "Emergency"
+    },
+    {
+      id: 28,
+      title: "Export QuickBooks Online Transactions: Complete Guide",
+      excerpt: "Need to export transactions from QuickBooks Online? Here's the complete guide to getting your data out.",
+      date: "2024-01-16",
+      readTime: "10 min read",
+      author: "Alex",
+      slug: "export-quickbooks-online-transactions",
+      category: "Export"
+    },
+    {
+      id: 29,
+      title: "QuickBooks Auto Matching Problems: Complete Fix",
+      excerpt: "QuickBooks auto matching problems driving you crazy? Here's the complete fix that actually works.",
+      date: "2024-01-16",
+      readTime: "11 min read",
       author: "Alex",
       slug: "quickbooks-auto-matching-problems",
       category: "QuickBooks"
     },
     {
-      id: 15,
-      title: "How to Export Bank Transactions from QuickBooks Desktop in 3 Steps",
-      excerpt: "Get your QuickBooks data ready for faster reconciliation with these simple export steps.",
-      date: "2024-01-16",
-      readTime: "6 min read",
-      author: "Alex",
-      slug: "export-quickbooks-bank-transactions",
-      category: "Tutorial"
-    },
-    {
-      id: 10,
-      title: "Manual vs Automated Bank Reconciliation: Time and Cost Comparison",
-      excerpt: "See the dramatic time and cost savings when you switch from manual reconciliation to smart automation.",
+      id: 30,
+      title: "Export QuickBooks Bank Transactions: Step-by-Step",
+      excerpt: "Need to export bank transactions from QuickBooks? Here's the step-by-step process that works every time.",
       date: "2024-01-16",
       readTime: "8 min read",
+      author: "Alex",
+      slug: "export-quickbooks-bank-transactions",
+      category: "Export"
+    },
+    {
+      id: 31,
+      title: "Manual vs Automated Reconciliation: Which is Better?",
+      excerpt: "Manual or automated reconciliation? Here's the complete comparison to help you choose the right approach.",
+      date: "2024-01-16",
+      readTime: "13 min read",
       author: "Alex",
       slug: "manual-vs-automated-reconciliation",
       category: "Comparison"
-    },
-    {
-      id: 11,
-      title: "How to Fix QuickBooks Reconciliation Fast: Complete Guide",
-      excerpt: "Stop struggling with QuickBooks reconciliation. Learn proven methods to fix reconciliation issues quickly and get your books balanced in minutes, not hours.",
-      date: "2024-01-15",
-      readTime: "8 min read",
-      author: "Alex",
-      slug: "fix-quickbooks-reconciliation-fast",
-      category: "QuickBooks"
-    },
-    {
-      id: 12,
-      title: "How to Reconcile Bank Statements in 8 Minutes",
-      excerpt: "Learn the step-by-step process to automate your bank reconciliation and save 4-5 hours every month.",
-      date: "2024-01-14",
-      readTime: "5 min read",
-      author: "Alex",
-      slug: "how-to-reconcile-bank-statements-8-minutes",
-      category: "Tutorial"
-    },
-    {
-      id: 13,
-      title: "5 Common Bank Reconciliation Errors and How to Fix Them",
-      excerpt: "Discover the most common reconciliation mistakes and learn how to prevent them with automated tools.",
-      date: "2024-01-13",
-      readTime: "7 min read",
-      author: "Alex",
-      slug: "common-bank-reconciliation-errors-fix",
-      category: "Tips"
     }
-  ]
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">ReconcileBook Blog</h1>
-              <p className="text-gray-600 mt-2">Bank reconciliation tips, tutorials, and industry insights</p>
-            </div>
-            <Link href="/">
-              <Button variant="outline">
-                Back to Home
-              </Button>
-            </Link>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Bank Reconciliation Blog
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Expert guides, tips, and solutions for QuickBooks users, bookkeepers, and accountants. 
+            Learn how to reconcile faster, more accurately, and with less frustration.
+          </p>
         </div>
-      </header>
 
-      {/* Blog Posts */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogPosts.map((post) => (
-            <Card key={post.id} className="hover:shadow-lg transition-shadow">
+            <Card key={post.id} className="hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-blue-600">{post.category}</span>
-                  <div className="flex items-center space-x-2 text-sm text-gray-500">
-                    <Clock className="h-4 w-4" />
-                    <span>{post.readTime}</span>
+                  <span className="text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                    {post.category}
+                  </span>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Calendar className="w-4 h-4 mr-1" />
+                    {new Date(post.date).toLocaleDateString()}
                   </div>
                 </div>
-                <CardTitle className="text-xl leading-tight">
-                  <Link href={`/blog/${post.slug}`} className="hover:text-blue-600">
-                    {post.title}
-                  </Link>
+                <CardTitle className="text-lg font-semibold line-clamp-2">
+                  {post.title}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">{post.excerpt}</p>
+                <p className="text-gray-600 mb-4 line-clamp-3">
+                  {post.excerpt}
+                </p>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <div className="flex items-center space-x-1">
-                      <User className="h-4 w-4" />
-                      <span>{post.author}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Calendar className="h-4 w-4" />
-                      <span>{new Date(post.date).toLocaleDateString()}</span>
-                    </div>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <User className="w-4 h-4 mr-1" />
+                    {post.author}
+                    <Clock className="w-4 h-4 ml-3 mr-1" />
+                    {post.readTime}
                   </div>
                   <Link href={`/blog/${post.slug}`}>
-                    <Button variant="ghost" size="sm">
+                    <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
                       Read More
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                      <ArrowRight className="w-4 h-4 ml-1" />
                     </Button>
                   </Link>
                 </div>
@@ -262,7 +372,15 @@ export default function BlogPage() {
             </Card>
           ))}
         </div>
+
+        <div className="text-center mt-12">
+          <Link href="/">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3">
+              Back to Homepage
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
-  )
+  );
 } 

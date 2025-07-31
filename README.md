@@ -1,270 +1,133 @@
-# Bank Reconciliation Tool
+# ReconcileBook Desktop
 
-A comprehensive React application for bank transaction reconciliation with client management, built with Next.js, TailwindCSS, and shadcn/ui components.
+A local-only bank reconciliation tool that matches bank transactions with QuickBooks data and generates professional PDF reports.
 
 ## Features
 
-### ✨ Core Functionality
-- **CSV Upload**: Upload bank and bookkeeping transactions separately
-- **Manual Matching**: Side-by-side transaction matching interface
-- **Client Management**: Switch between different business clients
-- **PDF Export**: Generate professional reconciliation reports
-- **Smart Filtering**: Filter by reconciliation status and transaction type
+- **100% Local**: No internet connection required, all processing happens on your machine
+- **Smart Matching**: Advanced algorithm with confidence scoring
+- **Drag & Drop**: Easy file import with support for CSV files
+- **Professional Reports**: Generate detailed PDF reconciliation reports
+- **Modern UI**: Clean, intuitive interface built with CustomTkinter
+- **Secure**: No data leaves your computer
 
-### 🎨 Modern UI/UX
-- Clean, professional interface using shadcn/ui components
-- Responsive design that works on all devices
-- Intuitive navigation with tabbed interface
-- Real-time summary cards showing reconciliation progress
-
-### 👥 Multi-Client Support
-- Client switcher in the header
-- Separate transaction sets per client
-- Client management dashboard
-- Add, edit, and delete business clients
-
-### 📊 Advanced Features
-- Side-by-side transaction matching
-- Bulk reconciliation options
-- Comprehensive PDF reports with client information
-- Transaction categorization and notes
-- Bank vs Bookkeeping transaction types
-
-## Quick Start
+## Installation
 
 ### Prerequisites
-- Node.js 18+ installed
-- Supabase account for database (optional for demo)
+- Python 3.9 or higher
+- Windows, macOS, or Linux
 
-### Installation
+### Quick Start
 
-1. **Clone the repository**
+1. **Clone or download this repository**
+2. **Install dependencies**:
    ```bash
-   git clone <your-repo-url>
-   cd quickbooks-tool
+   pip install -r requirements.txt
    ```
 
-2. **Install dependencies**
+3. **Run the application**:
    ```bash
-   npm install
+   python src/main.py
    ```
 
-3. **Set up environment variables**
-   Create a `.env.local` file in the root directory:
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
+## Usage
 
-4. **Run the development server**
-   ```bash
-   npm run dev
-   ```
+### 1. Import Files
+- Click "Select Bank File" to load your bank CSV export
+- Click "Select QuickBooks File" to load your QuickBooks CSV export
+- Supported formats: CSV files with date, amount, and description columns
 
-5. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+### 2. Run Reconciliation
+- Click "Run Reconciliation" to match transactions
+- Review matches and confidence scores in the transaction view
+- Filter by confidence level and view type
 
-## Usage Guide
+### 3. Export Report
+- Click "Export PDF Report" to save a professional reconciliation report
+- Reports include summary statistics, matched transactions, and unmatched items
 
-### 1. Getting Started
-- Visit the homepage at `/`
-- Navigate to the dashboard at `/dashboard`
-- The app works without authentication for demo purposes
+## Supported File Formats
 
-### 2. Client Management
-- Use the client selector in the header to switch between clients
-- Click "Add Client" to create new business clients
-- Each client has separate transaction data
+### Bank CSV Files
+Should contain columns for:
+- **Date**: Transaction date (YYYY-MM-DD, MM/DD/YYYY, DD/MM/YYYY)
+- **Amount**: Transaction amount (no currency symbols)
+- **Description**: Transaction description
 
-### 3. Uploading Transactions
+### QuickBooks CSV Files
+Export from QuickBooks with:
+- Transaction date
+- Amount
+- Description/Memo
+- Account/Category (optional)
 
-#### Bank Transactions
-1. Click "Upload Bank CSV" in the dashboard
-2. Use the provided `sample-bank-transactions.csv` or your own data
-3. Required columns: `date`, `description`, `amount`
-4. Optional columns: `category`
+## Building Executable
 
-#### Bookkeeping Transactions
-1. Click "Upload Bookkeeping CSV" in the dashboard
-2. Use the provided `sample-bookkeeping-transactions.csv` or your own data
-3. Required columns: `date`, `description`, `amount`
-4. Optional columns: `category`
+To create a standalone executable:
 
-### 4. Reconciling Transactions
-
-#### Manual Bulk Reconciliation
-1. Go to the "All Transactions" tab
-2. Select multiple transactions using checkboxes
-3. Click "Reconcile Selected" to group them together
-
-#### Smart Matching (Recommended)
-1. Go to the "Smart Matching" tab
-2. View bank transactions on the left, bookkeeping on the right
-3. Click transactions to select them (one from each side)
-4. Click "Match Transactions" to reconcile the pair
-
-### 5. Exporting Reports
-- **CSV Export**: Click "Export CSV" to download reconciled transactions
-- **PDF Export**: Click "Export PDF" to generate a professional report
-- Reports include client information when a client is selected
-
-## CSV File Format
-
-### Bank Transactions
-```csv
-date,description,amount,category
-2024-01-15,Client Payment,1500.00,Income
-2024-01-16,Office Rent,-1200.00,Rent
-```
-
-### Bookkeeping Transactions
-```csv
-date,description,amount,category
-2024-01-15,Service Revenue,1500.00,Revenue
-2024-01-16,Rent Expense,-1200.00,Rent
-```
-
-### Required Fields
-- `date`: Date in YYYY-MM-DD format
-- `description`: Transaction description
-- `amount`: Positive for income, negative for expenses
-
-### Optional Fields
-- `category`: Transaction category for organization
-- `notes`: Additional transaction notes
-
-## Database Schema (Supabase)
-
-### Tables Required
-
-#### `clients`
-```sql
-CREATE TABLE clients (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id),
-  name TEXT NOT NULL,
-  business_name TEXT NOT NULL,
-  email TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-);
-```
-
-#### `transactions`
-```sql
-CREATE TABLE transactions (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id),
-  client_id UUID REFERENCES clients(id),
-  date DATE NOT NULL,
-  description TEXT NOT NULL,
-  amount DECIMAL(10,2) NOT NULL,
-  transaction_type TEXT CHECK (transaction_type IN ('bank', 'bookkeeping')),
-  category TEXT,
-  notes TEXT,
-  is_reconciled BOOLEAN DEFAULT false,
-  reconciliation_group UUID,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-);
-```
-
-## Technology Stack
-
-- **Frontend**: Next.js 15, React 18, TypeScript
-- **Styling**: TailwindCSS, shadcn/ui components
-- **Database**: Supabase (PostgreSQL)
-- **File Processing**: PapaParse for CSV handling
-- **PDF Generation**: jsPDF with autoTable
-- **Icons**: Lucide React
-
-## Component Architecture
-
-### Core Components
-- `ClientSelector`: Multi-client switching interface
-- `TransactionTable`: Enhanced transaction display with filtering
-- `MatchingInterface`: Side-by-side transaction matching
-- `ClientManagement`: Full CRUD for business clients
-
-### UI Components (shadcn/ui)
-- `Button`, `Card`, `Table`, `Select`, `Badge`
-- `Dialog`, `Tabs`, `Checkbox`, `Separator`
-
-## Features in Detail
-
-### Smart Matching Interface
-- Visual side-by-side comparison
-- Click-to-select interaction
-- Real-time selection feedback
-- Automatic reconciliation grouping
-
-### PDF Export Features
-- Professional report formatting
-- Client information inclusion
-- Transaction grouping by reconciliation
-- Summary totals and statistics
-
-### Client Management
-- Add/edit/delete business clients
-- Client-specific transaction isolation
-- Business name and contact tracking
-- Optional email integration
-
-## Development
-
-### Building for Production
 ```bash
-npm run build
-npm start
+python build.py
 ```
 
-### Linting
-```bash
-npm run lint
-```
+This creates `dist/ReconcileBook.exe` (Windows) or equivalent for your platform.
 
-### Key Files
-- `/src/app/dashboard/page.tsx` - Main dashboard
-- `/src/components/` - Reusable components
-- `/src/types/index.ts` - TypeScript definitions
-- `/src/lib/supabase.ts` - Database configuration
+## Technical Details
+
+### Architecture
+- **Backend**: Python with Pandas for data processing
+- **GUI**: CustomTkinter for modern interface
+- **Matching**: Custom algorithm with confidence scoring
+- **Reports**: ReportLab for PDF generation
+
+### Matching Algorithm
+The tool uses a multi-factor matching algorithm:
+- **Description Similarity**: 40% weight
+- **Date Proximity**: 30% weight  
+- **Amount Matching**: 30% weight
+
+Confidence scores range from 0.0 to 1.0:
+- **Perfect (95%+)**: Exact or near-exact matches
+- **High (80-95%)**: Very similar transactions
+- **Medium (70-80%)**: Reasonable matches
+- **Low (<70%)**: Potential matches requiring review
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **CSV Upload Fails**
-   - Ensure CSV has required columns: date, description, amount
-   - Check date format (YYYY-MM-DD)
-   - Verify amount is numeric
+**"No file selected" error**
+- Ensure your CSV files have the required columns (date, amount, description)
+- Check that date formats are supported
+- Verify amounts don't contain currency symbols
 
-2. **Transactions Not Showing**
-   - Check client selection in header
-   - Verify database connection
-   - Check browser console for errors
+**Low match rates**
+- Check that date ranges overlap between files
+- Ensure descriptions are similar between bank and QuickBooks
+- Verify amounts match exactly (including fees)
 
-3. **PDF Export Issues**
-   - Large datasets may take time to generate
-   - Check browser popup blockers
-   - Ensure reconciled transactions exist
+**Application won't start**
+- Ensure Python 3.9+ is installed
+- Install all dependencies: `pip install -r requirements.txt`
+- Check that all files are in the correct directory structure
 
-### Sample Data
-Use the provided sample CSV files to test the application:
-- `sample-bank-transactions.csv`
-- `sample-bookkeeping-transactions.csv`
+## Security
 
-These files contain matching transactions that can be easily reconciled for demonstration purposes.
+- **No Internet**: Application works completely offline
+- **Local Processing**: All data stays on your machine
+- **No Telemetry**: No data collection or tracking
+- **Open Source**: Code is transparent and auditable
 
-## Contributing
+## Support
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+For issues or questions:
+- Check the troubleshooting section above
+- Review the console output for error messages
+- Ensure your CSV files follow the supported format
 
 ## License
 
-This project is licensed under the ISC License.
+This project is licensed under the MIT License.
 
 ---
 
-**Need Help?** Check the sample data files and follow the usage guide above. The application is designed to work out of the box with the provided sample transactions. 
+**ReconcileBook Desktop** - Professional reconciliation made simple and secure. 

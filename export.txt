@@ -1,0 +1,70 @@
+ReconcileBook Desktop - Reconciliation Report
+==================================================
+
+Generated: 2025-07-31 16:15:15
+
+Total matches: 12
+Average confidence: 52.4%
+
+Matches:
+------------------------------
+
+1. Office Supplies Purchase
+   Bank: $125.50 (2024-01-15)
+   QB: $-45.67 (2024-01-17)
+   Confidence: 50.0%
+
+2. Client Payment - ABC Corp
+   Bank: $2500.00 (2024-01-16)
+   QB: $2500.00 (2024-01-19)
+   Confidence: 73.3%
+
+3. Internet Service Fee
+   Bank: $89.99 (2024-01-17)
+   QB: $-89.99 (2024-01-18)
+   Confidence: 35.0%
+
+4. Software Subscription
+   Bank: $199.00 (2024-01-19)
+   QB: $-29.99 (2024-01-22)
+   Confidence: 50.0%
+
+5. Client Payment - XYZ Inc
+   Bank: $1800.00 (2024-01-21)
+   QB: $1800.00 (2024-01-23)
+   Confidence: 82.9%
+
+6. Office Rent Payment
+   Bank: $1200.00 (2024-01-22)
+   QB: $-1200.00 (2024-01-16)
+   Confidence: 50.0%
+
+7. Phone Bill
+   Bank: $65.50 (2024-01-23)
+   QB: $-65.00 (2024-01-29)
+   Confidence: 40.0%
+
+8. Client Payment - DEF Ltd
+   Bank: $3200.00 (2024-01-25)
+   QB: $2200.00 (2024-01-27)
+   Confidence: 32.9%
+
+9. Travel Expenses
+   Bank: $275.80 (2024-01-26)
+   QB: $-125.50 (2024-01-25)
+   Confidence: 50.0%
+
+10. Equipment Purchase
+   Bank: $450.00 (2024-01-27)
+   QB: $-450.00 (2024-01-31)
+   Confidence: 50.0%
+
+11. Client Payment - GHI Corp
+   Bank: $1500.00 (2024-01-28)
+   QB: $1500.00 (2024-01-15)
+   Confidence: 80.0%
+
+12. Office Cleaning Service
+   Bank: $120.00 (2024-01-30)
+   QB: $-120.00 (2024-02-02)
+   Confidence: 35.0%

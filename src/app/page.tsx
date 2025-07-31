@@ -133,7 +133,7 @@ export default function LandingPage() {
                   allowFullScreen
                 ></iframe>
               </div>
-              
+
               {/* Video Description */}
               <div className="p-8">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">What You'll See:</h3>
@@ -244,7 +244,7 @@ export default function LandingPage() {
                     <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
                     <p className="text-gray-700">Starting at just $29/month - 90% less than enterprise solutions</p>
                   </div>
-                </div>
+              </div>
               </Card>
             </div>
           </div>
@@ -687,7 +687,7 @@ export default function LandingPage() {
                 <li><a href="#" className="hover:text-white">API Docs</a></li>
                 <li><a href="#" className="hover:text-white">Status</a></li>
               </ul>
-            </div>
+              </div>
 
             <div>
               <h3 className="font-semibold mb-4">Legal</h3>
