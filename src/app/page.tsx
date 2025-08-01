@@ -61,10 +61,10 @@ export default function LandingPage() {
               <Link href="/blog" className="text-gray-600 hover:text-gray-900">Blog</Link>
               <a href="#testimonials" className="text-gray-600 hover:text-gray-900">Reviews</a>
               <Link href="/auth/login" className="text-gray-600 hover:text-gray-900">Login</Link>
-              <a href="https://youtu.be/Zut8D-5lERs" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
+              <a href="#demo" className="scroll-smooth">
                 <Button variant="outline" size="sm">
                   <Play className="mr-2 h-4 w-4" />
-                  2 Min Demo
+                  How It Works
                 </Button>
               </a>
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
@@ -105,10 +105,10 @@ export default function LandingPage() {
                   Try Professional Free (14 Days)
                 </Button>
               </a>
-              <a href="https://youtu.be/Zut8D-5lERs" target="_blank" rel="noopener noreferrer">
+              <a href="#demo" className="scroll-smooth">
                 <Button variant="outline" size="lg" className="text-lg px-8 py-6">
                   <Play className="mr-2 h-5 w-5" />
-                  2 Min Demo
+                  How It Works
                 </Button>
               </a>
             </div>
@@ -121,7 +121,7 @@ export default function LandingPage() {
       </section>
 
       {/* Demo Video Section */}
-      <section className="py-20 bg-gray-50">
+      <section id="demo" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
