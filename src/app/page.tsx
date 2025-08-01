@@ -61,6 +61,12 @@ export default function LandingPage() {
               <Link href="/blog" className="text-gray-600 hover:text-gray-900">Blog</Link>
               <a href="#testimonials" className="text-gray-600 hover:text-gray-900">Reviews</a>
               <Link href="/auth/login" className="text-gray-600 hover:text-gray-900">Login</Link>
+              <a href="https://youtu.be/Zut8D-5lERs" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
+                <Button variant="outline" size="sm">
+                  <Play className="mr-2 h-4 w-4" />
+                  2 Min Demo
+                </Button>
+              </a>
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline">Try Professional Free (14 Days)</Button>
               </a>
@@ -97,6 +103,12 @@ export default function LandingPage() {
                 <Button variant="outline" size="lg" className="text-lg px-8 py-6">
                   <Clock className="mr-2 h-5 w-5" />
                   Try Professional Free (14 Days)
+                </Button>
+              </a>
+              <a href="https://youtu.be/Zut8D-5lERs" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" size="lg" className="text-lg px-8 py-6">
+                  <Play className="mr-2 h-5 w-5" />
+                  2 Min Demo
                 </Button>
               </a>
             </div>
