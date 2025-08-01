@@ -149,84 +149,34 @@ export default function BlogPage() {
       category: "Best Practices"
     },
     {
-      id: 10,
-      title: "QuickBooks Bank Feed Not Syncing? Here's the Complete Fix (2024)",
-      excerpt: "QuickBooks bank feed not syncing is a nightmare that wastes hours every month. Here's the step-by-step fix that actually works.",
-      date: "2024-01-16",
-      readTime: "12 min read",
-      author: "Alex",
-      slug: "quickbooks-bank-feed-not-syncing-fix",
-      category: "QuickBooks"
-    },
-    {
-      id: 11,
-      title: "QuickBooks Duplicate Transactions? Here's How to Remove Them (2024)",
-      excerpt: "QuickBooks duplicate transactions can destroy your reconciliation and waste hours of cleanup time. Here's how to find and remove them quickly.",
-      date: "2024-01-16",
-      readTime: "11 min read",
-      author: "Alex",
-      slug: "quickbooks-duplicate-transactions-remove",
-      category: "QuickBooks"
-    },
-    {
-      id: 12,
-      title: "QuickBooks Reconciliation Balance Not Matching? Here's the Fix (2024)",
-      excerpt: "QuickBooks reconciliation balance not matching can drive you crazy. Here's the systematic approach to identify and fix the root cause quickly.",
-      date: "2024-01-16",
-      readTime: "13 min read",
-      author: "Alex",
-      slug: "quickbooks-reconciliation-balance-not-matching",
-      category: "QuickBooks"
-    },
-    {
-      id: 13,
-      title: "Multiple Bank Accounts Reconciliation: Complete Guide",
-      excerpt: "Managing multiple bank accounts in QuickBooks? Here's how to reconcile them efficiently and avoid common pitfalls.",
+      id: 15,
+      title: "QuickBooks Reconciliation Errors: The 2024 Complete Fix Guide",
+      excerpt: "QuickBooks reconciliation errors are driving you crazy? You're not alone. Thousands of users face these same errors daily. Here's the complete fix guide that actually works.",
       date: "2024-01-16",
       readTime: "14 min read",
       author: "Alex",
-      slug: "multiple-bank-accounts-reconciliation",
-      category: "Tutorial"
-    },
-    {
-      id: 14,
-      title: "Year-End Reconciliation Checklist: Don't Miss These Steps",
-      excerpt: "Year-end reconciliation is critical for accurate financial statements. Here's the complete checklist to ensure nothing is missed.",
-      date: "2024-01-16",
-      readTime: "15 min read",
-      author: "Alex",
-      slug: "year-end-reconciliation-checklist",
-      category: "Checklist"
-    },
-    {
-      id: 15,
-      title: "Monthly Reconciliation Checklist: Stay on Track",
-      excerpt: "Monthly reconciliation keeps your books clean and accurate. Here's the step-by-step checklist for consistent results.",
-      date: "2024-01-16",
-      readTime: "10 min read",
-      author: "Alex",
-      slug: "monthly-reconciliation-checklist",
-      category: "Checklist"
+      slug: "quickbooks-reconciliation-errors-2024",
+      category: "QuickBooks"
     },
     {
       id: 16,
-      title: "Bank Reconciliation for Small Business: Complete Guide",
-      excerpt: "Small business bank reconciliation doesn't have to be complicated. Here's the simplified process that works for any business size.",
+      title: "Bank Reconciliation Guide 2024: The Complete Step-by-Step Process",
+      excerpt: "Bank reconciliation is trending as more businesses realize its importance. This complete guide will teach you everything you need to know about bank reconciliation in 2024.",
       date: "2024-01-16",
-      readTime: "12 min read",
+      readTime: "18 min read",
       author: "Alex",
-      slug: "bank-reconciliation-for-small-business",
-      category: "Small Business"
+      slug: "bank-reconciliation-guide-2024",
+      category: "Tutorial"
     },
     {
       id: 17,
-      title: "Step-by-Step Bank Reconciliation Guide",
-      excerpt: "New to bank reconciliation? Here's the complete step-by-step guide that will make you an expert in no time.",
+      title: "Bank Reconciliation Software 2024: Top Tools That Actually Work",
+      excerpt: "Bank reconciliation software is trending as businesses realize manual reconciliation is costing them thousands. Here are the top tools for 2024 that actually deliver results.",
       date: "2024-01-16",
       readTime: "16 min read",
       author: "Alex",
-      slug: "step-by-step-bank-reconciliation-guide",
-      category: "Tutorial"
+      slug: "bank-reconciliation-software-2024",
+      category: "Software"
     },
     {
       id: 18,
