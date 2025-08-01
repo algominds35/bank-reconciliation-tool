@@ -100,6 +100,56 @@ export default function BlogPage() {
     },
     {
       id: 10,
+      title: "QuickBooks Reconciliation Tips: 10 Pro Secrets for 2024",
+      excerpt: "Most QuickBooks users waste hours on reconciliation because they don't know these insider secrets. Learn the techniques that professional bookkeepers use.",
+      date: "2024-01-16",
+      readTime: "15 min read",
+      author: "Alex",
+      slug: "quickbooks-reconciliation-tips-2024",
+      category: "QuickBooks"
+    },
+    {
+      id: 11,
+      title: "QuickBooks Bank Feed Not Syncing? Complete Troubleshooting Guide (2024)",
+      excerpt: "Your QuickBooks bank feed stopped syncing and you don't know why? You're not alone. This is one of the most common QuickBooks issues. Here's the complete fix.",
+      date: "2024-01-16",
+      readTime: "12 min read",
+      author: "Alex",
+      slug: "quickbooks-bank-feed-syncing-issues",
+      category: "QuickBooks"
+    },
+    {
+      id: 12,
+      title: "QuickBooks Reconciliation Accuracy: Why 95% of Users Make These Critical Mistakes",
+      excerpt: "Most QuickBooks users think their reconciliation is accurate, but they're making critical errors that could cost them thousands. Here's what you're probably doing wrong.",
+      date: "2024-01-16",
+      readTime: "14 min read",
+      author: "Alex",
+      slug: "quickbooks-reconciliation-accuracy",
+      category: "QuickBooks"
+    },
+    {
+      id: 13,
+      title: "Save 10+ Hours Per Week on QuickBooks Reconciliation: The Complete Guide",
+      excerpt: "Most bookkeepers spend 10-15 hours per week on reconciliation. That's 40-60 hours per month wasted on a task that could take just 2-3 hours. Here's how to reclaim your time.",
+      date: "2024-01-16",
+      readTime: "13 min read",
+      author: "Alex",
+      slug: "quickbooks-reconciliation-time-savings",
+      category: "Productivity"
+    },
+    {
+      id: 14,
+      title: "QuickBooks Reconciliation Best Practices: The 2024 Complete Guide",
+      excerpt: "Top bookkeepers and accountants follow these reconciliation best practices to ensure accuracy, efficiency, and compliance. Learn the techniques that separate amateurs from professionals.",
+      date: "2024-01-16",
+      readTime: "16 min read",
+      author: "Alex",
+      slug: "quickbooks-reconciliation-best-practices-2024",
+      category: "Best Practices"
+    },
+    {
+      id: 10,
       title: "QuickBooks Bank Feed Not Syncing? Here's the Complete Fix (2024)",
       excerpt: "QuickBooks bank feed not syncing is a nightmare that wastes hours every month. Here's the step-by-step fix that actually works.",
       date: "2024-01-16",
