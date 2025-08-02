@@ -669,6 +669,12 @@ export default function LandingPage() {
               <p className="text-gray-400 mb-4">
                 Professional bank reconciliation software that saves you time and reduces errors.
               </p>
+              <div className="mb-4">
+                <p className="text-gray-400 mb-2">Questions? Get in touch:</p>
+                <a href="mailto:alex@usealgomind.com" className="text-blue-400 hover:text-blue-300 font-medium">
+                  alex@usealgomind.com
+                </a>
+              </div>
               <div className="flex space-x-4">
                 <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">
                   <span className="text-gray-400">📧</span>
