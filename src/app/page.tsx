@@ -113,7 +113,7 @@ export default function LandingPage() {
             </div>
 
             <p className="text-sm text-gray-500">
-              🆓 14-day free trial • 💳 No credit card required • 🔒 Cancel anytime • ✅ 30-day money-back guarantee
+              🆓 14-day free trial • 💳 Credit card required • 🔒 Cancel anytime • ✅ No auto-billing during trial
             </p>
           </div>
         </div>
