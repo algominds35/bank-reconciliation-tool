@@ -68,7 +68,7 @@ export default function LandingPage() {
                 </Button>
               </a>
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline">Try Professional Free (14 Days)</Button>
+                <Button variant="outline">Start Free Trial</Button>
               </a>
             </div>
           </div>
@@ -95,14 +95,13 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="text-lg px-8 py-6">
-                  Get Professional $79/mo
+                  Start 14-Day Free Trial
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </a>
-              <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
+              <a href="#pricing" className="scroll-smooth">
                 <Button variant="outline" size="lg" className="text-lg px-8 py-6">
-                  <Clock className="mr-2 h-5 w-5" />
-                  Try Professional Free (14 Days)
+                  See Pricing
                 </Button>
               </a>
               <a href="#demo" className="scroll-smooth">
@@ -114,7 +113,7 @@ export default function LandingPage() {
             </div>
 
             <p className="text-sm text-gray-500">
-              💳 Credit card required for trial • 🔒 Cancel anytime • ✅ Auto-billing after 14 days
+              🆓 14-day free trial • 💳 Credit card required • 🔒 Cancel anytime • ✅ No auto-billing during trial
             </p>
           </div>
         </div>
@@ -626,15 +625,17 @@ export default function LandingPage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Link href="/auth/signup">
+            <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6">
-                Start Your Free Trial
+                Start 14-Day Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              </Link>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-6">
-              Schedule a Demo
-            </Button>
+            </a>
+            <a href="#demo" className="scroll-smooth">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-6">
+                Watch Demo
+              </Button>
+            </a>
           </div>
           
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-8 text-sm opacity-80">
