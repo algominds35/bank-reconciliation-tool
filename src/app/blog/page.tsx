@@ -327,6 +327,56 @@ export default function BlogPage() {
       author: "Alex",
       slug: "manual-vs-automated-reconciliation",
       category: "Comparison"
+    },
+    {
+      id: 33,
+      title: "QuickBooks Bank Feed Issues 2024: The Complete Troubleshooting Guide",
+      excerpt: "QuickBooks bank feed issues affect thousands of users daily. Here's the complete troubleshooting guide that fixes 95% of bank feed problems.",
+      date: "2024-01-16",
+      readTime: "15 min read",
+      author: "Alex",
+      slug: "quickbooks-bank-feed-issues-2024-complete-guide",
+      category: "QuickBooks"
+    },
+    {
+      id: 34,
+      title: "QuickBooks Auto Match Wrong Transactions: The Ultimate Fix Guide (2024)",
+      excerpt: "QuickBooks keeps matching the wrong transactions and you can't figure out why? This comprehensive guide will fix your auto-matching problems once and for all.",
+      date: "2024-01-16",
+      readTime: "14 min read",
+      author: "Alex",
+      slug: "quickbooks-auto-match-wrong-transactions-ultimate-fix",
+      category: "QuickBooks"
+    },
+    {
+      id: 35,
+      title: "QuickBooks Duplicate Transactions Fix: Complete Step-by-Step Solution (2024)",
+      excerpt: "QuickBooks creating duplicate transactions is a nightmare that wastes hours. Here's the complete step-by-step solution that prevents and fixes duplicate transactions.",
+      date: "2024-01-16",
+      readTime: "16 min read",
+      author: "Alex",
+      slug: "quickbooks-duplicate-transactions-fix-complete-solution",
+      category: "QuickBooks"
+    },
+    {
+      id: 36,
+      title: "How to Reconcile PayPal in QuickBooks: The Definitive Guide (2024)",
+      excerpt: "PayPal reconciliation in QuickBooks is notoriously difficult for e-commerce businesses. Here's the definitive guide that makes it simple and accurate.",
+      date: "2024-01-16",
+      readTime: "18 min read",
+      author: "Alex",
+      slug: "how-to-reconcile-paypal-in-quickbooks-definitive-guide",
+      category: "E-commerce"
+    },
+    {
+      id: 37,
+      title: "Best Reconciliation Software for QuickBooks: 2024 Expert Comparison",
+      excerpt: "Looking for the best reconciliation software for QuickBooks? Here's the expert comparison of top tools that actually work and save you time.",
+      date: "2024-01-16",
+      readTime: "12 min read",
+      author: "Alex",
+      slug: "best-reconciliation-software-for-quickbooks-2024",
+      category: "Software"
     }
   ];
 
