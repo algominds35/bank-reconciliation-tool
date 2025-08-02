@@ -187,13 +187,34 @@ export default function LandingPage() {
       {/* Social Proof */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-600 mb-8">Trusted by leading businesses</p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 items-center opacity-60">
-            {['Acme Corp', 'TechStart', 'GrowthCo', 'FinanceFirst', 'SmallBiz'].map((company) => (
-              <div key={company} className="text-xl font-semibold text-gray-400">
-                {company}
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Professional Reconciliation Software You Can Trust
+          </h2>
+          <p className="text-lg text-gray-600 mb-8">
+            Bank-grade security, 99.9% uptime, and expert support from reconciliation professionals
+          </p>
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-6 w-6 text-blue-600" />
               </div>
-            ))}
+              <h3 className="font-semibold text-gray-900 mb-2">Bank-Grade Security</h3>
+              <p className="text-gray-600 text-sm">256-bit SSL encryption, GDPR compliant</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">99.9% Uptime</h3>
+              <p className="text-gray-600 text-sm">Enterprise-grade reliability</p>
+            </div>
+            <div className="text-center">
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="h-6 w-6 text-purple-600" />
+              </div>
+              <h3 className="font-semibold text-gray-900 mb-2">Expert Support</h3>
+              <p className="text-gray-600 text-sm">Live chat and email support</p>
+            </div>
           </div>
         </div>
       </section>
@@ -745,7 +766,7 @@ export default function LandingPage() {
                 <Shield className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Bank-Grade Security</h3>
-              <p className="text-gray-600 text-sm">256-bit SSL encryption, GDPR compliant, SOC 2 standards</p>
+              <p className="text-gray-600 text-sm">256-bit SSL encryption, GDPR compliant</p>
             </div>
             
             <div className="text-center">
