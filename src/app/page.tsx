@@ -64,7 +64,7 @@ export default function LandingPage() {
               <a href="#demo" className="scroll-smooth">
                 <Button variant="outline" size="sm">
                   <Play className="mr-2 h-4 w-4" />
-                  How It Works
+                  Watch How It Works
                 </Button>
               </a>
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
@@ -107,7 +107,7 @@ export default function LandingPage() {
               <a href="#demo" className="scroll-smooth">
                 <Button variant="outline" size="lg" className="text-lg px-8 py-6">
                   <Play className="mr-2 h-5 w-5" />
-                  Watch Demo
+                  Watch How It Works
                 </Button>
               </a>
             </div>
@@ -726,7 +726,7 @@ export default function LandingPage() {
             </a>
             <a href="#demo" className="scroll-smooth">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-6">
-                Watch Demo
+                Watch How It Works
               </Button>
             </a>
           </div>
