@@ -137,7 +137,7 @@ export default function LandingPage() {
               <div className="aspect-video">
                 <iframe
                   className="w-full h-full"
-                  src="https://www.youtube.com/embed/_K9NET1njog"
+                  src="https://www.youtube.com/embed/_K9NET1njog?cc_load_policy=1"
                   title="ReconcileBook - Professional Bank Reconciliation Software Demo"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
