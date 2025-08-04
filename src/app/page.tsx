@@ -84,8 +84,8 @@ export default function LandingPage() {
             </Badge>
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
-              QuickBooks Reconciliation Taking Forever?{' '}
-              <span className="text-blue-600">Here's the 2-Minute Fix That Actually Works.</span>
+              Tired of QuickBooks matching the wrong transactions?{' '}
+              <span className="text-blue-600">Upload your CSV and reconcile 3 months in 10 minutes — without the QB chaos.</span>
             </h1>
             
             <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto">
