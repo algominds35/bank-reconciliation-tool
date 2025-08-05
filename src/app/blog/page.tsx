@@ -300,16 +300,6 @@ export default function BlogPage() {
     },
     {
       id: 30,
-      title: "QuickBooks Auto Matching Problems: Complete Fix",
-      excerpt: "QuickBooks auto matching problems driving you crazy? Here's the complete fix that actually works.",
-      date: "2024-01-16",
-      readTime: "11 min read",
-      author: "Alex",
-      slug: "quickbooks-auto-matching-problems",
-      category: "QuickBooks"
-    },
-    {
-      id: 31,
       title: "Export QuickBooks Bank Transactions: Step-by-Step",
       excerpt: "Need to export bank transactions from QuickBooks? Here's the step-by-step process that works every time.",
       date: "2024-01-16",
@@ -319,7 +309,7 @@ export default function BlogPage() {
       category: "Export"
     },
     {
-      id: 32,
+      id: 31,
       title: "Manual vs Automated Reconciliation: Which is Better?",
       excerpt: "Manual or automated reconciliation? Here's the complete comparison to help you choose the right approach.",
       date: "2024-01-16",
@@ -329,7 +319,7 @@ export default function BlogPage() {
       category: "Comparison"
     },
     {
-      id: 33,
+      id: 32,
       title: "QuickBooks Bank Feed Issues 2024: The Complete Troubleshooting Guide",
       excerpt: "QuickBooks bank feed issues affect thousands of users daily. Here's the complete troubleshooting guide that fixes 95% of bank feed problems.",
       date: "2024-01-16",
@@ -339,17 +329,7 @@ export default function BlogPage() {
       category: "QuickBooks"
     },
     {
-      id: 34,
-      title: "QuickBooks Auto Match Wrong Transactions: The Ultimate Fix Guide (2024)",
-      excerpt: "QuickBooks keeps matching the wrong transactions and you can't figure out why? This comprehensive guide will fix your auto-matching problems once and for all.",
-      date: "2024-01-16",
-      readTime: "14 min read",
-      author: "Alex",
-      slug: "quickbooks-auto-match-wrong-transactions-ultimate-fix",
-      category: "QuickBooks"
-    },
-    {
-      id: 35,
+      id: 33,
       title: "QuickBooks Duplicate Transactions Fix: Complete Step-by-Step Solution (2024)",
       excerpt: "QuickBooks creating duplicate transactions is a nightmare that wastes hours. Here's the complete step-by-step solution that prevents and fixes duplicate transactions.",
       date: "2024-01-16",
@@ -359,7 +339,7 @@ export default function BlogPage() {
       category: "QuickBooks"
     },
     {
-      id: 36,
+      id: 34,
       title: "How to Reconcile PayPal in QuickBooks: The Definitive Guide (2024)",
       excerpt: "PayPal reconciliation in QuickBooks is notoriously difficult for e-commerce businesses. Here's the definitive guide that makes it simple and accurate.",
       date: "2024-01-16",
@@ -369,7 +349,7 @@ export default function BlogPage() {
       category: "E-commerce"
     },
     {
-      id: 37,
+      id: 35,
       title: "Best Reconciliation Software for QuickBooks: 2024 Expert Comparison",
       excerpt: "Looking for the best reconciliation software for QuickBooks? Here's the expert comparison of top tools that actually work and save you time.",
       date: "2024-01-16",
