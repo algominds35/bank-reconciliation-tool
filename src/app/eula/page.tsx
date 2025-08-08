@@ -2,74 +2,190 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'End-User License Agreement (EULA) - ReconcileBook',
+  description: 'End-User License Agreement for ReconcileBook software and services.',
+  alternates: {
+    canonical: 'https://www.reconcilebook.com/eula'
+  }
+}
 
 export default function EULAPage() {
+  const today = new Date().toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  })
+
   return (
-    <div className="min-h-screen bg-white">
-      <div className="bg-gradient-to-r from-gray-900 to-gray-700 text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl sm:text-5xl font-bold">ReconcileBook End‑User License Agreement (EULA)</h1>
-          <p className="mt-4 text-white/90 max-w-3xl">Please read this End‑User License Agreement carefully before using ReconcileBook.</p>
+    <html lang="en">
+      <head>
+        <title>End-User License Agreement (EULA) - ReconcileBook</title>
+        <meta name="description" content="End-User License Agreement for ReconcileBook software and services." />
+        <link rel="canonical" href="https://www.reconcilebook.com/eula" />
+      </head>
+      <body>
+        <div style={{
+          maxWidth: '720px',
+          margin: '0 auto',
+          padding: '16px',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+          lineHeight: '1.6',
+          color: '#333'
+        }}>
+          <header style={{ marginBottom: '32px', textAlign: 'center' }}>
+            <h1 style={{
+              fontSize: '28px',
+              fontWeight: 'bold',
+              marginBottom: '8px',
+              color: '#111'
+            }}>
+              End-User License Agreement (EULA)
+            </h1>
+            <p style={{ color: '#666', fontSize: '14px' }}>
+              Last updated: {today}
+            </p>
+          </header>
+
+            <section style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '12px',
+                color: '#111'
+              }}>
+                License Grant
+              </h2>
+              <p style={{ marginBottom: '16px' }}>
+                Subject to payment of applicable fees and compliance with this Agreement, ReconcileBook, Inc. ("ReconcileBook", "we", "our") grants you a limited, non-exclusive, non-transferable license to access and use the ReconcileBook software and services (the "Software") solely for your internal business purposes.
+              </p>
+            </section>
+
+            <section style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '12px',
+                color: '#111'
+              }}>
+                Acceptable Use
+              </h2>
+              <p style={{ marginBottom: '8px' }}>You may use the Software to:</p>
+              <ul style={{ marginLeft: '20px', marginBottom: '16px' }}>
+                <li style={{ marginBottom: '4px' }}>Reconcile bank and credit card transactions using CSV files you lawfully control</li>
+                <li style={{ marginBottom: '4px' }}>Generate reconciliation reports for internal records, accountants, auditors, and clients you serve</li>
+                <li style={{ marginBottom: '4px' }}>Create user accounts for team members within your subscription plan limits</li>
+              </ul>
+              <p style={{ marginBottom: '8px' }}>You may not:</p>
+              <ul style={{ marginLeft: '20px', marginBottom: '16px' }}>
+                <li style={{ marginBottom: '4px' }}>Reverse engineer, decompile, or attempt to derive the source code</li>
+                <li style={{ marginBottom: '4px' }}>Rent, lease, sell, sublicense, or redistribute the Software</li>
+                <li style={{ marginBottom: '4px' }}>Use the Software for unlawful purposes or to infringe third-party rights</li>
+                <li style={{ marginBottom: '4px' }}>Circumvent usage limits or security measures</li>
+              </ul>
+            </section>
+
+            <section style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '12px',
+                color: '#111'
+              }}>
+                Data Handling
+              </h2>
+              <p style={{ marginBottom: '16px' }}>
+                We process customer data in accordance with our Privacy Policy. You are responsible for ensuring you have the right to upload and process any data you provide to the Software. You must maintain the security of your account credentials and notify us immediately of any unauthorized access.
+              </p>
+            </section>
+
+            <section style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '12px',
+                color: '#111'
+              }}>
+                Third-Party Services (Intuit/QuickBooks)
+              </h2>
+              <p style={{ marginBottom: '16px' }}>
+                The Software may integrate with third-party services including Intuit QuickBooks. Your use of such integrations is subject to the third party's terms of service and privacy policies. We are not responsible for the availability, functionality, or security of third-party services. You may disconnect these integrations at any time through your account settings or by visiting our disconnect page.
+              </p>
+            </section>
+
+            <section style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '12px',
+                color: '#111'
+              }}>
+                Termination
+              </h2>
+              <p style={{ marginBottom: '16px' }}>
+                This Agreement remains in effect while you use the Software. Either party may terminate this Agreement at any time. We may suspend or terminate your access for breach of this Agreement. Upon termination, your right to use the Software ceases immediately, though certain provisions will survive termination.
+              </p>
+            </section>
+
+            <section style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '12px',
+                color: '#111'
+              }}>
+                Disclaimers & Limitation of Liability
+              </h2>
+              <p style={{ marginBottom: '12px' }}>
+                THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+              </p>
+              <p style={{ marginBottom: '16px' }}>
+                OUR TOTAL LIABILITY ARISING OUT OF OR RELATED TO THIS AGREEMENT SHALL NOT EXCEED THE AMOUNTS PAID BY YOU FOR THE SOFTWARE IN THE 12 MONTHS PRECEDING THE CLAIM. WE SHALL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES.
+              </p>
+            </section>
+
+            <section style={{ marginBottom: '32px' }}>
+              <h2 style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '12px',
+                color: '#111'
+              }}>
+                Support & Contact
+              </h2>
+              <p style={{ marginBottom: '16px' }}>
+                For questions about this Agreement or technical support, please contact us at{' '}
+                <a 
+                  href="mailto:support@reconcilebook.com" 
+                  style={{ color: '#3b82f6', textDecoration: 'underline' }}
+                >
+                  support@reconcilebook.com
+                </a>
+              </p>
+            </section>
+
+            <div style={{ 
+              marginTop: '48px', 
+              paddingTop: '24px', 
+              borderTop: '1px solid #e5e7eb',
+              textAlign: 'center'
+            }}>
+              <Link 
+                href="/"
+                style={{
+                  color: '#3b82f6',
+                  textDecoration: 'underline',
+                  fontSize: '14px'
+                }}
+              >
+                ← Back to ReconcileBook
+              </Link>
+            </div>
+          </main>
         </div>
-      </div>
-
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <article className="prose prose-gray max-w-none">
-          <h2 className="text-2xl font-bold text-gray-900">1. Acceptance of Terms</h2>
-          <p className="text-gray-700">By accessing or using ReconcileBook (the “Software”), you agree to be bound by this End‑User License Agreement (“Agreement”). If you do not agree, do not use the Software.</p>
-
-          <h2 className="text-2xl font-bold text-gray-900">2. License Grant</h2>
-          <p className="text-gray-700">Subject to payment of applicable fees and compliance with this Agreement, ReconcileBook, Inc. (“ReconcileBook”, “we”, “our”) grants you a limited, non‑exclusive, non‑transferable, non‑sublicensable license to access and use the Software solely for your internal business purposes.</p>
-
-          <h2 className="text-2xl font-bold text-gray-900">3. Permitted Use</h2>
-          <ul className="text-gray-700">
-            <li>Reconcile bank and credit‑card transactions using CSV files you lawfully control.</li>
-            <li>Generate reconciliation reports for internal records, accountants, auditors, and clients you serve.</li>
-            <li>Create user accounts for team members within your subscription plan limits.</li>
-          </ul>
-
-          <h2 className="text-2xl font-bold text-gray-900">4. Prohibited Use</h2>
-          <ul className="text-gray-700">
-            <li>Reverse engineer, decompile, or attempt to derive the source code of the Software.</li>
-            <li>Rent, lease, sell, sublicense, or otherwise redistribute the Software to third parties.</li>
-            <li>Use the Software to process unlawful data or infringe third‑party rights.</li>
-            <li>Access the Software in a manner intended to circumvent plan limits or fees.</li>
-          </ul>
-
-          <h2 className="text-2xl font-bold text-gray-900">5. Data & Privacy</h2>
-          <p className="text-gray-700">We process customer data in accordance with our Privacy Policy. By using the Software, you consent to such processing. Do not upload data you are not authorized to share. You are responsible for maintaining your account security.</p>
-
-          <h2 className="text-2xl font-bold text-gray-900">6. Intellectual Property</h2>
-          <p className="text-gray-700">The Software is licensed, not sold. ReconcileBook retains all right, title, and interest in and to the Software, including all related intellectual property rights.</p>
-
-          <h2 className="text-2xl font-bold text-gray-900">7. Subscription, Trials, and Payment</h2>
-          <p className="text-gray-700">Use of the Software may require a paid subscription. Trials are provided for evaluation and may be changed or discontinued at any time. Fees are non‑refundable except as required by law or expressly stated otherwise.</p>
-
-          <h2 className="text-2xl font-bold text-gray-900">8. Disclaimers</h2>
-          <p className="text-gray-700">THE SOFTWARE IS PROVIDED “AS IS” AND “AS AVAILABLE.” TO THE MAXIMUM EXTENT PERMITTED BY LAW, RECONCILEBOOK DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON‑INFRINGEMENT. WE DO NOT WARRANT THAT THE SOFTWARE WILL BE ERROR‑FREE OR UNINTERRUPTED.</p>
-
-          <h2 className="text-2xl font-bold text-gray-900">9. Limitation of Liability</h2>
-          <p className="text-gray-700">TO THE MAXIMUM EXTENT PERMITTED BY LAW, RECONCILEBOOK SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR ANY LOSS OF PROFITS, REVENUE, DATA, OR USE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. OUR AGGREGATE LIABILITY ARISING OUT OF OR RELATED TO THIS AGREEMENT SHALL NOT EXCEED THE AMOUNTS PAID BY YOU FOR THE SOFTWARE IN THE 12 MONTHS PRECEDING THE EVENT GIVING RISE TO THE CLAIM.</p>
-
-          <h2 className="text-2xl font-bold text-gray-900">10. Term and Termination</h2>
-          <p className="text-gray-700">This Agreement remains in effect while you use the Software. We may suspend or terminate access for breach. Upon termination, your right to use the Software ceases immediately; sections intended to survive (including Intellectual Property, Disclaimers, Limitation of Liability, and Governing Law) will continue in effect.</p>
-
-          <h2 className="text-2xl font-bold text-gray-900">11. Governing Law</h2>
-          <p className="text-gray-700">This Agreement is governed by the laws of the State of Delaware, without regard to conflict of laws principles. Venue shall lie exclusively in state or federal courts located in Delaware, and you consent to personal jurisdiction there.</p>
-
-          <h2 className="text-2xl font-bold text-gray-900">12. Changes to this Agreement</h2>
-          <p className="text-gray-700">We may update this Agreement from time to time. Material changes will be posted on this page with an updated effective date. Continued use of the Software after changes become effective constitutes acceptance.</p>
-
-          <h2 className="text-2xl font-bold text-gray-900">13. Contact</h2>
-          <p className="text-gray-700">Questions about this Agreement? Contact us at <a href="mailto:alex@usealgomind.com" className="text-blue-600 hover:text-blue-800">alex@usealgomind.com</a>.</p>
-
-          <p className="text-gray-500 text-sm mt-8">Effective date: {new Date().toISOString().substring(0, 10)}</p>
-
-          <div className="mt-8">
-            <Link href="/" className="text-blue-600 hover:text-blue-800">← Back to Home</Link>
-          </div>
-        </article>
-      </main>
-    </div>
+      </body>
+    </html>
   )
 }
