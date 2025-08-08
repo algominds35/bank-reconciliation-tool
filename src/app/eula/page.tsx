@@ -49,6 +49,7 @@ export default function EULAPage() {
             </p>
           </header>
 
+          <main>
             <section style={{ marginBottom: '32px' }}>
               <h2 style={{
                 fontSize: '20px',
