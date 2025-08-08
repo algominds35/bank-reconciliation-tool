@@ -854,6 +854,7 @@ export default function LandingPage() {
               <ul className="space-y-2 text-gray-400">
                 <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
                 <li><Link href="/terms" className="hover:text-white">Terms of Service</Link></li>
+                <li><Link href="/eula" className="hover:text-white">End‑User License Agreement</Link></li>
                 <li><a href="#" className="hover:text-white">Cookie Policy</a></li>
                 <li><a href="#" className="hover:text-white">GDPR</a></li>
               </ul>
