@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { prisma } from '@/lib/prisma'
+import { supabase } from '@/lib/supabase'
 import { exchangeCodeForTokens } from '@/lib/qbo'
 
 export async function GET(req: NextRequest) {
@@ -14,11 +14,20 @@ export async function GET(req: NextRequest) {
   try {
     const userId = 'current-user-id' // TODO: replace with real authenticated user id
     const tokens = await exchangeCodeForTokens(code, realmId)
-    await prisma.qboConnection.upsert({
-      where: { userId_realmId: { userId, realmId } },
-      create: { userId, realmId, ...tokens, syncStatus: 'idle' },
-      update: { ...tokens, syncStatus: 'idle' },
-    })
+    const conn = {
+      user_id: userId,
+      realm_id: realmId,
+      access_token_encrypted: tokens.accessTokenEncrypted,
+      refresh_token_encrypted: tokens.refreshTokenEncrypted,
+      access_token_expires_at: tokens.accessTokenExpiresAt.toISOString(),
+      sync_status: 'idle',
+      updated_at: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+    }
+    const { error } = await supabase
+      .from('qbo_connections')
+      .upsert(conn, { onConflict: 'user_id,realm_id' })
+    if (error) throw error
     ;(await cookies()).delete('qbo_oauth_state')
     return NextResponse.redirect('/settings/qbo')
   } catch (e) {

@@ -1,6 +1,5 @@
-import { prisma } from '@/lib/prisma'
 import { encrypt, decrypt } from '@/lib/crypto'
-import { Prisma } from '@prisma/client'
+import { supabase } from '@/lib/supabase'
 
 const QBO_AUTH_URL = 'https://appcenter.intuit.com/connect/oauth2'
 const QBO_TOKEN_URL = 'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer'
@@ -45,8 +44,14 @@ export async function exchangeCodeForTokens(code: string, realmId: string) {
   }
 }
 
-export async function refreshTokens(connId: string) {
-  let conn = await prisma.qboConnection.findUnique({ where: { id: connId } })
+export async function refreshTokensByUser(userId: string, realmId: string) {
+  const { data: conn, error } = await supabase
+    .from('qbo_connections')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('realm_id', realmId)
+    .maybeSingle()
+  if (error) throw error
   if (!conn) throw new Error('Connection not found')
   const basic = Buffer.from(`${process.env.QBO_CLIENT_ID}:${process.env.QBO_CLIENT_SECRET}`).toString('base64')
   const body = new URLSearchParams({ grant_type: 'refresh_token', refresh_token: decrypt(conn.refreshTokenEncrypted) })
@@ -59,27 +64,38 @@ export async function refreshTokens(connId: string) {
   if (!res.ok) throw new Error('Refresh failed')
   const data = (await res.json()) as TokenResponse
   const now = Date.now()
-  conn = await prisma.qboConnection.update({
-    where: { id: conn.id },
-    data: {
-      accessTokenEncrypted: encrypt(data.access_token),
-      refreshTokenEncrypted: data.refresh_token ? encrypt(data.refresh_token) : conn.refreshTokenEncrypted,
-      accessTokenExpiresAt: new Date(now + data.expires_in * 1000),
-    },
-  })
-  return conn
+  const updates = {
+    access_token_encrypted: encrypt(data.access_token),
+    refresh_token_encrypted: data.refresh_token ? encrypt(data.refresh_token) : conn.refresh_token_encrypted,
+    access_token_expires_at: new Date(now + data.expires_in * 1000).toISOString(),
+    updated_at: new Date().toISOString(),
+  }
+  const { data: updated, error: upErr } = await supabase
+    .from('qbo_connections')
+    .update(updates)
+    .eq('id', conn.id)
+    .select('*')
+    .maybeSingle()
+  if (upErr) throw upErr
+  return updated
 }
 
-async function getAuthHeader(conn: { id: string; accessTokenEncrypted: string; accessTokenExpiresAt: Date }) {
-  if (new Date(conn.accessTokenExpiresAt).getTime() < Date.now() + 60_000) {
-    conn = await refreshTokens(conn.id)
+async function getAuthHeader(conn: { id: string; access_token_encrypted: string; access_token_expires_at: string; user_id: string; realm_id: string }) {
+  if (new Date(conn.access_token_expires_at).getTime() < Date.now() + 60_000) {
+    conn = await refreshTokensByUser(conn.user_id, conn.realm_id)
   }
-  const token = decrypt(conn.accessTokenEncrypted)
+  const token = decrypt(conn.access_token_encrypted)
   return { Authorization: `Bearer ${token}`, Accept: 'application/json' }
 }
 
 export async function fetchAccounts(userId: string, realmId: string) {
-  const conn = await prisma.qboConnection.findFirst({ where: { userId, realmId } })
+  const { data: conn, error } = await supabase
+    .from('qbo_connections')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('realm_id', realmId)
+    .maybeSingle()
+  if (error) throw error
   if (!conn) throw new Error('No QBO connection')
   const headers = await getAuthHeader(conn)
   const url = `${QBO_API_BASE}/${realmId}/query?query=${encodeURIComponent('select * from Account')}`
@@ -87,32 +103,30 @@ export async function fetchAccounts(userId: string, realmId: string) {
   if (!res.ok) throw new Error('Accounts fetch failed')
   const data = await res.json()
   const rows = (data.QueryResponse?.Account || []) as any[]
-  await prisma.$transaction(
-    rows.map((a) =>
-      prisma.qboAccount.upsert({
-        where: { realmId_qboId: { realmId, qboId: String(a.Id) } },
-        create: {
-          userId,
-          realmId,
-          qboId: String(a.Id),
-          name: a.Name,
-          accountType: a.AccountType,
-          accountSubType: a.AccountSubType || null,
-          active: a.Active ?? true,
-        },
-        update: {
-          name: a.Name,
-          accountType: a.AccountType,
-          accountSubType: a.AccountSubType || null,
-          active: a.Active ?? true,
-        },
-      })
-    )
-  )
+  const upserts = rows.map((a) => ({
+    user_id: userId,
+    realm_id: realmId,
+    qbo_id: String(a.Id),
+    name: a.Name,
+    account_type: a.AccountType,
+    account_sub_type: a.AccountSubType || null,
+    active: a.Active ?? true,
+    updated_at: new Date().toISOString(),
+  }))
+  const { error: upErr } = await supabase
+    .from('qbo_accounts')
+    .upsert(upserts, { onConflict: 'realm_id,qbo_id' })
+  if (upErr) throw upErr
 }
 
 export async function fetchTransactions(userId: string, realmId: string, since?: string) {
-  const conn = await prisma.qboConnection.findFirst({ where: { userId, realmId } })
+  const { data: conn, error } = await supabase
+    .from('qbo_connections')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('realm_id', realmId)
+    .maybeSingle()
+  if (error) throw error
   if (!conn) throw new Error('No QBO connection')
   const headers = await getAuthHeader(conn)
   const start = since || new Date(Date.now() - 730 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
@@ -132,39 +146,31 @@ export async function fetchTransactions(userId: string, realmId: string, since?:
     const key = Object.keys(data.QueryResponse || {}).find((k) => Array.isArray((data.QueryResponse as any)[k]))
     const rows = (key ? (data.QueryResponse as any)[key] : []) as any[]
     if (!rows.length) continue
-    await prisma.$transaction(
-      rows.map((t) =>
-        prisma.qboTransaction.upsert({
-          where: { realmId_qboId_txn: { realmId, qboId: String(t.Id) } },
-          create: {
-            userId,
-            realmId,
-            entityType: key || 'Txn',
-            qboId: String(t.Id),
-            docNumber: t.DocNumber || t.PaymentRefNum || null,
-            txnDate: new Date(t.TxnDate || t.MetaData?.CreateTime || Date.now()),
-            amount: new Prisma.Decimal(
-              t.TotalAmt ?? t.Amount ?? (t.Line || []).reduce((s: number, l: any) => s + (l.Amount || 0), 0) ?? 0
-            ),
-            description: t.PrivateNote || t.Line?.[0]?.Description || null,
-            accountRef: t.AccountRef?.value || null,
-            reconciled: undefined,
-          },
-          update: {
-            docNumber: t.DocNumber || t.PaymentRefNum || null,
-            txnDate: new Date(t.TxnDate || t.MetaData?.CreateTime || Date.now()),
-            amount: new Prisma.Decimal(
-              t.TotalAmt ?? t.Amount ?? (t.Line || []).reduce((s: number, l: any) => s + (l.Amount || 0), 0) ?? 0
-            ),
-            description: t.PrivateNote || t.Line?.[0]?.Description || null,
-            accountRef: t.AccountRef?.value || null,
-          },
-        })
-      )
-    )
+    const upserts = rows.map((t) => ({
+      user_id: userId,
+      realm_id: realmId,
+      entity_type: key || 'Txn',
+      qbo_id: String(t.Id),
+      doc_number: t.DocNumber || t.PaymentRefNum || null,
+      txn_date: new Date(t.TxnDate || t.MetaData?.CreateTime || Date.now()).toISOString(),
+      amount: Number(
+        t.TotalAmt ?? t.Amount ?? (t.Line || []).reduce((s: number, l: any) => s + (l.Amount || 0), 0) ?? 0
+      ),
+      description: t.PrivateNote || t.Line?.[0]?.Description || null,
+      account_ref: t.AccountRef?.value || null,
+      updated_at: new Date().toISOString(),
+    }))
+    const { error: upErr } = await supabase
+      .from('qbo_transactions')
+      .upsert(upserts, { onConflict: 'realm_id,qbo_id' })
+    if (upErr) throw upErr
   }
 }
 
 export async function markSync(userId: string, realmId: string) {
-  await prisma.qboConnection.updateMany({ where: { userId, realmId }, data: { lastSyncAt: new Date(), syncStatus: 'completed' } })
+  await supabase
+    .from('qbo_connections')
+    .update({ last_sync_at: new Date().toISOString(), sync_status: 'completed' })
+    .eq('user_id', userId)
+    .eq('realm_id', realmId)
 }

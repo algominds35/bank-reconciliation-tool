@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { supabase } from '@/lib/supabase'
 import { fetchAccounts, fetchTransactions, markSync } from '@/lib/qbo'
 
 async function runSync(userId: string, realmId: string, full: boolean) {
-  await prisma.qboConnection.updateMany({ where: { userId, realmId }, data: { syncStatus: 'running' } })
+  await supabase
+    .from('qbo_connections')
+    .update({ sync_status: 'running', updated_at: new Date().toISOString() })
+    .eq('user_id', userId)
+    .eq('realm_id', realmId)
   await fetchAccounts(userId, realmId)
   await fetchTransactions(userId, realmId, full ? undefined : new Date(Date.now() - 90*24*60*60*1000).toISOString().slice(0,10))
   await markSync(userId, realmId)
@@ -41,11 +45,11 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     // Cron daily sync across all connections
-    const connections = await prisma.qboConnection.findMany()
-    for (const c of connections) {
+    const { data: connections } = await supabase.from('qbo_connections').select('user_id, realm_id')
+    for (const c of connections || []) {
       // fire-and-forget, but await sequentially to avoid rate limits
       // eslint-disable-next-line no-await-in-loop
-      await runSync(c.userId, c.realmId, false)
+      await runSync(c.user_id, c.realm_id, false)
     }
     return NextResponse.json({ ok: true })
   } catch (e) {
