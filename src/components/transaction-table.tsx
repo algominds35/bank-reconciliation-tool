@@ -33,7 +33,7 @@ export function TransactionTable({
     return amount >= 0 ? 'text-green-600' : 'text-red-600'
   }
 
-  const getTransactionTypeBadge = (type: 'bank' | 'bookkeeping' | undefined) => {
+  const getTransactionTypeBadge = (type: 'bank' | 'bookkeeping' | 'quickbooks' | undefined) => {
     if (!type) {
       return (
         <Badge variant="outline">
@@ -41,11 +41,17 @@ export function TransactionTable({
         </Badge>
       )
     }
-    return (
-      <Badge variant={type === 'bank' ? 'default' : 'secondary'}>
-        {type === 'bank' ? 'Bank' : 'Books'}
-      </Badge>
-    )
+    
+    switch (type) {
+      case 'bank':
+        return <Badge variant="default">Bank</Badge>
+      case 'bookkeeping':
+        return <Badge variant="secondary">Books</Badge>
+      case 'quickbooks':
+        return <Badge variant="outline" className="border-blue-200 text-blue-700 bg-blue-50">QuickBooks</Badge>
+      default:
+        return <Badge variant="outline">Unknown</Badge>
+    }
   }
 
   if (loading) {
