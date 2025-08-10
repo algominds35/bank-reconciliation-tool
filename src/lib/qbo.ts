@@ -117,6 +117,8 @@ export async function fetchAccounts(userId: string, realmId: string) {
     .from('qbo_accounts')
     .upsert(upserts, { onConflict: 'realm_id,qbo_id' })
   if (upErr) throw upErr
+  
+  return rows
 }
 
 export async function fetchTransactions(userId: string, realmId: string, since?: string) {
@@ -138,6 +140,9 @@ export async function fetchTransactions(userId: string, realmId: string, since?:
     `select * from Deposit where TxnDate >= '${start}'`,
     `select * from BillPayment where TxnDate >= '${start}'`,
   ]
+  
+  let allTransactions: any[] = []
+  
   for (const q of queries) {
     const url = `${QBO_API_BASE}/${realmId}/query?query=${encodeURIComponent(q)}`
     const res = await fetch(url, { headers, cache: 'no-store' })
@@ -164,13 +169,31 @@ export async function fetchTransactions(userId: string, realmId: string, since?:
       .from('qbo_transactions')
       .upsert(upserts, { onConflict: 'realm_id,qbo_id' })
     if (upErr) throw upErr
+    
+    allTransactions.push(...rows)
   }
+  
+  return allTransactions
 }
 
-export async function markSync(userId: string, realmId: string) {
-  await supabase
+export async function markSync(userId: string, realmId: string, status: string = 'completed', errorMessage?: string) {
+  const updateData: any = { 
+    last_sync_at: new Date().toISOString(), 
+    sync_status: status 
+  }
+  
+  if (errorMessage) {
+    updateData.sync_error = errorMessage
+  }
+  
+  const { data, error } = await supabase
     .from('qbo_connections')
-    .update({ last_sync_at: new Date().toISOString(), sync_status: 'completed' })
+    .update(updateData)
     .eq('user_id', userId)
     .eq('realm_id', realmId)
+    .select()
+    .maybeSingle()
+    
+  if (error) throw error
+  return data
 }
