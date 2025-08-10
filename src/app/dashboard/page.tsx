@@ -53,6 +53,7 @@ export default function Dashboard() {
     bookkeepingTransactions: 0
   })
   const [activeTab, setActiveTab] = useState('transactions')
+  const [qboStatus, setQboStatus] = useState<{ connected: boolean; realmId?: string }>({ connected: false })
   const router = useRouter()
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function Dashboard() {
     if (user) {
       fetchClients()
       fetchTransactions()
+      fetchQboStatus()
     }
   }, [user, selectedClientId])
 
@@ -133,6 +135,21 @@ export default function Dashboard() {
     } catch (error) {
       console.warn('Error fetching transactions:', error)
       setTransactions([])
+    }
+  }
+
+  const fetchQboStatus = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) return
+
+      const response = await fetch('/api/qbo/status')
+      if (response.ok) {
+        const status = await response.json()
+        setQboStatus({ connected: status.connected, realmId: status.status })
+      }
+    } catch (error) {
+      console.warn('Error fetching QBO status:', error)
     }
   }
 
@@ -580,6 +597,18 @@ export default function Dashboard() {
                 </Button>
               </a>
               
+              <Link href="/settings/qbo">
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                  <div className={`w-3 h-3 rounded-full ${qboStatus.connected ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                  <span>QuickBooks</span>
+                  {qboStatus.connected && (
+                    <Badge variant="secondary" className="ml-1 text-xs bg-green-100 text-green-800">
+                      ✓
+                    </Badge>
+                  )}
+                </Button>
+              </Link>
+              
               <Link href="/settings/security">
                 <Button variant="outline" size="sm" className="flex items-center space-x-2">
                   <Settings className="h-4 w-4" />
@@ -669,6 +698,84 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* QuickBooks Integration Section */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">QB</span>
+              </div>
+              <span>QuickBooks Integration</span>
+              {qboStatus.connected && (
+                <Badge variant="secondary" className="ml-2 bg-green-100 text-green-800">
+                  Connected
+                </Badge>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {qboStatus.connected ? (
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Your QuickBooks account is connected and syncing automatically.
+                  </p>
+                  <div className="flex items-center space-x-4 text-sm text-gray-500">
+                    <span>• Auto-sync bank accounts & transactions</span>
+                    <span>• Real-time financial data</span>
+                    <span>• No more manual CSV uploads</span>
+                  </div>
+                </div>
+                <div className="flex space-x-3">
+                  <Link href="/settings/qbo">
+                    <Button variant="outline">
+                      Manage Connection
+                    </Button>
+                  </Link>
+                  <Button 
+                    variant="outline" 
+                    onClick={async () => {
+                      try {
+                        const response = await fetch('/api/qbo/sync', { method: 'POST' })
+                        if (response.ok) {
+                          alert('Sync started successfully!')
+                        }
+                      } catch (error) {
+                        console.error('Sync error:', error)
+                      }
+                    }}
+                  >
+                    Sync Now
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Connect your QuickBooks account to automatically sync transactions and eliminate manual CSV uploads.
+                  </p>
+                  <div className="flex items-center space-x-4 text-sm text-gray-500">
+                    <span>• Auto-sync bank accounts & transactions</span>
+                    <span>• Real-time financial data</span>
+                    <span>• No more manual CSV uploads</span>
+                  </div>
+                </div>
+                <div className="flex space-x-3">
+                  <Link href="/settings/qbo">
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                      Connect QuickBooks
+                    </Button>
+                  </Link>
+                  <Button variant="outline" onClick={() => window.open('https://quickbooks.intuit.com', '_blank')}>
+                    Learn More
+                  </Button>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
