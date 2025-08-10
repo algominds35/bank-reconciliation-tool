@@ -1,42 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    // Parse request body and query params
-    let realmId: string | undefined
-    let userId: string | undefined
-
-    // Try to get from request body
-    try {
-      const body = await request.json()
-      realmId = body.realmId
-      userId = body.userId
-    } catch {
-      // If body parsing fails, continue - it's optional
+    const { realmId } = await req.json()
+    
+    if (!realmId) {
+      return NextResponse.json({ error: 'realmId is required' }, { status: 400 })
     }
-
-    // Try to get from query params if not in body
-    if (!realmId || !userId) {
-      const url = new URL(request.url)
-      realmId = realmId || url.searchParams.get('realmId') || undefined
-      userId = userId || url.searchParams.get('userId') || undefined
+    
+    // TODO: Replace with real authenticated user ID
+    const userId = 'current-user-id'
+    
+    // Delete the QBO connection
+    const { error: deleteError } = await supabase
+      .from('qbo_connections')
+      .delete()
+      .eq('user_id', userId)
+      .eq('realm_id', realmId)
+    
+    if (deleteError) {
+      console.error('Failed to delete QBO connection:', deleteError)
+      return NextResponse.json({ error: 'Failed to disconnect' }, { status: 500 })
     }
-
-    // Log the disconnect event
-    console.log('QuickBooks disconnect webhook received:', {
-      realmId,
-      userId,
-      timestamp: new Date().toISOString(),
-      userAgent: request.headers.get('user-agent'),
-      ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip')
-    })
-
-    // Always return success - never throw
-    return NextResponse.json({ ok: true }, { status: 200 })
+    
+    // Also delete related accounts and transactions
+    await supabase
+      .from('qbo_accounts')
+      .delete()
+      .eq('user_id', userId)
+      .eq('realm_id', realmId)
+    
+    await supabase
+      .from('qbo_transactions')
+      .delete()
+      .eq('user_id', userId)
+      .eq('realm_id', realmId)
+    
+    return NextResponse.json({ success: true })
+    
   } catch (error) {
-    // Log error but still return success to Intuit
-    console.error('Error processing QuickBooks disconnect webhook:', error)
-    return NextResponse.json({ ok: true }, { status: 200 })
+    console.error('QBO disconnect error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
