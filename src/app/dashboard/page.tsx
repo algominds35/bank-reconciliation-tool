@@ -12,7 +12,7 @@ import { TrialGuard } from '@/components/trial-guard'
 import { AccessGuard } from '@/components/access-guard'
 import { AccessWarning } from '@/components/access-warning'
 import { TrialStatusBadge } from '@/components/trial-status-badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
@@ -44,13 +44,14 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [filter, setFilter] = useState<'all' | 'reconciled' | 'unreconciled'>('all')
-  const [transactionTypeFilter, setTransactionTypeFilter] = useState<'all' | 'bank' | 'bookkeeping'>('all')
+  const [transactionTypeFilter, setTransactionTypeFilter] = useState<'all' | 'bank' | 'bookkeeping' | 'quickbooks'>('all')
   const [summary, setSummary] = useState<ReconciliationSummary>({ 
     total: 0, 
     reconciled: 0, 
     unreconciled: 0,
     bankTransactions: 0,
-    bookkeepingTransactions: 0
+    bookkeepingTransactions: 0,
+    quickbooksTransactions: 0
   })
   const [activeTab, setActiveTab] = useState('transactions')
   const [qboStatus, setQboStatus] = useState<{ connected: boolean; realmId?: string }>({ connected: false })
@@ -175,8 +176,9 @@ export default function Dashboard() {
     const unreconciled = total - reconciled
     const bankTransactions = transactions.filter(t => t.transaction_type === 'bank').length
     const bookkeepingTransactions = transactions.filter(t => t.transaction_type === 'bookkeeping').length
+    const quickbooksTransactions = transactions.filter(t => t.transaction_type === 'quickbooks').length
 
-    setSummary({ total, reconciled, unreconciled, bankTransactions, bookkeepingTransactions })
+    setSummary({ total, reconciled, unreconciled, bankTransactions, bookkeepingTransactions, quickbooksTransactions })
   }
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>, transactionType: 'bank' | 'bookkeeping') => {
@@ -697,6 +699,20 @@ export default function Dashboard() {
           </div>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-6 h-6 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xs">QB</span>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-600">QuickBooks</p>
+                  <p className="text-2xl font-bold text-blue-600">{summary.quickbooksTransactions}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* QuickBooks Integration Section */}
@@ -737,7 +753,14 @@ export default function Dashboard() {
                     variant="outline" 
                     onClick={async () => {
                       try {
-                        const response = await fetch('/api/qbo/sync', { method: 'POST' })
+                        const response = await fetch('/api/qbo/sync', { 
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ 
+                            realmId: qboStatus.realmId, 
+                            full: false 
+                          })
+                        })
                         if (response.ok) {
                           alert('Sync started successfully!')
                         }
@@ -857,6 +880,7 @@ export default function Dashboard() {
                         <SelectItem value="all">All Types</SelectItem>
                         <SelectItem value="bank">Bank Only</SelectItem>
                         <SelectItem value="bookkeeping">Bookkeeping Only</SelectItem>
+                        <SelectItem value="quickbooks">QuickBooks Only</SelectItem>
                       </SelectContent>
                     </Select>
             </div>
@@ -914,6 +938,152 @@ export default function Dashboard() {
               onUnreconcileGroup={unreconcileGroup}
               loading={false}
             />
+          </TabsContent>
+
+          <TabsContent value="quickbooks" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">QB</span>
+                  </div>
+                  <span>QuickBooks Transactions</span>
+                </CardTitle>
+                <CardDescription>
+                  Transactions synced from your QuickBooks account
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {qboStatus.connected ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-gray-600">
+                        Your QuickBooks data is automatically synced and integrated into the main reconciliation system.
+                      </p>
+                      <div className="flex space-x-3">
+                        <Link href="/settings/qbo">
+                          <Button variant="outline" size="sm">
+                            Manage Connection
+                          </Button>
+                        </Link>
+                        <Button 
+                          size="sm"
+                          onClick={async () => {
+                            try {
+                              const response = await fetch('/api/qbo/sync', { 
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ 
+                                  realmId: qboStatus.realmId, 
+                                  full: false 
+                                })
+                              })
+                              if (response.ok) {
+                                alert('Sync started successfully!')
+                              }
+                            } catch (error) {
+                              console.error('Sync error:', error)
+                            }
+                          }}
+                        >
+                          Sync Now
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {/* QuickBooks Transactions Summary */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="bg-blue-50 p-4 rounded-lg">
+                        <div className="text-2xl font-bold text-blue-600">
+                          {transactions.filter(t => t.transaction_type === 'quickbooks').length}
+                        </div>
+                        <div className="text-sm text-blue-600">QB Transactions</div>
+                      </div>
+                      <div className="bg-green-50 p-4 rounded-lg">
+                        <div className="text-2xl font-bold text-green-600">
+                          {transactions.filter(t => t.transaction_type === 'quickbooks' && t.is_reconciled).length}
+                        </div>
+                        <div className="text-sm text-green-600">Reconciled</div>
+                      </div>
+                      <div className="bg-orange-50 p-4 rounded-lg">
+                        <div className="text-2xl font-bold text-orange-600">
+                          {transactions.filter(t => t.transaction_type === 'quickbooks' && !t.is_reconciled).length}
+                        </div>
+                        <div className="text-sm text-orange-600">Pending</div>
+                      </div>
+                    </div>
+
+                    {/* QuickBooks Transactions Table */}
+                    <div className="border rounded-lg">
+                      <div className="p-4 border-b bg-gray-50">
+                        <h3 className="font-medium">Recent QuickBooks Transactions</h3>
+                      </div>
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead className="bg-gray-50">
+                            <tr>
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account</th>
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-200">
+                            {transactions
+                              .filter(t => t.transaction_type === 'quickbooks')
+                              .slice(0, 10)
+                              .map((transaction) => (
+                                <tr key={transaction.id} className="hover:bg-gray-50">
+                                  <td className="px-4 py-2 text-sm text-gray-900">
+                                    {new Date(transaction.date).toLocaleDateString()}
+                                  </td>
+                                  <td className="px-4 py-2 text-sm text-gray-900 max-w-xs truncate">
+                                    {transaction.description}
+                                  </td>
+                                  <td className="px-4 py-2 text-sm text-gray-500">
+                                    {transaction.qbo_account_name || 'N/A'}
+                                  </td>
+                                  <td className={`px-4 py-2 text-sm font-medium ${transaction.is_credit ? 'text-green-600' : 'text-red-600'}`}>
+                                    {transaction.is_credit ? '+' : '-'}${transaction.amount.toFixed(2)}
+                                  </td>
+                                  <td className="px-4 py-2 text-sm">
+                                    <Badge variant={transaction.is_reconciled ? "default" : "secondary"}>
+                                      {transaction.is_reconciled ? 'Reconciled' : 'Pending'}
+                                    </Badge>
+                                  </td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      {transactions.filter(t => t.transaction_type === 'quickbooks').length === 0 && (
+                        <div className="p-8 text-center text-gray-500">
+                          <p>No QuickBooks transactions found. Sync your account to get started.</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <div className="w-8 h-8 bg-gray-400 rounded-lg flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">QB</span>
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">Connect QuickBooks</h3>
+                    <p className="text-gray-500 mb-4">
+                      Connect your QuickBooks account to automatically sync transactions and integrate them into your reconciliation workflow.
+                    </p>
+                    <Link href="/settings/qbo">
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                        Connect QuickBooks
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="matching" className="space-y-6">

@@ -2,6 +2,43 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { fetchAccounts, fetchTransactions, markSync } from '@/lib/qbo'
 
+// Function to convert QuickBooks transactions to main transaction format
+async function importQboTransactionsToMainTable(transactions: any[], userId: string, realmId: string) {
+  const convertedTransactions = transactions.map(qboTx => ({
+    user_id: userId,
+    client_id: null, // Will be set by user later
+    transaction_type: 'quickbooks',
+    date: qboTx.TxnDate || qboTx.MetaData?.CreateTime,
+    description: qboTx.DocNumber ? `${qboTx.DocNumber} - ${qboTx.Memo || qboTx.Description || 'QuickBooks Transaction'}` : (qboTx.Memo || qboTx.Description || 'QuickBooks Transaction'),
+    amount: Math.abs(qboTx.Amount || 0),
+    is_credit: (qboTx.Amount || 0) > 0,
+    is_reconciled: false,
+    reconciliation_group: null,
+    qbo_id: qboTx.Id,
+    qbo_realm_id: realmId,
+    qbo_account_id: qboTx.AccountRef?.value,
+    qbo_account_name: qboTx.AccountRef?.name,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }))
+
+  // Upsert transactions to avoid duplicates
+  const { data, error } = await supabase
+    .from('transactions')
+    .upsert(convertedTransactions, { 
+      onConflict: 'qbo_id,qbo_realm_id',
+      ignoreDuplicates: false
+    })
+    .select()
+
+  if (error) {
+    console.error('Error importing QBO transactions to main table:', error)
+    throw error
+  }
+
+  return data
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { realmId, full = false } = await req.json()
@@ -37,6 +74,10 @@ export async function POST(req: NextRequest) {
       const transactions = await fetchTransactions(realmId, userId, full)
       console.log(`Fetched ${transactions.length} transactions from QBO`)
       
+      // Import transactions to main table
+      const importedTransactions = await importQboTransactionsToMainTable(transactions, userId, realmId)
+      console.log(`Imported ${importedTransactions.length} transactions to main table`)
+      
       // Mark sync as completed
       await markSync(realmId, userId, 'completed')
       
@@ -44,18 +85,20 @@ export async function POST(req: NextRequest) {
         success: true,
         accountsCount: accounts.length,
         transactionsCount: transactions.length,
-        message: `Successfully synced ${accounts.length} accounts and ${transactions.length} transactions`
+        importedCount: importedTransactions.length,
+        message: `Successfully synced ${accounts.length} accounts and imported ${importedTransactions.length} transactions to main system`
       })
       
     } catch (syncError) {
       console.error('Sync failed:', syncError)
       
       // Mark sync as failed
-      await markSync(realmId, userId, 'failed', syncError.message)
+      const errorMessage = syncError instanceof Error ? syncError.message : 'Unknown sync error'
+      await markSync(realmId, userId, 'failed', errorMessage)
       
       return NextResponse.json({ 
         error: 'Sync failed', 
-        details: syncError.message 
+        details: errorMessage
       }, { status: 500 })
     }
     
@@ -101,6 +144,10 @@ export async function GET(req: NextRequest) {
       const transactions = await fetchTransactions(realmId, userId, false) // Incremental sync for cron
       console.log(`Cron job: Fetched ${transactions.length} transactions from QBO`)
       
+      // Import transactions to main table
+      const importedTransactions = await importQboTransactionsToMainTable(transactions, userId, realmId)
+      console.log(`Cron job: Imported ${importedTransactions.length} transactions to main table`)
+      
       // Mark sync as completed
       await markSync(realmId, userId, 'completed')
       
@@ -108,18 +155,20 @@ export async function GET(req: NextRequest) {
         success: true,
         accountsCount: accounts.length,
         transactionsCount: transactions.length,
-        message: `Cron sync completed: ${accounts.length} accounts and ${transactions.length} transactions`
+        importedCount: importedTransactions.length,
+        message: `Cron sync completed: ${accounts.length} accounts and imported ${importedTransactions.length} transactions to main system`
       })
       
     } catch (syncError) {
       console.error('Cron sync failed:', syncError)
       
       // Mark sync as failed
-      await markSync(realmId, userId, 'failed', syncError.message)
+      const errorMessage = syncError instanceof Error ? syncError.message : 'Unknown sync error'
+      await markSync(realmId, userId, 'failed', errorMessage)
       
       return NextResponse.json({ 
         error: 'Cron sync failed', 
-        details: syncError.message 
+        details: errorMessage
       }, { status: 500 })
     }
     

@@ -7,10 +7,17 @@ export interface Transaction {
   amount: number;
   is_reconciled: boolean;
   reconciliation_group?: string | null;
-  transaction_type?: 'bank' | 'bookkeeping';
+  transaction_type?: 'bank' | 'bookkeeping' | 'quickbooks';
   category?: string;
   notes?: string;
   created_at?: string;
+  updated_at?: string;
+  // QuickBooks specific fields
+  qbo_id?: string;
+  qbo_realm_id?: string;
+  qbo_account_id?: string;
+  qbo_account_name?: string;
+  is_credit?: boolean;
 }
 
 export interface TransactionUpload {
@@ -50,4 +57,5 @@ export interface ReconciliationSummary {
   unreconciled: number;
   bankTransactions: number;
   bookkeepingTransactions: number;
+  quickbooksTransactions: number;
 } 
