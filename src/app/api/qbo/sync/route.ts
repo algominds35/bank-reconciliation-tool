@@ -67,11 +67,11 @@ export async function POST(req: NextRequest) {
     
     try {
       // Fetch accounts from QuickBooks
-      const accounts = await fetchAccounts(realmId, userId)
+      const accounts = await fetchAccounts(userId, realmId)
       console.log(`Fetched ${accounts.length} accounts from QBO`)
       
       // Fetch transactions from QuickBooks
-      const transactions = await fetchTransactions(realmId, userId, full)
+      const transactions = await fetchTransactions(userId, realmId, full ? undefined : new Date(Date.now() - 7 * 60 * 60 * 1000).toISOString().slice(0, 10))
       console.log(`Fetched ${transactions.length} transactions from QBO`)
       
       // Import transactions to main table
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
       console.log(`Imported ${importedTransactions.length} transactions to main table`)
       
       // Mark sync as completed
-      await markSync(realmId, userId, 'completed')
+      await markSync(userId, realmId, 'completed')
       
       return NextResponse.json({
         success: true,
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
       
       // Mark sync as failed
       const errorMessage = syncError instanceof Error ? syncError.message : 'Unknown sync error'
-      await markSync(realmId, userId, 'failed', errorMessage)
+      await markSync(userId, realmId, 'failed', errorMessage)
       
       return NextResponse.json({ 
         error: 'Sync failed', 
@@ -137,11 +137,11 @@ export async function GET(req: NextRequest) {
     
     try {
       // Fetch accounts from QuickBooks
-      const accounts = await fetchAccounts(realmId, userId)
+      const accounts = await fetchAccounts(userId, realmId)
       console.log(`Cron job: Fetched ${accounts.length} accounts from QBO`)
       
       // Fetch transactions from QuickBooks
-      const transactions = await fetchTransactions(realmId, userId, false) // Incremental sync for cron
+      const transactions = await fetchTransactions(userId, realmId) // Incremental sync for cron
       console.log(`Cron job: Fetched ${transactions.length} transactions from QBO`)
       
       // Import transactions to main table
@@ -149,14 +149,14 @@ export async function GET(req: NextRequest) {
       console.log(`Cron job: Imported ${importedTransactions.length} transactions to main table`)
       
       // Mark sync as completed
-      await markSync(realmId, userId, 'completed')
+      await markSync(userId, realmId, 'completed')
       
       return NextResponse.json({
         success: true,
         accountsCount: accounts.length,
         transactionsCount: transactions.length,
         importedCount: importedTransactions.length,
-        message: `Cron sync completed: ${accounts.length} accounts and imported ${importedTransactions.length} transactions to main system`
+        message: `Cron sync completed: ${accounts.length} accounts and imported ${importedTransactions.length} transactions to main table`
       })
       
     } catch (syncError) {
@@ -164,7 +164,7 @@ export async function GET(req: NextRequest) {
       
       // Mark sync as failed
       const errorMessage = syncError instanceof Error ? syncError.message : 'Unknown sync error'
-      await markSync(realmId, userId, 'failed', errorMessage)
+      await markSync(userId, realmId, 'failed', errorMessage)
       
       return NextResponse.json({ 
         error: 'Cron sync failed', 
