@@ -258,7 +258,7 @@ export default function QboSettingsClient() {
         )}
 
         {/* QBO Dashboard Component */}
-        {connection && <QboDashboard />}
+        {connection && <QboDashboard realmId={connection.realm_id} />}
       </div>
     </div>
   )
