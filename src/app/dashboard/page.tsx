@@ -55,6 +55,9 @@ export default function Dashboard() {
   })
   const [activeTab, setActiveTab] = useState('transactions')
   const [qboStatus, setQboStatus] = useState<{ connected: boolean; realmId?: string }>({ connected: false })
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'error'>('idle')
+  const [lastSyncTime, setLastSyncTime] = useState<string | null>(null)
+  const [nextSyncTime, setNextSyncTime] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -151,6 +154,44 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.warn('Error fetching QBO status:', error)
+    }
+  }
+
+  const handleQuickBooksSync = async () => {
+    if (!qboStatus.realmId) {
+      alert('QuickBooks not connected')
+      return
+    }
+
+    setSyncStatus('syncing')
+    try {
+      const response = await fetch('/api/qbo/sync', { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          realmId: qboStatus.realmId, 
+          full: false 
+        })
+      })
+      
+      if (response.ok) {
+        setSyncStatus('success')
+        setLastSyncTime(new Date().toLocaleString())
+        // Refresh transactions after sync
+        setTimeout(() => {
+          fetchTransactions()
+          fetchQboStatus()
+        }, 2000)
+        
+        // Reset status after 3 seconds
+        setTimeout(() => setSyncStatus('idle'), 3000)
+      } else {
+        throw new Error('Sync failed')
+      }
+    } catch (error) {
+      console.error('Sync error:', error)
+      setSyncStatus('error')
+      setTimeout(() => setSyncStatus('idle'), 3000)
     }
   }
 
@@ -732,45 +773,105 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             {qboStatus.connected ? (
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 mb-2">
-                    Your QuickBooks account is connected and syncing automatically.
-                  </p>
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <span>• Auto-sync bank accounts & transactions</span>
-                    <span>• Real-time financial data</span>
-                    <span>• No more manual CSV uploads</span>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-2">
+                      Your QuickBooks account is connected and syncing automatically.
+                    </p>
+                    <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      <span>• Auto-sync bank accounts & transactions</span>
+                      <span>• Real-time financial data</span>
+                      <span>• No more manual CSV uploads</span>
+                    </div>
+                  </div>
+                  <div className="flex space-x-3">
+                    <Link href="/settings/qbo">
+                      <Button variant="outline">
+                        Manage Connection
+                      </Button>
+                    </Link>
+                    <Button 
+                      variant="outline" 
+                      onClick={handleQuickBooksSync}
+                      disabled={syncStatus === 'syncing'}
+                      className="min-w-[100px]"
+                    >
+                      {syncStatus === 'syncing' ? (
+                        <div className="flex items-center space-x-2">
+                          <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                          <span>Syncing...</span>
+                        </div>
+                      ) : syncStatus === 'success' ? (
+                        <div className="flex items-center space-x-2 text-green-600">
+                          <CheckCircle className="w-4 h-4" />
+                          <span>Success!</span>
+                        </div>
+                      ) : syncStatus === 'error' ? (
+                        <div className="flex items-center space-x-2 text-red-600">
+                          <AlertCircle className="w-4 h-4" />
+                          <span>Error</span>
+                        </div>
+                      ) : (
+                        'Sync Now'
+                      )}
+                    </Button>
                   </div>
                 </div>
-                <div className="flex space-x-3">
-                  <Link href="/settings/qbo">
-                    <Button variant="outline">
-                      Manage Connection
-                    </Button>
-                  </Link>
-                  <Button 
-                    variant="outline" 
-                    onClick={async () => {
-                      try {
-                        const response = await fetch('/api/qbo/sync', { 
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ 
-                            realmId: qboStatus.realmId, 
-                            full: false 
-                          })
-                        })
-                        if (response.ok) {
-                          alert('Sync started successfully!')
-                        }
-                      } catch (error) {
-                        console.error('Sync error:', error)
-                      }
-                    }}
-                  >
-                    Sync Now
-                  </Button>
+                
+                {/* Enhanced Sync Status */}
+                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-2 h-2 rounded-full ${
+                        syncStatus === 'syncing' ? 'bg-yellow-500' : 
+                        syncStatus === 'error' ? 'bg-red-500' : 
+                        syncStatus === 'success' ? 'bg-green-500' : 'bg-green-500'
+                      }`}></div>
+                      <span className="text-sm font-medium text-gray-700">Status</span>
+                      <span className="text-sm text-gray-600">
+                        {syncStatus === 'syncing' ? 'Syncing...' : 
+                         syncStatus === 'error' ? 'Error' : 
+                         syncStatus === 'success' ? 'Success' : 'Active'}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span className="text-sm font-medium text-gray-700">Last Sync</span>
+                      <span className="text-sm text-gray-600">
+                        {lastSyncTime ? lastSyncTime : 'Never'}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                      <span className="text-sm font-medium text-gray-700">Next Sync</span>
+                      <span className="text-sm text-gray-600">
+                        {nextSyncTime ? nextSyncTime : 'Auto-sync enabled'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Sync Frequency Control */}
+                <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-sm font-medium text-gray-700">Auto-sync Frequency:</span>
+                    <Select defaultValue="4h">
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1h">Every hour</SelectItem>
+                        <SelectItem value="4h">Every 4 hours</SelectItem>
+                        <SelectItem value="8h">Every 8 hours</SelectItem>
+                        <SelectItem value="24h">Daily</SelectItem>
+                        <SelectItem value="manual">Manual only</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    Next sync: {nextSyncTime || 'In 4 hours'}
+                  </div>
                 </div>
               </div>
             ) : (
