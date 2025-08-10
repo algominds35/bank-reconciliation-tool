@@ -1,0 +1,418 @@
+{
+  "crons": [
+    {
+      "path": "/api/qbo/sync",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}
+
+import Link from 'next/link'
+
+export const metadata = {
+  title: 'QuickBooks Online Connection - ReconcileBook',
+  description: 'Connect or disconnect your QuickBooks Online account and manage syncs.'
+}
+
+export default function QboSettingsPage() {
+  return (
+    <div style={{ maxWidth: 720, margin: '0 auto', padding: 16, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>QuickBooks Online</h1>
+      <p style={{ color: '#555', marginBottom: 24 }}>Connect your QuickBooks account to import accounts and transactions.</p>
+
+      <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
+        <Link href="/api/qbo/connect" style={{ background: '#2563eb', color: '#fff', padding: '10px 16px', borderRadius: 8, textDecoration: 'none' }}>Connect QuickBooks</Link>
+        <Link href="/disconnect" style={{ border: '1px solid #e5e7eb', padding: '10px 16px', borderRadius: 8, textDecoration: 'none' }}>Disconnect</Link>
+        <form action="/api/qbo/sync" method="post" style={{ display: 'inline' }}>
+          <input type="hidden" name="full" value="true" />
+          <button type="submit" style={{ border: '1px solid #e5e7eb', padding: '10px 16px', borderRadius: 8 }}>Full Historical Sync</button>
+        </form>
+      </div>
+
+      <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: 16 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 8 }}>Sync Status</h2>
+        <p style={{ color: '#666' }}>After connecting, you will see import progress and a summary of reconciled vs. unreconciled months here.</p>
+      </div>
+    </div>
+  )
+}
+
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { fetchAccounts, fetchTransactions, markSync } from '@/lib/qbo'
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json().catch(() => ({}))
+    const userId = body.userId || 'current-user-id'
+    const realmId = body.realmId
+    const full = Boolean(body.full)
+    if (!realmId) return NextResponse.json({ error: 'realmId required' }, { status: 400 })
+
+    await prisma.qboConnection.updateMany({
+      where: { userId, realmId },
+      data: { syncStatus: 'running' },
+    })
+
+    await fetchAccounts(userId, realmId)
+    await fetchTransactions(userId, realmId, full ? undefined : new Date(Date.now() - 90*24*60*60*1000).toISOString().slice(0,10))
+    await markSync(userId, realmId)
+
+    return NextResponse.json({ ok: true })
+  } catch (e) {
+    console.error('QBO sync error', e)
+    return NextResponse.json({ ok: false }, { status: 200 })
+  }
+}
+
+import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { prisma } from '@/lib/prisma'
+import { exchangeCodeForTokens } from '@/lib/qbo'
+
+export async function GET(req: NextRequest) {
+  const url = new URL(req.url)
+  const code = url.searchParams.get('code')
+  const realmId = url.searchParams.get('realmId')
+  const state = url.searchParams.get('state')
+  const c = await cookies()
+  const expected = c.get('qbo_oauth_state')?.value
+  if (!code || !realmId || !state || !expected || state !== expected) {
+    return NextResponse.redirect('/?error=qbo_oauth')
+  }
+
+  try {
+    // TODO: replace with your auth system's user id
+    const userId = 'current-user-id'
+    const tokens = await exchangeCodeForTokens(code, realmId)
+    await prisma.qboConnection.upsert({
+      where: { userId_realmId: { userId, realmId } },
+      create: {
+        userId,
+        realmId,
+        ...tokens,
+        syncStatus: 'idle',
+      },
+      update: {
+        ...tokens,
+        syncStatus: 'idle',
+      },
+    })
+    c.delete('qbo_oauth_state')
+    return NextResponse.redirect('/dashboard?qbo=connected')
+  } catch (e) {
+    console.error('QBO OAuth callback error', e)
+    return NextResponse.redirect('/?error=qbo_callback')
+  }
+}
+
+import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { randomUUID } from 'crypto'
+import { getQboAuthUrl } from '@/lib/qbo'
+
+export async function GET(req: NextRequest) {
+  const state = randomUUID()
+  const c = await cookies()
+  c.set('qbo_oauth_state', state, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 600 })
+  const url = getQboAuthUrl(state)
+  return NextResponse.redirect(url)
+}
+
+import { decrypt, encrypt } from './crypto'
+import { prisma } from './prisma'
+
+const QBO_AUTH_URL = 'https://appcenter.intuit.com/connect/oauth2'
+const QBO_TOKEN_URL = 'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer'
+const QBO_API_BASE = 'https://quickbooks.api.intuit.com/v3/company'
+
+type TokenResponse = {
+  access_token: string
+  refresh_token: string
+  expires_in: number
+}
+
+export function getQboAuthUrl(state: string, scope?: string) {
+  const params = new URLSearchParams({
+    client_id: process.env.QBO_CLIENT_ID!,
+    response_type: 'code',
+    scope:
+      scope ||
+      'com.intuit.quickbooks.accounting com.intuit.quickbooks.payment openid email profile phone address',
+    redirect_uri: process.env.QBO_REDIRECT_URI!,
+    state,
+  })
+  return `${QBO_AUTH_URL}?${params.toString()}`
+}
+
+export async function exchangeCodeForTokens(code: string, realmId: string) {
+  const basic = Buffer.from(
+    `${process.env.QBO_CLIENT_ID}:${process.env.QBO_CLIENT_SECRET}`
+  ).toString('base64')
+  const body = new URLSearchParams({
+    grant_type: 'authorization_code',
+    code,
+    redirect_uri: process.env.QBO_REDIRECT_URI!,
+  })
+  const res = await fetch(QBO_TOKEN_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${basic}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Accept: 'application/json',
+    },
+    body,
+    cache: 'no-store',
+  })
+  if (!res.ok) throw new Error('Token exchange failed')
+  const data = (await res.json()) as TokenResponse
+  const now = Date.now()
+  return {
+    realmId,
+    accessTokenEncrypted: encrypt(data.access_token),
+    refreshTokenEncrypted: encrypt(data.refresh_token),
+    accessTokenExpiresAt: new Date(now + data.expires_in * 1000),
+  }
+}
+
+export async function refreshTokens(connId: string) {
+  const conn = await prisma.qboConnection.findUnique({ where: { id: connId } })
+  if (!conn) throw new Error('Connection not found')
+  const basic = Buffer.from(
+    `${process.env.QBO_CLIENT_ID}:${process.env.QBO_CLIENT_SECRET}`
+  ).toString('base64')
+  const body = new URLSearchParams({
+    grant_type: 'refresh_token',
+    refresh_token: decrypt(conn.refreshTokenEncrypted),
+  })
+  const res = await fetch(QBO_TOKEN_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${basic}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Accept: 'application/json',
+    },
+    body,
+    cache: 'no-store',
+  })
+  if (!res.ok) throw new Error('Refresh failed')
+  const data = (await res.json()) as TokenResponse
+  const now = Date.now()
+  return prisma.qboConnection.update({
+    where: { id: conn.id },
+    data: {
+      accessTokenEncrypted: encrypt(data.access_token),
+      refreshTokenEncrypted: data.refresh_token
+        ? encrypt(data.refresh_token)
+        : conn.refreshTokenEncrypted,
+      accessTokenExpiresAt: new Date(now + data.expires_in * 1000),
+      updatedAt: new Date(),
+    },
+  })
+}
+
+async function getAuthHeader(conn: { accessTokenEncrypted: string; accessTokenExpiresAt: Date; id: string }) {
+  if (new Date(conn.accessTokenExpiresAt).getTime() < Date.now() + 60_000) {
+    conn = await refreshTokens(conn.id)
+  }
+  const token = decrypt(conn.accessTokenEncrypted)
+  return { Authorization: `Bearer ${token}`, Accept: 'application/json' }
+}
+
+export async function fetchAccounts(userId: string, realmId: string) {
+  const conn = await prisma.qboConnection.findFirst({ where: { userId, realmId } })
+  if (!conn) throw new Error('No QBO connection')
+  const headers = await getAuthHeader(conn)
+  const url = `${QBO_API_BASE}/${realmId}/query?query=${encodeURIComponent('select * from Account')}`
+  const res = await fetch(url, { headers, cache: 'no-store' })
+  if (!res.ok) throw new Error('Accounts fetch failed')
+  const data = await res.json()
+  const rows = (data.QueryResponse?.Account || []) as any[]
+  await prisma.$transaction(
+    rows.map((a) =>
+      prisma.qboAccount.upsert({
+        where: { qboId: a.Id },
+        create: {
+          userId,
+          realmId,
+          qboId: String(a.Id),
+          name: a.Name,
+          accountType: a.AccountType,
+          accountSubType: a.AccountSubType || null,
+          active: a.Active ?? true,
+        },
+        update: {
+          name: a.Name,
+          accountType: a.AccountType,
+          accountSubType: a.AccountSubType || null,
+          active: a.Active ?? true,
+        },
+      })
+    )
+  )
+}
+
+export async function fetchTransactions(userId: string, realmId: string, since?: string) {
+  const conn = await prisma.qboConnection.findFirst({ where: { userId, realmId } })
+  if (!conn) throw new Error('No QBO connection')
+  const headers = await getAuthHeader(conn)
+  // Pull last 24 months if not provided
+  const start = since || new Date(Date.now() - 730 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
+  const queries = [
+    `select * from Purchase where TxnDate >= '${start}'`,
+    `select * from JournalEntry where TxnDate >= '${start}'`,
+    `select * from Payment where TxnDate >= '${start}'`,
+    `select * from SalesReceipt where TxnDate >= '${start}'`,
+    `select * from Deposit where TxnDate >= '${start}'`,
+    `select * from BillPayment where TxnDate >= '${start}'`,
+  ]
+  for (const q of queries) {
+    const url = `${QBO_API_BASE}/${realmId}/query?query=${encodeURIComponent(q)}`
+    const res = await fetch(url, { headers, cache: 'no-store' })
+    if (!res.ok) continue
+    const data = await res.json()
+    const key = Object.keys(data.QueryResponse || {}).find((k) => Array.isArray(data.QueryResponse[k]))
+    const rows = (key ? data.QueryResponse[key] : []) as any[]
+    if (!rows.length) continue
+    await prisma.$transaction(
+      rows.map((t) =>
+        prisma.qboTransaction.upsert({
+          where: { qboId: String(t.Id) },
+          create: {
+            userId,
+            realmId,
+            entityType: key || 'Txn',
+            qboId: String(t.Id),
+            docNumber: t.DocNumber || t.PaymentRefNum || null,
+            txnDate: new Date(t.TxnDate || t.MetaData?.CreateTime || Date.now()),
+            amount: new Prisma.Decimal(
+              t.TotalAmt ?? t.Amount ?? t.Line?.reduce((s: number, l: any) => s + (l.Amount || 0), 0) ?? 0
+            ),
+            description: t.PrivateNote || t.Line?.[0]?.Description || null,
+            accountRef: t.AccountRef?.value || null,
+            reconciled: undefined,
+          },
+          update: {
+            docNumber: t.DocNumber || t.PaymentRefNum || null,
+            txnDate: new Date(t.TxnDate || t.MetaData?.CreateTime || Date.now()),
+            amount: new Prisma.Decimal(
+              t.TotalAmt ?? t.Amount ?? t.Line?.reduce((s: number, l: any) => s + (l.Amount || 0), 0) ?? 0
+            ),
+            description: t.PrivateNote || t.Line?.[0]?.Description || null,
+            accountRef: t.AccountRef?.value || null,
+          },
+        })
+      )
+    )
+  }
+}
+
+export async function markSync(userId: string, realmId: string) {
+  await prisma.qboConnection.updateMany({
+    where: { userId, realmId },
+    data: { lastSyncAt: new Date(), syncStatus: 'completed' },
+  })
+}
+
+import crypto from 'crypto'
+
+const ALGO = 'aes-256-gcm'
+const KEY = crypto.createHash('sha256').update(String(process.env.ENCRYPTION_SECRET || 'dev-secret')).digest()
+
+export function encrypt(plainText: string): string {
+  const iv = crypto.randomBytes(12)
+  const cipher = crypto.createCipheriv(ALGO, KEY, iv)
+  const enc = Buffer.concat([cipher.update(plainText, 'utf8'), cipher.final()])
+  const tag = cipher.getAuthTag()
+  return Buffer.concat([iv, tag, enc]).toString('base64')
+}
+
+export function decrypt(cipherText: string): string {
+  const buf = Buffer.from(cipherText, 'base64')
+  const iv = buf.subarray(0, 12)
+  const tag = buf.subarray(12, 28)
+  const data = buf.subarray(28)
+  const decipher = crypto.createDecipheriv(ALGO, KEY, iv)
+  decipher.setAuthTag(tag)
+  const dec = Buffer.concat([decipher.update(data), decipher.final()])
+  return dec.toString('utf8')
+}
+
+import { PrismaClient } from '@prisma/client'
+
+declare global {
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined
+}
+
+export const prisma = global.prisma || new PrismaClient()
+
+if (process.env.NODE_ENV !== 'production') global.prisma = prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model QboConnection {
+  id                     String   @id @default(cuid())
+  userId                 String
+  realmId                String
+  accessTokenEncrypted   String
+  refreshTokenEncrypted  String
+  accessTokenExpiresAt   DateTime
+  lastSyncAt             DateTime? @db.Timestamptz(6)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  syncStatus             String    @default("idle") // idle | running | failed | completed
+}
+
+model QboAccount {
+  id            String   @id @default(cuid())
+  userId        String
+  realmId       String
+  qboId         String
+  name          String
+  accountType   String
+  accountSubType String?
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  @@index([userId, realmId])
+}
+
+model QboTransaction {
+  id            String   @id @default(cuid())
+  userId        String
+  realmId       String
+  entityType    String   // e.g., Payment, Invoice, Purchase, JournalEntry, etc.
+  qboId         String   // Txn Id
+  docNumber     String?  // DocNumber or RefNumber
+  txnDate       DateTime
+  amount        Decimal  @db.Decimal(18, 2)
+  description   String?
+  accountRef    String?
+  reconciled    Boolean? // if available
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  @@index([userId, realmId, txnDate])
+}
+
+model SyncJob {
+  id            String   @id @default(cuid())
+  userId        String
+  realmId       String
+  jobType       String   // daily or full
+  status        String   @default("queued") // queued | running | completed | failed
+  startedAt     DateTime? @db.Timestamptz(6)
+  completedAt   DateTime? @db.Timestamptz(6)
+  error         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  @@index([userId, realmId, jobType])
+}
+
