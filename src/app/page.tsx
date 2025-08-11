@@ -89,7 +89,7 @@ export default function LandingPage() {
             </h1>
             
             <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto">
-              Stop losing 8+ hours every month to manual reconciliation. Join 1,200+ users who cut reconciliation time from 8 hours to 30 minutes with 90%+ accuracy.
+              Stop losing 8+ hours every month to manual reconciliation. Connect your QuickBooks account or upload CSVs and reconcile 3 months in 10 minutes with 90%+ accuracy. Join 1,200+ users who've switched.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -114,6 +114,149 @@ export default function LandingPage() {
 
             <p className="text-sm text-gray-500">
               🆓 14-day free trial • 💳 Credit card required • 🔒 Cancel anytime • ✅ No auto-billing during trial
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* QuickBooks Integration Section */}
+      <section className="py-20 bg-gradient-to-r from-green-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center space-x-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <CheckCircle className="h-4 w-4" />
+              <span>NEW: QuickBooks Online Integration</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Connect Your QuickBooks & Sync Instantly
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              No more manual exports. Connect your QuickBooks account and sync months of transactions with one click.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Zap className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">One-Click Sync</h3>
+                    <p className="text-gray-600">Connect your QuickBooks account and sync 24+ months of transactions instantly. No manual work required.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Shield className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Secure OAuth Connection</h3>
+                    <p className="text-gray-600">Bank-level security with encrypted tokens. Your QuickBooks data stays private and secure.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Clock className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Automatic Daily Updates</h3>
+                    <p className="text-gray-600">Set it and forget it. New transactions sync automatically every day without lifting a finger.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <TrendingUp className="h-6 w-6 text-orange-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Unified Reconciliation</h3>
+                    <p className="text-gray-600">Reconcile both QuickBooks and bank transactions in one place. See everything in one unified view.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg p-6 border border-green-200">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                  </div>
+                  <h4 className="font-semibold text-gray-900">What You Get:</h4>
+                </div>
+                <ul className="space-y-2 text-sm text-gray-600">
+                  <li>• 24+ months of historical transaction data</li>
+                  <li>• Complete chart of accounts</li>
+                  <li>• Reconciliation status for every transaction</li>
+                  <li>• Automatic daily syncs</li>
+                  <li>• Manual sync anytime with "Full Historical Sync"</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-200">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <TrendingUp className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">QuickBooks Connected</h3>
+                  <p className="text-gray-600">Your account is synced and ready</p>
+                </div>
+
+                <div className="space-y-4 mb-6">
+                  <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                    <span className="text-gray-600">Last Sync</span>
+                    <span className="text-green-600 font-medium">2 minutes ago</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                    <span className="text-gray-600">Transactions Loaded</span>
+                    <span className="text-gray-900 font-medium">1,247</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                    <span className="text-gray-600">Accounts Synced</span>
+                    <span className="text-gray-900 font-medium">8</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3">
+                    <span className="text-gray-600">Sync Status</span>
+                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Active</span>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors">
+                    Sync Now
+                  </button>
+                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors">
+                    Full Historical Sync
+                  </button>
+                </div>
+
+                <div className="mt-4 text-center">
+                  <p className="text-xs text-gray-500">Auto-syncs daily at 2:00 AM</p>
+                </div>
+              </div>
+
+              {/* Floating elements for visual appeal */}
+              <div className="absolute -top-4 -right-4 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                <CheckCircle className="h-5 w-5 text-blue-600" />
+              </div>
+              <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                <Zap className="h-4 w-4 text-green-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mt-12">
+            <div className="inline-flex items-center space-x-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <Shield className="h-4 w-4" />
+              <span>Production Ready - Trusted by 1,200+ Users</span>
+            </div>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Our QuickBooks integration is production-ready and follows Intuit's strict security requirements. 
+              Your data is encrypted, secure, and never shared with third parties.
             </p>
           </div>
         </div>
@@ -376,6 +519,20 @@ export default function LandingPage() {
               <CardContent>
                 <p className="text-gray-600">
                   See exactly how much time you're saving. Most users cut reconciliation time by 85%.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="relative">
+              <CardHeader>
+                <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
+                  <TrendingUp className="h-6 w-6 text-emerald-600" />
+                </div>
+                <CardTitle className="text-xl">QuickBooks Integration</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Connect your QuickBooks account and sync 24+ months of transactions automatically. No more manual exports.
                 </p>
               </CardContent>
             </Card>
