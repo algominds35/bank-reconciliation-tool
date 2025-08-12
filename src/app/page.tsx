@@ -395,6 +395,20 @@ export default function LandingPage() {
                 </p>
               </CardContent>
             </Card>
+
+            <Card className="relative">
+              <CardHeader>
+                <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
+                  <TrendingUp className="h-6 w-6 text-teal-600" />
+                </div>
+                <CardTitle className="text-xl">QuickBooks Integration</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Connect your QuickBooks account and sync 24+ months of transactions automatically. No more manual exports.
+                </p>
+              </CardContent>
+            </Card>
           </div>
               </div>
       </section>
