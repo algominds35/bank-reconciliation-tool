@@ -92,6 +92,22 @@ export default function LandingPage() {
               Stop losing 8+ hours every month to manual reconciliation. Upload CSVs or connect your QuickBooks account to reconcile 3 months in 10 minutes with 90%+ accuracy. Join 1,200+ users who've switched.
             </p>
 
+            {/* Feature Highlights */}
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
+              <div className="inline-flex items-center space-x-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
+                <Upload className="h-4 w-4" />
+                <span>Upload CSV Files</span>
+              </div>
+              <div className="inline-flex items-center space-x-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+                <TrendingUp className="h-4 w-4" />
+                <span>QuickBooks Integration</span>
+              </div>
+              <div className="inline-flex items-center space-x-2 bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium">
+                <Zap className="h-4 w-4" />
+                <span>90%+ Accuracy</span>
+              </div>
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="text-lg px-8 py-6">
