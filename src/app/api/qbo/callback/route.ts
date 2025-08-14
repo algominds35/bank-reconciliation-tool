@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 import { exchangeCodeForTokens } from '@/lib/qbo'
 
 export async function GET(req: NextRequest) {
@@ -34,9 +34,24 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    // Create Supabase client with cookies for authentication
+    const cookieStore = await cookies()
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll()
+          },
+        },
+      }
+    )
+
     // Get real authenticated user
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) {
+      console.error('Authentication error:', authError)
       return NextResponse.redirect('/auth/login')
     }
     const userId = user.id
