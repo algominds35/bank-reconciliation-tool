@@ -25,22 +25,57 @@ export function getQboAuthUrl(state: string, scope?: string) {
 }
 
 export async function exchangeCodeForTokens(code: string, realmId: string) {
-  const basic = Buffer.from(`${process.env.QBO_CLIENT_ID}:${process.env.QBO_CLIENT_SECRET}`).toString('base64')
-  const body = new URLSearchParams({ grant_type: 'authorization_code', code, redirect_uri: process.env.QBO_REDIRECT_URI! })
-  const res = await fetch(QBO_TOKEN_URL, {
-    method: 'POST',
-    headers: { Authorization: `Basic ${basic}`, 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
-    body,
-    cache: 'no-store',
-  })
-  if (!res.ok) throw new Error('Token exchange failed')
-  const data = (await res.json()) as TokenResponse
-  const now = Date.now()
-  return {
-    realmId,
-    accessTokenEncrypted: encrypt(data.access_token),
-    refreshTokenEncrypted: encrypt(data.refresh_token),
-    accessTokenExpiresAt: new Date(now + data.expires_in * 1000),
+  try {
+    console.log('🔍 Starting token exchange...')
+    console.log('🔍 Client ID:', process.env.QBO_CLIENT_ID ? '✅ Set' : '❌ Missing')
+    console.log('🔍 Client Secret:', process.env.QBO_CLIENT_SECRET ? '✅ Set' : '❌ Missing')
+    console.log('🔍 Redirect URI:', process.env.QBO_REDIRECT_URI ? '✅ Set' : '❌ Missing')
+    
+    if (!process.env.QBO_CLIENT_ID || !process.env.QBO_CLIENT_SECRET || !process.env.QBO_REDIRECT_URI) {
+      throw new Error('Missing required environment variables: QBO_CLIENT_ID, QBO_CLIENT_SECRET, or QBO_REDIRECT_URI')
+    }
+    
+    const basic = Buffer.from(`${process.env.QBO_CLIENT_ID}:${process.env.QBO_CLIENT_SECRET}`).toString('base64')
+    const body = new URLSearchParams({ 
+      grant_type: 'authorization_code', 
+      code, 
+      redirect_uri: process.env.QBO_REDIRECT_URI 
+    })
+    
+    console.log('🔍 Making token request to:', QBO_TOKEN_URL)
+    
+    const res = await fetch(QBO_TOKEN_URL, {
+      method: 'POST',
+      headers: { 
+        Authorization: `Basic ${basic}`, 
+        'Content-Type': 'application/x-www-form-urlencoded', 
+        Accept: 'application/json' 
+      },
+      body,
+      cache: 'no-store',
+    })
+    
+    console.log('🔍 Token response status:', res.status)
+    
+    if (!res.ok) {
+      const errorText = await res.text()
+      console.error('🔍 Token exchange failed:', res.status, errorText)
+      throw new Error(`Token exchange failed: ${res.status} - ${errorText}`)
+    }
+    
+    const data = (await res.json()) as TokenResponse
+    console.log('🔍 Token exchange successful!')
+    
+    const now = Date.now()
+    return {
+      realmId,
+      accessTokenEncrypted: encrypt(data.access_token),
+      refreshTokenEncrypted: encrypt(data.refresh_token),
+      accessTokenExpiresAt: new Date(now + data.expires_in * 1000),
+    }
+  } catch (error) {
+    console.error('🔍 Token exchange error:', error)
+    throw error
   }
 }
 
