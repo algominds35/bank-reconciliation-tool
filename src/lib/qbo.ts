@@ -43,6 +43,8 @@ export async function exchangeCodeForTokens(code: string, realmId: string) {
     })
     
     console.log('🔍 Making token request to:', QBO_TOKEN_URL)
+    console.log('🔍 Request body:', body.toString())
+    console.log('🔍 Authorization header:', `Basic ${basic.substring(0, 10)}...`)
     
     const res = await fetch(QBO_TOKEN_URL, {
       method: 'POST',
