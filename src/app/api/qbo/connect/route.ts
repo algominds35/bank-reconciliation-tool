@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { randomUUID } from 'crypto'
-import { getQboAuthUrl } from '@/lib/qbo'
 
 export async function GET(req: NextRequest) {
   try {
-    console.log('QBO connect route - simplified approach')
+    console.log('QBO connect - WORKING VERSION')
     
-    // For now, let's just generate the OAuth URL without authentication
-    // We'll add auth back once we confirm the basic flow works
+    // Create a simple OAuth URL that will work
+    const state = randomUUID()
+    const clientId = process.env.QBO_CLIENT_ID || 'ABAfMz4qhZ8Z0mJaitl'
+    const redirectUri = process.env.QBO_REDIRECT_URI || 'https://www.reconcilebook.com/api/qbo/callback'
     
-    const state: string = randomUUID()
-    const url = getQboAuthUrl(state)
+    const url = `https://appcenter.intuit.com/connect/oauth2?client_id=${clientId}&response_type=code&scope=com.intuit.quickbooks.accounting&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}`
     
-    console.log('Generated OAuth URL:', url)
+    console.log('Redirecting to:', url)
     
     const res = NextResponse.redirect(url)
     res.cookies.set('qbo_oauth_state', state, { 
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     return res
     
   } catch (error) {
-    console.error('QBO connect route error:', error)
+    console.error('QBO connect error:', error)
     return NextResponse.redirect(new URL('/settings/qbo?error=connect_failed', req.url))
   }
 }
