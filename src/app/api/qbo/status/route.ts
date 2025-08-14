@@ -6,9 +6,18 @@ export async function GET(req: NextRequest) {
   try {
     // Create Supabase client with cookies for authentication
     const cookieStore = await cookies()
+    
+    // Get the auth cookie specifically
+    const authCookie = cookieStore.get('sb-ajdvqkvevaklcwhxijde-auth-token')
+    
+    if (!authCookie) {
+      console.error('No auth cookie found')
+      return NextResponse.json({ error: 'No authentication cookie' }, { status: 401 })
+    }
+    
     const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      'https://ajdvqkvevaklcwhxijde.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZHZxa3ZldmFrbGN3aHhpamRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0MjkwOTYsImV4cCI6MjA2OTAwNTA5Nn0.551cSJSE4QlPdw1iRWBMslj2gBkcEIsQHenZRq6L7rs',
       {
         global: {
           headers: {
@@ -27,6 +36,7 @@ export async function GET(req: NextRequest) {
     }
     
     const userId = user.id
+    console.log('Authenticated user ID:', userId)
     
     const { data: connections, error } = await supabase
       .from('qbo_connections')
@@ -39,6 +49,8 @@ export async function GET(req: NextRequest) {
       console.error('Failed to fetch QBO connections:', error)
       return NextResponse.json({ error: 'Failed to fetch connection status' }, { status: 500 })
     }
+    
+    console.log('Found connections:', connections)
     
     const connection = connections && connections.length > 0 ? connections[0] : null
     
