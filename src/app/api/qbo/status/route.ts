@@ -7,13 +7,21 @@ export async function GET(req: NextRequest) {
     // Create Supabase client with cookies for authentication
     const cookieStore = await cookies()
     
-    // Get the auth cookie specifically
-    const authCookie = cookieStore.get('sb-ajdvqkvevaklcwhxijde-auth-token')
+    // Debug: Log all available cookies
+    const allCookies = cookieStore.getAll()
+    console.log('All available cookies:', allCookies.map(c => c.name))
+    
+    // Look for any Supabase auth cookie
+    const authCookie = allCookies.find(cookie => 
+      cookie.name.includes('sb-') && cookie.name.includes('-auth-token')
+    )
     
     if (!authCookie) {
-      console.error('No auth cookie found')
-      return NextResponse.json({ error: 'No authentication cookie' }, { status: 401 })
+      console.error('No Supabase auth cookie found. Available cookies:', allCookies.map(c => c.name))
+      return NextResponse.json({ error: 'No authentication cookie found' }, { status: 401 })
     }
+    
+    console.log('Found auth cookie:', authCookie.name)
     
     const supabase = createClient(
       'https://ajdvqkvevaklcwhxijde.supabase.co',
