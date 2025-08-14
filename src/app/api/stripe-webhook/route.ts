@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 import Stripe from 'stripe'
 
 // Create admin client with service role key for user lookup
-const supabaseAdmin = createClient(
+const supabaseAdmin = process.env.SUPABASE_SERVICE_ROLE_KEY ? createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
   {
@@ -13,7 +13,7 @@ const supabaseAdmin = createClient(
       persistSession: false
     }
   }
-)
+) : null
 
 // Initialize Stripe with live keys
 const stripe = process.env.STRIPE_SECRET_KEY_LIVE ? new Stripe(process.env.STRIPE_SECRET_KEY_LIVE, {
@@ -102,6 +102,14 @@ export async function POST(request: NextRequest) {
       console.log('📋 Final plan:', subscriptionPlan.toUpperCase())
 
       // Find user using ADMIN CLIENT
+      if (!supabaseAdmin) {
+        console.error('❌ Supabase admin client not configured')
+        return NextResponse.json({ 
+          error: 'Server configuration error',
+          details: 'Supabase admin client not available'
+        }, { status: 500 })
+      }
+      
       console.log('🔍 Looking for existing user...')
       const { data: users, error: userError } = await supabaseAdmin.auth.admin.listUsers()
       
@@ -153,6 +161,14 @@ export async function POST(request: NextRequest) {
         
         try {
           // Create user account using admin client
+          if (!supabaseAdmin) {
+            console.error('❌ Supabase admin client not configured')
+            return NextResponse.json({ 
+              error: 'Server configuration error',
+              details: 'Supabase admin client not available'
+            }, { status: 500 })
+          }
+          
           const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
             email: customerEmail,
             email_confirm: true, // Auto-confirm email since they paid
