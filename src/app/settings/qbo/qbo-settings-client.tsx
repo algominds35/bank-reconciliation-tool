@@ -131,9 +131,9 @@ export default function QboSettingsClient() {
                 Connect your QuickBooks account to automatically sync transactions and integrate them into your reconciliation workflow.
               </p>
             </div>
-            <Link href="/dashboard" className="text-blue-600 hover:text-blue-700">
+            <a href="/dashboard" className="text-blue-600 hover:text-blue-700">
               ← Back to Dashboard
-            </Link>
+            </a>
           </div>
         </div>
 
