@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import QboDashboard from '@/components/qbo-dashboard'
 
@@ -247,12 +246,12 @@ export default function QboSettingsClient() {
               <p className="text-gray-500 mb-6">
                 Connect your QuickBooks account to automatically import transactions and integrate them into your reconciliation workflow.
               </p>
-              <Link
-                href="/api/qbo/connect"
+              <button
+                onClick={() => window.location.href = '/api/qbo/connect'}
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Connect QuickBooks
-              </Link>
+              </button>
             </div>
           </div>
         )}
