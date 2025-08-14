@@ -4,35 +4,35 @@ import { createClient } from '@supabase/supabase-js'
 import { exchangeCodeForTokens } from '@/lib/qbo'
 
 export async function GET(req: NextRequest) {
-  const url = new URL(req.url)
-  const code = url.searchParams.get('code')
-  const realmId = url.searchParams.get('realmId')
-  const state = url.searchParams.get('state')
-  const error = url.searchParams.get('error')
-  const cookieStore = await cookies()
-  const expected = cookieStore.get('qbo_oauth_state')?.value
-
-  // Handle OAuth errors (user cancelled, access denied, etc.)
-  if (error) {
-    console.log('QBO OAuth error:', error)
-    
-    // Redirect based on error type
-    if (error === 'access_denied') {
-      return NextResponse.redirect('/settings/qbo?error=access_denied')
-    } else if (error === 'invalid_grant') {
-      return NextResponse.redirect('/settings/qbo?error=invalid_grant')
-    } else {
-      return NextResponse.redirect('/settings/qbo?error=oauth_error')
-    }
-  }
-
-  // Validate required parameters for successful connection
-  if (!code || !realmId || !state || !expected || state !== expected) {
-    console.log('QBO OAuth validation failed:', { code: !!code, realmId: !!realmId, state: !!state, expected: !!expected, stateMatch: state === expected })
-    return NextResponse.redirect('/settings/qbo?error=invalid_params')
-  }
-
   try {
+    const url = new URL(req.url)
+    const code = url.searchParams.get('code')
+    const realmId = url.searchParams.get('realmId')
+    const state = url.searchParams.get('state')
+    const error = url.searchParams.get('error')
+    const cookieStore = await cookies()
+    const expected = cookieStore.get('qbo_oauth_state')?.value
+
+    // Handle OAuth errors (user cancelled, access denied, etc.)
+    if (error) {
+      console.log('QBO OAuth error:', error)
+      
+      // Redirect based on error type
+      if (error === 'access_denied') {
+        return NextResponse.redirect(new URL('/settings/qbo?error=access_denied', req.url))
+      } else if (error === 'invalid_grant') {
+        return NextResponse.redirect(new URL('/settings/qbo?error=invalid_grant', req.url))
+      } else {
+        return NextResponse.redirect(new URL('/settings/qbo?error=oauth_error', req.url))
+      }
+    }
+
+    // Validate required parameters for successful connection
+    if (!code || !realmId || !state || !expected || state !== expected) {
+      console.log('QBO OAuth validation failed:', { code: !!code, realmId: !!realmId, state: !!state, expected: !!expected, stateMatch: state === expected })
+      return NextResponse.redirect(new URL('/settings/qbo?error=invalid_params', req.url))
+    }
+
     // Create Supabase client with cookies for authentication
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
       console.error('Authentication error:', authError)
-      return NextResponse.redirect('/auth/login')
+      return NextResponse.redirect(new URL('/auth/login', req.url))
     }
     const userId = user.id
     
@@ -77,10 +77,10 @@ export async function GET(req: NextRequest) {
     }
 
     // Redirect to success
-    return NextResponse.redirect('/settings/qbo?success=connected')
+    return NextResponse.redirect(new URL('/settings/qbo?success=connected', req.url))
     
   } catch (e) {
     console.error('QBO OAuth callback error:', e)
-    return NextResponse.redirect('/settings/qbo?error=connection_failed')
+    return NextResponse.redirect(new URL('/settings/qbo?error=connection_failed', req.url))
   }
 }

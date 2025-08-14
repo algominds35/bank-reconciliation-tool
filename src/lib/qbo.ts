@@ -17,7 +17,7 @@ export function getQboAuthUrl(state: string, scope?: string) {
     response_type: 'code',
     scope:
       scope ||
-      'com.intuit.quickbooks.accounting com.intuit.quickbooks.payment openid email profile phone address',
+      'com.intuit.quickbooks.accounting',
     redirect_uri: process.env.QBO_REDIRECT_URI!,
     state,
   })
