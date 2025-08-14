@@ -9,12 +9,12 @@ export async function GET(req: NextRequest) {
   const realmId = url.searchParams.get('realmId')
   const state = url.searchParams.get('state')
   const error = url.searchParams.get('error')
-  const expected = (await cookies()).get('qbo_oauth_state')?.value
+  const cookieStore = await cookies()
+  const expected = cookieStore.get('qbo_oauth_state')?.value
 
   // Handle OAuth errors (user cancelled, access denied, etc.)
   if (error) {
     console.log('QBO OAuth error:', error)
-    ;(await cookies()).delete('qbo_oauth_state')
     
     // Redirect based on error type
     if (error === 'access_denied') {
@@ -29,13 +29,11 @@ export async function GET(req: NextRequest) {
   // Validate required parameters for successful connection
   if (!code || !realmId || !state || !expected || state !== expected) {
     console.log('QBO OAuth validation failed:', { code: !!code, realmId: !!realmId, state: !!state, expected: !!expected, stateMatch: state === expected })
-    ;(await cookies()).delete('qbo_oauth_state')
     return NextResponse.redirect('/settings/qbo?error=invalid_params')
   }
 
   try {
     // Create Supabase client with cookies for authentication
-    const cookieStore = await cookies()
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -78,13 +76,11 @@ export async function GET(req: NextRequest) {
       throw upsertError
     }
 
-    // Clear OAuth state and redirect to success
-    ;(await cookies()).delete('qbo_oauth_state')
+    // Redirect to success
     return NextResponse.redirect('/settings/qbo?success=connected')
     
   } catch (e) {
     console.error('QBO OAuth callback error:', e)
-    ;(await cookies()).delete('qbo_oauth_state')
     return NextResponse.redirect('/settings/qbo?error=connection_failed')
   }
 }
