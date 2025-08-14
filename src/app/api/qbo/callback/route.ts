@@ -33,11 +33,15 @@ export async function GET(req: NextRequest) {
       return NextResponse.redirect(new URL('/settings/qbo?error=invalid_params', req.url))
     }
 
-    // Create Supabase client with cookies for authentication
+    // Create Supabase client with proper cookie handling
     const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      'https://ajdvqkvevaklcwhxijde.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZHZxa3ZldmFrbGN3aHhpamRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0MjkwOTYsImV4cCI6MjA2OTAwNTA5Nn0.551cSJSE4QlPdw1iRWBMslj2gBkcEIsQHenZRq6L7rs',
       {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
         global: {
           headers: {
             cookie: cookieStore.toString(),

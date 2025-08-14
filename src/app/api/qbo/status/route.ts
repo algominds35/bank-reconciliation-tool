@@ -4,29 +4,17 @@ import { cookies } from 'next/headers'
 
 export async function GET(req: NextRequest) {
   try {
-    // Create Supabase client with cookies for authentication
+    // Create Supabase client with proper cookie handling
     const cookieStore = await cookies()
-    
-    // Debug: Log all available cookies
-    const allCookies = cookieStore.getAll()
-    console.log('All available cookies:', allCookies.map(c => c.name))
-    
-    // Look for any Supabase auth cookie
-    const authCookie = allCookies.find(cookie => 
-      cookie.name.includes('sb-') && cookie.name.includes('-auth-token')
-    )
-    
-    if (!authCookie) {
-      console.error('No Supabase auth cookie found. Available cookies:', allCookies.map(c => c.name))
-      return NextResponse.json({ error: 'No authentication cookie found' }, { status: 401 })
-    }
-    
-    console.log('Found auth cookie:', authCookie.name)
     
     const supabase = createClient(
       'https://ajdvqkvevaklcwhxijde.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZHZxa3ZldmFrbGN3aHhpamRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0MjkwOTYsImV4cCI6MjA2OTAwNTA5Nn0.551cSJSE4QlPdw1iRWBMslj2gBkcEIsQHenZRq6L7rs',
       {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
         global: {
           headers: {
             cookie: cookieStore.toString(),
