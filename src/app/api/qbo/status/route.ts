@@ -3,8 +3,12 @@ import { supabase } from '@/lib/supabase'
 
 export async function GET(req: NextRequest) {
   try {
-    // TODO: Replace with real authenticated user ID
-    const userId = 'current-user-id'
+    // Get real authenticated user
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    const userId = user.id
     
     const { data: connections, error } = await supabase
       .from('qbo_connections')

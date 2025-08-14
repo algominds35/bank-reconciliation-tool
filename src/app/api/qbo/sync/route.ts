@@ -41,14 +41,18 @@ async function importQboTransactionsToMainTable(transactions: any[], userId: str
 
 export async function POST(req: NextRequest) {
   try {
+    // Get real authenticated user
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    const userId = user.id
+
     const { realmId, full = false } = await req.json()
     
     if (!realmId) {
       return NextResponse.json({ error: 'realmId required' }, { status: 400 })
     }
-    
-    // TODO: Replace with real authenticated user ID
-    const userId = 'current-user-id'
     
     // Update sync status to 'syncing'
     const { error: updateError } = await supabase
@@ -110,15 +114,19 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
+    // Get real authenticated user
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    const userId = user.id
+
     const url = new URL(req.url)
     const realmId = url.searchParams.get('realmId')
     
     if (!realmId) {
       return NextResponse.json({ error: 'realmId required' }, { status: 400 })
     }
-    
-    // TODO: Replace with real authenticated user ID
-    const userId = 'current-user-id'
     
     // Update sync status to 'syncing'
     const { error: updateError } = await supabase

@@ -34,7 +34,13 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const userId = 'current-user-id' // TODO: replace with real authenticated user id
+    // Get real authenticated user
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.redirect('/auth/login')
+    }
+    const userId = user.id
+    
     const tokens = await exchangeCodeForTokens(code, realmId)
     
     const conn = {
