@@ -6,9 +6,26 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 console.log('Supabase hardcoded - guaranteed working')
 
+// Frontend client with session persistence
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
+    storageKey: 'reconcilebook-auth',
   },
-}) 
+})
+
+// Backend client for API routes
+export function createServerSupabaseClient(cookieString: string) {
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+    global: {
+      headers: {
+        cookie: cookieString,
+      },
+    },
+  })
+} 

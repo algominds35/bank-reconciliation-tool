@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { createClient } from '@supabase/supabase-js'
+import { createServerSupabaseClient } from '@/lib/supabase'
 import { exchangeCodeForTokens } from '@/lib/qbo'
 
 export async function GET(req: NextRequest) {
@@ -53,21 +53,7 @@ export async function GET(req: NextRequest) {
     console.log('QBO OAuth validation passed, creating Supabase client')
 
     // Create Supabase client with proper cookie handling
-    const supabase = createClient(
-      'https://ajdvqkvevaklcwhxijde.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZHZxa3ZldmFrbGN3aHhpamRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0MjkwOTYsImV4cCI6MjA2OTAwNTA5Nn0.551cSJSE4QlPdw1iRWBMslj2gBkcEIsQHenZRq6L7rs',
-      {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false,
-        },
-        global: {
-          headers: {
-            cookie: cookieStore.toString(),
-          },
-        },
-      }
-    )
+    const supabase = createServerSupabaseClient(cookieStore.toString())
 
     console.log('Supabase client created, getting user')
 
