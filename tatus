@@ -1,0 +1,5 @@
+[33m207aebf[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m FIX ALL QBO INTEGRATION: Proper Supabase authentication, working status API, callback, and sync routes
+[33mf4fb440[m Debug QBO status API to find correct auth cookie name
+[33ma4455f8[m Fix QBO status API authentication with proper cookie handling
+[33m606d386[m Fix QBO OAuth scopes to prevent invalid_scope errors
+[33m6d11cca[m Fix QBO callback route syntax error causing HTTP 500

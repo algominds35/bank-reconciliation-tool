@@ -54,7 +54,7 @@ export async function refreshTokensByUser(userId: string, realmId: string) {
   if (error) throw error
   if (!conn) throw new Error('Connection not found')
   const basic = Buffer.from(`${process.env.QBO_CLIENT_ID}:${process.env.QBO_CLIENT_SECRET}`).toString('base64')
-  const body = new URLSearchParams({ grant_type: 'refresh_token', refresh_token: decrypt(conn.refreshTokenEncrypted) })
+  const body = new URLSearchParams({ grant_type: 'refresh_token', refresh_token: decrypt(conn.refresh_token_encrypted) })
   const res = await fetch(QBO_TOKEN_URL, {
     method: 'POST',
     headers: { Authorization: `Basic ${basic}`, 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
@@ -106,8 +106,8 @@ export async function fetchAccounts(userId: string, realmId: string) {
   const upserts = rows.map((a) => ({
     user_id: userId,
     realm_id: realmId,
-    qbo_id: String(a.Id),
-    name: a.Name,
+    qbo_account_id: String(a.Id),
+    account_name: a.Name,
     account_type: a.AccountType,
     account_sub_type: a.AccountSubType || null,
     active: a.Active ?? true,
@@ -115,7 +115,7 @@ export async function fetchAccounts(userId: string, realmId: string) {
   }))
   const { error: upErr } = await supabase
     .from('qbo_accounts')
-    .upsert(upserts, { onConflict: 'realm_id,qbo_id' })
+    .upsert(upserts, { onConflict: 'realm_id,qbo_account_id' })
   if (upErr) throw upErr
   
   return rows
@@ -155,7 +155,7 @@ export async function fetchTransactions(userId: string, realmId: string, since?:
       user_id: userId,
       realm_id: realmId,
       entity_type: key || 'Txn',
-      qbo_id: String(t.Id),
+      qbo_transaction_id: String(t.Id),
       doc_number: t.DocNumber || t.PaymentRefNum || null,
       txn_date: new Date(t.TxnDate || t.MetaData?.CreateTime || Date.now()).toISOString(),
       amount: Number(
@@ -167,7 +167,7 @@ export async function fetchTransactions(userId: string, realmId: string, since?:
     }))
     const { error: upErr } = await supabase
       .from('qbo_transactions')
-      .upsert(upserts, { onConflict: 'realm_id,qbo_id' })
+      .upsert(upserts, { onConflict: 'realm_id,qbo_transaction_id' })
     if (upErr) throw upErr
     
     allTransactions.push(...rows)

@@ -5,6 +5,8 @@ import { exchangeCodeForTokens } from '@/lib/qbo'
 
 export async function GET(req: NextRequest) {
   try {
+    console.log('QBO OAuth callback started')
+    
     const url = new URL(req.url)
     const code = url.searchParams.get('code')
     const realmId = url.searchParams.get('realmId')
@@ -12,6 +14,15 @@ export async function GET(req: NextRequest) {
     const error = url.searchParams.get('error')
     const cookieStore = await cookies()
     const expected = cookieStore.get('qbo_oauth_state')?.value
+
+    console.log('QBO callback params:', { 
+      hasCode: !!code, 
+      hasRealmId: !!realmId, 
+      hasState: !!state, 
+      hasExpectedState: !!expected,
+      stateMatch: state === expected,
+      error 
+    })
 
     // Handle OAuth errors (user cancelled, access denied, etc.)
     if (error) {
@@ -29,9 +40,17 @@ export async function GET(req: NextRequest) {
 
     // Validate required parameters for successful connection
     if (!code || !realmId || !state || !expected || state !== expected) {
-      console.log('QBO OAuth validation failed:', { code: !!code, realmId: !!realmId, state: !!state, expected: !!expected, stateMatch: state === expected })
+      console.log('QBO OAuth validation failed:', { 
+        code: !!code, 
+        realmId: !!realmId, 
+        state: !!state, 
+        expected: !!expected, 
+        stateMatch: state === expected 
+      })
       return NextResponse.redirect(new URL('/settings/qbo?error=invalid_params', req.url))
     }
+
+    console.log('QBO OAuth validation passed, creating Supabase client')
 
     // Create Supabase client with proper cookie handling
     const supabase = createClient(
@@ -50,15 +69,21 @@ export async function GET(req: NextRequest) {
       }
     )
 
+    console.log('Supabase client created, getting user')
+
     // Get real authenticated user
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
-      console.error('Authentication error:', authError)
+      console.error('Authentication error in callback:', authError)
       return NextResponse.redirect(new URL('/auth/login', req.url))
     }
-    const userId = user.id
     
+    const userId = user.id
+    console.log('User authenticated in callback:', userId)
+    
+    console.log('Exchanging code for tokens')
     const tokens = await exchangeCodeForTokens(code, realmId)
+    console.log('Tokens received, encrypting and saving connection')
     
     const conn = {
       user_id: userId,
@@ -71,6 +96,8 @@ export async function GET(req: NextRequest) {
       created_at: new Date().toISOString(),
     }
     
+    console.log('Saving connection to database:', { userId, realmId })
+    
     const { error: upsertError } = await supabase
       .from('qbo_connections')
       .upsert(conn, { onConflict: 'user_id,realm_id' })
@@ -80,6 +107,8 @@ export async function GET(req: NextRequest) {
       throw upsertError
     }
 
+    console.log('QBO connection saved successfully, redirecting to success')
+    
     // Redirect to success
     return NextResponse.redirect(new URL('/settings/qbo?success=connected', req.url))
     
