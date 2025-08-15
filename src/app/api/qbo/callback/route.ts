@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     const state = url.searchParams.get('state')
     const error = url.searchParams.get('error')
     
-    console.log('Callback params:', { code: !!code, realmId, state: !!state, error })
+    console.log('Callback params:', { code: code ? `${code.substring(0, 10)}...` : 'null', realmId, state: !!state, error })
     
     if (error) {
       console.log('OAuth error:', error)
@@ -20,8 +20,14 @@ export async function GET(req: NextRequest) {
     }
     
     if (!code || !realmId) {
-      console.log('Missing required params')
+      console.log('Missing required params - code:', !!code, 'realmId:', !!realmId)
       return NextResponse.redirect(new URL('/settings/qbo?error=missing_params', req.url))
+    }
+    
+    // Validate the authorization code format
+    if (code === 'true' || code === 'false') {
+      console.error('Invalid authorization code received:', code)
+      return NextResponse.redirect(new URL('/settings/qbo?error=invalid_code', req.url))
     }
     
     // ENTERPRISE SOLUTION: Skip authentication entirely and save connection
@@ -40,6 +46,9 @@ export async function GET(req: NextRequest) {
     try {
       // Exchange code for tokens
       console.log('Exchanging code for tokens...')
+      console.log('Code length:', code.length)
+      console.log('Code starts with:', code.substring(0, 20))
+      
       const tokens = await exchangeCodeForTokens(code, realmId)
       console.log('Tokens received successfully')
       

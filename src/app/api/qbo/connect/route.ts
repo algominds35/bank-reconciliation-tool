@@ -1,20 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { randomUUID } from 'crypto'
+import { getQboAuthUrl } from '@/lib/qbo'
 
 export async function GET(req: NextRequest) {
   try {
-    console.log('QBO connect - WORKING VERSION')
+    console.log('QBO connect - ENTERPRISE VERSION')
     
-    // Create a simple OAuth URL that will work
+    // Validate environment variables
+    if (!process.env.QBO_CLIENT_ID || !process.env.QBO_REDIRECT_URI) {
+      console.error('Missing required environment variables')
+      return NextResponse.redirect(new URL('/settings/qbo?error=missing_config', req.url))
+    }
+    
+    // Create OAuth URL using the proper function
     const state = randomUUID()
-    const clientId = process.env.QBO_CLIENT_ID || 'ABAfMz4qhZ8Z0mJaitl'
-    const redirectUri = process.env.QBO_REDIRECT_URI || 'https://www.reconcilebook.com/api/qbo/callback'
+    const authUrl = getQboAuthUrl(state)
     
-    const url = `https://appcenter.intuit.com/connect/oauth2?client_id=${clientId}&response_type=code&scope=com.intuit.quickbooks.accounting&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}`
+    console.log('🔍 Generated OAuth URL:', authUrl)
+    console.log('🔍 Client ID:', process.env.QBO_CLIENT_ID)
+    console.log('🔍 Redirect URI:', process.env.QBO_REDIRECT_URI)
     
-    console.log('Redirecting to:', url)
-    
-    const res = NextResponse.redirect(url)
+    const res = NextResponse.redirect(authUrl)
     res.cookies.set('qbo_oauth_state', state, { 
       httpOnly: true, 
       secure: true, 
