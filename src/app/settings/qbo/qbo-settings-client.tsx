@@ -46,19 +46,26 @@ export default function QboSettingsClient() {
       return
     }
 
+    console.log('🔍 Debug: connection object:', connection)
+    console.log('🔍 Debug: connection.realm_id:', connection.realm_id)
+    console.log('🔍 Debug: connection type:', typeof connection.realm_id)
+
     setSyncing(true)
     setSyncStatus('Starting full historical sync...')
     
     try {
+      const requestBody = {
+        realmId: connection.realm_id,
+        full: true
+      }
+      console.log('🔍 Debug: sending request body:', requestBody)
+      
       const response = await fetch('/api/qbo/sync', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          realmId: connection.realm_id,
-          full: true
-        })
+        body: JSON.stringify(requestBody)
       })
       
       if (response.ok) {
@@ -67,9 +74,11 @@ export default function QboSettingsClient() {
         await checkConnection()
       } else {
         const errorData = await response.json()
+        console.log('🔍 Debug: error response:', errorData)
         setSyncStatus(`Sync failed: ${errorData.error}`)
       }
     } catch (error) {
+      console.log('🔍 Debug: network error:', error)
       setSyncStatus('Sync failed: Network error')
     } finally {
       setSyncing(false)
