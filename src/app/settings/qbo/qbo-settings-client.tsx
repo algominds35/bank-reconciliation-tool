@@ -148,13 +148,22 @@ export default function QboSettingsClient() {
               </div>
               <div className="ml-3">
                 <h3 className="text-sm font-medium text-red-800">
-                  {error === 'access_denied' ? 'Connection Cancelled' : 'Connection Error'}
+                  {error === 'access_denied' ? 'Connection Cancelled' : 
+                   error === 'missing_config' ? 'Configuration Error' :
+                   'Connection Error'}
                 </h3>
                 <div className="mt-2 text-sm text-red-700">
                   {error === 'access_denied' 
                     ? 'You cancelled the QuickBooks authorization. You can try connecting again anytime.'
+                    : error === 'missing_config'
+                    ? 'Missing QuickBooks configuration. Please check your environment variables.'
                     : 'There was an error connecting to QuickBooks. Please try again.'
                   }
+                  {searchParams.get('vars') && (
+                    <div className="mt-2 p-2 bg-red-100 rounded text-xs">
+                      <strong>Missing variables:</strong> {searchParams.get('vars')}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
