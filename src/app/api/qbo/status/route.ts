@@ -43,10 +43,10 @@ export async function GET(req: NextRequest) {
         success: true,
         hasConnection: true,
         connection: {
-          realmId: connection.realm_id,
-          syncStatus: connection.sync_status,
-          lastSync: connection.last_sync_at,
-          createdAt: connection.created_at
+          realm_id: connection.realm_id,
+          sync_status: connection.sync_status,
+          last_sync_at: connection.last_sync_at,
+          created_at: connection.created_at
         }
       })
     } else {
