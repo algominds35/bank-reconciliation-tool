@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { exchangeCodeForTokens } from '@/lib/qbo'
+import { randomUUID } from 'crypto'
 
 export async function GET(req: NextRequest) {
   try {
@@ -39,8 +40,8 @@ export async function GET(req: NextRequest) {
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZHZxa3ZldmFrbGN3aHhpamRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0MjkwOTYsImV4cCI6MjA2OTAwNTA5Nn0.551cSJSE4QlPdw1iRWBMslj2gBkcEIsQHenZRq6L7rs'
     )
     
-    // Use a fallback user ID to ensure connection is saved
-    const userId = 'enterprise-user-' + Date.now()
+    // Use a proper UUID to ensure database compatibility
+    const userId = randomUUID()
     console.log('Using enterprise user ID:', userId)
     
     try {
