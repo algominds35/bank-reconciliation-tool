@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,8 +9,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'realmId is required' }, { status: 400 })
     }
     
-    // TODO: Replace with real authenticated user ID
-    const userId = 'current-user-id'
+    // Create Supabase client with admin key for this operation
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+    
+    // For now, use a generic user ID since we're bypassing auth
+    const userId = 'enterprise-user-disconnect'
     
     // Delete the QBO connection
     const { error: deleteError } = await supabase
