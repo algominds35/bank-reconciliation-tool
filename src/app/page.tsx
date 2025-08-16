@@ -154,12 +154,23 @@ export default function LandingPage() {
                 <span className="text-2xl font-bold text-blue-600">1</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Upload CSV</h3>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
-                <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
-                  <div className="text-center">
+              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
+                <div className="w-full h-40 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
+                  <img 
+                    src="/images/upload-csv-screenshot.png" 
+                    alt="File upload interface showing CSV selection"
+                    className="w-full h-full object-cover rounded"
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      target.style.display = 'none';
+                      fallback.style.display = 'flex';
+                    }}
+                  />
+                  <div className="text-center hidden">
                     <div className="text-4xl mb-2">📁</div>
-                    <p className="text-sm text-gray-500">Screenshot: File Upload Interface</p>
-                    <p className="text-xs text-gray-400">Add your bank CSV here</p>
+                    <p className="text-sm text-gray-500">File Upload Interface</p>
+                    <p className="text-xs text-gray-400">Select your bank CSV</p>
                   </div>
                 </div>
               </div>
@@ -174,15 +185,23 @@ export default function LandingPage() {
                 <span className="text-2xl font-bold text-indigo-600">2</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">QuickBooks Sync</h3>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
-                <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-4xl mb-2">🎥</div>
-                    <p className="text-sm text-gray-500">Video: QuickBooks Integration Process</p>
-                    <p className="text-xs text-gray-400">Show OAuth flow & connection</p>
-                    <button className="mt-2 px-3 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700 transition-colors">
-                      Play Demo
-                    </button>
+              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
+                <div className="w-full h-40 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
+                  <img 
+                    src="/images/qb-integration-screenshot.png" 
+                    alt="QuickBooks integration showing successful connection"
+                    className="w-full h-full object-cover rounded"
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      target.style.display = 'none';
+                      fallback.style.display = 'flex';
+                    }}
+                  />
+                  <div className="text-center hidden">
+                    <div className="text-4xl mb-2">🔗</div>
+                    <p className="text-sm text-gray-500">QuickBooks Connected</p>
+                    <p className="text-xs text-gray-400">Sync completed successfully</p>
                   </div>
                 </div>
               </div>
@@ -197,12 +216,23 @@ export default function LandingPage() {
                 <span className="text-2xl font-bold text-green-600">3</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Smart Matching</h3>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
-                <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
-                  <div className="text-center">
+              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
+                <div className="w-full h-40 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
+                  <img 
+                    src="/images/smart-matching-screenshot.png" 
+                    alt="Smart auto-matching interface showing AI suggestions"
+                    className="w-full h-full object-cover rounded"
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      target.style.display = 'none';
+                      fallback.style.display = 'flex';
+                    }}
+                  />
+                  <div className="text-center hidden">
                     <div className="text-4xl mb-2">🔍</div>
-                    <p className="text-sm text-gray-500">Screenshot: Matching Interface</p>
-                    <p className="text-xs text-gray-400">Show reconciled vs pending rows</p>
+                    <p className="text-sm text-gray-500">AI Matching Interface</p>
+                    <p className="text-xs text-gray-400">90%+ accuracy</p>
                   </div>
                 </div>
               </div>
@@ -217,12 +247,23 @@ export default function LandingPage() {
                 <span className="text-2xl font-bold text-purple-600">4</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Review & Approve</h3>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
-                <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
-                  <div className="text-center">
+              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
+                <div className="w-full h-40 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
+                  <img 
+                    src="/images/reconciliation-dashboard-screenshot.png" 
+                    alt="Reconciliation dashboard with transaction status"
+                    className="w-full h-full object-cover rounded"
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      target.style.display = 'none';
+                      fallback.style.display = 'flex';
+                    }}
+                  />
+                  <div className="text-center hidden">
                     <div className="text-4xl mb-2">✅</div>
-                    <p className="text-sm text-gray-500">Screenshot: Reconciliation Dashboard</p>
-                    <p className="text-xs text-gray-400">Show approve buttons & status</p>
+                    <p className="text-sm text-gray-500">Reconciliation Dashboard</p>
+                    <p className="text-xs text-gray-400">Review & approve matches</p>
                   </div>
                 </div>
               </div>
@@ -237,12 +278,23 @@ export default function LandingPage() {
                 <span className="text-2xl font-bold text-orange-600">5</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Export Reports</h3>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
-                <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
-                  <div className="text-center">
+              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
+                <div className="w-full h-40 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
+                  <img 
+                    src="/images/export-report-screenshot.png" 
+                    alt="Professional bank reconciliation report"
+                    className="w-full h-full object-cover rounded"
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      target.style.display = 'none';
+                      fallback.style.display = 'flex';
+                    }}
+                  />
+                  <div className="text-center hidden">
                     <div className="text-4xl mb-2">📊</div>
-                    <p className="text-sm text-gray-500">Screenshot: Export Options</p>
-                    <p className="text-xs text-gray-400">Show PDF/CSV export buttons</p>
+                    <p className="text-sm text-gray-500">Professional Reports</p>
+                    <p className="text-xs text-gray-400">PDF/CSV export</p>
                   </div>
                 </div>
               </div>
