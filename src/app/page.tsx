@@ -143,11 +143,11 @@ export default function LandingPage() {
               How It Works
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Get from CSV upload to reconciled accounts in just 4 simple steps
+              Get from CSV upload to reconciled accounts in just 5 simple steps
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
             {/* Step 1: Upload CSV */}
             <div className="text-center">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -155,7 +155,7 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Upload CSV</h3>
               <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
-                <div className="w-full h-48 bg-gray-100 rounded flex items-center justify-center">
+                <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-4xl mb-2">📁</div>
                     <p className="text-sm text-gray-500">Screenshot: File Upload Interface</p>
@@ -168,14 +168,34 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* Step 2: Smart Matching */}
+            {/* Step 2: QuickBooks Integration */}
+            <div className="text-center">
+              <div className="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-indigo-600">2</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">QuickBooks Sync</h3>
+              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
+                <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">🔗</div>
+                    <p className="text-sm text-gray-500">Screenshot: QuickBooks Integration</p>
+                    <p className="text-xs text-gray-400">Show connected status & sync</p>
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600 text-sm">
+                Connect QuickBooks for automatic transaction sync — no CSV uploads needed
+              </p>
+            </div>
+
+            {/* Step 3: Smart Matching */}
             <div className="text-center">
               <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-green-600">2</span>
+                <span className="text-2xl font-bold text-green-600">3</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Smart Matching</h3>
               <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
-                <div className="w-full h-48 bg-gray-100 rounded flex items-center justify-center">
+                <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-4xl mb-2">🔍</div>
                     <p className="text-sm text-gray-500">Screenshot: Matching Interface</p>
@@ -188,14 +208,14 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* Step 3: Review & Approve */}
+            {/* Step 4: Review & Approve */}
             <div className="text-center">
               <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-purple-600">3</span>
+                <span className="text-2xl font-bold text-purple-600">4</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Review & Approve</h3>
               <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
-                <div className="w-full h-48 bg-gray-100 rounded flex items-center justify-center">
+                <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-4xl mb-2">✅</div>
                     <p className="text-sm text-gray-500">Screenshot: Reconciliation Dashboard</p>
@@ -208,14 +228,14 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* Step 4: Export Reports */}
+            {/* Step 5: Export Reports */}
             <div className="text-center">
               <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-orange-600">4</span>
+                <span className="text-2xl font-bold text-orange-600">5</span>
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Export Reports</h3>
               <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
-                <div className="w-full h-48 bg-gray-100 rounded flex items-center justify-center">
+                <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-4xl mb-2">📊</div>
                     <p className="text-sm text-gray-500">Screenshot: Export Options</p>
