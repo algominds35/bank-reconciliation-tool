@@ -9,9 +9,6 @@ export async function GET(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
     
-    // For now, use a generic user ID since we're bypassing auth
-    const userId = 'enterprise-user-accounts'
-    
     const url = new URL(req.url)
     const realmId = url.searchParams.get('realmId')
     
@@ -22,7 +19,6 @@ export async function GET(req: NextRequest) {
     const { data: accounts, error } = await supabase
       .from('qbo_accounts')
       .select('*')
-      .eq('user_id', userId)
       .eq('realm_id', realmId)
       .eq('is_active', true)
       .order('account_name')

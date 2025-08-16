@@ -15,14 +15,10 @@ export async function POST(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
     
-    // For now, use a generic user ID since we're bypassing auth
-    const userId = 'enterprise-user-disconnect'
-    
-    // Delete the QBO connection
+    // Delete the QBO connection by realm_id only (since we don't know the exact user_id)
     const { error: deleteError } = await supabase
       .from('qbo_connections')
       .delete()
-      .eq('user_id', userId)
       .eq('realm_id', realmId)
     
     if (deleteError) {
@@ -30,17 +26,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to disconnect' }, { status: 500 })
     }
     
-    // Also delete related accounts and transactions
+    // Also delete related accounts and transactions by realm_id
     await supabase
       .from('qbo_accounts')
       .delete()
-      .eq('user_id', userId)
       .eq('realm_id', realmId)
     
     await supabase
       .from('qbo_transactions')
       .delete()
-      .eq('user_id', userId)
       .eq('realm_id', realmId)
     
     return NextResponse.json({ success: true })

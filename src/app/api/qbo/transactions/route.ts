@@ -9,9 +9,6 @@ export async function GET(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
     
-    // For now, use a generic user ID since we're bypassing auth
-    const userId = 'enterprise-user-transactions'
-    
     const url = new URL(req.url)
     const realmId = url.searchParams.get('realmId')
     const limit = parseInt(url.searchParams.get('limit') || '50')
@@ -27,7 +24,6 @@ export async function GET(req: NextRequest) {
         *,
         qbo_accounts(account_name)
       `)
-      .eq('user_id', userId)
       .eq('realm_id', realmId)
       .order('transaction_date', { ascending: false })
       .range(offset, offset + limit - 1)
