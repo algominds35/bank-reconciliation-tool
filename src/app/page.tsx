@@ -135,6 +135,173 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              How It Works
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Get from CSV upload to reconciled accounts in just 4 simple steps
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Step 1: Upload CSV */}
+            <div className="text-center">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-600">1</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Upload CSV</h3>
+              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
+                <div className="w-full h-48 bg-gray-100 rounded flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">📁</div>
+                    <p className="text-sm text-gray-500">Screenshot: File Upload Interface</p>
+                    <p className="text-xs text-gray-400">Add your bank CSV here</p>
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600 text-sm">
+                Upload your bank or bookkeeping CSV file in seconds — no manual entry
+              </p>
+            </div>
+
+            {/* Step 2: Smart Matching */}
+            <div className="text-center">
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-green-600">2</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Smart Matching</h3>
+              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
+                <div className="w-full h-48 bg-gray-100 rounded flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">🔍</div>
+                    <p className="text-sm text-gray-500">Screenshot: Matching Interface</p>
+                    <p className="text-xs text-gray-400">Show reconciled vs pending rows</p>
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600 text-sm">
+                AI catches 90%+ of matches instantly with intelligent pattern recognition
+              </p>
+            </div>
+
+            {/* Step 3: Review & Approve */}
+            <div className="text-center">
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-purple-600">3</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Review & Approve</h3>
+              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
+                <div className="w-full h-48 bg-gray-100 rounded flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">✅</div>
+                    <p className="text-sm text-gray-500">Screenshot: Reconciliation Dashboard</p>
+                    <p className="text-xs text-gray-400">Show approve buttons & status</p>
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600 text-sm">
+                Quickly review matches and approve with one click
+              </p>
+            </div>
+
+            {/* Step 4: Export Reports */}
+            <div className="text-center">
+              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-orange-600">4</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Export Reports</h3>
+              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
+                <div className="w-full h-48 bg-gray-100 rounded flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">📊</div>
+                    <p className="text-sm text-gray-500">Screenshot: Export Options</p>
+                    <p className="text-xs text-gray-400">Show PDF/CSV export buttons</p>
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600 text-sm">
+                Export professional reports your accountant will love
+              </p>
+            </div>
+          </div>
+
+          {/* CTA Button */}
+          <div className="text-center mt-12">
+            <Button size="lg" className="text-lg px-8 py-4">
+              <Link href="/dashboard">Try It Free Now</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Why Choose ReconcileBook?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Join thousands of businesses saving hours every month on reconciliation
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">⚡</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">10x Faster</h3>
+              <p className="text-gray-600">
+                Go from hours of manual work to minutes of automated reconciliation
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🎯</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">90%+ Accuracy</h3>
+              <p className="text-gray-600">
+                AI-powered matching eliminates human errors and catches discrepancies
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">💰</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Save $500+/Month</h3>
+              <p className="text-gray-600">
+                Reduce accounting costs and free up time for revenue-generating activities
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-20 bg-blue-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Ready to Transform Your Reconciliation Process?
+          </h2>
+          <p className="text-xl mb-8 text-blue-100">
+            Join thousands of businesses already saving hours every month
+          </p>
+          <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
+            <Link href="/dashboard">Start Your Free Trial</Link>
+          </Button>
+          <p className="text-sm text-blue-200 mt-4">
+            No credit card required • 14-day free trial • Cancel anytime
+          </p>
+        </div>
+      </section>
+
       {/* Demo Video Section */}
       <section id="demo" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
