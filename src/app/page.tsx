@@ -177,9 +177,12 @@ export default function LandingPage() {
               <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-dashed border-gray-300">
                 <div className="w-full h-40 bg-gray-100 rounded flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-4xl mb-2">🔗</div>
-                    <p className="text-sm text-gray-500">Screenshot: QuickBooks Integration</p>
-                    <p className="text-xs text-gray-400">Show connected status & sync</p>
+                    <div className="text-4xl mb-2">🎥</div>
+                    <p className="text-sm text-gray-500">Video: QuickBooks Integration Process</p>
+                    <p className="text-xs text-gray-400">Show OAuth flow & connection</p>
+                    <button className="mt-2 px-3 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700 transition-colors">
+                      Play Demo
+                    </button>
                   </div>
                 </div>
               </div>
