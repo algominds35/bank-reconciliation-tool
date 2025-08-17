@@ -199,8 +199,129 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pain Points Section */}
+      {/* QuickBooks Problems vs Your Solution */}
       <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Why QuickBooks Sucks at Reconciliation (And How We Fixed It)
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              QuickBooks was built for accounting, not reconciliation. That's why we built a tool that does what QuickBooks can't.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
+            {/* QuickBooks Problems */}
+            <div className="bg-white rounded-xl p-8 shadow-lg border border-red-200">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">❌</span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">QuickBooks Problems</h3>
+                <p className="text-gray-600">Why reconciliation is a nightmare</p>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Auto-matches wrong transactions</div>
+                    <div className="text-sm text-gray-600">No way to fix it, leads to errors</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Takes 8+ hours monthly</div>
+                    <div className="text-sm text-gray-600">Manual work that never ends</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">No intelligent matching</div>
+                    <div className="text-sm text-gray-600">Just basic rules that fail</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Expensive for what it does</div>
+                    <div className="text-sm text-gray-600">$300+/month for basic features</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Your Solution */}
+            <div className="bg-white rounded-xl p-8 shadow-lg border border-green-200">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">✅</span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Our Solution</h3>
+                <p className="text-gray-600">Built specifically for reconciliation</p>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">90%+ AI accuracy</div>
+                    <div className="text-sm text-gray-600">Learns from your patterns</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Done in 10 minutes</div>
+                    <div className="text-sm text-gray-600">Not 8+ hours</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Intelligent AI matching</div>
+                    <div className="text-sm text-gray-600">Catches errors humans miss</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Fraction of the cost</div>
+                    <div className="text-sm text-gray-600">Starting at $79/month</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              That's Why 1,200+ Users Switched from QuickBooks to Us
+            </h3>
+            <p className="text-lg text-gray-600 mb-6">
+              QuickBooks is great for accounting, but terrible for reconciliation. We built the tool that does what QuickBooks can't.
+            </p>
+            <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-4 text-lg font-semibold">
+                Switch from QuickBooks Today
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Pain Points Section */}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
