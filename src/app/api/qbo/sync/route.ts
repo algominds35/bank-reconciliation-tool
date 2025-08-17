@@ -153,7 +153,7 @@ export async function POST(req: NextRequest) {
     
     const connection = connections[0]
     
-    if (!connection.access_token) {
+    if (!connection.access_token_encrypted) {
       console.error('❌ No access token found for connection')
       return NextResponse.json({ error: 'QuickBooks connection expired. Please reconnect.' }, { status: 400 })
     }
@@ -175,7 +175,7 @@ export async function POST(req: NextRequest) {
       
       // Fetch accounts from QuickBooks
       console.log('Fetching accounts from QuickBooks...')
-      const accounts = await fetchAccountsFromQBO(connection.access_token, realmId)
+      const accounts = await fetchAccountsFromQBO(connection.access_token_encrypted, realmId)
       console.log(`✅ Fetched ${accounts.length} accounts from QuickBooks`)
       
       // Save accounts to Supabase
@@ -189,7 +189,7 @@ export async function POST(req: NextRequest) {
         new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)     // 7 days
       
       console.log('Fetching transactions since:', sinceDate)
-      const transactions = await fetchTransactionsFromQBO(connection.access_token, realmId, sinceDate)
+      const transactions = await fetchTransactionsFromQBO(connection.access_token_encrypted, realmId, sinceDate)
       console.log(`✅ Fetched ${transactions.length} transactions from QuickBooks since ${sinceDate}`)
       
       // Save transactions to Supabase
@@ -277,17 +277,17 @@ export async function GET(req: NextRequest) {
       try {
         console.log(`🔄 Syncing realm ${connection.realm_id}...`)
         
-        if (!connection.access_token) {
+        if (!connection.access_token_encrypted) {
           console.log(`⚠️ No access token for realm ${connection.realm_id}, skipping...`)
           continue
         }
         
         // Fetch accounts from QuickBooks
-        const accounts = await fetchAccountsFromQBO(connection.access_token, connection.realm_id)
+        const accounts = await fetchAccountsFromQBO(connection.access_token_encrypted, connection.realm_id)
         
         // Fetch transactions from QuickBooks (full sync for cron)
         const sinceDate = new Date(Date.now() - 730 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10) // 24 months
-        const transactions = await fetchTransactionsFromQBO(connection.access_token, connection.realm_id, sinceDate)
+        const transactions = await fetchTransactionsFromQBO(connection.access_token_encrypted, connection.realm_id, sinceDate)
         
         // Save to database
         await saveAccountsToSupabase(supabase, accounts, connection.realm_id)
