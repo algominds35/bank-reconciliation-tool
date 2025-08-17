@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 // QuickBooks API functions
 async function fetchAccountsFromQBO(accessToken: string, realmId: string) {
   try {
-    const response = await fetch(`https://sandbox-accounts.platform.intuit.com/v3/company/${realmId}/query?query=SELECT * FROM Account WHERE Active = true&minorversion=65`, {
+    const response = await fetch(`https://accounts.platform.intuit.com/v3/company/${realmId}/query?query=SELECT * FROM Account WHERE Active = true&minorversion=65`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Accept': 'application/json',
@@ -26,7 +26,7 @@ async function fetchAccountsFromQBO(accessToken: string, realmId: string) {
 
 async function fetchTransactionsFromQBO(accessToken: string, realmId: string, sinceDate: string) {
   try {
-    const response = await fetch(`https://sandbox-accounts.platform.intuit.com/v3/company/${realmId}/query?query=SELECT * FROM Transaction WHERE TxnDate >= '${sinceDate}' ORDER BY TxnDate DESC&minorversion=65`, {
+    const response = await fetch(`https://accounts.platform.intuit.com/v3/company/${realmId}/query?query=SELECT * FROM Transaction WHERE TxnDate >= '${sinceDate}' ORDER BY TxnDate DESC&minorversion=65`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Accept': 'application/json',
