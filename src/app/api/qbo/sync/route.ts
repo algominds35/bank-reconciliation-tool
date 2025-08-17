@@ -1,80 +1,128 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-// Inline implementations to avoid circular dependency issues
-async function fetchAccountsInline(supabase: any, userId: string, realmId: string) {
+// QuickBooks API functions
+async function fetchAccountsFromQBO(accessToken: string, realmId: string) {
   try {
-    // Get connection for auth headers
-    const { data: conn, error } = await supabase
-      .from('qbo_connections')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('realm_id', realmId)
-      .maybeSingle()
-    
-    if (error || !conn) {
-      throw new Error('No QBO connection found')
+    const response = await fetch(`https://sandbox-accounts.platform.intuit.com/v3/company/${realmId}/query?query=SELECT * FROM Account WHERE Active = true&minorversion=65`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+
+    if (!response.ok) {
+      throw new Error(`QuickBooks API error: ${response.status} ${response.statusText}`)
     }
-    
-    // For now, just return empty array since we need to implement QBO API calls
-    // This will be expanded later when we implement the full QBO integration
-    console.log('📊 Fetching accounts for realm:', realmId)
-    return []
+
+    const data = await response.json()
+    return data.QueryResponse?.Account || []
   } catch (error) {
-    console.error('Error fetching accounts:', error)
-    return []
+    console.error('Error fetching accounts from QuickBooks:', error)
+    throw error
   }
 }
 
-async function fetchTransactionsInline(supabase: any, userId: string, realmId: string, since?: string) {
+async function fetchTransactionsFromQBO(accessToken: string, realmId: string, sinceDate: string) {
   try {
-    // Get connection for auth headers
-    const { data: conn, error } = await supabase
-      .from('qbo_connections')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('realm_id', realmId)
-      .maybeSingle()
-    
-    if (error || !conn) {
-      throw new Error('No QBO connection found')
+    const response = await fetch(`https://sandbox-accounts.platform.intuit.com/v3/company/${realmId}/query?query=SELECT * FROM Transaction WHERE TxnDate >= '${sinceDate}' ORDER BY TxnDate DESC&minorversion=65`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+
+    if (!response.ok) {
+      throw new Error(`QuickBooks API error: ${response.status} ${response.statusText}`)
     }
-    
-    // For now, just return empty array since we need to implement QBO API calls
-    // This will be expanded later when we implement the full QBO integration
-    console.log('📊 Fetching transactions for realm:', realmId, 'since:', since)
-    return []
+
+    const data = await response.json()
+    return data.QueryResponse?.Transaction || []
   } catch (error) {
-    console.error('Error fetching transactions:', error)
-    return []
+    console.error('Error fetching transactions from QuickBooks:', error)
+    throw error
   }
 }
 
-async function markSyncInline(supabase: any, userId: string, realmId: string, status: string = 'completed', errorMessage?: string) {
-  const updateData: any = { 
-    last_sync_at: new Date().toISOString(), 
-    sync_status: status 
+async function saveAccountsToSupabase(supabase: any, accounts: any[], realmId: string) {
+  try {
+    const accountsToInsert = accounts.map(account => ({
+      realm_id: realmId,
+      account_id: account.Id,
+      account_name: account.Name,
+      account_type: account.AccountType,
+      account_sub_type: account.AccountSubType,
+      is_active: account.Active,
+      balance: account.CurrentBalance,
+      currency: account.CurrencyRef?.value || 'USD',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }))
+
+    // Delete existing accounts for this realm
+    await supabase
+      .from('qbo_accounts')
+      .delete()
+      .eq('realm_id', realmId)
+
+    // Insert new accounts
+    if (accountsToInsert.length > 0) {
+      const { error } = await supabase
+        .from('qbo_accounts')
+        .insert(accountsToInsert)
+      
+      if (error) throw error
+    }
+
+    return accountsToInsert.length
+  } catch (error) {
+    console.error('Error saving accounts to Supabase:', error)
+    throw error
   }
-  
-  if (errorMessage) {
-    updateData.sync_error = errorMessage
-  }
-  
-  const { data, error } = await supabase
-    .from('qbo_connections')
-    .update(updateData)
-    .eq('user_id', userId)
-    .eq('realm_id', realmId)
-    .select()
-    .maybeSingle()
-    
-  if (error) throw error
-  return data
 }
-                        
+
+async function saveTransactionsToSupabase(supabase: any, transactions: any[], realmId: string) {
+  try {
+    const transactionsToInsert = transactions.map(txn => ({
+      realm_id: realmId,
+      transaction_id: txn.Id,
+      transaction_date: txn.TxnDate,
+      transaction_type: txn.TxnType,
+      reference_number: txn.DocNumber,
+      memo: txn.Memo,
+      amount: txn.TotalAmt,
+      currency: txn.CurrencyRef?.value || 'USD',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }))
+
+    // Delete existing transactions for this realm
+    await supabase
+      .from('qbo_transactions')
+      .delete()
+      .eq('realm_id', realmId)
+
+    // Insert new transactions
+    if (transactionsToInsert.length > 0) {
+      const { error } = await supabase
+        .from('qbo_transactions')
+        .insert(transactionsToInsert)
+      
+      if (error) throw error
+    }
+
+    return transactionsToInsert.length
+  } catch (error) {
+    console.error('Error saving transactions to Supabase:', error)
+    throw error
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
-    console.log('QBO SYNC STARTED - ENTERPRISE VERSION - NO AUTH BLOCKING')
+    console.log('🚀 QBO SYNC STARTED - REAL IMPLEMENTATION')
     
     const { realmId, full = false } = await req.json()
     
@@ -82,16 +130,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'realmId required' }, { status: 400 })
     }
     
-    console.log('Skipping authentication - syncing data directly')
     console.log('Sync type:', full ? 'Full 24-month' : 'Incremental 7-day')
     
-    // Create Supabase client without auth
+    // Create Supabase client
     const supabase = createClient(
-      'https://ajdvqkvevaklcwhxijde.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZHZxa3ZldmFrbGN3aHhpamRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0MjkwOTYsImV4cCI6MjA2OTAwNTA5Nn0.551cSJSE4QlPdw1iRWBMslj2gBkcEIsQHenZRq6L7rs'
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
     
-    // Get the connection to retrieve user_id
+    // Get the connection with OAuth tokens
     console.log('Getting connection details for realm:', realmId)
     const { data: connections, error: connError } = await supabase
       .from('qbo_connections')
@@ -105,8 +152,13 @@ export async function POST(req: NextRequest) {
     }
     
     const connection = connections[0]
-    const userId = connection.user_id
-    console.log('✅ Found connection for user:', userId)
+    
+    if (!connection.access_token) {
+      console.error('❌ No access token found for connection')
+      return NextResponse.json({ error: 'QuickBooks connection expired. Please reconnect.' }, { status: 400 })
+    }
+    
+    console.log('✅ Found connection with access token')
     
     // Update sync status to 'syncing'
     console.log('Updating sync status to syncing...')
@@ -119,12 +171,17 @@ export async function POST(req: NextRequest) {
       .eq('id', connection.id)
     
     try {
-      console.log('🚀 Starting data sync...')
+      console.log('🚀 Starting REAL QuickBooks data sync...')
       
       // Fetch accounts from QuickBooks
-      console.log('Fetching accounts...')
-      const accounts = await fetchAccountsInline(supabase, userId, realmId)
-      console.log(`✅ Fetched ${accounts.length} accounts from QBO`)
+      console.log('Fetching accounts from QuickBooks...')
+      const accounts = await fetchAccountsFromQBO(connection.access_token, realmId)
+      console.log(`✅ Fetched ${accounts.length} accounts from QuickBooks`)
+      
+      // Save accounts to Supabase
+      console.log('Saving accounts to database...')
+      const savedAccountsCount = await saveAccountsToSupabase(supabase, accounts, realmId)
+      console.log(`✅ Saved ${savedAccountsCount} accounts to database`)
                               
       // Fetch transactions - 24 months if full sync, 7 days if incremental
       const sinceDate = full ? 
@@ -132,24 +189,36 @@ export async function POST(req: NextRequest) {
         new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)     // 7 days
       
       console.log('Fetching transactions since:', sinceDate)
-      const transactions = await fetchTransactionsInline(supabase, userId, realmId, sinceDate)
-      console.log(`✅ Fetched ${transactions.length} transactions from QBO since ${sinceDate}`)
+      const transactions = await fetchTransactionsFromQBO(connection.access_token, realmId, sinceDate)
+      console.log(`✅ Fetched ${transactions.length} transactions from QuickBooks since ${sinceDate}`)
+      
+      // Save transactions to Supabase
+      console.log('Saving transactions to database...')
+      const savedTransactionsCount = await saveTransactionsToSupabase(supabase, transactions, realmId)
+      console.log(`✅ Saved ${savedTransactionsCount} transactions to database`)
                               
       // Mark sync as completed
       console.log('Marking sync as completed...')
-      await markSyncInline(supabase, userId, realmId, 'completed')
+      await supabase
+        .from('qbo_connections')
+        .update({ 
+          sync_status: 'completed',
+          last_sync_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', connection.id)
       
       console.log('🎉 SYNC COMPLETED SUCCESSFULLY!')
       console.log('📊 Summary:')
-      console.log('   - Accounts:', accounts.length)
-      console.log('   - Transactions:', transactions.length)
+      console.log('   - Accounts fetched:', accounts.length)
+      console.log('   - Transactions fetched:', transactions.length)
       console.log('   - Sync Type:', full ? 'Full 24-month sync' : 'Incremental 7-day sync')
       
       return NextResponse.json({
         success: true,
         accountsCount: accounts.length,
         transactionsCount: transactions.length,
-        message: `Successfully synced ${accounts.length} accounts and ${transactions.length} transactions`,
+        message: `Successfully synced ${accounts.length} accounts and ${transactions.length} transactions from QuickBooks`,
         syncType: full ? 'Full 24-month sync' : 'Incremental 7-day sync'
       })
                               
@@ -159,7 +228,14 @@ export async function POST(req: NextRequest) {
       // Mark sync as failed
       const errorMessage = syncError instanceof Error ? syncError.message : 'Unknown sync error'
       console.log('Marking sync as failed with error:', errorMessage)
-      await markSyncInline(supabase, userId, realmId, 'failed', errorMessage)
+      await supabase
+        .from('qbo_connections')
+        .update({ 
+          sync_status: 'failed',
+          sync_error: errorMessage,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', connection.id)
                               
       return NextResponse.json({ 
         error: 'Sync failed', 
@@ -175,14 +251,12 @@ export async function POST(req: NextRequest) {
                         
 export async function GET(req: NextRequest) {
   try {
-    console.log('QBO CRON SYNC - ENTERPRISE VERSION - NO AUTH BLOCKING')
+    console.log('🔄 QBO CRON SYNC - REAL IMPLEMENTATION')
     
-    console.log('Skipping authentication - running cron sync directly')
-    
-    // Create Supabase client without auth
+    // Create Supabase client
     const supabase = createClient(
-      'https://ajdvqkvevaklcwhxijde.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZHZxa3ZldmFrbGN3aHhpamRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0MjkwOTYsImV4cCI6MjA2OTAwNTA5Nn0.551cSJSE4QlPdw1iRWBMslj2gBkcEIsQHenZRq6L7rs'
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
     
     // Get all QBO connections
@@ -203,16 +277,44 @@ export async function GET(req: NextRequest) {
       try {
         console.log(`🔄 Syncing realm ${connection.realm_id}...`)
         
-        const accounts = await fetchAccountsInline(supabase, connection.user_id, connection.realm_id)
-        const transactions = await fetchTransactionsInline(supabase, connection.user_id, connection.realm_id, undefined) // Full sync
+        if (!connection.access_token) {
+          console.log(`⚠️ No access token for realm ${connection.realm_id}, skipping...`)
+          continue
+        }
         
-        await markSyncInline(supabase, connection.user_id, connection.realm_id, 'completed')
+        // Fetch accounts from QuickBooks
+        const accounts = await fetchAccountsFromQBO(connection.access_token, connection.realm_id)
+        
+        // Fetch transactions from QuickBooks (full sync for cron)
+        const sinceDate = new Date(Date.now() - 730 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10) // 24 months
+        const transactions = await fetchTransactionsFromQBO(connection.access_token, connection.realm_id, sinceDate)
+        
+        // Save to database
+        await saveAccountsToSupabase(supabase, accounts, connection.realm_id)
+        await saveTransactionsToSupabase(supabase, transactions, connection.realm_id)
+        
+        // Mark sync as completed
+        await supabase
+          .from('qbo_connections')
+          .update({ 
+            sync_status: 'completed',
+            last_sync_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', connection.id)
         
         console.log(`✅ Synced ${accounts.length} accounts and ${transactions.length} transactions for realm ${connection.realm_id}`)
         
       } catch (syncError) {
         console.error(`❌ Failed to sync realm ${connection.realm_id}:`, syncError)
-        await markSyncInline(supabase, connection.user_id, connection.realm_id, 'failed')
+        await supabase
+          .from('qbo_connections')
+          .update({ 
+            sync_status: 'failed',
+            sync_error: syncError instanceof Error ? syncError.message : 'Unknown error',
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', connection.id)
       }
     }
                             
