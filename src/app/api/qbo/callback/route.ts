@@ -34,10 +34,10 @@ export async function GET(req: NextRequest) {
     // ENTERPRISE SOLUTION: Skip authentication entirely and save connection
     console.log('Skipping authentication - saving connection directly')
     
-    // Create Supabase client without auth
+    // Create Supabase client with proper environment variables
     const supabase = createClient(
-      'https://ajdvqkvevaklcwhxijde.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZHZxa3ZldmFrbGN3aHhpamRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0MjkwOTYsImV4cCI6MjA2OTAwNTA5Nn0.551cSJSE4QlPdw1iRWBMslj2gBkcEIsQHenZRq6L7rs'
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
     
     // Use a proper UUID to ensure database compatibility
