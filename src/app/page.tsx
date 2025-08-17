@@ -80,7 +80,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <Badge className="mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 border-0">
-              🚀 Trusted by 1,200+ accountants & bookkeepers
+              🚀 Trusted by small business owners & bookkeepers nationwide
             </Badge>
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
@@ -93,7 +93,7 @@ export default function LandingPage() {
             
             <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
               Reconcile 3 months of bank statements in <strong>10 minutes</strong> instead of <strong>8+ hours</strong>. 
-              AI-powered matching with 90%+ accuracy. Join accountants who've already saved <strong>20+ hours monthly</strong>.
+              AI-powered matching with 90%+ accuracy. Join small business owners & bookkeepers who've already saved <strong>20+ hours monthly</strong>.
             </p>
 
             {/* Social Proof */}
@@ -105,7 +105,7 @@ export default function LandingPage() {
                   <div className="w-8 h-8 bg-purple-500 rounded-full border-2 border-white"></div>
                   <div className="w-8 h-8 bg-orange-500 rounded-full border-2 border-white"></div>
                 </div>
-                <span>1,200+ accountants switched this month</span>
+                                 <span>Small business owners & bookkeepers switching daily</span>
               </div>
             </div>
 
@@ -169,7 +169,7 @@ export default function LandingPage() {
       <section className="py-16 bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-sm text-gray-500 mb-8">Trusted by accounting firms nationwide</p>
+                         <p className="text-sm text-gray-500 mb-8">Trusted by small businesses & bookkeepers nationwide</p>
             <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
               <div className="text-2xl font-bold text-gray-300">ACCOUNTING FIRM</div>
               <div className="text-2xl font-bold text-gray-300">BOOKKEEPING PRO</div>
@@ -292,9 +292,9 @@ export default function LandingPage() {
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
               Real Results from Real Accountants
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              See how ReconcileBook is transforming reconciliation for accounting professionals nationwide
-            </p>
+                         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+               See how ReconcileBook is transforming reconciliation for small business owners & bookkeepers nationwide
+             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -311,13 +311,13 @@ export default function LandingPage() {
               <p className="text-gray-600 mb-6">
                 "I was spending 12+ hours monthly on reconciliation. Now it takes me 2 hours. This tool has literally saved my business."
               </p>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-blue-500 rounded-full mr-4"></div>
-                <div>
-                  <div className="font-semibold text-gray-900">Sarah Chen</div>
-                  <div className="text-sm text-gray-500">CPA, Chen Accounting</div>
-                </div>
-              </div>
+                             <div className="flex items-center">
+                 <div className="w-12 h-12 bg-blue-500 rounded-full mr-4"></div>
+                 <div>
+                   <div className="font-semibold text-gray-900">Sarah Chen</div>
+                   <div className="text-sm text-gray-500">Small Business Owner, Chen Consulting</div>
+                 </div>
+               </div>
             </div>
 
             <div className="bg-white rounded-xl p-8 shadow-lg">
@@ -333,13 +333,13 @@ export default function LandingPage() {
               <p className="text-gray-600 mb-6">
                 "90% accuracy is no joke. I've caught errors that would have cost my clients thousands. This is a game-changer."
               </p>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-green-500 rounded-full mr-4"></div>
-                <div>
-                  <div className="font-semibold text-gray-900">Mike Rodriguez</div>
-                  <div className="text-sm text-gray-500">Bookkeeper, Rodriguez Financial</div>
-                </div>
-              </div>
+                             <div className="flex items-center">
+                 <div className="w-12 h-12 bg-green-500 rounded-full mr-4"></div>
+                 <div>
+                   <div className="font-semibold text-gray-900">Mike Rodriguez</div>
+                   <div className="text-sm text-gray-500">Bookkeeper, Rodriguez Financial Services</div>
+                 </div>
+               </div>
             </div>
 
             <div className="bg-white rounded-xl p-8 shadow-lg">
@@ -355,13 +355,13 @@ export default function LandingPage() {
               <p className="text-gray-600 mb-6">
                 "From 8 hours to 45 minutes. I can now focus on growing my practice instead of drowning in paperwork."
               </p>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-purple-500 rounded-full mr-4"></div>
-                <div>
-                  <div className="font-semibold text-gray-900">Lisa Thompson</div>
-                  <div className="text-sm text-gray-500">Accountant, Thompson & Associates</div>
-                </div>
-              </div>
+                             <div className="flex items-center">
+                 <div className="w-12 h-12 bg-purple-500 rounded-full mr-4"></div>
+                 <div>
+                   <div className="font-semibold text-gray-900">Lisa Thompson</div>
+                   <div className="text-sm text-gray-500">Small Business Owner, Thompson & Associates</div>
+                 </div>
+               </div>
             </div>
           </div>
         </div>
@@ -373,9 +373,9 @@ export default function LandingPage() {
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
             Ready to Stop Wasting Time on Reconciliation?
           </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join 1,200+ accountants who've already saved 20+ hours monthly. Start your free trial today.
-          </p>
+                     <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+             Join small business owners & bookkeepers who've already saved 20+ hours monthly. Start your free trial today.
+           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-10 py-6 text-xl font-semibold shadow-lg">
