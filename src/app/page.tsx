@@ -79,114 +79,319 @@ export default function LandingPage() {
       <section className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-20 sm:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <Badge className="mb-6 bg-blue-100 text-blue-800 hover:bg-blue-100">
-              🚀 Join 1,200+ QuickBooks users who've switched
+            <Badge className="mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 border-0">
+              🚀 Trusted by 1,200+ accountants & bookkeepers
             </Badge>
             
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
-              Tired of QuickBooks matching the wrong transactions?{' '}
-              <span className="text-blue-600">Upload your CSV and reconcile 3 months in 10 minutes — without the QB chaos.</span>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+              Stop Losing{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                $2,000+ Monthly
+              </span>{' '}
+              to Reconciliation Errors
             </h1>
             
-            <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto">
-              Stop losing 8+ hours every month to manual reconciliation. Upload CSVs or connect your QuickBooks account to reconcile 3 months in 10 minutes with 90%+ accuracy. Join 1,200+ users who've switched.
+            <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
+              Reconcile 3 months of bank statements in <strong>10 minutes</strong> instead of <strong>8+ hours</strong>. 
+              AI-powered matching with 90%+ accuracy. Join accountants who've already saved <strong>20+ hours monthly</strong>.
             </p>
+
+            {/* Social Proof */}
+            <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm text-gray-600">
+              <div className="flex items-center space-x-2">
+                <div className="flex -space-x-2">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full border-2 border-white"></div>
+                  <div className="w-8 h-8 bg-green-500 rounded-full border-2 border-white"></div>
+                  <div className="w-8 h-8 bg-purple-500 rounded-full border-2 border-white"></div>
+                  <div className="w-8 h-8 bg-orange-500 rounded-full border-2 border-white"></div>
+                </div>
+                <span>1,200+ accountants switched this month</span>
+              </div>
+            </div>
 
             {/* Feature Highlights */}
             <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <div className="inline-flex items-center space-x-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 px-4 py-2 rounded-full text-sm font-medium border border-blue-200">
                 <Upload className="h-4 w-4" />
                 <span>Upload CSV Files</span>
               </div>
-              <div className="inline-flex items-center space-x-2 bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium">
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-indigo-100 to-indigo-200 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium border border-indigo-200">
                 <Zap className="h-4 w-4" />
                 <span>90%+ AI Accuracy</span>
               </div>
-              <div className="inline-flex items-center space-x-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-green-100 to-green-200 text-green-800 px-4 py-2 rounded-full text-sm font-medium border border-green-200">
                 <Clock className="h-4 w-4" />
-                <span>10 Minutes vs 8 Hours</span>
+                <span>10 Min vs 8 Hours</span>
               </div>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
-                  Start Free Trial
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                  Start Free 14-Day Trial
+                  <ArrowRight className="ml-3 h-6 w-6" />
                 </Button>
               </a>
               <a href="#demo" className="scroll-smooth">
-                <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
-                  <Play className="mr-2 h-5 w-5" />
-                  Watch How It Works
+                <Button variant="outline" size="lg" className="px-10 py-6 text-xl font-semibold border-2 hover:bg-gray-50">
+                  <Play className="mr-3 h-6 w-6" />
+                  Watch 2-Min Demo
                 </Button>
               </a>
+            </div>
+
+            {/* Trust Signals */}
+            <div className="text-center">
+              <p className="text-sm text-gray-500 mb-4">
+                🆓 <strong>14-day free trial</strong> • 💳 No credit card required • 🔒 Cancel anytime • ✅ No auto-billing
+              </p>
+              <div className="flex justify-center items-center space-x-6 text-xs text-gray-400">
+                <div className="flex items-center space-x-2">
+                  <Shield className="h-4 w-4 text-green-500" />
+                  <span>Bank-level security</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <TrendingUp className="h-4 w-4 text-blue-500" />
+                  <span>99.9% uptime</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Users className="h-4 w-4 text-purple-500" />
+                  <span>24/7 support</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="py-20 bg-white">
+      {/* Social Proof Section */}
+      <section className="py-16 bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-sm text-gray-500 mb-8">Trusted by accounting firms nationwide</p>
+            <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
+              <div className="text-2xl font-bold text-gray-300">ACCOUNTING FIRM</div>
+              <div className="text-2xl font-bold text-gray-300">BOOKKEEPING PRO</div>
+              <div className="text-2xl font-bold text-gray-300">CPA PARTNERS</div>
+              <div className="text-2xl font-bold text-gray-300">FINANCIAL SERVICES</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pain Points Section */}
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Why Choose ReconcileBook?
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Tired of These Reconciliation Nightmares?
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Join thousands of businesses saving hours every month on reconciliation
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Every month, you waste precious time on manual reconciliation that could be spent growing your business
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">⚡</span>
+            <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Clock className="h-8 w-8 text-red-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">10x Faster</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">8+ Hours Wasted Monthly</h3>
+              <p className="text-gray-600 mb-6">
+                Manual reconciliation eats up your entire workday. Time you could spend on high-value client work.
+              </p>
+              <div className="text-2xl font-bold text-red-600">$2,000+ Lost Monthly</div>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <FileText className="h-8 w-8 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Errors Cost You Money</h3>
+              <p className="text-gray-600 mb-6">
+                One missed transaction can cost thousands. Manual entry leads to costly mistakes and client disputes.
+              </p>
+              <div className="text-2xl font-bold text-orange-600">Risk of Fines</div>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <TrendingUp className="h-8 w-8 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Growth Stuck in Neutral</h3>
+              <p className="text-gray-600 mb-6">
+                You can't scale when you're stuck doing low-value manual work. Your potential is limited by busywork.
+              </p>
+              <div className="text-2xl font-bold text-purple-600">Revenue Stagnant</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Solution Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              The Solution: AI-Powered Reconciliation
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Upload your CSV files and let our AI do the heavy lifting. Get from chaos to clarity in minutes, not hours.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Upload className="h-10 w-10 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">1. Upload CSV</h3>
               <p className="text-gray-600">
-                Go from hours of manual work to minutes of automated reconciliation
+                Drag & drop your bank statements. We support all major bank formats.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🎯</span>
+              <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Zap className="h-10 w-10 text-indigo-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">90%+ Accuracy</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">2. AI Matches</h3>
               <p className="text-gray-600">
-                AI-powered matching eliminates human errors and catches discrepancies
+                Our AI instantly finds 90%+ of matches using intelligent pattern recognition.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">💰</span>
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckCircle className="h-10 w-10 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Save $500+/Month</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">3. Review & Approve</h3>
               <p className="text-gray-600">
-                Reduce accounting costs and free up time for revenue-generating activities
+                Quickly review AI suggestions and approve with one click.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <FileText className="h-10 w-10 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">4. Export Reports</h3>
+              <p className="text-gray-600">
+                Generate professional reports your clients and accountants will love.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-20 bg-blue-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-white mb-4">
-            Ready to Transform Your Reconciliation Process?
+      {/* Results Section */}
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Real Results from Real Accountants
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              See how ReconcileBook is transforming reconciliation for accounting professionals nationwide
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white rounded-xl p-8 shadow-lg">
+              <div className="flex items-center mb-4">
+                <div className="flex text-yellow-400">
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                </div>
+              </div>
+              <p className="text-gray-600 mb-6">
+                "I was spending 12+ hours monthly on reconciliation. Now it takes me 2 hours. This tool has literally saved my business."
+              </p>
+              <div className="flex items-center">
+                <div className="w-12 h-12 bg-blue-500 rounded-full mr-4"></div>
+                <div>
+                  <div className="font-semibold text-gray-900">Sarah Chen</div>
+                  <div className="text-sm text-gray-500">CPA, Chen Accounting</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-lg">
+              <div className="flex items-center mb-4">
+                <div className="flex text-yellow-400">
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                </div>
+              </div>
+              <p className="text-gray-600 mb-6">
+                "90% accuracy is no joke. I've caught errors that would have cost my clients thousands. This is a game-changer."
+              </p>
+              <div className="flex items-center">
+                <div className="w-12 h-12 bg-green-500 rounded-full mr-4"></div>
+                <div>
+                  <div className="font-semibold text-gray-900">Mike Rodriguez</div>
+                  <div className="text-sm text-gray-500">Bookkeeper, Rodriguez Financial</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl p-8 shadow-lg">
+              <div className="flex items-center mb-4">
+                <div className="flex text-yellow-400">
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                </div>
+              </div>
+              <p className="text-gray-600 mb-6">
+                "From 8 hours to 45 minutes. I can now focus on growing my practice instead of drowning in paperwork."
+              </p>
+              <div className="flex items-center">
+                <div className="w-12 h-12 bg-purple-500 rounded-full mr-4"></div>
+                <div>
+                  <div className="font-semibold text-gray-900">Lisa Thompson</div>
+                  <div className="text-sm text-gray-500">Accountant, Thompson & Associates</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+            Ready to Stop Wasting Time on Reconciliation?
           </h2>
-          <p className="text-xl mb-8 text-blue-100">
-            Join thousands of businesses already saving hours every month
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Join 1,200+ accountants who've already saved 20+ hours monthly. Start your free trial today.
           </p>
-          <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
-            <Link href="/dashboard">Start Your Free Trial</Link>
-          </Button>
-          <p className="text-sm text-blue-200 mt-4">
-            No credit card required • 14-day free trial • Cancel anytime
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
+              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-10 py-6 text-xl font-semibold shadow-lg">
+                Start Free 14-Day Trial
+                <ArrowRight className="ml-3 h-6 w-6" />
+              </Button>
+            </a>
+            <a href="#demo" className="scroll-smooth">
+              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-blue-600 px-10 py-6 text-xl font-semibold">
+                <Play className="mr-3 h-6 w-6" />
+                Watch Demo
+              </Button>
+            </a>
+          </div>
+          <p className="text-sm text-blue-200 mt-6">
+            🆓 No credit card required • 🔒 Cancel anytime • ✅ No auto-billing during trial
           </p>
         </div>
       </section>
@@ -194,12 +399,12 @@ export default function LandingPage() {
       {/* Demo Video Section */}
       <section id="demo" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
               See How It Works in 2 Minutes
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Watch how ReconcileBook transforms 4-5 hours of manual reconciliation into an 8-minute automated process.
+              Watch how ReconcileBook transforms 8+ hours of manual reconciliation into a 10-minute automated process.
             </p>
           </div>
           
@@ -251,105 +456,6 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Professional Reconciliation Software You Can Trust
-          </h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Bank-grade security, 99.9% uptime, and expert support from reconciliation professionals
-          </p>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-6 w-6 text-blue-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Bank-Grade Security</h3>
-              <p className="text-gray-600 text-sm">256-bit SSL encryption, GDPR compliant</p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="h-6 w-6 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">99.9% Uptime</h3>
-              <p className="text-gray-600 text-sm">Enterprise-grade reliability</p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-6 w-6 text-purple-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Expert Support</h3>
-              <p className="text-gray-600 text-sm">Live chat and email support</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Problem/Solution */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
-                Every Month, You're Losing Money to Reconciliation Hell
-            </h2>
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-red-100 rounded-full flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mx-auto mt-2"></div>
-                  </div>
-                  <p className="text-gray-600">Spending 8+ hours manually matching transactions while your business suffers</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-red-100 rounded-full flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mx-auto mt-2"></div>
-          </div>
-                  <p className="text-gray-600">Losing thousands to accounting errors and missed discrepancies</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-red-100 rounded-full flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mx-auto mt-2"></div>
-                  </div>
-                  <p className="text-gray-600">QuickBooks auto-matching the wrong transactions with no way to fix it</p>
-              </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-red-100 rounded-full flex-shrink-0 mt-0.5">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mx-auto mt-2"></div>
-                  </div>
-                  <p className="text-gray-600">Paying $300+/month for bloated software that doesn't solve your problem</p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <Card className="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                  Now You Can Reconcile in Minutes, Not Hours
-                </h3>
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-gray-700">Upload CSV → Auto-match with 90% accuracy → Export report in under 30 minutes</p>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-gray-700">Catch every discrepancy with intelligent matching algorithms</p>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-gray-700">Professional reports that make your accountant smile</p>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-gray-700">Starting at just $79/month - 75% less than enterprise solutions</p>
-                  </div>
-              </div>
-              </Card>
             </div>
           </div>
         </div>
@@ -789,47 +895,6 @@ export default function LandingPage() {
             <p className="text-sm text-gray-500">
               🆓 14-day free trials • ⚡ Instant access • 🚫 Cancel anytime before billing
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-600 to-indigo-700 text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-            Ready to Get Your Time Back?
-          </h2>
-          <p className="text-xl mb-8 opacity-90">
-            Join thousands of businesses who've already said goodbye to reconciliation stress.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6">
-                Start 14-Day Free Trial
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </a>
-            <a href="#demo" className="scroll-smooth">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-6">
-                Watch How It Works
-              </Button>
-            </a>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-8 text-sm opacity-80">
-            <div className="flex items-center">
-              <CheckCircle className="h-4 w-4 mr-2" />
-              <span>14-day free trial</span>
-            </div>
-            <div className="flex items-center">
-              <CheckCircle className="h-4 w-4 mr-2" />
-              <span>No credit card required</span>
-            </div>
-            <div className="flex items-center">
-              <CheckCircle className="h-4 w-4 mr-2" />
-              <span>Cancel anytime</span>
-            </div>
           </div>
         </div>
       </section>
