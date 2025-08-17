@@ -84,16 +84,19 @@ export default function LandingPage() {
             </Badge>
             
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-              Stop Losing{' '}
+              It's Like Having a Bookkeeper Who Works{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                $2,000+ Monthly
+                24/7
               </span>{' '}
-              to Reconciliation Errors
+              — Without the{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">
+                $4,000/Month
+              </span>{' '}
+              Salary.
             </h1>
             
             <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
-              Connect your QuickBooks account or upload CSV files. Our AI automatically matches transactions with 90%+ accuracy. 
-              Reconcile 3 months in <strong>10 minutes</strong> instead of <strong>8+ hours</strong>. Join small business owners & bookkeepers who've already saved <strong>20+ hours monthly</strong>.
+              Connect QuickBooks once. Our AI reconciles 3 months in <strong>10 minutes</strong> with <strong>90%+ accuracy</strong> — no breaks, no errors, no stress.
             </p>
 
                         {/* Social Proof */}
