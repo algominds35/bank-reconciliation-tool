@@ -176,20 +176,20 @@ export default function LandingPage() {
                          <p className="text-sm text-gray-500 mb-8">Trusted by small businesses & bookkeepers nationwide</p>
             <div className="flex flex-wrap justify-center items-center gap-8">
               <div className="text-center">
-                <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=64&h=64&fit=crop&crop=face&auto=format" alt="Accounting Professional" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
-                <div className="text-sm text-gray-500">ACCOUNTING FIRM</div>
+                <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=64&h=64&fit=crop&crop=face&auto=format" alt="Sarah Chen" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
+                <div className="text-sm text-gray-500">Chen Consulting</div>
               </div>
               <div className="text-center">
-                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=64&h=64&fit=crop&crop=face&auto=format" alt="Bookkeeper" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
-                <div className="text-sm text-gray-500">BOOKKEEPING PRO</div>
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=64&h=64&fit=crop&crop=face&auto=format" alt="Mike Rodriguez" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
+                <div className="text-sm text-gray-500">Rodriguez Financial</div>
               </div>
               <div className="text-center">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&auto=format" alt="CPA Partner" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
-                <div className="text-sm text-gray-500">CPA PARTNERS</div>
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&auto=format" alt="Lisa Thompson" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
+                <div className="text-sm text-gray-500">Thompson & Associates</div>
               </div>
               <div className="text-center">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face&auto=format" alt="Financial Services" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
-                <div className="text-sm text-gray-500">FINANCIAL SERVICES</div>
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face&auto=format" alt="David Kim" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
+                <div className="text-sm text-gray-500">Kim Bookkeeping</div>
               </div>
             </div>
           </div>
