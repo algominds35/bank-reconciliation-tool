@@ -96,16 +96,16 @@ export default function LandingPage() {
               Reconcile 3 months in <strong>10 minutes</strong> instead of <strong>8+ hours</strong>. Join small business owners & bookkeepers who've already saved <strong>20+ hours monthly</strong>.
             </p>
 
-            {/* Social Proof */}
+                        {/* Social Proof */}
             <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm text-gray-600">
               <div className="flex items-center space-x-2">
                 <div className="flex -space-x-2">
-                  <div className="w-8 h-8 bg-blue-500 rounded-full border-2 border-white"></div>
-                  <div className="w-8 h-8 bg-green-500 rounded-full border-2 border-white"></div>
-                  <div className="w-8 h-8 bg-purple-500 rounded-full border-2 border-white"></div>
-                  <div className="w-8 h-8 bg-orange-500 rounded-full border-2 border-white"></div>
+                  <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=32&h=32&fit=crop&crop=face&auto=format" alt="Sarah Chen" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face&auto=format" alt="Mike Rodriguez" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
+                  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face&auto=format" alt="Lisa Thompson" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
+                  <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face&auto=format" alt="David Kim" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
                 </div>
-                                 <span>Small business owners & bookkeepers switching daily</span>
+                <span>Small business owners & bookkeepers switching daily</span>
               </div>
             </div>
 
@@ -174,11 +174,23 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
                          <p className="text-sm text-gray-500 mb-8">Trusted by small businesses & bookkeepers nationwide</p>
-            <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-              <div className="text-2xl font-bold text-gray-300">ACCOUNTING FIRM</div>
-              <div className="text-2xl font-bold text-gray-300">BOOKKEEPING PRO</div>
-              <div className="text-2xl font-bold text-gray-300">CPA PARTNERS</div>
-              <div className="text-2xl font-bold text-gray-300">FINANCIAL SERVICES</div>
+            <div className="flex flex-wrap justify-center items-center gap-8">
+              <div className="text-center">
+                <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=64&h=64&fit=crop&crop=face&auto=format" alt="Accounting Professional" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
+                <div className="text-sm text-gray-500">ACCOUNTING FIRM</div>
+              </div>
+              <div className="text-center">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=64&h=64&fit=crop&crop=face&auto=format" alt="Bookkeeper" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
+                <div className="text-sm text-gray-500">BOOKKEEPING PRO</div>
+              </div>
+              <div className="text-center">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&auto=format" alt="CPA Partner" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
+                <div className="text-sm text-gray-500">CPA PARTNERS</div>
+              </div>
+              <div className="text-center">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face&auto=format" alt="Financial Services" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
+                <div className="text-sm text-gray-500">FINANCIAL SERVICES</div>
+              </div>
             </div>
           </div>
         </div>
@@ -316,7 +328,7 @@ export default function LandingPage() {
                 "I was spending 12+ hours monthly on reconciliation. Now it takes me 2 hours. This tool has literally saved my business."
               </p>
                              <div className="flex items-center">
-                 <div className="w-12 h-12 bg-blue-500 rounded-full mr-4"></div>
+                 <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=48&h=48&fit=crop&crop=face&auto=format" alt="Sarah Chen" className="w-12 h-12 rounded-full mr-4 object-cover" />
                  <div>
                    <div className="font-semibold text-gray-900">Sarah Chen</div>
                    <div className="text-sm text-gray-500">Small Business Owner, Chen Consulting</div>
@@ -338,7 +350,7 @@ export default function LandingPage() {
                 "90% accuracy is no joke. I've caught errors that would have cost my clients thousands. This is a game-changer."
               </p>
                              <div className="flex items-center">
-                 <div className="w-12 h-12 bg-green-500 rounded-full mr-4"></div>
+                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face&auto=format" alt="Mike Rodriguez" className="w-12 h-12 rounded-full mr-4 object-cover" />
                  <div>
                    <div className="font-semibold text-gray-900">Mike Rodriguez</div>
                    <div className="text-sm text-gray-500">Bookkeeper, Rodriguez Financial Services</div>
@@ -360,7 +372,7 @@ export default function LandingPage() {
                 "From 8 hours to 45 minutes. I can now focus on growing my practice instead of drowning in paperwork."
               </p>
                              <div className="flex items-center">
-                 <div className="w-12 h-12 bg-purple-500 rounded-full mr-4"></div>
+                 <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=48&h=48&fit=crop&crop=face&auto=format" alt="Lisa Thompson" className="w-12 h-12 rounded-full mr-4 object-cover" />
                  <div>
                    <div className="font-semibold text-gray-900">Lisa Thompson</div>
                    <div className="text-sm text-gray-500">Small Business Owner, Thompson & Associates</div>
