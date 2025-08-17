@@ -155,11 +155,11 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Upload CSV</h3>
               <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
-                <div className="w-full h-40 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
+                <div className="w-full h-64 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
                   <img 
                     src="/images/upload-csv-screenshot.png" 
                     alt="File upload interface showing CSV selection"
-                    className="w-full h-full object-cover rounded"
+                    className="w-full h-full object-contain rounded"
                     onError={(e) => {
                       const target = e.currentTarget as HTMLImageElement;
                       const fallback = target.nextElementSibling as HTMLElement;
@@ -186,11 +186,11 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">QuickBooks Sync</h3>
               <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
-                <div className="w-full h-40 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
+                <div className="w-full h-64 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
                   <img 
                     src="/images/qb-integration-screenshot.png" 
                     alt="QuickBooks integration showing successful connection"
-                    className="w-full h-full object-cover rounded"
+                    className="w-full h-full object-contain rounded"
                     onError={(e) => {
                       const target = e.currentTarget as HTMLImageElement;
                       const fallback = target.nextElementSibling as HTMLElement;
@@ -217,11 +217,11 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Smart Matching</h3>
               <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
-                <div className="w-full h-40 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
+                <div className="w-full h-64 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
                   <img 
                     src="/images/smart-matching-screenshot.png" 
                     alt="Smart auto-matching interface showing AI suggestions"
-                    className="w-full h-full object-cover rounded"
+                    className="w-full h-full object-contain rounded"
                     onError={(e) => {
                       const target = e.currentTarget as HTMLImageElement;
                       const fallback = target.nextElementSibling as HTMLElement;
@@ -248,11 +248,11 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Review & Approve</h3>
               <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
-                <div className="w-full h-40 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
+                <div className="w-full h-64 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
                   <img 
                     src="/images/reconciliation-dashboard-screenshot.png" 
                     alt="Reconciliation dashboard with transaction status"
-                    className="w-full h-full object-cover rounded"
+                    className="w-full h-full object-contain rounded"
                     onError={(e) => {
                       const target = e.currentTarget as HTMLImageElement;
                       const fallback = target.nextElementSibling as HTMLElement;
@@ -279,11 +279,11 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">Export Reports</h3>
               <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
-                <div className="w-full h-40 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
+                <div className="w-full h-64 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
                   <img 
                     src="/images/export-report-screenshot.png" 
                     alt="Professional bank reconciliation report"
-                    className="w-full h-full object-cover rounded"
+                    className="w-full h-full object-contain rounded"
                     onError={(e) => {
                       const target = e.currentTarget as HTMLImageElement;
                       const fallback = target.nextElementSibling as HTMLElement;
