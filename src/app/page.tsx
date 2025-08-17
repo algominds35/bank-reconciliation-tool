@@ -92,8 +92,8 @@ export default function LandingPage() {
             </h1>
             
             <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
-              Reconcile 3 months of bank statements in <strong>10 minutes</strong> instead of <strong>8+ hours</strong>. 
-              AI-powered matching with 90%+ accuracy. Join small business owners & bookkeepers who've already saved <strong>20+ hours monthly</strong>.
+              Connect your QuickBooks account or upload CSV files. Our AI automatically matches transactions with 90%+ accuracy. 
+              Reconcile 3 months in <strong>10 minutes</strong> instead of <strong>8+ hours</strong>. Join small business owners & bookkeepers who've already saved <strong>20+ hours monthly</strong>.
             </p>
 
             {/* Social Proof */}
@@ -112,14 +112,18 @@ export default function LandingPage() {
             {/* Feature Highlights */}
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 px-4 py-2 rounded-full text-sm font-medium border border-blue-200">
+                <TrendingUp className="h-4 w-4" />
+                <span>QuickBooks Integration</span>
+              </div>
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-indigo-100 to-indigo-200 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium border border-indigo-200">
                 <Upload className="h-4 w-4" />
                 <span>Upload CSV Files</span>
               </div>
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-indigo-100 to-indigo-200 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium border border-indigo-200">
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-green-100 to-green-200 text-green-800 px-4 py-2 rounded-full text-sm font-medium border border-green-200">
                 <Zap className="h-4 w-4" />
                 <span>90%+ AI Accuracy</span>
               </div>
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-green-100 to-green-200 text-green-800 px-4 py-2 rounded-full text-sm font-medium border border-green-200">
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-100 to-orange-200 text-orange-800 px-4 py-2 rounded-full text-sm font-medium border border-orange-200">
                 <Clock className="h-4 w-4" />
                 <span>10 Min vs 8 Hours</span>
               </div>
@@ -143,9 +147,9 @@ export default function LandingPage() {
 
             {/* Trust Signals */}
             <div className="text-center">
-              <p className="text-sm text-gray-500 mb-4">
-                🆓 <strong>14-day free trial</strong> • 💳 No credit card required • 🔒 Cancel anytime • ✅ No auto-billing
-              </p>
+                           <p className="text-sm text-gray-500 mb-4">
+               🆓 <strong>14-day free trial</strong> • 💳 Credit card required • 🔒 Cancel anytime • ✅ No auto-billing
+             </p>
               <div className="flex justify-center items-center space-x-6 text-xs text-gray-400">
                 <div className="flex items-center space-x-2">
                   <Shield className="h-4 w-4 text-green-500" />
@@ -234,51 +238,51 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              The Solution: AI-Powered Reconciliation
+              The Solution: QuickBooks Integration + AI-Powered Matching
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Upload your CSV files and let our AI do the heavy lifting. Get from chaos to clarity in minutes, not hours.
+              Connect your QuickBooks account for instant sync, or upload CSV files manually. Our AI does the heavy lifting - you get from chaos to clarity in minutes, not hours.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Upload className="h-10 w-10 text-blue-600" />
+                <TrendingUp className="h-10 w-10 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">1. Upload CSV</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">1. Connect QuickBooks</h3>
               <p className="text-gray-600">
-                Drag & drop your bank statements. We support all major bank formats.
+                One-click QuickBooks integration. We automatically sync your transactions.
               </p>
             </div>
 
             <div className="text-center">
               <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Zap className="h-10 w-10 text-indigo-600" />
+                <Upload className="h-10 w-10 text-indigo-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">2. AI Matches</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">2. Upload CSV (Optional)</h3>
+              <p className="text-gray-600">
+                Or upload bank statements manually. We support all major bank formats.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Zap className="h-10 w-10 text-green-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">3. AI Matches</h3>
               <p className="text-gray-600">
                 Our AI instantly finds 90%+ of matches using intelligent pattern recognition.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle className="h-10 w-10 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">3. Review & Approve</h3>
-              <p className="text-gray-600">
-                Quickly review AI suggestions and approve with one click.
-              </p>
-            </div>
-
-            <div className="text-center">
               <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <FileText className="h-10 w-10 text-orange-600" />
+                <CheckCircle className="h-10 w-10 text-orange-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">4. Export Reports</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">4. Review & Export</h3>
               <p className="text-gray-600">
-                Generate professional reports your clients and accountants will love.
+                Review AI suggestions, approve matches, and export professional reports.
               </p>
             </div>
           </div>
@@ -390,9 +394,9 @@ export default function LandingPage() {
               </Button>
             </a>
           </div>
-          <p className="text-sm text-blue-200 mt-6">
-            🆓 No credit card required • 🔒 Cancel anytime • ✅ No auto-billing during trial
-          </p>
+                     <p className="text-sm text-blue-200 mt-6">
+             💳 Credit card required • 🔒 Cancel anytime • ✅ No auto-billing during trial
+           </p>
         </div>
       </section>
 
