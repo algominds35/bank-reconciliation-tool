@@ -143,7 +143,7 @@ export default function LandingPage() {
               <a href="#demo" className="scroll-smooth">
                 <Button variant="outline" size="lg" className="px-10 py-6 text-xl font-semibold border-2 hover:bg-gray-50">
                   <Play className="mr-3 h-6 w-6" />
-                  Watch 2-Min Demo
+                  See How It Works
                 </Button>
               </a>
             </div>
@@ -403,10 +403,10 @@ export default function LandingPage() {
               </Button>
             </a>
             <a href="#demo" className="scroll-smooth">
-              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-blue-600 px-10 py-6 text-xl font-semibold">
-                <Play className="mr-3 h-6 w-6" />
-                Watch Demo
-              </Button>
+                              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-blue-600 px-10 py-6 text-xl font-semibold">
+                  <Play className="mr-3 h-6 w-6" />
+                  See How It Works
+                </Button>
             </a>
           </div>
                      <p className="text-sm text-blue-200 mt-6">
