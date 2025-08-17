@@ -98,217 +98,31 @@ export default function LandingPage() {
                 <Upload className="h-4 w-4" />
                 <span>Upload CSV Files</span>
               </div>
-              <div className="inline-flex items-center space-x-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
-                <TrendingUp className="h-4 w-4" />
-                <span>QuickBooks Integration</span>
-              </div>
-              <div className="inline-flex items-center space-x-2 bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium">
+              <div className="inline-flex items-center space-x-2 bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium">
                 <Zap className="h-4 w-4" />
-                <span>90%+ Accuracy</span>
+                <span>90%+ AI Accuracy</span>
+              </div>
+              <div className="inline-flex items-center space-x-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+                <Clock className="h-4 w-4" />
+                <span>10 Minutes vs 8 Hours</span>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="text-lg px-8 py-6">
-                  Start 14-Day Free Trial
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
+                  Start Free Trial
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </a>
-              <a href="#pricing" className="scroll-smooth">
-                <Button variant="outline" size="lg" className="text-lg px-8 py-6">
-                  See Pricing
-                </Button>
-              </a>
               <a href="#demo" className="scroll-smooth">
-                <Button variant="outline" size="lg" className="text-lg px-8 py-6">
+                <Button variant="outline" size="lg" className="px-8 py-4 text-lg">
                   <Play className="mr-2 h-5 w-5" />
                   Watch How It Works
                 </Button>
               </a>
             </div>
-
-            <p className="text-sm text-gray-500">
-              🆓 14-day free trial • 💳 Credit card required • 🔒 Cancel anytime • ✅ No auto-billing during trial
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              How It Works
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Get from CSV upload to reconciled accounts in just 5 simple steps
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
-            {/* Step 1: Upload CSV */}
-            <div className="text-center">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">1</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Upload CSV</h3>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
-                <div className="w-full h-64 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
-                  <img 
-                    src="/images/upload-csv-screenshot.png" 
-                    alt="File upload interface showing CSV selection"
-                    className="w-full h-full object-contain rounded"
-                    onError={(e) => {
-                      const target = e.currentTarget as HTMLImageElement;
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      target.style.display = 'none';
-                      fallback.style.display = 'flex';
-                    }}
-                  />
-                  <div className="text-center hidden">
-                    <div className="text-4xl mb-2">📁</div>
-                    <p className="text-sm text-gray-500">File Upload Interface</p>
-                    <p className="text-xs text-gray-400">Select your bank CSV</p>
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm">
-                Upload your bank or bookkeeping CSV file in seconds — no manual entry
-              </p>
-            </div>
-
-            {/* Step 2: QuickBooks Integration */}
-            <div className="text-center">
-              <div className="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-indigo-600">2</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">QuickBooks Sync</h3>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
-                <div className="w-full h-64 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
-                  <img 
-                    src="/images/qb-integration-screenshot.png" 
-                    alt="QuickBooks integration showing successful connection"
-                    className="w-full h-full object-contain rounded"
-                    onError={(e) => {
-                      const target = e.currentTarget as HTMLImageElement;
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      target.style.display = 'none';
-                      fallback.style.display = 'flex';
-                    }}
-                  />
-                  <div className="text-center hidden">
-                    <div className="text-4xl mb-2">🔗</div>
-                    <p className="text-sm text-gray-500">QuickBooks Connected</p>
-                    <p className="text-xs text-gray-400">Sync completed successfully</p>
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm">
-                Connect QuickBooks for automatic transaction sync — no CSV uploads needed
-              </p>
-            </div>
-
-            {/* Step 3: Smart Matching */}
-            <div className="text-center">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-green-600">3</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Smart Matching</h3>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
-                <div className="w-full h-64 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
-                  <img 
-                    src="/images/smart-matching-screenshot.png" 
-                    alt="Smart auto-matching interface showing AI suggestions"
-                    className="w-full h-full object-contain rounded"
-                    onError={(e) => {
-                      const target = e.currentTarget as HTMLImageElement;
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      target.style.display = 'none';
-                      fallback.style.display = 'flex';
-                    }}
-                  />
-                  <div className="text-center hidden">
-                    <div className="text-4xl mb-2">🔍</div>
-                    <p className="text-sm text-gray-500">AI Matching Interface</p>
-                    <p className="text-xs text-gray-400">90%+ accuracy</p>
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm">
-                AI catches 90%+ of matches instantly with intelligent pattern recognition
-              </p>
-            </div>
-
-            {/* Step 4: Review & Approve */}
-            <div className="text-center">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-purple-600">4</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Review & Approve</h3>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
-                <div className="w-full h-64 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
-                  <img 
-                    src="/images/reconciliation-dashboard-screenshot.png" 
-                    alt="Reconciliation dashboard with transaction status"
-                    className="w-full h-full object-contain rounded"
-                    onError={(e) => {
-                      const target = e.currentTarget as HTMLImageElement;
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      target.style.display = 'none';
-                      fallback.style.display = 'flex';
-                    }}
-                  />
-                  <div className="text-center hidden">
-                    <div className="text-4xl mb-2">✅</div>
-                    <p className="text-sm text-gray-500">Reconciliation Dashboard</p>
-                    <p className="text-xs text-gray-400">Review & approve matches</p>
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm">
-                Quickly review matches and approve with one click
-              </p>
-            </div>
-
-            {/* Step 5: Export Reports */}
-            <div className="text-center">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-orange-600">5</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">Export Reports</h3>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-2 border-gray-200">
-                <div className="w-full h-64 bg-gray-50 rounded flex items-center justify-center overflow-hidden">
-                  <img 
-                    src="/images/export-report-screenshot.png" 
-                    alt="Professional bank reconciliation report"
-                    className="w-full h-full object-contain rounded"
-                    onError={(e) => {
-                      const target = e.currentTarget as HTMLImageElement;
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      target.style.display = 'none';
-                      fallback.style.display = 'flex';
-                    }}
-                  />
-                  <div className="text-center hidden">
-                    <div className="text-4xl mb-2">📊</div>
-                    <p className="text-sm text-gray-500">Professional Reports</p>
-                    <p className="text-xs text-gray-400">PDF/CSV export</p>
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm">
-                Export professional reports your accountant will love
-              </p>
-            </div>
-          </div>
-
-          {/* CTA Button */}
-          <div className="text-center mt-12">
-            <Button size="lg" className="text-lg px-8 py-4">
-              <Link href="/dashboard">Try It Free Now</Link>
-            </Button>
           </div>
         </div>
       </section>
