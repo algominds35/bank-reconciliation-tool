@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { 
   CheckCircle, 
   Zap, 
@@ -89,7 +90,8 @@ const pricingPlans = [
       "Email support",
       "Standard reports"
     ],
-    popular: false
+    popular: false,
+    stripeLink: "https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a"
   },
   {
     name: "Pro",
@@ -104,7 +106,8 @@ const pricingPlans = [
       "Advanced analytics",
       "Custom rules & automation"
     ],
-    popular: true
+    popular: true,
+    stripeLink: "https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b"
   },
   {
     name: "Enterprise",
@@ -120,7 +123,8 @@ const pricingPlans = [
       "Custom integrations",
       "On-premise deployment"
     ],
-    popular: false
+    popular: false,
+    stripeLink: "mailto:alex@usealgomind.com?subject=Enterprise%20Plan%20Inquiry"
   }
 ];
 
@@ -147,10 +151,19 @@ export default function HomePage() {
               <a href="#demo" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-medium">Demo</a>
             </nav>
 
-            {/* CTA Button */}
-            <Button className="bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
-              Start Free Trial
-            </Button>
+            {/* Right Side Buttons */}
+            <div className="flex items-center space-x-4">
+              <Link href="/auth/login">
+                <Button variant="ghost" className="text-neutral-600 hover:text-neutral-900 text-sm font-medium">
+                  Log in
+                </Button>
+              </Link>
+              <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
+                <Button className="bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
+                  Start Free Trial
+                </Button>
+              </a>
+            </div>
           </div>
         </div>
       </header>
@@ -188,14 +201,18 @@ export default function HomePage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-              <Button className="bg-neutral-900 hover:bg-neutral-800 text-white px-8 py-4 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 font-medium">
-                Start Free Trial
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-              <Button variant="outline" className="border-2 border-neutral-200 text-neutral-700 px-8 py-4 text-lg rounded-lg hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-200 font-medium">
-                <Play className="mr-2 w-5 h-5" />
-                Watch Demo
-              </Button>
+              <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
+                <Button className="bg-neutral-900 hover:bg-neutral-800 text-white px-8 py-4 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 font-medium">
+                  Start Free Trial
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </a>
+              <Link href="/auth/login">
+                <Button variant="outline" className="border-2 border-neutral-200 text-neutral-700 px-8 py-4 text-lg rounded-lg hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-200 font-medium">
+                  <Play className="mr-2 w-5 h-5" />
+                  Log In
+                </Button>
+              </Link>
             </div>
 
             {/* Trust indicators */}
@@ -541,10 +558,19 @@ export default function HomePage() {
                 to automate your entire financial workflow. See real examples of AI matching, automated 
                 reminders, and seamless QuickBooks integration.
               </p>
-              <Button className="bg-white text-neutral-900 hover:bg-neutral-100 px-8 py-3 text-lg rounded-lg font-medium transition-all duration-200">
-                <Play className="mr-2 w-5 h-5" />
-                Watch Full Demo
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/auth/login">
+                  <Button className="bg-white text-neutral-900 hover:bg-gray-100 px-8 py-3 text-lg rounded-lg font-medium transition-all duration-200">
+                    <Play className="mr-2 w-5 h-5" />
+                    Log In to Demo
+                  </Button>
+                </Link>
+                <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-neutral-900 px-8 py-3 text-lg rounded-lg font-medium transition-all duration-200">
+                    Start Free Trial
+                  </Button>
+                </a>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -659,15 +685,17 @@ export default function HomePage() {
                         </li>
                       ))}
                     </ul>
-                    <Button 
-                      className={`w-full py-3 rounded-lg font-medium ${
-                        plan.popular
-                          ? 'bg-neutral-900 hover:bg-neutral-800 text-white'
-                          : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-900'
-                      }`}
-                    >
-                      {plan.popular ? 'Start Free Trial' : 'Get Started'}
-                    </Button>
+                    <a href={plan.stripeLink} target="_blank" rel="noopener noreferrer">
+                      <Button 
+                        className={`w-full py-3 rounded-lg font-medium ${
+                          plan.popular
+                            ? 'bg-neutral-900 hover:bg-neutral-800 text-white'
+                            : 'bg-neutral-100 hover:bg-neutral-200 text-neutral-900'
+                        }`}
+                      >
+                        {plan.popular ? 'Start Free Trial' : plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}
+                      </Button>
+                    </a>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -677,7 +705,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Banner */}
-      <section className="py-24 bg-neutral-900">
+      <section className="py-24 bg-gradient-to-r from-neutral-900 to-neutral-800">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -688,17 +716,21 @@ export default function HomePage() {
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-8 tracking-tight">
               Ready to Transform Your Reconciliation?
             </h2>
-            <p className="text-xl text-neutral-300 max-w-3xl mx-auto mb-12 leading-relaxed">
+            <p className="text-xl text-neutral-300 max-w-3xl mx-auto mb-12">
               Join thousands of businesses saving hours every month on bank reconciliation. 
               Start your free trial today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-white text-neutral-900 hover:bg-neutral-100 px-8 py-4 text-lg rounded-lg shadow-lg font-medium transition-all duration-200">
-                Start Free Trial
-              </Button>
-              <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-neutral-900 px-8 py-4 text-lg rounded-lg font-medium transition-all duration-200">
-                Schedule Demo
-              </Button>
+              <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
+                <Button className="bg-white text-neutral-900 hover:bg-gray-100 px-8 py-4 text-lg rounded-lg shadow-lg font-medium transition-all duration-200">
+                  Start Free Trial
+                </Button>
+              </a>
+              <Link href="/auth/login">
+                <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-neutral-900 px-8 py-4 text-lg rounded-lg font-medium transition-all duration-200">
+                  Log In
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -723,30 +755,28 @@ export default function HomePage() {
             <div>
               <h3 className="font-semibold mb-4 text-neutral-900">Product</h3>
               <ul className="space-y-2 text-neutral-600 text-sm">
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">API</a></li>
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">Integrations</a></li>
+                <li><a href="#features" className="hover:text-neutral-900 transition-colors">Features</a></li>
+                <li><a href="#pricing" className="hover:text-neutral-900 transition-colors">Pricing</a></li>
+                <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Demo</a></li>
+                <li><a href="/auth/login" className="hover:text-neutral-900 transition-colors">Log In</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4 text-neutral-900">Support</h3>
               <ul className="space-y-2 text-neutral-600 text-sm">
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">Contact Us</a></li>
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">Status</a></li>
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">Documentation</a></li>
+                <li><a href="mailto:alex@usealgomind.com" className="hover:text-neutral-900 transition-colors">Contact Support</a></li>
+                <li><a href="/auth/login" className="hover:text-neutral-900 transition-colors">Help Center</a></li>
+                <li><a href="/auth/login" className="hover:text-neutral-900 transition-colors">Documentation</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4 text-neutral-900">Company</h3>
               <ul className="space-y-2 text-neutral-600 text-sm">
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-neutral-900 transition-colors">Legal</a></li>
+                <li><a href="mailto:alex@usealgomind.com" className="hover:text-neutral-900 transition-colors">Contact Us</a></li>
+                <li><a href="/auth/login" className="hover:text-neutral-900 transition-colors">About</a></li>
+                <li><a href="/auth/login" className="hover:text-neutral-900 transition-colors">Blog</a></li>
               </ul>
             </div>
           </div>
@@ -756,8 +786,8 @@ export default function HomePage() {
               © 2024 ReconcilePro. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">Privacy Policy</a>
-              <a href="#" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">Terms of Service</a>
+              <a href="/auth/login" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">Privacy Policy</a>
+              <a href="/auth/login" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">Terms of Service</a>
             </div>
           </div>
         </div>
