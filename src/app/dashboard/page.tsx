@@ -40,8 +40,11 @@ export default function Dashboard() {
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([])
+  const [invoices, setInvoices] = useState<any[]>([])
   const [selectedTransactions, setSelectedTransactions] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
+  
+
   const [uploading, setUploading] = useState(false)
   const [filter, setFilter] = useState<'all' | 'reconciled' | 'unreconciled'>('all')
   const [transactionTypeFilter, setTransactionTypeFilter] = useState<'all' | 'bank' | 'bookkeeping' | 'quickbooks'>('all')
@@ -390,6 +393,38 @@ export default function Dashboard() {
       fetchTransactions()
     } catch (error) {
       console.error('Error matching transactions:', error)
+    }
+  }
+
+  const syncInvoices = async () => {
+    if (!qboStatus.connected) {
+      alert('Please connect your QuickBooks account first')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const response = await fetch('/api/qbo/invoices/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: user?.id,
+          realm_id: qboStatus.realmId
+        })
+      })
+
+      const result = await response.json()
+      if (result.success) {
+        alert(`Successfully synced ${result.invoices_processed} invoices and ${result.clients_processed} clients!`)
+        // TODO: Refresh invoice data
+      } else {
+        alert(`Sync failed: ${result.message}`)
+      }
+    } catch (error) {
+      console.error('Invoice sync failed:', error)
+      alert('Failed to sync invoices. Please try again.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -903,9 +938,10 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="transactions">All Transactions</TabsTrigger>
             <TabsTrigger value="matching">Smart Matching</TabsTrigger>
+            <TabsTrigger value="collections">Invoice Collections</TabsTrigger>
           </TabsList>
 
           <TabsContent value="transactions" className="space-y-6">
@@ -1194,6 +1230,91 @@ export default function Dashboard() {
               onMatch={handleMatch}
               loading={false}
             />
+          </TabsContent>
+
+          <TabsContent value="collections" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <DollarSign className="h-5 w-5 text-green-600" />
+                  <span>Invoice Collections</span>
+                </CardTitle>
+                <CardDescription>
+                  Automatically manage overdue invoices and send professional payment reminders
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Quick Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <div className="text-2xl font-bold text-blue-600">0</div>
+                    <div className="text-sm text-blue-600">Total Invoices</div>
+                  </div>
+                  <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <div className="text-2xl font-bold text-red-600">0</div>
+                    <div className="text-sm text-red-600">Overdue</div>
+                  </div>
+                  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <div className="text-2xl font-bold text-green-600">0</div>
+                    <div className="text-sm text-green-600">Active Campaigns</div>
+                  </div>
+                  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                    <div className="text-2xl font-bold text-purple-600">0%</div>
+                    <div className="text-sm text-purple-600">Collection Rate</div>
+                  </div>
+                </div>
+
+                {/* Sync Section */}
+                {qboStatus.connected ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">
+                          QuickBooks Invoice Sync
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Sync your overdue invoices from QuickBooks and start collecting payments automatically.
+                        </p>
+                      </div>
+                      <Button 
+                        onClick={syncInvoices}
+                        disabled={loading}
+                        className="bg-green-600 hover:bg-green-700 text-white"
+                      >
+                        {loading ? 'Syncing...' : 'Sync Invoices'}
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <div className="w-8 h-8 bg-gray-400 rounded-lg flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">QB</span>
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">Connect QuickBooks</h3>
+                    <p className="text-gray-500 mb-4">
+                      Connect your QuickBooks account to automatically sync invoices and start collecting overdue payments.
+                    </p>
+                    <Link href="/settings/qbo">
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                        Connect QuickBooks
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+
+                {/* Invoice List Placeholder */}
+                <div className="border rounded-lg">
+                  <div className="p-4 border-b bg-gray-50">
+                    <h3 className="font-medium">Overdue Invoices</h3>
+                  </div>
+                  <div className="p-8 text-center text-gray-500">
+                    <p>No overdue invoices found. Sync with QuickBooks to get started.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>
