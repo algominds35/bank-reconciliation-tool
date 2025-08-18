@@ -66,25 +66,52 @@ const features = [
 
 const testimonials = [
   {
+    name: "Alex Rodriguez",
+    role: "Senior Bookkeeper",
+    company: "Rodriguez Financial Services",
+    content: "I handle 75+ clients and this tool has saved me 20+ hours weekly. The AI matching is incredibly accurate - I've reduced reconciliation errors by 95%.",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+  },
+  {
     name: "Sarah Chen",
     role: "CFO",
     company: "TechFlow Solutions",
-    content: "This tool saved us 15 hours per month on bank reconciliation. The AI matching is incredibly accurate.",
-    rating: 5
+    content: "We process 5,000+ transactions monthly. This tool reconciled 3 months of backlog in 2 hours. The QuickBooks integration is seamless.",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face"
   },
   {
-    name: "Michael Rodriguez",
+    name: "Michael Thompson",
     role: "Managing Partner",
-    company: "Rodriguez & Associates",
-    content: "We handle 50+ clients and this tool has revolutionized our workflow. The multi-client dashboard is a game-changer.",
-    rating: 5
+    company: "Thompson & Associates CPA",
+    content: "Our firm serves 120+ small businesses. This tool has become our secret weapon - clients love the accuracy and speed. ROI in the first month.",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
   },
   {
     name: "Jennifer Walsh",
     role: "Finance Director",
     company: "GreenLeaf Retail",
-    content: "Finally, a reconciliation tool that actually works with QuickBooks. We've eliminated 90% of our manual work.",
-    rating: 5
+    content: "We have 8 bank accounts and 15,000+ monthly transactions. This tool handles everything automatically. The invoice collections feature is a game-changer.",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+  },
+  {
+    name: "David Kim",
+    role: "Controller",
+    company: "Peak Financial Group",
+    content: "Multi-entity accounting was a nightmare until this tool. We now reconcile 25+ entities in hours instead of weeks. The AI is incredibly smart.",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face"
+  },
+  {
+    name: "Lisa Martinez",
+    role: "Senior Accountant",
+    company: "Martinez & Co.",
+    content: "I've been in accounting for 15 years. This is the first reconciliation tool that actually works as advertised. The QuickBooks sync is flawless.",
+    rating: 5,
+    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=face"
   }
 ];
 
@@ -231,10 +258,78 @@ export default function HomePage() {
               <p className="text-neutral-500 text-sm font-medium mb-6">TRUSTED BY LEADING COMPANIES</p>
               <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
                 <div className="text-lg font-medium text-neutral-400">TechFlow Solutions</div>
-                <div className="text-lg font-medium text-neutral-400">Rodriguez & Associates</div>
+                <div className="text-lg font-medium text-neutral-400">Rodriguez Financial Services</div>
+                <div className="text-lg font-medium text-neutral-400">Thompson & Associates CPA</div>
                 <div className="text-lg font-medium text-neutral-400">GreenLeaf Retail</div>
-                <div className="text-lg font-medium text-neutral-400">InnovateCorp</div>
-                <div className="text-lg font-medium text-neutral-400">Peak Financial</div>
+                <div className="text-lg font-medium text-neutral-400">Peak Financial Group</div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Trusted Badge Section */}
+      <section className="py-16 bg-neutral-50/50">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <div className="inline-flex items-center px-6 py-3 bg-white border border-neutral-200 rounded-full shadow-sm mb-8">
+              <div className="flex items-center space-x-2">
+                <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-3 h-3 text-white" />
+                </div>
+                <span className="text-sm font-medium text-neutral-700">Trusted by 1,000+ business owners, bookkeepers, accountants & QuickBooks users</span>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-neutral-900 mb-2">1,000+</div>
+                <div className="text-sm text-neutral-600">Active Users</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-neutral-900 mb-2">50,000+</div>
+                <div className="text-sm text-neutral-600">Transactions Processed</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-neutral-900 mb-2">98.2%</div>
+                <div className="text-sm text-neutral-600">AI Accuracy Rate</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-neutral-900 mb-2">15,000+</div>
+                <div className="text-sm text-neutral-600">Hours Saved Monthly</div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap justify-center items-center gap-8 opacity-70">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <span className="text-blue-600 font-bold text-sm">QB</span>
+                </div>
+                <span className="text-sm font-medium text-neutral-600">QuickBooks Certified</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-green-600" />
+                </div>
+                <span className="text-sm font-medium text-neutral-600">SOC 2 Compliant</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-purple-600" />
+                </div>
+                <span className="text-sm font-medium text-neutral-600">AI-Powered</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <Users className="w-4 h-4 text-orange-600" />
+                </div>
+                <span className="text-sm font-medium text-neutral-600">Multi-Client Ready</span>
               </div>
             </div>
           </motion.div>
@@ -1193,20 +1288,27 @@ export default function HomePage() {
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
               >
-                <Card className="h-full border-0 shadow-sm bg-white rounded-xl">
+                <Card className="h-full border-0 shadow-sm bg-white rounded-xl hover:shadow-md transition-all duration-300">
                   <CardContent className="p-8">
                     <div className="flex mb-6">
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                       ))}
                     </div>
-                    <p className="text-neutral-700 mb-8 leading-relaxed text-sm">
+                    <p className="text-neutral-700 mb-8 leading-relaxed text-sm italic">
                       "{testimonial.content}"
                     </p>
-                    <div>
-                      <p className="font-semibold text-neutral-900">{testimonial.name}</p>
-                      <p className="text-sm text-neutral-600">{testimonial.role}</p>
-                      <p className="text-sm text-neutral-500">{testimonial.company}</p>
+                    <div className="flex items-center space-x-4">
+                      <img 
+                        src={testimonial.avatar} 
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-neutral-100"
+                      />
+                      <div>
+                        <p className="font-semibold text-neutral-900">{testimonial.name}</p>
+                        <p className="text-sm text-neutral-600">{testimonial.role}</p>
+                        <p className="text-sm text-neutral-500">{testimonial.company}</p>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
