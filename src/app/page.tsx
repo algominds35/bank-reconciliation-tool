@@ -1029,6 +1029,120 @@ export default function HomePage() {
             </div>
           </motion.div>
 
+          {/* Export Report Example */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            viewport={{ once: true }}
+            className="mb-24"
+          >
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-neutral-900 mb-4">
+                📄 Export & Reporting
+              </h3>
+              <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
+                Generate professional reports and export data in multiple formats for your team and clients.
+              </p>
+            </div>
+
+            {/* Export Report Mockup */}
+            <div className="bg-white border border-neutral-200 rounded-2xl shadow-xl p-8 max-w-6xl mx-auto">
+              {/* Report Header */}
+              <div className="text-center mb-8 pb-6 border-b border-neutral-200">
+                <h4 className="text-3xl font-bold text-neutral-900 mb-2">Bank Reconciliation Report</h4>
+                <div className="text-sm text-neutral-600 space-y-1">
+                  <p>Export Date: 8/17/2025</p>
+                  <p>Account: alex@usealgomind.com</p>
+                  <p>Total Reconciled Transactions: 6</p>
+                </div>
+              </div>
+
+              {/* Report Table */}
+              <div className="overflow-hidden border border-neutral-200 rounded-lg mb-8">
+                <table className="w-full">
+                  <thead className="bg-blue-600">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Date</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Description</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Amount</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Type</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Group</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-neutral-200">
+                    <tr className="bg-neutral-50">
+                      <td className="px-4 py-3 text-sm text-neutral-900">1/30/2024</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Late Fee Charge</td>
+                      <td className="px-4 py-3 text-sm font-medium text-red-600">$-25.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Bank</td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">62ae00</td>
+                    </tr>
+                    <tr className="bg-white">
+                      <td className="px-4 py-3 text-sm text-neutral-900">1/29/2024</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Client Refund</td>
+                      <td className="px-4 py-3 text-sm font-medium text-red-600">$-150.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Bank</td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">62ae00</td>
+                    </tr>
+                    <tr className="bg-neutral-50">
+                      <td className="px-4 py-3 text-sm text-neutral-900">1/28/2024</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Phone Bill</td>
+                      <td className="px-4 py-3 text-sm font-medium text-red-600">$-65.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Bank</td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">62ae00</td>
+                    </tr>
+                    <tr className="bg-white">
+                      <td className="px-4 py-3 text-sm text-neutral-900">1/27/2024</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Gas Station</td>
+                      <td className="px-4 py-3 text-sm font-medium text-red-600">$-45.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Bank</td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">62ae00</td>
+                    </tr>
+                    <tr className="bg-neutral-50">
+                      <td className="px-4 py-3 text-sm text-neutral-900">1/26/2024</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Client Payment - DEF Inc</td>
+                      <td className="px-4 py-3 text-sm font-medium text-green-600">$3200.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Bank</td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">62ae00</td>
+                    </tr>
+                    <tr className="bg-white">
+                      <td className="px-4 py-3 text-sm text-neutral-900">1/25/2024</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Freelancer Payment - Design Work</td>
+                      <td className="px-4 py-3 text-sm font-medium text-red-600">$-500.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Bank</td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">62ae00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Report Summary */}
+              <div className="text-center">
+                <div className="text-2xl font-bold text-neutral-900">Total Amount: $2415.00</div>
+              </div>
+
+              {/* Export Options */}
+              <div className="mt-8 pt-6 border-t border-neutral-200">
+                <h5 className="text-lg font-semibold text-neutral-900 mb-4 text-center">Export Options</h5>
+                <div className="flex justify-center space-x-4">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3">
+                    <Download className="w-4 h-4 mr-2" />
+                    Download PDF
+                  </Button>
+                  <Button variant="outline" className="border-green-200 text-green-600 hover:bg-green-50 px-6 py-3">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Export CSV
+                  </Button>
+                  <Button variant="outline" className="border-purple-200 text-purple-600 hover:bg-purple-50 px-6 py-3">
+                    <BarChart3 className="w-4 h-4 mr-2" />
+                    Excel Report
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
           {/* Call to Action */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
