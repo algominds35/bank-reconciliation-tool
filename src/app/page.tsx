@@ -94,9 +94,12 @@ export default function LandingPage() {
               </span>{' '}
               Salary.
             </h1>
+            <p className="text-lg sm:text-xl text-gray-600 mb-4 max-w-3xl mx-auto">
+              <span className="font-semibold">Two powerful tools in one platform:</span> Bank reconciliation that takes minutes, not hours. Plus automated payment collection that gets you paid 40% faster.
+            </p>
             
             <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
-              Connect QuickBooks once. Our AI reconciles 3 months in <strong>10 minutes</strong> with <strong>90%+ accuracy</strong> — no breaks, no errors, no stress.
+              Connect QuickBooks once. Our AI reconciles 3 months in <strong>10 minutes</strong> with <strong>90%+ accuracy</strong> — no breaks, no errors, no stress. <strong>Plus, automatically collect overdue payments with our new Invoice Collections Tool.</strong>
             </p>
 
                         {/* Social Proof */}
@@ -129,6 +132,10 @@ export default function LandingPage() {
               <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-100 to-orange-200 text-orange-800 px-4 py-2 rounded-full text-sm font-medium border border-orange-200">
                 <Clock className="h-4 w-4" />
                 <span>10 Min vs 8 Hours</span>
+              </div>
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 px-4 py-2 rounded-full text-sm font-medium border border-purple-200">
+                <span className="text-lg">💰</span>
+                <span>Auto Payment Collection</span>
               </div>
             </div>
 
@@ -712,7 +719,169 @@ export default function LandingPage() {
               </CardContent>
             </Card>
           </div>
+        </div>
+      </section>
+
+      {/* NEW: Invoice Collections Tool Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Stop Chasing Payments. Start Collecting Them.
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Our new Invoice Collections Tool automatically sends professional payment reminders, so you get paid 40% faster without awkward conversations.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+            {/* Left: Problem */}
+            <div className="space-y-6">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                  <span className="text-2xl">💸</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900">The Payment Collection Nightmare</h3>
+                  <p className="text-gray-600">Every business owner's biggest pain point</p>
+                </div>
               </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">14 hours weekly wasted chasing payments</div>
+                    <div className="text-sm text-gray-600">Time you could spend growing your business</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">55% of invoices paid late</div>
+                    <div className="text-sm text-gray-600">Costing businesses $6K-30K annually</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Awkward money conversations</div>
+                    <div className="text-sm text-gray-600">Damaging client relationships</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Cash flow constantly stressed</div>
+                    <div className="text-sm text-gray-600">Preventing business growth</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Solution */}
+            <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8 border border-green-200">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🚀</span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Automated Payment Collection</h3>
+                <p className="text-gray-600">Professional reminders that actually work</p>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">QuickBooks integration</div>
+                    <div className="text-sm text-gray-600">Automatically syncs overdue invoices</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Smart email escalation</div>
+                    <div className="text-sm text-gray-600">Day 7: Friendly, Day 14: Firm, Day 21+: Final</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Professional templates</div>
+                    <div className="text-sm text-gray-600">Preserves client relationships</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                  <div>
+                    <div className="font-semibold text-gray-900">40% faster payments</div>
+                    <div className="text-sm text-gray-600">Proven results from real businesses</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* How It Works */}
+          <div className="text-center mb-12">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">How Invoice Collections Works</h3>
+            <p className="text-lg text-gray-600">From overdue invoice to payment in 3 simple steps</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl">📊</span>
+              </div>
+              <h4 className="text-xl font-semibold text-gray-900 mb-3">1. Sync QuickBooks</h4>
+              <p className="text-gray-600">
+                Connect once, automatically import all overdue invoices and client contact info.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl">📧</span>
+              </div>
+              <h4 className="text-xl font-semibold text-gray-900 mb-3">2. Automated Emails</h4>
+              <p className="text-gray-600">
+                Professional reminders sent at optimal times with smart escalation.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl">💰</span>
+              </div>
+              <h4 className="text-xl font-semibold text-gray-900 mb-3">3. Get Paid Faster</h4>
+              <p className="text-gray-600">
+                Track payments, stop campaigns automatically, and improve cash flow.
+              </p>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="text-center">
+            <p className="text-lg text-gray-600 mb-6">
+              <strong>Stop losing money to late payments.</strong> Start collecting what you're owed automatically.
+            </p>
+            <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
+              <Button size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white px-8 py-4 text-lg font-semibold">
+                Start Free Trial - Get Both Tools
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
+            <p className="text-sm text-gray-500 mt-4">
+              💳 14-day free trial • 🔒 Cancel anytime • ✅ No auto-billing
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* Testimonials */}
