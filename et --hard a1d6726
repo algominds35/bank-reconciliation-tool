@@ -1,0 +1,10 @@
+[33ma1d6726[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Add invoice collections tool to features section - now shows both bank reconciliation and invoice tools
+[33m9cd3d1e[m Add login button to header navigation for easy account access
+[33mcbc1e3c[m Add testimonials section after hero for immediate social proof and trust building
+[33mc3772cf[m Add Bank Reconciliation Report export screenshot showing final output users get
+[33maaa2a1d[m Restore realistic tool screenshots: Bank Reconciliation, AI Matching, QuickBooks Integration, and Invoice Collections
+[33mc2593c1[m Add professional demo section with 'How It Works' and 'See Results' layout exactly like the screenshot
+[33m9cdd184[m Add '1,200+ switched from QB to this' badge and real testimonials with faces under hero section
+[33mccbe1d6[m Move trusted badge to hero section where it belongs and remove duplicate section
+[33m5193dd5[m Add realistic testimonials with real faces and trusted badge showing 1000+ users
+[33ma089cc7[m Replace login buttons with 'See How It Works' buttons that scroll to demo section

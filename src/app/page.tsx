@@ -1,5 +1,6 @@
 "use client";
 
+// Landing page with complete Notion-style design - Bank Reconciliation + Invoice Collections
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { 
