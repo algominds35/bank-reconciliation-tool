@@ -275,33 +275,68 @@ export default function HomePage() {
             className="text-center mb-20"
           >
             <h2 className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6 tracking-tight">
-              See It In Action
+              Two Powerful Tools in One Platform
             </h2>
-            <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-              Watch how ReconcilePro transforms hours of manual work into minutes of automated reconciliation.
+            <p className="text-xl text-neutral-600 max-w-4xl mx-auto">
+              ReconcilePro combines AI-powered bank reconciliation with automated invoice collections. 
+              See how both tools work together to automate your entire financial workflow.
             </p>
           </motion.div>
 
-          {/* Product Screenshots Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            {/* Left: AI Matching Interface */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              <h3 className="text-2xl font-bold text-neutral-900">
-                AI-Powered Transaction Matching
+          {/* Tool 1: Bank Reconciliation */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="mb-24"
+          >
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-neutral-900 mb-4">
+                🏦 AI-Powered Bank Reconciliation
               </h3>
-              <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-lg">
-                <div className="bg-neutral-50 rounded-xl p-4 mb-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-semibold text-neutral-900">Bank Transactions</h4>
-                    <span className="text-sm text-neutral-500">23 unmatched</span>
-                  </div>
-                  <div className="space-y-2">
+              <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
+                Automatically match bank transactions with QuickBooks data using advanced machine learning.
+              </p>
+            </div>
+
+            {/* How It Works Steps */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-blue-600">1</span>
+                </div>
+                <h4 className="text-xl font-semibold text-neutral-900 mb-2">Connect & Import</h4>
+                <p className="text-neutral-600 text-sm">
+                  Connect QuickBooks Online and import bank statements. We automatically sync all your financial data.
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-green-600">2</span>
+                </div>
+                <h4 className="text-xl font-semibold text-neutral-900 mb-2">AI Matching</h4>
+                <p className="text-neutral-600 text-sm">
+                  Our AI analyzes transaction patterns and automatically matches bank transactions with QuickBooks records.
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-purple-600">3</span>
+                </div>
+                <h4 className="text-xl font-semibold text-neutral-900 mb-2">Review & Approve</h4>
+                <p className="text-neutral-600 text-sm">
+                  Review AI suggestions, approve matches, and generate professional reconciliation reports in minutes.
+                </p>
+              </div>
+            </div>
+
+            {/* Reconciliation Interface Mockup */}
+            <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-lg max-w-5xl mx-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-neutral-900">Bank Transactions (Unmatched)</h4>
+                  <div className="bg-neutral-50 rounded-xl p-4 space-y-2">
                     <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
                       <span className="text-sm text-neutral-700">$1,250.00 - Office Supplies</span>
                       <span className="text-xs text-neutral-500">Mar 15, 2024</span>
@@ -316,12 +351,9 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <div className="bg-green-50 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-semibold text-green-900">AI Matches Found</h4>
-                    <span className="text-sm text-green-600">3 matches</span>
-                  </div>
-                  <div className="space-y-2">
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-neutral-900">AI Matches Found</h4>
+                  <div className="bg-green-50 rounded-xl p-4 space-y-2">
                     <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-green-200">
                       <span className="text-sm text-green-800">✓ $1,250.00 - Office Supplies</span>
                       <span className="text-xs text-green-600">Matched with Invoice #1001</span>
@@ -333,103 +365,161 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+              <div className="mt-6 p-4 bg-blue-50 rounded-xl">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-blue-900">Reconciliation Progress</span>
+                  <span className="text-sm text-blue-600">85% Complete</span>
+                </div>
+                <div className="w-full bg-blue-200 rounded-full h-2 mt-2">
+                  <div className="bg-blue-600 h-2 rounded-full" style={{ width: '85%' }}></div>
+                </div>
+                <p className="text-xs text-blue-600 mt-1">3,891 of 4,580 transactions reconciled</p>
+              </div>
+            </div>
+          </motion.div>
 
-            {/* Right: QuickBooks Integration */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              <h3 className="text-2xl font-bold text-neutral-900">
-                Seamless QuickBooks Integration
+          {/* Tool 2: Invoice Collections */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="mb-24"
+          >
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-neutral-900 mb-4">
+                💰 Automated Invoice Collections
               </h3>
-              <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-lg">
-                <div className="bg-blue-50 rounded-xl p-4 mb-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-semibold text-blue-900">QuickBooks Sync Status</h4>
-                    <span className="text-sm text-blue-600">Connected ✓</span>
-                  </div>
-                  <div className="space-y-2">
+              <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
+                Automatically send professional payment reminders and get paid 40% faster without awkward conversations.
+              </p>
+            </div>
+
+            {/* How Invoice Collections Work */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-orange-600">1</span>
+                </div>
+                <h4 className="text-xl font-semibold text-neutral-900 mb-2">Import Invoices</h4>
+                <p className="text-neutral-600 text-sm">
+                  Import outstanding invoices from QuickBooks or upload CSV files. We automatically detect payment status.
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-red-600">2</span>
+                </div>
+                <h4 className="text-xl font-semibold text-neutral-900 mb-2">Smart Reminders</h4>
+                <p className="text-neutral-600 text-sm">
+                  Set up automated reminder schedules with professional templates. Escalate gently if needed.
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl font-bold text-emerald-600">3</span>
+                </div>
+                <h4 className="text-xl font-semibold text-neutral-900 mb-2">Track & Collect</h4>
+                <p className="text-neutral-600 text-sm">
+                  Monitor payment status, track responses, and automatically update QuickBooks when payments arrive.
+                </p>
+              </div>
+            </div>
+
+            {/* Invoice Collections Interface Mockup */}
+            <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-lg max-w-5xl mx-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-neutral-900">Outstanding Invoices</h4>
+                  <div className="bg-neutral-50 rounded-xl p-4 space-y-2">
                     <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
-                      <span className="text-sm text-blue-800">Invoices Synced</span>
-                      <span className="text-xs text-blue-600">1,247 items</span>
+                      <div>
+                        <span className="text-sm font-medium text-neutral-700">Invoice #1001</span>
+                        <p className="text-xs text-neutral-500">TechFlow Solutions - $1,250.00</p>
+                      </div>
+                      <span className="text-xs text-red-600 font-medium">Overdue 15 days</span>
                     </div>
                     <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
-                      <span className="text-sm text-blue-800">Transactions Synced</span>
-                      <span className="text-xs text-blue-600">3,891 items</span>
-                    </div>
-                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
-                      <span className="text-sm text-blue-800">Last Sync</span>
-                      <span className="text-xs text-blue-600">2 minutes ago</span>
+                      <div>
+                        <span className="text-sm font-medium text-neutral-700">Invoice #1002</span>
+                        <p className="text-xs text-neutral-500">GreenLeaf Retail - $2,100.00</p>
+                      </div>
+                      <span className="text-xs text-yellow-600 font-medium">Due in 3 days</span>
                     </div>
                   </div>
                 </div>
-                <div className="bg-neutral-50 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-semibold text-neutral-900">Reconciliation Progress</h4>
-                    <span className="text-sm text-neutral-600">85% Complete</span>
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-neutral-900">Collection Status</h4>
+                  <div className="bg-orange-50 rounded-xl p-4 space-y-2">
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-orange-200">
+                      <span className="text-sm text-orange-800">📧 Reminder sent</span>
+                      <span className="text-xs text-orange-600">2 hours ago</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-orange-200">
+                      <span className="text-sm text-orange-800">📞 Follow-up call</span>
+                      <span className="text-xs text-orange-600">Scheduled for tomorrow</span>
+                    </div>
                   </div>
-                  <div className="w-full bg-neutral-200 rounded-full h-2 mb-2">
-                    <div className="bg-blue-600 h-2 rounded-full" style={{ width: '85%' }}></div>
-                  </div>
-                  <p className="text-xs text-neutral-500">3,891 of 4,580 transactions reconciled</p>
                 </div>
               </div>
-            </motion.div>
-          </div>
+              <div className="mt-6 p-4 bg-emerald-50 rounded-xl">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-emerald-900">Collection Progress</span>
+                  <span className="text-sm text-emerald-600">$3,350.00 collected this month</span>
+                </div>
+                <div className="w-full bg-emerald-200 rounded-full h-2 mt-2">
+                  <div className="bg-emerald-600 h-2 rounded-full" style={{ width: '70%' }}></div>
+                </div>
+                <p className="text-xs text-emerald-600 mt-1">70% of overdue invoices have payment plans</p>
+              </div>
+            </div>
+          </motion.div>
 
-          {/* Bottom: Multi-Client Dashboard */}
+          {/* How Both Tools Work Together */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: true }}
-            className="space-y-6"
+            className="mb-16"
           >
-            <h3 className="text-2xl font-bold text-neutral-900 text-center">
-              Multi-Client Management Dashboard
-            </h3>
-            <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-lg max-w-4xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-neutral-50 rounded-xl p-4">
-                  <h4 className="font-semibold text-neutral-900 mb-2">TechFlow Solutions</h4>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600">Status: <span className="text-green-600">✓ Reconciled</span></p>
-                    <p className="text-xs text-neutral-600">Transactions: 1,247</p>
-                    <p className="text-xs text-neutral-600">Last Activity: Today</p>
-                  </div>
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-neutral-900 mb-4">
+                🔄 Complete Financial Workflow Automation
+              </h3>
+              <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
+                Both tools work together to create a seamless financial automation system.
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-r from-blue-50 to-emerald-50 border border-blue-200 rounded-2xl p-8 max-w-5xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="text-xl font-semibold text-blue-900 mb-4">🏦 Bank Reconciliation</h4>
+                  <ul className="space-y-2 text-sm text-blue-800">
+                    <li>• Import bank statements automatically</li>
+                    <li>• AI matches transactions with QuickBooks</li>
+                    <li>• Generate reconciliation reports</li>
+                    <li>• Export to PDF for compliance</li>
+                  </ul>
                 </div>
-                <div className="bg-neutral-50 rounded-xl p-4">
-                  <h4 className="font-semibold text-neutral-900 mb-2">GreenLeaf Retail</h4>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600">Status: <span className="text-yellow-600">⚠ In Progress</span></p>
-                    <p className="text-xs text-neutral-600">Transactions: 892</p>
-                    <p className="text-xs text-neutral-600">Last Activity: 2 hours ago</p>
-                  </div>
-                </div>
-                <div className="bg-neutral-50 rounded-xl p-4">
-                  <h4 className="font-semibold text-neutral-900 mb-2">Peak Financial</h4>
-                  <div className="space-y-1">
-                    <p className="text-xs text-neutral-600">Status: <span className="text-blue-600">🔄 Syncing</span></p>
-                    <p className="text-xs text-neutral-600">Transactions: 2,156</p>
-                    <p className="text-xs text-neutral-600">Last Activity: 5 minutes ago</p>
-                  </div>
+                <div>
+                  <h4 className="text-xl font-semibold text-emerald-900 mb-4">💰 Invoice Collections</h4>
+                  <ul className="space-y-2 text-sm text-emerald-800">
+                    <li>• Track outstanding invoices</li>
+                    <li>• Automated payment reminders</li>
+                    <li>• Payment status monitoring</li>
+                    <li>• QuickBooks integration</li>
+                  </ul>
                 </div>
               </div>
-              <div className="bg-green-50 rounded-xl p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-semibold text-green-900">Overall Progress</h4>
-                    <p className="text-sm text-green-700">All clients are up to date with reconciliation</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-green-900">4,295</p>
-                    <p className="text-xs text-green-600">Total Transactions</p>
-                  </div>
-                </div>
+              <div className="mt-6 p-4 bg-white rounded-xl border border-blue-200">
+                <h5 className="font-semibold text-neutral-900 mb-2">🔄 How They Connect:</h5>
+                <p className="text-sm text-neutral-700">
+                  When invoice collections bring in payments, they automatically appear in your bank feed. 
+                  Our AI then matches these payments with the corresponding invoices, creating a perfect 
+                  reconciliation loop. No more manual work - everything flows automatically!
+                </p>
               </div>
             </div>
           </motion.div>
@@ -440,14 +530,16 @@ export default function HomePage() {
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mt-16"
+            className="text-center"
           >
             <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-12 text-center text-white max-w-4xl mx-auto">
               <h3 className="text-3xl lg:text-4xl font-bold mb-6">
-                Watch the Complete Demo
+                See Both Tools in Action
               </h3>
               <p className="text-lg mb-8 opacity-90 leading-relaxed">
-                See the full reconciliation workflow from start to finish, including AI matching, QuickBooks integration, and multi-client management.
+                Watch the complete demo showing how bank reconciliation and invoice collections work together 
+                to automate your entire financial workflow. See real examples of AI matching, automated 
+                reminders, and seamless QuickBooks integration.
               </p>
               <Button className="bg-white text-neutral-900 hover:bg-neutral-100 px-8 py-3 text-lg rounded-lg font-medium transition-all duration-200">
                 <Play className="mr-2 w-5 h-5" />
