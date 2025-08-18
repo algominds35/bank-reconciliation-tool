@@ -39,7 +39,7 @@ const testimonials = [
     name: "Alex Rodriguez",
     role: "Senior Bookkeeper",
     company: "Rodriguez Financial Services",
-    content: "I handle 75+ clients and this tool has saved me 20+ hours weekly. The AI matching is incredibly accurate - I've reduced reconciliation errors by 95%.",
+    content: "I handle 75+ clients and this tool has saved me 20+ hours weekly. The AI matching is incredibly accurate - I've reduced reconciliation errors by 95%. The invoice collections feature is a game-changer for cash flow management.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
   },
@@ -47,7 +47,7 @@ const testimonials = [
     name: "Sarah Chen",
     role: "CFO",
     company: "TechFlow Solutions",
-    content: "We process 5,000+ transactions monthly. This tool reconciled 3 months of backlog in 2 hours. The QuickBooks integration is seamless.",
+    content: "We process 5,000+ transactions monthly. This tool reconciled 3 months of backlog in 2 hours. The QuickBooks integration is seamless, and the automated invoice reminders have improved our collections by 40%.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face"
   },
@@ -55,7 +55,7 @@ const testimonials = [
     name: "Michael Thompson",
     role: "Managing Partner",
     company: "Thompson & Associates CPA",
-    content: "Our firm serves 120+ small businesses. This tool has become our secret weapon - clients love the accuracy and speed. ROI in the first month.",
+    content: "Our firm serves 120+ small businesses. This tool has become our secret weapon - clients love the accuracy and speed. The invoice automation alone has saved us 15+ hours monthly on collections.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
   },
@@ -63,7 +63,7 @@ const testimonials = [
     name: "Jennifer Walsh",
     role: "Finance Director",
     company: "GreenLeaf Retail",
-    content: "We have 8 bank accounts and 15,000+ monthly transactions. This tool handles everything automatically. The invoice collections feature is a game-changer.",
+    content: "We have 8 bank accounts and 15,000+ monthly transactions. This tool handles everything automatically. The invoice collections feature is a game-changer - we've reduced overdue invoices by 60%.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
   },
@@ -71,7 +71,7 @@ const testimonials = [
     name: "David Kim",
     role: "Controller",
     company: "Peak Financial Group",
-    content: "Multi-entity accounting was a nightmare until this tool. We now reconcile 25+ entities in hours instead of weeks. The AI is incredibly smart.",
+    content: "Multi-entity accounting was a nightmare until this tool. We now reconcile 25+ entities in hours instead of weeks. The AI is incredibly smart, and the invoice automation has streamlined our entire collections process.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face"
   },
@@ -79,7 +79,7 @@ const testimonials = [
     name: "Lisa Martinez",
     role: "Senior Accountant",
     company: "Martinez & Co.",
-    content: "I've been in accounting for 15 years. This is the first reconciliation tool that actually works as advertised. The QuickBooks sync is flawless.",
+    content: "I've been in accounting for 15 years. This is the first reconciliation tool that actually works as advertised. The QuickBooks sync is flawless, and the invoice collections automation has transformed how we manage receivables.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=face"
   }
@@ -300,25 +300,47 @@ export default function HomePage() {
             </div>
 
             {/* Trust indicators */}
-            <div className="pt-8 border-t border-neutral-200">
-              <p className="text-neutral-500 text-sm font-medium mb-6">TRUSTED BY LEADING COMPANIES</p>
-              <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-                <div className="text-lg font-medium text-neutral-400">TechFlow Solutions</div>
-                <div className="text-lg font-medium text-neutral-400">Rodriguez Financial Services</div>
-                <div className="text-lg font-medium text-neutral-400">Thompson & Associates CPA</div>
-                <div className="text-lg font-medium text-neutral-400">GreenLeaf Retail</div>
-                <div className="text-lg font-medium text-neutral-400">Peak Financial Group</div>
+            <div className="mt-8 text-center">
+              <h3 className="text-lg font-semibold text-neutral-700 mb-4">TRUSTED BY LEADING COMPANIES</h3>
+              <div className="flex justify-center items-center space-x-8 mb-6">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <span className="text-blue-600 font-bold text-sm">TF</span>
+                  </div>
+                  <span className="text-sm font-medium text-neutral-600">TechFlow</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                    <span className="text-green-600 font-bold text-sm">RF</span>
+                  </div>
+                  <span className="text-sm font-medium text-neutral-600">Rodriguez Financial</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <span className="text-purple-600 font-bold text-sm">TA</span>
+                  </div>
+                  <span className="text-sm font-medium text-neutral-600">Thompson & Associates</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <span className="text-orange-600 font-bold text-sm">GL</span>
+                  </div>
+                  <span className="text-sm font-medium text-neutral-600">GreenLeaf</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                    <span className="text-indigo-600 font-bold text-sm">PF</span>
+                  </div>
+                  <span className="text-sm font-medium text-neutral-600">Peak Financial</span>
+                </div>
               </div>
               
-              {/* Trusted Badge */}
-              <div className="mt-8 flex justify-center">
-                <div className="inline-flex items-center px-6 py-3 bg-white border border-neutral-200 rounded-full shadow-sm">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                      <CheckCircle className="w-3 h-3 text-white" />
-                    </div>
-                    <span className="text-sm font-medium text-neutral-700">Trusted by 1,200+ business owners, bookkeepers, accountants & QuickBooks users</span>
+              <div className="inline-flex items-center px-6 py-3 bg-green-50 border border-green-200 rounded-full shadow-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-3 h-3 text-white" />
                   </div>
+                  <span className="text-sm font-medium text-green-700">Trusted by 1,200+ business owners, bookkeepers, accountants & QuickBooks users</span>
                 </div>
               </div>
               
@@ -367,20 +389,14 @@ export default function HomePage() {
           {/* Featured Testimonials Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {/* Testimonial 1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="bg-white p-6 rounded-xl border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-300"
-            >
-              <div className="flex mb-4">
+            <div className="bg-white rounded-xl p-6 shadow-lg border border-neutral-200">
+              <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
                 ))}
               </div>
               <p className="text-neutral-700 mb-6 leading-relaxed text-sm italic">
-                "I handle 75+ clients and this tool has saved me 20+ hours weekly. The AI matching is incredibly accurate - I've reduced reconciliation errors by 95%."
+                "I handle 75+ clients and this tool has saved me 20+ hours weekly. The AI matching is incredibly accurate - I've reduced reconciliation errors by 95%. The invoice collections feature is a game-changer for cash flow management."
               </p>
               <div className="flex items-center space-x-3">
                 <img 
@@ -389,28 +405,21 @@ export default function HomePage() {
                   className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
                 />
                 <div>
-                  <p className="font-semibold text-neutral-900">Alex Rodriguez</p>
-                  <p className="text-sm text-neutral-600">Senior Bookkeeper</p>
-                  <p className="text-xs text-neutral-500">Rodriguez Financial Services</p>
+                  <p className="text-sm font-medium text-neutral-900">Alex Rodriguez</p>
+                  <p className="text-xs text-neutral-500">Senior Bookkeeper, Rodriguez Financial Services</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Testimonial 2 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="bg-white p-6 rounded-xl border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-300"
-            >
-              <div className="flex mb-4">
+            <div className="bg-white rounded-xl p-6 shadow-lg border border-neutral-200">
+              <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
                 ))}
               </div>
               <p className="text-neutral-700 mb-6 leading-relaxed text-sm italic">
-                "We process 5,000+ transactions monthly. This tool reconciled 3 months of backlog in 2 hours. The QuickBooks integration is seamless."
+                "We process 5,000+ transactions monthly. This tool reconciled 3 months of backlog in 2 hours. The QuickBooks integration is seamless, and the automated invoice reminders have improved our collections by 40%."
               </p>
               <div className="flex items-center space-x-3">
                 <img 
@@ -419,28 +428,21 @@ export default function HomePage() {
                   className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
                 />
                 <div>
-                  <p className="font-semibold text-neutral-900">Sarah Chen</p>
-                  <p className="text-sm text-neutral-600">CFO</p>
-                  <p className="text-xs text-neutral-500">TechFlow Solutions</p>
+                  <p className="text-sm font-medium text-neutral-900">Sarah Chen</p>
+                  <p className="text-xs text-neutral-500">CFO, TechFlow Solutions</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Testimonial 3 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="bg-white p-6 rounded-xl border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-300"
-            >
-              <div className="flex mb-4">
+            <div className="bg-white rounded-xl p-6 shadow-lg border border-neutral-200">
+              <div className="flex items-center mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
                 ))}
               </div>
               <p className="text-neutral-700 mb-6 leading-relaxed text-sm italic">
-                "Our firm serves 120+ small businesses. This tool has become our secret weapon - clients love the accuracy and speed. ROI in the first month."
+                "Our firm serves 120+ small businesses. This tool has become our secret weapon - clients love the accuracy and speed. The invoice automation alone has saved us 15+ hours monthly on collections."
               </p>
               <div className="flex items-center space-x-3">
                 <img 
@@ -449,12 +451,11 @@ export default function HomePage() {
                   className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
                 />
                 <div>
-                  <p className="font-semibold text-neutral-900">Michael Thompson</p>
-                  <p className="text-sm text-neutral-600">Managing Partner</p>
-                  <p className="text-xs text-neutral-500">Thompson & Associates CPA</p>
+                  <p className="text-sm font-medium text-neutral-900">Michael Thompson</p>
+                  <p className="text-xs text-neutral-500">Managing Partner, Thompson & Associates CPA</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* View All Testimonials CTA */}
