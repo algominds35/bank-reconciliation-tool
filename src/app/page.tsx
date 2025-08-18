@@ -31,38 +31,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const features = [
-  {
-    icon: <Zap className="w-6 h-6 text-neutral-600" />,
-    title: "AI-Powered Matching",
-    description: "Automatically match bank transactions with QuickBooks data using advanced machine learning algorithms."
-  },
-  {
-    icon: <Shield className="w-6 h-6 text-neutral-600" />,
-    title: "Bank-Level Security",
-    description: "Enterprise-grade encryption with SOC 2 compliance. Your financial data is protected with military-grade security."
-  },
-  {
-    icon: <BarChart3 className="w-6 h-6 text-neutral-600" />,
-    title: "Real-Time Analytics",
-    description: "Live dashboards showing reconciliation status, cash flow insights, and financial health metrics."
-  },
-  {
-    icon: <Users className="w-6 h-6 text-neutral-600" />,
-    title: "Multi-Client Management",
-    description: "Handle unlimited clients from one dashboard. Perfect for bookkeepers and accounting firms."
-  },
-  {
-    icon: <Clock className="w-6 h-6 text-neutral-600" />,
-    title: "Automated Workflows",
-    description: "Set up rules and automation to handle recurring transactions. Never miss a reconciliation again."
-  },
-  {
-    icon: <CheckCircle className="w-6 h-6 text-neutral-600" />,
-    title: "QuickBooks Native",
-    description: "Seamless integration with QuickBooks Online. Sync invoices, transactions, and accounts automatically."
-  }
-];
+
 
 const testimonials = [
   {
@@ -507,52 +476,114 @@ export default function HomePage() {
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="py-24 bg-neutral-50/50">
+      <section className="py-24 bg-neutral-50/50">
         <div className="max-w-6xl mx-auto px-6">
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6 tracking-tight">
-              Everything You Need to
-              <span className="block bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
-                Automate Reconciliation
-              </span>
+            <h2 className="text-4xl font-bold text-neutral-900 mb-6">
+              Everything You Need for Financial Automation
             </h2>
             <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-              Powerful features designed for modern businesses that need accuracy, speed, and reliability in their financial operations.
+              Two powerful tools in one platform: Bank Reconciliation & Invoice Collections
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="h-full border-0 shadow-sm hover:shadow-md transition-all duration-300 bg-white rounded-xl">
-                  <CardHeader className="pb-4">
-                    <div className="w-12 h-12 bg-neutral-100 rounded-xl flex items-center justify-center mb-4">
-                      {feature.icon}
-                    </div>
-                    <CardTitle className="text-xl font-semibold text-neutral-900">
-                      {feature.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-neutral-600 leading-relaxed text-sm">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+            {/* Bank Reconciliation Features */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="bg-white rounded-2xl p-8 shadow-lg border border-neutral-200 hover:shadow-xl transition-all duration-300"
+            >
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+                <Zap className="w-6 h-6 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-neutral-900 mb-4">AI-Powered Bank Reconciliation</h3>
+              <p className="text-neutral-600 leading-relaxed">
+                Automatically match bank transactions with QuickBooks data using advanced machine learning algorithms. 99% accuracy rate.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="bg-white rounded-2xl p-8 shadow-lg border border-neutral-200 hover:shadow-xl transition-all duration-300"
+            >
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
+                <Shield className="w-6 h-6 text-green-600" />
+              </div>
+              <h3 className="text-xl font-bold text-neutral-900 mb-4">Bank-Level Security</h3>
+              <p className="text-neutral-600 leading-relaxed">
+                Enterprise-grade encryption with SOC 2 compliance. Your financial data is protected with military-grade security.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="bg-white rounded-2xl p-8 shadow-lg border border-neutral-200 hover:shadow-xl transition-all duration-300"
+            >
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
+                <BarChart3 className="w-6 h-6 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-bold text-neutral-900 mb-4">Real-Time Analytics</h3>
+              <p className="text-neutral-600 leading-relaxed">
+                Live dashboards showing reconciliation status, cash flow insights, and financial health metrics.
+              </p>
+            </motion.div>
+
+            {/* Invoice Collections Features */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="bg-white rounded-2xl p-8 shadow-lg border border-neutral-200 hover:shadow-xl transition-all duration-300"
+            >
+              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
+                <FileText className="w-6 h-6 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-bold text-neutral-900 mb-4">Automated Invoice Collections</h3>
+              <p className="text-neutral-600 leading-relaxed">
+                Track overdue invoices, send automated reminders, and predict payment dates using AI. Never chase payments again.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="bg-white rounded-2xl p-8 shadow-lg border border-neutral-200 hover:shadow-xl transition-all duration-300"
+            >
+              <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
+                <Users className="w-6 h-6 text-indigo-600" />
+              </div>
+              <h3 className="text-xl font-bold text-neutral-900 mb-4">Multi-Client Management</h3>
+              <p className="text-neutral-600 leading-relaxed">
+                Handle unlimited clients from one dashboard. Perfect for bookkeepers and accounting firms.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="bg-white rounded-2xl p-8 shadow-lg border border-neutral-200 hover:shadow-xl transition-all duration-300"
+            >
+              <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center mb-6">
+                <CheckCircle className="w-6 h-6 text-teal-600" />
+              </div>
+              <h3 className="text-xl font-bold text-neutral-900 mb-4">QuickBooks Native</h3>
+              <p className="text-neutral-600 leading-relaxed">
+                Seamless integration with QuickBooks Online. Sync invoices, transactions, and accounts automatically.
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>
