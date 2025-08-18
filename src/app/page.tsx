@@ -80,7 +80,7 @@ const testimonials = [
 const pricingPlans = [
   {
     name: "Starter",
-    price: "$49",
+    price: "$29",
     period: "/month",
     description: "Perfect for small businesses getting started with automation",
     features: [
@@ -95,7 +95,7 @@ const pricingPlans = [
   },
   {
     name: "Pro",
-    price: "$99",
+    price: "$79",
     period: "/month",
     description: "Ideal for growing businesses and bookkeepers",
     features: [
@@ -111,8 +111,8 @@ const pricingPlans = [
   },
   {
     name: "Enterprise",
-    price: "Custom",
-    period: "",
+    price: "$199",
+    period: "/month",
     description: "For large organizations with complex needs",
     features: [
       "Unlimited transactions",
@@ -124,7 +124,7 @@ const pricingPlans = [
       "On-premise deployment"
     ],
     popular: false,
-    stripeLink: "mailto:alex@usealgomind.com?subject=Enterprise%20Plan%20Inquiry"
+    stripeLink: "https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c"
   }
 ];
 
