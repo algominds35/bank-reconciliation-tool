@@ -27,7 +27,8 @@ import {
   Building2,
   CreditCard,
   Minus,
-  X
+  X,
+  Eye
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -220,9 +221,15 @@ export default function HomePage() {
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </a>
+              <a href="/demo" target="_blank" rel="noopener noreferrer">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 font-medium">
+                  <Play className="mr-2 w-5 h-5" />
+                  Try Live Demo
+                </Button>
+              </a>
               <a href="#demo">
                 <Button variant="outline" className="border-2 border-neutral-200 text-neutral-700 px-8 py-4 text-lg rounded-lg hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-200 font-medium">
-                  <Play className="mr-2 w-5 h-5" />
+                  <Eye className="mr-2 w-5 h-5" />
                   See How It Works
                 </Button>
               </a>
@@ -1330,10 +1337,16 @@ export default function HomePage() {
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </a>
+              <a href="/demo" target="_blank" rel="noopener noreferrer">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 font-medium">
+                  <Play className="mr-2 w-5 h-5" />
+                  Try Live Demo
+                </Button>
+              </a>
               <a href="#demo">
                 <Button variant="outline" className="border-2 border-neutral-200 text-neutral-700 px-8 py-4 text-lg rounded-lg hover:border-neutral-400 hover:bg-neutral-50 font-medium">
-                  <Play className="mr-2 w-5 h-5" />
-                  Watch Full Demo
+                  <Eye className="mr-2 w-5 h-5" />
+                  See How It Works
                 </Button>
               </a>
             </div>
@@ -1496,6 +1509,12 @@ export default function HomePage() {
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                 <Button className="bg-white text-neutral-900 hover:bg-gray-100 px-8 py-4 text-lg rounded-lg shadow-lg font-medium transition-all duration-200">
                   Start Free Trial
+                </Button>
+              </a>
+              <a href="/demo" target="_blank" rel="noopener noreferrer">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 font-medium">
+                  <Play className="mr-2 w-5 h-5" />
+                  Try Live Demo
                 </Button>
               </a>
               <a href="#demo">
