@@ -16,7 +16,10 @@ import {
   FileText,
   Upload,
   ArrowRight,
-  Play
+  Play,
+  DollarSign,
+  Mail,
+  Database
 } from 'lucide-react'
 
 export default function LandingPage() {
@@ -46,11 +49,11 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b bg-white/95 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-gray-100 bg-white/95 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
                 <TrendingUp className="h-5 w-5 text-white" />
               </div>
               <span className="text-xl font-bold text-gray-900">ReconcileBook</span>
@@ -60,989 +63,318 @@ export default function LandingPage() {
               <a href="#pricing" className="text-gray-600 hover:text-gray-900">Pricing</a>
               <Link href="/blog" className="text-gray-600 hover:text-gray-900">Blog</Link>
               <a href="#testimonials" className="text-gray-600 hover:text-gray-900">Reviews</a>
-              <Link href="/auth/login" className="text-gray-600 hover:text-gray-900">Login</Link>
-              <a href="#demo" className="scroll-smooth">
-                <Button variant="outline" size="sm">
-                  <Play className="mr-2 h-4 w-4" />
-                  Watch How It Works
-                </Button>
-              </a>
+              <Link href="/auth/login" className="text-gray-600 hover:text-gray-900">Log in</Link>
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline">Start Free Trial</Button>
+                <Button className="bg-gray-900 hover:bg-gray-800 text-white">
+                  Sign up
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
               </a>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-20 sm:py-32">
+      {/* Hero Section - Clean & Professional */}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <Badge className="mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 border-0">
-              🚀 Trusted by small business owners & bookkeepers nationwide
-            </Badge>
-            
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-              It's Like Having a Bookkeeper Who Works{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                24/7
+          <div className="text-center mb-16">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+              The AI Bookkeeper That Handles Your{' '}
+              <span className="text-gray-900">
+                Invoices + Reconciliation
               </span>{' '}
-              — Without the{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-700">
-                $4,000/Month
-              </span>{' '}
-              Salary.
+              in Minutes
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-4 max-w-3xl mx-auto">
-              <span className="font-semibold">Two powerful tools in one platform:</span> Bank reconciliation that takes minutes, not hours. Plus automated payment collection that gets you paid 40% faster.
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
+              No hourly rates. No bloated accounting software. Just professional financial management that works 24/7.
             </p>
             
-            <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
-              Connect QuickBooks once. Our AI reconciles 3 months in <strong>10 minutes</strong> with <strong>90%+ accuracy</strong> — no breaks, no errors, no stress. <strong>Plus, automatically collect overdue payments with our new Invoice Collections Tool.</strong>
-            </p>
-
-                        {/* Social Proof */}
-            <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm text-gray-600">
-              <div className="flex items-center space-x-2">
-                <div className="flex -space-x-2">
-                  <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=32&h=32&fit=crop&crop=face&auto=format" alt="Sarah Chen" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
-                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face&auto=format" alt="Mike Rodriguez" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
-                  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face&auto=format" alt="Lisa Thompson" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
-                  <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face&auto=format" alt="David Kim" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
+            {/* Professional Video Section */}
+            <div className="max-w-4xl mx-auto mb-12">
+              <div className="relative bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
+                <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <Play className="h-20 w-20 mx-auto mb-4 text-gray-300" />
+                    <p className="text-lg text-gray-300">Professional Demo Video</p>
+                    <p className="text-sm text-gray-400">See how it works in 2 minutes</p>
+                  </div>
                 </div>
-                <span>Small business owners & bookkeepers switching daily</span>
-              </div>
-            </div>
-
-            {/* Feature Highlights */}
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 px-4 py-2 rounded-full text-sm font-medium border border-blue-200">
-                <TrendingUp className="h-4 w-4" />
-                <span>QuickBooks Integration</span>
-              </div>
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-indigo-100 to-indigo-200 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium border border-indigo-200">
-                <Upload className="h-4 w-4" />
-                <span>Upload CSV Files</span>
-              </div>
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-green-100 to-green-200 text-green-800 px-4 py-2 rounded-full text-sm font-medium border border-green-200">
-                <Zap className="h-4 w-4" />
-                <span>90%+ AI Accuracy</span>
-              </div>
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-100 to-orange-200 text-orange-800 px-4 py-2 rounded-full text-sm font-medium border border-orange-200">
-                <Clock className="h-4 w-4" />
-                <span>10 Min vs 8 Hours</span>
-              </div>
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 px-4 py-2 rounded-full text-sm font-medium border border-purple-200">
-                <span className="text-lg">💰</span>
-                <span>Auto Payment Collection</span>
               </div>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-6 text-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
-                  Start Free 14-Day Trial
+                <Button size="lg" className="bg-gray-900 hover:bg-gray-800 text-white px-10 py-6 text-xl font-semibold">
+                  Start Free Trial
                   <ArrowRight className="ml-3 h-6 w-6" />
                 </Button>
               </a>
               <a href="#demo" className="scroll-smooth">
-                <Button variant="outline" size="lg" className="px-10 py-6 text-xl font-semibold border-2 hover:bg-gray-50">
+                <Button variant="outline" size="lg" className="px-10 py-6 text-xl font-semibold border-2 border-gray-200 hover:bg-gray-50">
                   <Play className="mr-3 h-6 w-6" />
                   See How It Works
                 </Button>
               </a>
             </div>
-
-            {/* Trust Signals */}
-            <div className="text-center">
-                           <p className="text-sm text-gray-500 mb-4">
-               🆓 <strong>14-day free trial</strong> • 💳 Credit card required • 🔒 Cancel anytime • ✅ No auto-billing
-             </p>
-              <div className="flex justify-center items-center space-x-6 text-xs text-gray-400">
-                <div className="flex items-center space-x-2">
-                  <Shield className="h-4 w-4 text-green-500" />
-                  <span>Bank-level security</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <TrendingUp className="h-4 w-4 text-blue-500" />
-                  <span>99.9% uptime</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Users className="h-4 w-4 text-purple-500" />
-                  <span>24/7 support</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Social Proof Section */}
-      <section className="py-16 bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-                         <p className="text-sm text-gray-500 mb-8">Trusted by small businesses & bookkeepers nationwide</p>
-            <div className="flex flex-wrap justify-center items-center gap-8">
-              <div className="text-center">
-                <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=64&h=64&fit=crop&crop=face&auto=format" alt="Sarah Chen" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
-                <div className="text-sm text-gray-500">Chen Consulting</div>
-              </div>
-              <div className="text-center">
-                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=64&h=64&fit=crop&crop=face&auto=format" alt="Mike Rodriguez" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
-                <div className="text-sm text-gray-500">Rodriguez Financial</div>
-              </div>
-              <div className="text-center">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face&auto=format" alt="Lisa Thompson" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
-                <div className="text-sm text-gray-500">Thompson & Associates</div>
-              </div>
-              <div className="text-center">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face&auto=format" alt="David Kim" className="w-16 h-16 rounded-full mx-auto mb-2 object-cover" />
-                <div className="text-sm text-gray-500">Kim Bookkeeping</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* QuickBooks Problems vs Your Solution */}
+      {/* Two-Column Feature Section - Enterprise Style */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Why QuickBooks Sucks at Reconciliation (And How We Fixed It)
+              Platform Features
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              QuickBooks was built for accounting, not reconciliation. That's why we built a tool that does what QuickBooks can't.
+              Everything you need to manage your finances professionally
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
-            {/* QuickBooks Problems */}
-            <div className="bg-white rounded-xl p-8 shadow-lg border border-red-200">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">❌</span>
+          <div className="grid lg:grid-cols-2 gap-16">
+            {/* Left Column: Bank Reconciliation */}
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Database className="h-6 w-6 text-blue-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">QuickBooks Problems</h3>
-                <p className="text-gray-600">Why reconciliation is a nightmare</p>
+                <h3 className="text-2xl font-bold text-gray-900">Bank Reconciliation</h3>
               </div>
               
+              <p className="text-lg text-gray-600 mb-6">
+                Connect QuickBooks once. Our AI reconciles 3 months in 10 minutes with 90%+ accuracy — no breaks, no errors, no stress.
+              </p>
+              
               <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Auto-matches wrong transactions</div>
-                    <div className="text-sm text-gray-600">No way to fix it, leads to errors</div>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span className="text-gray-700">QuickBooks integration</span>
                 </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Takes 8+ hours monthly</div>
-                    <div className="text-sm text-gray-600">Manual work that never ends</div>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span className="text-gray-700">CSV import & export</span>
                 </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">No intelligent matching</div>
-                    <div className="text-sm text-gray-600">Just basic rules that fail</div>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span className="text-gray-700">90%+ AI accuracy</span>
                 </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Expensive for what it does</div>
-                    <div className="text-sm text-gray-600">$300+/month for basic features</div>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span className="text-gray-700">Professional reports</span>
                 </div>
               </div>
             </div>
 
-            {/* Your Solution */}
-            <div className="bg-white rounded-xl p-8 shadow-lg border border-green-200">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">✅</span>
+            {/* Right Column: Invoice Collections */}
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <Mail className="h-6 w-6 text-green-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Our Solution</h3>
-                <p className="text-gray-600">Built specifically for reconciliation</p>
+                <h3 className="text-2xl font-bold text-gray-900">Invoice Collections</h3>
               </div>
               
+              <p className="text-lg text-gray-600 mb-6">
+                Automatically send professional payment reminders. Get paid 40% faster without awkward conversations or damaged relationships.
+              </p>
+              
               <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">90%+ AI accuracy</div>
-                    <div className="text-sm text-gray-600">Learns from your patterns</div>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span className="text-gray-700">Automated payment reminders</span>
                 </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Done in 10 minutes</div>
-                    <div className="text-sm text-gray-600">Not 8+ hours</div>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span className="text-gray-700">Smart email escalation</span>
                 </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Intelligent AI matching</div>
-                    <div className="text-sm text-gray-600">Catches errors humans miss</div>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span className="text-gray-700">Professional templates</span>
                 </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Fraction of the cost</div>
-                    <div className="text-sm text-gray-600">Starting at $79/month</div>
-                  </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <span className="text-gray-700">Payment tracking</span>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              That's Why 1,200+ Users Switched from QuickBooks to Us
-            </h3>
-            <p className="text-lg text-gray-600 mb-6">
-              QuickBooks is great for accounting, but terrible for reconciliation. We built the tool that does what QuickBooks can't.
-            </p>
-            <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-4 text-lg font-semibold">
-                Switch from QuickBooks Today
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </a>
           </div>
         </div>
       </section>
 
-      {/* Pain Points Section */}
+      {/* How It Works - Clean Steps */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Tired of These Reconciliation Nightmares?
+              How It Works
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Every month, you waste precious time on manual reconciliation that could be spent growing your business
+              From financial chaos to clarity in 3 simple steps
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl font-bold text-gray-600">1</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Connect QuickBooks</h3>
+              <p className="text-gray-600">
+                One-click integration. We automatically sync your transactions and invoices.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl font-bold text-gray-600">2</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">AI Does the Work</h3>
+              <p className="text-gray-600">
+                Our AI reconciles transactions and sends payment reminders automatically.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl font-bold text-gray-600">3</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Get Results</h3>
+              <p className="text-gray-600">
+                Professional reports, faster payments, and peace of mind.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof - Clean & Professional */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Trusted by Finance Professionals
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Join 1,200+ users who've transformed their financial management
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Clock className="h-8 w-8 text-red-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">8+ Hours Wasted Monthly</h3>
-              <p className="text-gray-600 mb-6">
-                Manual reconciliation eats up your entire workday. Time you could spend on high-value client work.
-              </p>
-              <div className="text-2xl font-bold text-red-600">$2,000+ Lost Monthly</div>
-            </div>
+            <Card className="bg-white border-gray-100">
+              <CardContent className="p-8">
+                <div className="flex items-center mb-4">
+                  <div className="flex text-yellow-400">
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                  </div>
+                </div>
+                <p className="text-gray-600 mb-6">
+                  "I was spending 12+ hours monthly on reconciliation. Now it takes me 2 hours. This tool has literally saved my business."
+                </p>
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-gray-600 font-semibold">SC</span>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Sarah Chen</div>
+                    <div className="text-sm text-gray-500">Small Business Owner</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-            <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <FileText className="h-8 w-8 text-orange-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Errors Cost You Money</h3>
-              <p className="text-gray-600 mb-6">
-                One missed transaction can cost thousands. Manual entry leads to costly mistakes and client disputes.
-              </p>
-              <div className="text-2xl font-bold text-orange-600">Risk of Fines</div>
-            </div>
+            <Card className="bg-white border-gray-100">
+              <CardContent className="p-8">
+                <div className="flex items-center mb-4">
+                  <div className="flex text-yellow-400">
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                  </div>
+                </div>
+                <p className="text-gray-600 mb-6">
+                  "90% accuracy is no joke. I've caught errors that would have cost my clients thousands. This is a game-changer."
+                </p>
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-gray-600 font-semibold">MR</span>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Mike Rodriguez</div>
+                    <div className="text-sm text-gray-500">Bookkeeper</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-            <div className="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <TrendingUp className="h-8 w-8 text-purple-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Growth Stuck in Neutral</h3>
-              <p className="text-gray-600 mb-6">
-                You can't scale when you're stuck doing low-value manual work. Your potential is limited by busywork.
-              </p>
-              <div className="text-2xl font-bold text-purple-600">Revenue Stagnant</div>
-            </div>
+            <Card className="bg-white border-gray-100">
+              <CardContent className="p-8">
+                <div className="flex items-center mb-4">
+                  <div className="flex text-yellow-400">
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                  </div>
+                </div>
+                <p className="text-gray-600 mb-6">
+                  "From 8 hours to 45 minutes. I can now focus on growing my practice instead of drowning in paperwork."
+                </p>
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-gray-600 font-semibold">LT</span>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Lisa Thompson</div>
+                    <div className="text-sm text-gray-500">Small Business Owner</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
-      {/* Solution Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              The Solution: QuickBooks Integration + AI-Powered Matching
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Connect your QuickBooks account for instant sync, or upload CSV files manually. Our AI does the heavy lifting - you get from chaos to clarity in minutes, not hours.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <TrendingUp className="h-10 w-10 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">1. Connect QuickBooks</h3>
-              <p className="text-gray-600">
-                One-click QuickBooks integration. We automatically sync your transactions.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Upload className="h-10 w-10 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">2. Upload CSV (Optional)</h3>
-              <p className="text-gray-600">
-                Or upload bank statements manually. We support all major bank formats.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Zap className="h-10 w-10 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">3. AI Matches</h3>
-              <p className="text-gray-600">
-                Our AI instantly finds 90%+ of matches using intelligent pattern recognition.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle className="h-10 w-10 text-orange-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">4. Review & Export</h3>
-              <p className="text-gray-600">
-                Review AI suggestions, approve matches, and export professional reports.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Results Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Real Results from Real Accountants
-            </h2>
-                         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-               See how ReconcileBook is transforming reconciliation for small business owners & bookkeepers nationwide
-             </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl p-8 shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="flex text-yellow-400">
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                </div>
-              </div>
-              <p className="text-gray-600 mb-6">
-                "I was spending 12+ hours monthly on reconciliation. Now it takes me 2 hours. This tool has literally saved my business."
-              </p>
-                             <div className="flex items-center">
-                 <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=48&h=48&fit=crop&crop=face&auto=format" alt="Sarah Chen" className="w-12 h-12 rounded-full mr-4 object-cover" />
-                 <div>
-                   <div className="font-semibold text-gray-900">Sarah Chen</div>
-                   <div className="text-sm text-gray-500">Small Business Owner, Chen Consulting</div>
-                 </div>
-               </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-8 shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="flex text-yellow-400">
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                </div>
-              </div>
-              <p className="text-gray-600 mb-6">
-                "90% accuracy is no joke. I've caught errors that would have cost my clients thousands. This is a game-changer."
-              </p>
-                             <div className="flex items-center">
-                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face&auto=format" alt="Mike Rodriguez" className="w-12 h-12 rounded-full mr-4 object-cover" />
-                 <div>
-                   <div className="font-semibold text-gray-900">Mike Rodriguez</div>
-                   <div className="text-sm text-gray-500">Bookkeeper, Rodriguez Financial Services</div>
-                 </div>
-               </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-8 shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="flex text-yellow-400">
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                  <Star className="h-5 w-5 fill-current" />
-                </div>
-              </div>
-              <p className="text-gray-600 mb-6">
-                "From 8 hours to 45 minutes. I can now focus on growing my practice instead of drowning in paperwork."
-              </p>
-                             <div className="flex items-center">
-                 <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=48&h=48&fit=crop&crop=face&auto=format" alt="Lisa Thompson" className="w-12 h-12 rounded-full mr-4 object-cover" />
-                 <div>
-                   <div className="font-semibold text-gray-900">Lisa Thompson</div>
-                   <div className="text-sm text-gray-500">Small Business Owner, Thompson & Associates</div>
-                 </div>
-               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600">
+      {/* CTA Section - Clean & Professional */}
+      <section className="py-20 bg-gray-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Ready to Stop Wasting Time on Reconciliation?
+            Ready to Transform Your Financial Management?
           </h2>
-                     <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-             Join small business owners & bookkeepers who've already saved 20+ hours monthly. Start your free trial today.
-           </p>
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            Join finance professionals who've already saved 20+ hours monthly. Start your free trial today.
+          </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-10 py-6 text-xl font-semibold shadow-lg">
+              <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100 px-10 py-6 text-xl font-semibold">
                 Start Free 14-Day Trial
                 <ArrowRight className="ml-3 h-6 w-6" />
               </Button>
             </a>
             <a href="#demo" className="scroll-smooth">
-                              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-blue-600 px-10 py-6 text-xl font-semibold">
-                  <Play className="mr-3 h-6 w-6" />
-                  See How It Works
-                </Button>
-            </a>
-          </div>
-                     <p className="text-sm text-blue-200 mt-6">
-             💳 Credit card required • 🔒 Cancel anytime • ✅ No auto-billing during trial
-           </p>
-        </div>
-      </section>
-
-      {/* Demo Video Section */}
-      <section id="demo" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              See How It Works in 2 Minutes
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Watch how ReconcileBook transforms 8+ hours of manual reconciliation into a 10-minute automated process.
-            </p>
-          </div>
-          
-          <div className="max-w-4xl mx-auto">
-            <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden">
-              {/* YouTube Video Embed */}
-              <div className="aspect-video">
-                <iframe
-                  className="w-full h-full"
-                  src="https://www.youtube.com/embed/_K9NET1njog?cc_load_policy=1"
-                  title="ReconcileBook - Professional Bank Reconciliation Software Demo"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              </div>
-
-              {/* Video Description */}
-              <div className="p-8">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">What You'll See:</h3>
-                <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-600">
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Upload bank and bookkeeping CSV files</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Smart matching interface</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>One-click reconciliation</span>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>Professional PDF reports</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>QuickBooks CSV export</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <span>95% time savings</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need to Reconcile Like a Pro
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Built specifically for small businesses, bookkeepers, and accountants who need powerful reconciliation without the complexity.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="relative">
-              <CardHeader>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <Upload className="h-6 w-6 text-blue-600" />
-                </div>
-                <CardTitle className="text-xl">Smart CSV Upload</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Drag, drop, done. Our smart parser handles any CSV format from any bank or accounting software.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="relative">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                  <Zap className="h-6 w-6 text-green-600" />
-              </div>
-                <CardTitle className="text-xl">Instant Auto-Matching</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Watch transactions pair themselves automatically. Our algorithm finds matches you'd miss manually.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="relative">
-              <CardHeader>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                  <FileText className="h-6 w-6 text-purple-600" />
-            </div>
-                <CardTitle className="text-xl">Professional Reports</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Generate bank-ready PDF reports and CSV exports that make your accountant smile.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="relative">
-              <CardHeader>
-                <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-indigo-600" />
-              </div>
-                <CardTitle className="text-xl">Multi-Client Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Perfect for bookkeepers managing multiple clients. Keep everyone's data separate and organized.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="relative">
-              <CardHeader>
-                <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-yellow-600" />
-            </div>
-                <CardTitle className="text-xl">Bank-Grade Security</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Your financial data stays encrypted and private. No AI training, no human review, no data sharing.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="relative">
-              <CardHeader>
-                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                  <Clock className="h-6 w-6 text-red-600" />
-                </div>
-                <CardTitle className="text-xl">Time Tracking</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  See exactly how much time you're saving. Most users cut reconciliation time by 85%.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="relative">
-              <CardHeader>
-                <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                  <TrendingUp className="h-6 w-6 text-teal-600" />
-                </div>
-                <CardTitle className="text-xl">QuickBooks Integration</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Connect your QuickBooks account and sync 24+ months of transactions automatically. No more manual exports.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* NEW: Invoice Collections Tool Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Stop Chasing Payments. Start Collecting Them.
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our new Invoice Collections Tool automatically sends professional payment reminders, so you get paid 40% faster without awkward conversations.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-            {/* Left: Problem */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                  <span className="text-2xl">💸</span>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900">The Payment Collection Nightmare</h3>
-                  <p className="text-gray-600">Every business owner's biggest pain point</p>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">14 hours weekly wasted chasing payments</div>
-                    <div className="text-sm text-gray-600">Time you could spend growing your business</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">55% of invoices paid late</div>
-                    <div className="text-sm text-gray-600">Costing businesses $6K-30K annually</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Awkward money conversations</div>
-                    <div className="text-sm text-gray-600">Damaging client relationships</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Cash flow constantly stressed</div>
-                    <div className="text-sm text-gray-600">Preventing business growth</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Solution */}
-            <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8 border border-green-200">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🚀</span>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Automated Payment Collection</h3>
-                <p className="text-gray-600">Professional reminders that actually work</p>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">QuickBooks integration</div>
-                    <div className="text-sm text-gray-600">Automatically syncs overdue invoices</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Smart email escalation</div>
-                    <div className="text-sm text-gray-600">Day 7: Friendly, Day 14: Firm, Day 21+: Final</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Professional templates</div>
-                    <div className="text-sm text-gray-600">Preserves client relationships</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <div>
-                    <div className="font-semibold text-gray-900">40% faster payments</div>
-                    <div className="text-sm text-gray-600">Proven results from real businesses</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* How It Works */}
-          <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">How Invoice Collections Works</h3>
-            <p className="text-lg text-gray-600">From overdue invoice to payment in 3 simple steps</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-3xl">📊</span>
-              </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-3">1. Sync QuickBooks</h4>
-              <p className="text-gray-600">
-                Connect once, automatically import all overdue invoices and client contact info.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-3xl">📧</span>
-              </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-3">2. Automated Emails</h4>
-              <p className="text-gray-600">
-                Professional reminders sent at optimal times with smart escalation.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-3xl">💰</span>
-              </div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-3">3. Get Paid Faster</h4>
-              <p className="text-gray-600">
-                Track payments, stop campaigns automatically, and improve cash flow.
-              </p>
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div className="text-center">
-            <p className="text-lg text-gray-600 mb-6">
-              <strong>Stop losing money to late payments.</strong> Start collecting what you're owed automatically.
-            </p>
-            <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-              <Button size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white px-8 py-4 text-lg font-semibold">
-                Start Free Trial - Get Both Tools
-                <ArrowRight className="ml-2 h-5 w-5" />
+              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-gray-900 px-10 py-6 text-xl font-semibold">
+                <Play className="mr-3 h-6 w-6" />
+                See How It Works
               </Button>
             </a>
-            <p className="text-sm text-gray-500 mt-4">
-              💳 14-day free trial • 🔒 Cancel anytime • ✅ No auto-billing
-            </p>
           </div>
+          <p className="text-sm text-gray-400 mt-6">
+            💳 14-day free trial • 🔒 Cancel anytime • ✅ No auto-billing during trial
+          </p>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section id="testimonials" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Real Results from Real Users
-            </h2>
-            <div className="flex justify-center items-center space-x-2 mb-4">
-              {[1,2,3,4,5].map((star) => (
-                <Star key={star} className="h-6 w-6 text-yellow-400 fill-current" />
-              ))}
-              <span className="text-gray-600 ml-2">(4.9/5 from 1,200+ reviews)</span>
-            </div>
-            </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="relative">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[1,2,3,4,5].map((star) => (
-                    <Star key={star} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic">
-                  "I was spending 6-8 hours every month on reconciliation. ReconcileBook cut that to 45 minutes. The auto-matching is incredibly accurate - it caught discrepancies I would have missed. Paid for itself in the first month."
-                </p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-blue-600 font-semibold">SM</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Sarah Martinez</div>
-                    <div className="text-gray-600 text-sm">Small Business Owner, Construction</div>
-                    <div className="text-green-600 text-sm font-medium">Saved 7.5 hours/month</div>
-              </div>
-            </div>
-              </CardContent>
-            </Card>
-
-            <Card className="relative">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[1,2,3,4,5].map((star) => (
-                    <Star key={star} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic">
-                  "Game changer for my bookkeeping practice. I can now handle 3x more clients without hiring additional staff. The professional reports are exactly what my clients need. ROI was immediate."
-                </p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-green-600 font-semibold">MJ</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Michael Johnson</div>
-                    <div className="text-gray-600 text-sm">Certified Bookkeeper</div>
-                    <div className="text-green-600 text-sm font-medium">3x more clients</div>
-              </div>
-            </div>
-              </CardContent>
-            </Card>
-
-            <Card className="relative">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[1,2,3,4,5].map((star) => (
-                    <Star key={star} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic">
-                  "Finally, a tool that does exactly what I need without the QuickBooks bloat. Clean interface, fast processing, and reliable results. My reconciliation accuracy went from 85% to 98%."
-                </p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-purple-600 font-semibold">LC</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Lisa Chen</div>
-                    <div className="text-gray-600 text-sm">Finance Manager, Tech Startup</div>
-                    <div className="text-green-600 text-sm font-medium">98% accuracy rate</div>
-              </div>
-            </div>
-              </CardContent>
-            </Card>
-
-            <Card className="relative">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[1,2,3,4,5].map((star) => (
-                    <Star key={star} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic">
-                  "QuickBooks was driving me crazy with wrong auto-matches. ReconcileBook's intelligent matching is spot-on. I can review and accept matches with confidence. Time savings are incredible."
-                </p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-orange-600 font-semibold">RD</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Robert Davis</div>
-                    <div className="text-gray-600 text-sm">Accountant, CPA Firm</div>
-                    <div className="text-green-600 text-sm font-medium">90% time savings</div>
-              </div>
-            </div>
-              </CardContent>
-            </Card>
-
-            <Card className="relative">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[1,2,3,4,5].map((star) => (
-                    <Star key={star} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic">
-                  "The CSV import feature is brilliant. Works with any bank format. No more manual data entry. Professional reports make my clients happy. This tool pays for itself every month."
-                </p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-teal-600 font-semibold">AW</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Amanda Wilson</div>
-                    <div className="text-gray-600 text-sm">Bookkeeper, Retail Business</div>
-                    <div className="text-green-600 text-sm font-medium">Eliminated manual entry</div>
-              </div>
-            </div>
-              </CardContent>
-            </Card>
-
-            <Card className="relative">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[1,2,3,4,5].map((star) => (
-                    <Star key={star} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic">
-                  "As a small business owner, I was drowning in reconciliation. ReconcileBook made it simple and fast. The support team is amazing. I actually look forward to reconciliation now."
-                </p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-pink-600 font-semibold">TB</span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-gray-900">Thomas Brown</div>
-                    <div className="text-gray-600 text-sm">Restaurant Owner</div>
-                    <div className="text-green-600 text-sm font-medium">From 6 hours to 30 min</div>
-              </div>
-            </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20 bg-gray-50">
+      {/* Pricing Section - Clean & Professional */}
+      <section id="pricing" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
@@ -1055,7 +387,7 @@ export default function LandingPage() {
           
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {/* Starter Plan */}
-            <Card className="relative">
+            <Card className="relative border-gray-200">
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl">Starter</CardTitle>
                 <div className="mt-4">
@@ -1100,16 +432,16 @@ export default function LandingPage() {
             </Card>
 
             {/* Professional Plan */}
-            <Card className="relative border-blue-500 border-2">
+            <Card className="relative border-gray-900 border-2">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-blue-500 text-white">Most Popular</Badge>
+                <Badge className="bg-gray-900 text-white">Most Popular</Badge>
               </div>
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl">Professional</CardTitle>
                 <div className="mt-4">
                   <span className="text-4xl font-bold">$79</span>
                   <span className="text-gray-600">/month</span>
-            </div>
+                </div>
                 <p className="text-gray-600 mt-2">For growing businesses & bookkeepers</p>
               </CardHeader>
               <CardContent>
@@ -1137,7 +469,7 @@ export default function LandingPage() {
                 </ul>
                 <div className="space-y-3">
                   <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-                    <Button className="w-full">
+                    <Button className="w-full bg-gray-900 hover:bg-gray-800">
                       Get Professional - $79/mo
                     </Button>
                   </a>
@@ -1152,7 +484,7 @@ export default function LandingPage() {
             </Card>
 
             {/* Enterprise Plan */}
-            <Card className="relative">
+            <Card className="relative border-gray-200">
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl">Enterprise</CardTitle>
                 <div className="mt-4">
@@ -1192,7 +524,7 @@ export default function LandingPage() {
                       Try Enterprise Free (14 Days)
                     </Button>
                   </a>
-              </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -1208,7 +540,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Trust & Security Section */}
+      {/* Trust & Security Section - Clean & Professional */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -1222,32 +554,32 @@ export default function LandingPage() {
           
           <div className="grid md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-8 w-8 text-blue-600" />
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-8 w-8 text-gray-600" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Bank-Grade Security</h3>
               <p className="text-gray-600 text-sm">256-bit SSL encryption, GDPR compliant</p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="h-8 w-8 text-green-600" />
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-8 w-8 text-gray-600" />
               </div>
               <h3 className="text-lg font-semibold mb-2">99.9% Uptime</h3>
               <p className="text-gray-600 text-sm">Enterprise-grade infrastructure with guaranteed reliability</p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-purple-600" />
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="h-8 w-8 text-gray-600" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Expert Support</h3>
               <p className="text-gray-600 text-sm">Live chat, email, and phone support from reconciliation experts</p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="h-8 w-8 text-orange-600" />
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="h-8 w-8 text-gray-600" />
               </div>
               <h3 className="text-lg font-semibold mb-2">Proven Results</h3>
               <p className="text-gray-600 text-sm">1,200+ users saving 10+ hours per month on average</p>
@@ -1262,13 +594,13 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="h-5 w-5 text-white" />
+                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                  <TrendingUp className="h-5 w-5 text-gray-900" />
                 </div>
                 <span className="text-xl font-bold">ReconcileBook</span>
               </div>
               <p className="text-gray-400 mb-4">
-                Professional bank reconciliation software that saves you time and reduces errors.
+                Professional financial management software that saves you time and reduces errors.
               </p>
               <div className="mb-4">
                 <p className="text-gray-400 mb-2">Questions? Get in touch:</p>
@@ -1276,20 +608,9 @@ export default function LandingPage() {
                   alex@usealgomind.com
                 </a>
               </div>
-              <div className="flex space-x-4">
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">
-                  <span className="text-gray-400">📧</span>
-          </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">
-                  <span className="text-gray-400">📱</span>
-                </div>
-                <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center">
-                  <span className="text-gray-400">💬</span>
-                </div>
-              </div>
-              </div>
+            </div>
 
-              <div>
+            <div>
               <h3 className="font-semibold mb-4">Product</h3>
               <ul className="space-y-2 text-gray-400">
                 <li><a href="#" className="hover:text-white">Features</a></li>
@@ -1297,9 +618,9 @@ export default function LandingPage() {
                 <li><a href="#" className="hover:text-white">Security</a></li>
                 <li><a href="#" className="hover:text-white">Integrations</a></li>
               </ul>
-              </div>
+            </div>
 
-              <div>
+            <div>
               <h3 className="font-semibold mb-4">Support</h3>
               <ul className="space-y-2 text-gray-400">
                 <li><a href="mailto:alex@usealgomind.com" className="hover:text-white">Contact Support</a></li>
@@ -1307,19 +628,8 @@ export default function LandingPage() {
                 <li><a href="#" className="hover:text-white">API Docs</a></li>
                 <li><a href="#" className="hover:text-white">Status</a></li>
               </ul>
-              </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="hover:text-white">Terms of Service</Link></li>
-                <li><Link href="/eula" className="hover:text-white">End‑User License Agreement</Link></li>
-                <li><a href="#" className="hover:text-white">Cookie Policy</a></li>
-                <li><a href="#" className="hover:text-white">GDPR</a></li>
-              </ul>
             </div>
-        </div>
+          </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
             <p>&copy; 2024 ReconcileBook. All rights reserved.</p>
