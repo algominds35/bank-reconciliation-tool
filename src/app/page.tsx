@@ -371,7 +371,135 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Quick Testimonials Section */}
+      <section className="py-16 bg-neutral-50/50">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold text-neutral-900 mb-4">
+              Trusted by 1,200+ Financial Professionals
+            </h2>
+            <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
+              See what bookkeepers, accountants, and business owners are saying about ReconcilePro
+            </p>
+          </motion.div>
 
+          {/* Featured Testimonials Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            {/* Testimonial 1 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="bg-white p-6 rounded-xl border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-300"
+            >
+              <div className="flex mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              <p className="text-neutral-700 mb-6 leading-relaxed text-sm italic">
+                "I handle 75+ clients and this tool has saved me 20+ hours weekly. The AI matching is incredibly accurate - I've reduced reconciliation errors by 95%."
+              </p>
+              <div className="flex items-center space-x-3">
+                <img 
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" 
+                  alt="Alex Rodriguez"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
+                />
+                <div>
+                  <p className="font-semibold text-neutral-900">Alex Rodriguez</p>
+                  <p className="text-sm text-neutral-600">Senior Bookkeeper</p>
+                  <p className="text-xs text-neutral-500">Rodriguez Financial Services</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Testimonial 2 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="bg-white p-6 rounded-xl border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-300"
+            >
+              <div className="flex mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              <p className="text-neutral-700 mb-6 leading-relaxed text-sm italic">
+                "We process 5,000+ transactions monthly. This tool reconciled 3 months of backlog in 2 hours. The QuickBooks integration is seamless."
+              </p>
+              <div className="flex items-center space-x-3">
+                <img 
+                  src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face" 
+                  alt="Sarah Chen"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
+                />
+                <div>
+                  <p className="font-semibold text-neutral-900">Sarah Chen</p>
+                  <p className="text-sm text-neutral-600">CFO</p>
+                  <p className="text-xs text-neutral-500">TechFlow Solutions</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Testimonial 3 */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              className="bg-white p-6 rounded-xl border border-neutral-200 shadow-sm hover:shadow-md transition-all duration-300"
+            >
+              <div className="flex mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              <p className="text-neutral-700 mb-6 leading-relaxed text-sm italic">
+                "Our firm serves 120+ small businesses. This tool has become our secret weapon - clients love the accuracy and speed. ROI in the first month."
+              </p>
+              <div className="flex items-center space-x-3">
+                <img 
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" 
+                  alt="Michael Thompson"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
+                />
+                <div>
+                  <p className="font-semibold text-neutral-900">Michael Thompson</p>
+                  <p className="text-sm text-neutral-600">Managing Partner</p>
+                  <p className="text-xs text-neutral-500">Thompson & Associates CPA</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* View All Testimonials CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <a href="#testimonials">
+              <Button variant="outline" className="border-neutral-300 text-neutral-700 hover:bg-neutral-50 px-8 py-3">
+                <Star className="w-4 h-4 mr-2" />
+                View All Testimonials
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </a>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Features Grid */}
       <section id="features" className="py-24 bg-neutral-50/50">
