@@ -253,6 +253,77 @@ export default function HomePage() {
               </a>
             </div>
 
+            {/* Switch from QB Badge */}
+            <div className="flex justify-center mb-8">
+              <div className="inline-flex items-center px-6 py-3 bg-green-50 border border-green-200 rounded-full shadow-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-3 h-3 text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-green-700">1,200+ switched from QuickBooks to this</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Real Testimonials with Faces */}
+            <div className="mb-12">
+              <div className="flex flex-wrap justify-center items-center gap-6 mb-6">
+                <div className="flex items-center space-x-2">
+                  <img 
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" 
+                    alt="Alex Rodriguez"
+                    className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
+                  />
+                  <img 
+                    src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face" 
+                    alt="Sarah Chen"
+                    className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
+                  />
+                  <img 
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" 
+                    alt="Michael Thompson"
+                    className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
+                  />
+                  <img 
+                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face" 
+                    alt="Jennifer Walsh"
+                    className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
+                  />
+                  <img 
+                    src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face" 
+                    alt="David Kim"
+                    className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
+                  />
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                  <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                </div>
+                <span className="text-sm text-neutral-600">1,200+ entrepreneurs finding proven solutions</span>
+              </div>
+              
+              {/* Quick Testimonial Preview */}
+              <div className="max-w-2xl mx-auto text-center">
+                <p className="text-lg text-neutral-700 italic mb-4">
+                  "This tool saved me 20+ hours weekly. The AI matching is incredibly accurate - I've reduced reconciliation errors by 95%."
+                </p>
+                <div className="flex items-center justify-center space-x-3">
+                  <img 
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face" 
+                    alt="Alex Rodriguez"
+                    className="w-8 h-8 rounded-full object-cover border border-neutral-200"
+                  />
+                  <div className="text-left">
+                    <p className="text-sm font-medium text-neutral-900">Alex Rodriguez</p>
+                    <p className="text-xs text-neutral-500">Senior Bookkeeper, Rodriguez Financial Services</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Trust indicators */}
             <div className="pt-8 border-t border-neutral-200">
               <p className="text-neutral-500 text-sm font-medium mb-6">TRUSTED BY LEADING COMPANIES</p>
@@ -556,7 +627,6 @@ export default function HomePage() {
                         <input type="checkbox" className="rounded border-neutral-300" />
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Date</th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Description</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">$ Amount</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Type</th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Category</th>
@@ -570,7 +640,6 @@ export default function HomePage() {
                         <input type="checkbox" className="rounded border-neutral-300" checked />
                       </td>
                       <td className="px-4 py-3 text-sm text-neutral-900">1/30/2024</td>
-                      <td className="px-4 py-3 text-sm text-neutral-900">Late Fee Charge</td>
                       <td className="px-4 py-3 text-sm font-medium text-red-600">-$25.00</td>
                       <td className="px-4 py-3">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Bank</span>
@@ -592,7 +661,6 @@ export default function HomePage() {
                         <input type="checkbox" className="rounded border-neutral-300" checked />
                       </td>
                       <td className="px-4 py-3 text-sm text-neutral-900">1/30/2024</td>
-                      <td className="px-4 py-3 text-sm text-neutral-900">Client Refund</td>
                       <td className="px-4 py-3 text-sm font-medium text-green-600">$3200.00</td>
                       <td className="px-4 py-3">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Bank</span>
@@ -614,7 +682,6 @@ export default function HomePage() {
                         <input type="checkbox" className="rounded border-neutral-300" />
                       </td>
                       <td className="px-4 py-3 text-sm text-neutral-900">1/24/2024</td>
-                      <td className="px-4 py-3 text-sm text-neutral-900">Phone Bill</td>
                       <td className="px-4 py-3 text-sm font-medium text-red-600">-$150.00</td>
                       <td className="px-4 py-3">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Bank</span>
@@ -632,7 +699,6 @@ export default function HomePage() {
                         <input type="checkbox" className="rounded border-neutral-300" />
                       </td>
                       <td className="px-4 py-3 text-sm text-neutral-900">1/24/2024</td>
-                      <td className="px-4 py-3 text-sm text-neutral-900">Gas Station</td>
                       <td className="px-4 py-3 text-sm font-medium text-red-600">-$45.00</td>
                       <td className="px-4 py-3">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Bank</span>
