@@ -188,5 +188,5 @@ export interface EmailTemplateVariables {
   days_overdue: number;
   your_name: string;
   deadline_date?: string;
-  [key: string]: string | number;
+  [key: string]: string | number | undefined;
 }
