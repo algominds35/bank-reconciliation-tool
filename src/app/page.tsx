@@ -22,7 +22,11 @@ import {
   Trash2,
   RefreshCw,
   ArrowLeft,
-  Plus
+  Plus,
+  Building2,
+  CreditCard,
+  Minus,
+  X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -740,36 +744,271 @@ export default function HomePage() {
                 🔗 QuickBooks Integration
               </h3>
               <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
-                Seamlessly connect your QuickBooks account for automatic transaction syncing and real-time data.
+                Connect your QuickBooks account to automatically sync transactions and integrate them into your reconciliation workflow.
               </p>
             </div>
 
-            {/* QuickBooks Integration Mockup */}
-            <div className="bg-white border border-neutral-200 rounded-2xl shadow-xl p-12 max-w-4xl mx-auto text-center">
-              <div className="flex justify-between items-start mb-8">
-                <div className="text-left">
-                  <h4 className="text-3xl font-bold text-neutral-900 mb-2">QuickBooks Integration</h4>
-                  <p className="text-lg text-neutral-600">Connect your QuickBooks account to automatically sync transactions and integrate them into your reconciliation workflow.</p>
+            {/* QuickBooks Connected Dashboard Mockup */}
+            <div className="bg-white border border-neutral-200 rounded-2xl shadow-xl p-8 max-w-6xl mx-auto">
+              {/* Header with Connection Status */}
+              <div className="flex justify-between items-center mb-8 pb-4 border-b border-neutral-200">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-green-600 text-white text-lg font-bold rounded-lg flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="text-2xl font-bold text-neutral-900">QuickBooks Connected</h4>
+                    <p className="text-green-600 font-medium">✓ Successfully Connected!</p>
+                  </div>
                 </div>
-                <a href="#" className="text-blue-600 hover:text-blue-700 flex items-center">
-                  <ArrowLeft className="w-4 h-4 mr-1" />
-                  Back to Dashboard
-                </a>
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-neutral-500">Realm ID: 9341455152432773</span>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
               </div>
 
-              <div className="bg-neutral-50 rounded-2xl p-12 mb-8">
-                <h5 className="text-xl font-semibold text-neutral-900 mb-2">Connect QuickBooks</h5>
-                <p className="text-neutral-600 mb-8">Link your QuickBooks account to start syncing transactions</p>
-                
-                <div className="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Zap className="w-16 h-16 text-blue-600" />
+              {/* Sync Status */}
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <CheckCircle className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-blue-900">Sync completed successfully!</p>
+                      <p className="text-sm text-blue-700">Last sync: 8/17/2025 • Status: completed</p>
+                    </div>
+                  </div>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2">
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Full Historical Sync
+                  </Button>
                 </div>
-                
-                <h6 className="text-xl font-semibold text-neutral-900 mb-4">Ready to Connect?</h6>
-                <p className="text-neutral-600 mb-8">Connect your QuickBooks account to automatically import transactions and integrate them into your reconciliation workflow.</p>
-                
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
-                  Connect QuickBooks
+              </div>
+
+              {/* QuickBooks Dashboard Metrics */}
+              <div className="grid grid-cols-4 gap-6 mb-8">
+                <div className="bg-neutral-50 rounded-xl p-4 text-center border">
+                  <div className="text-2xl font-bold text-neutral-900">$47,892.45</div>
+                  <div className="text-sm text-neutral-600">Total Balance</div>
+                  <div className="text-xs text-green-600 mt-1">+$2,450.00 this month</div>
+                </div>
+                <div className="bg-neutral-50 rounded-xl p-4 text-center border">
+                  <div className="text-2xl font-bold text-neutral-900">8</div>
+                  <div className="text-sm text-neutral-600">Connected Accounts</div>
+                  <div className="text-xs text-blue-600 mt-1">3 bank, 5 credit</div>
+                </div>
+                <div className="bg-neutral-50 rounded-xl p-4 text-center border">
+                  <div className="text-2xl font-bold text-green-600">1,247</div>
+                  <div className="text-sm text-neutral-600">Reconciled Transactions</div>
+                  <div className="text-xs text-green-600 mt-1">98% accuracy</div>
+                </div>
+                <div className="bg-neutral-50 rounded-xl p-4 text-center border">
+                  <div className="text-2xl font-bold text-orange-600">23</div>
+                  <div className="text-sm text-neutral-600">Pending Reconciliation</div>
+                  <div className="text-xs text-orange-600 mt-1">Requires review</div>
+                </div>
+              </div>
+
+              {/* Connected Bank Accounts */}
+              <div className="bg-neutral-50 rounded-xl p-6 mb-8">
+                <h5 className="text-lg font-semibold text-neutral-900 mb-4">Connected Bank Accounts</h5>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="bg-white p-4 rounded-lg border">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          <Building2 className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-neutral-900">Chase Business Checking</p>
+                          <p className="text-sm text-neutral-500">****1234</p>
+                        </div>
+                      </div>
+                      <span className="text-lg font-bold text-green-600">$23,456.78</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-neutral-500">Last sync: 2 min ago</span>
+                      <span className="text-green-600 font-medium">✓ Connected</span>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-white p-4 rounded-lg border">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                          <CreditCard className="w-5 h-5 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-neutral-900">Chase Business Credit</p>
+                          <p className="text-sm text-neutral-500">****5678</p>
+                        </div>
+                      </div>
+                      <span className="text-lg font-bold text-red-600">-$8,234.56</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-neutral-500">Last sync: 5 min ago</span>
+                      <span className="text-green-600 font-medium">✓ Connected</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-lg border">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                          <Building2 className="w-5 h-5 text-purple-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-neutral-900">Wells Fargo Savings</p>
+                          <p className="text-sm text-neutral-500">****9012</p>
+                        </div>
+                      </div>
+                      <span className="text-lg font-bold text-green-600">$32,670.23</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-neutral-500">Last sync: 1 min ago</span>
+                      <span className="text-green-600 font-medium">✓ Connected</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-4 rounded-lg border">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                          <CreditCard className="w-5 h-5 text-orange-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-neutral-900">Amex Business Gold</p>
+                          <p className="text-sm text-neutral-500">****3456</p>
+                        </div>
+                      </div>
+                      <span className="text-lg font-bold text-red-600">-$12,456.78</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-neutral-500">Last sync: 3 min ago</span>
+                      <span className="text-green-600 font-medium">✓ Connected</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Recent Transactions */}
+              <div className="bg-neutral-50 rounded-xl p-6 mb-8">
+                <h5 className="text-lg font-semibold text-neutral-900 mb-4">Recent Transactions</h5>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-4 bg-white rounded-lg border">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-neutral-900">Client Payment - ABC Corp</p>
+                        <p className="text-sm text-neutral-500">1/30/2024 • Chase Business Checking</p>
+                        <p className="text-xs text-green-600">✓ Auto-matched with Invoice #1001</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-lg font-bold text-green-600">$2,500.00</span>
+                      <p className="text-sm text-neutral-500">Reconciled</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 bg-white rounded-lg border">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                        <Minus className="w-5 h-5 text-red-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-neutral-900">Office Supplies - Staples</p>
+                        <p className="text-sm text-neutral-500">1/30/2024 • Chase Business Credit</p>
+                        <p className="text-xs text-blue-600">📋 Ready for categorization</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-lg font-bold text-red-600">-$89.99</span>
+                      <p className="text-sm text-neutral-500">Pending</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 bg-white rounded-lg border">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-neutral-900">Software Subscription - Adobe</p>
+                        <p className="text-sm text-neutral-500">1/30/2024 • Amex Business Gold</p>
+                        <p className="text-xs text-green-600">✓ Auto-matched with Expense</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-lg font-bold text-red-600">-$52.99</span>
+                      <p className="text-sm text-neutral-500">Reconciled</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 bg-white rounded-lg border">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-neutral-900">Client Payment - XYZ Inc</p>
+                        <p className="text-sm text-neutral-500">1/30/2024 • Wells Fargo Savings</p>
+                        <p className="text-xs text-green-600">✓ Auto-matched with Invoice #1002</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-lg font-bold text-green-600">$1,800.00</span>
+                      <p className="text-sm text-neutral-500">Reconciled</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* AI Matching Summary */}
+              <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-xl p-6 mb-8">
+                <div className="flex items-center justify-between mb-4">
+                  <h5 className="text-lg font-semibold text-blue-900">AI Auto-Matching Summary</h5>
+                  <span className="text-sm text-blue-600 font-medium">Updated 2 minutes ago</span>
+                </div>
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-600">1,247</div>
+                    <div className="text-sm text-blue-600">Total Transactions</div>
+                    <div className="text-xs text-blue-500">From all accounts</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600">1,224</div>
+                    <div className="text-sm text-green-600">Auto-Matched</div>
+                    <div className="text-xs text-green-500">98.2% accuracy</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-yellow-600">15</div>
+                    <div className="text-sm text-yellow-600">Ready to Review</div>
+                    <div className="text-xs text-yellow-500">AI suggestions</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-orange-600">8</div>
+                    <div className="text-sm text-orange-600">Manual Review</div>
+                    <div className="text-xs text-orange-500">Complex cases</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-center space-x-4">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3">
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  View Full Dashboard
+                </Button>
+                <Button variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 px-8 py-3">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export Reconciliation Report
+                </Button>
+                <Button variant="outline" className="border-red-200 text-red-600 hover:bg-red-50 px-8 py-3">
+                  <X className="w-4 h-4 mr-2" />
+                  Disconnect QuickBooks
                 </Button>
               </div>
             </div>
