@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
       due_date: formatDate(invoice.due_date),
       days_overdue: invoice.days_overdue,
       your_name: 'Your Company Name', // This should come from user settings
-      deadline_date: invoice.days_overdue > 14 ? formatDate(addDays(new Date(), 2)) : undefined
+      deadline_date: invoice.days_overdue > 14 ? formatDate(addDays(new Date(), 2).toISOString()) : undefined
     };
 
     const processedSubject = processTemplate(template.subject_line, templateVars);
