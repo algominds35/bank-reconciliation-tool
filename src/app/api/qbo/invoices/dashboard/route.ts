@@ -71,7 +71,11 @@ export async function GET(req: NextRequest) {
     }
 
     // Get total count for pagination
-    const { count } = await query.select('*', { count: 'exact', head: true });
+    const { count } = await supabase
+      .from('invoices')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user_id)
+      .eq('realm_id', realm_id);
 
     // Apply pagination
     const offset = (page - 1) * limit;
