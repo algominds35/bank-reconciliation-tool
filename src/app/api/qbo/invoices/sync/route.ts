@@ -254,22 +254,35 @@ function calculateNextReminderDate(daysOverdue: number): string {
 async function updateOverdueStatuses(user_id: string, realm_id: string): Promise<void> {
   const today = new Date();
   
-  // Update all invoices to recalculate overdue status
-  const { error } = await supabase
+  // Get all invoices to update
+  const { data: invoices, error: fetchError } = await supabase
     .from('invoices')
-    .update({
-      days_overdue: supabase.sql`EXTRACT(DAY FROM (${today.toISOString()}::date - due_date::date))`,
-      status: supabase.sql`CASE 
-        WHEN EXTRACT(DAY FROM (${today.toISOString()}::date - due_date::date)) > 0 THEN 'overdue'
-        ELSE 'open'
-      END`,
-      updated_at: today.toISOString()
-    })
+    .select('id, due_date')
     .eq('user_id', user_id)
     .eq('realm_id', realm_id)
     .neq('status', 'paid');
 
-  if (error) throw error;
+  if (fetchError) throw fetchError;
+
+  // Update each invoice individually
+  for (const invoice of invoices || []) {
+    const dueDate = new Date(invoice.due_date);
+    const daysOverdue = Math.max(0, Math.ceil((today.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24)));
+    const status = daysOverdue > 0 ? 'overdue' : 'open';
+
+    const { error: updateError } = await supabase
+      .from('invoices')
+      .update({
+        days_overdue: daysOverdue,
+        status: status,
+        updated_at: today.toISOString()
+      })
+      .eq('id', invoice.id);
+
+    if (updateError) {
+      console.error(`Failed to update invoice ${invoice.id}:`, updateError);
+    }
+  }
 }
 
 async function createPaymentReminders(user_id: string, realm_id: string): Promise<void> {
