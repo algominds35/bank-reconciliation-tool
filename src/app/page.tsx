@@ -162,9 +162,9 @@ export default function HomePage() {
 
             {/* Right Side Buttons */}
             <div className="flex items-center space-x-4">
-              <a href="#demo">
+              <a href="/demo" target="_blank" rel="noopener noreferrer">
                 <Button variant="ghost" className="text-neutral-600 hover:text-neutral-900 text-sm font-medium">
-                  See How It Works
+                  Try Live Demo
                 </Button>
               </a>
               <Link href="/auth/login">
@@ -227,12 +227,12 @@ export default function HomePage() {
                   Try Live Demo
                 </Button>
               </a>
-              <a href="#demo">
-                <Button variant="outline" className="border-2 border-neutral-200 text-neutral-700 px-8 py-4 text-lg rounded-lg hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-200 font-medium">
-                  <Eye className="mr-2 w-5 h-5" />
-                  See How It Works
-                </Button>
-              </a>
+                              <a href="/demo" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="border-2 border-neutral-200 text-neutral-700 px-8 py-4 text-lg rounded-lg hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-200 font-medium">
+                    <Play className="mr-2 w-5 h-5" />
+                    Try Live Demo
+                  </Button>
+                </a>
             </div>
 
             {/* Switch from QB Badge */}
@@ -1343,10 +1343,10 @@ export default function HomePage() {
                   Try Live Demo
                 </Button>
               </a>
-              <a href="#demo">
+              <a href="/demo" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" className="border-2 border-neutral-200 text-neutral-700 px-8 py-4 text-lg rounded-lg hover:border-neutral-400 hover:bg-neutral-50 font-medium">
-                  <Eye className="mr-2 w-5 h-5" />
-                  See How It Works
+                  <Play className="mr-2 w-5 h-5" />
+                  Try Live Demo
                 </Button>
               </a>
             </div>
@@ -1517,9 +1517,9 @@ export default function HomePage() {
                   Try Live Demo
                 </Button>
               </a>
-              <a href="#demo">
+              <a href="/demo" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-neutral-900 px-8 py-4 text-lg rounded-lg font-medium transition-all duration-200">
-                  See How It Works
+                  Try Live Demo
                 </Button>
               </a>
             </div>
@@ -1549,7 +1549,7 @@ export default function HomePage() {
                 <li><a href="#features" className="hover:text-neutral-900 transition-colors">Features</a></li>
                 <li><a href="#pricing" className="hover:text-neutral-900 transition-colors">Pricing</a></li>
                 <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Demo</a></li>
-                <li><a href="#demo" className="hover:text-neutral-900 transition-colors">See How It Works</a></li>
+                <li><a href="/demo" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-900 transition-colors">Try Live Demo</a></li>
               </ul>
             </div>
             
