@@ -164,11 +164,11 @@ export default function HomePage() {
 
             {/* Right Side Buttons */}
             <div className="flex items-center space-x-4">
-              <Link href="/auth/login">
+              <a href="#demo">
                 <Button variant="ghost" className="text-neutral-600 hover:text-neutral-900 text-sm font-medium">
-                  Log in
+                  See How It Works
                 </Button>
-              </Link>
+              </a>
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                 <Button className="bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
                   Start Free Trial
@@ -218,12 +218,12 @@ export default function HomePage() {
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </a>
-              <Link href="/auth/login">
+              <a href="#demo">
                 <Button variant="outline" className="border-2 border-neutral-200 text-neutral-700 px-8 py-4 text-lg rounded-lg hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-200 font-medium">
                   <Play className="mr-2 w-5 h-5" />
-                  Log In
+                  See How It Works
                 </Button>
-              </Link>
+              </a>
             </div>
 
             {/* Trust indicators */}
@@ -1151,15 +1151,15 @@ export default function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
-                  <Button className="bg-white text-neutral-900 hover:bg-gray-100 px-8 py-3 text-lg rounded-lg font-medium transition-all duration-200">
+                  <Button className="bg-white text-neutral-900 hover:bg-gray-100 px-8 py-4 text-lg rounded-lg shadow-lg font-medium transition-all duration-200">
                     Start Free Trial
                   </Button>
                 </a>
-                <Link href="/auth/login">
-                  <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-neutral-900 px-8 py-3 text-lg rounded-lg font-medium transition-all duration-200">
-                    Log In to Demo
+                <a href="#demo">
+                  <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-neutral-900 px-8 py-4 text-lg rounded-lg font-medium transition-all duration-200">
+                    See How It Works
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
           </motion.div>
@@ -1316,11 +1316,11 @@ export default function HomePage() {
                   Start Free Trial
                 </Button>
               </a>
-              <Link href="/auth/login">
+              <a href="#demo">
                 <Button variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-neutral-900 px-8 py-4 text-lg rounded-lg font-medium transition-all duration-200">
-                  Log In
+                  See How It Works
                 </Button>
-              </Link>
+              </a>
             </div>
           </motion.div>
         </div>
@@ -1348,7 +1348,7 @@ export default function HomePage() {
                 <li><a href="#features" className="hover:text-neutral-900 transition-colors">Features</a></li>
                 <li><a href="#pricing" className="hover:text-neutral-900 transition-colors">Pricing</a></li>
                 <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Demo</a></li>
-                <li><a href="/auth/login" className="hover:text-neutral-900 transition-colors">Log In</a></li>
+                <li><a href="#demo" className="hover:text-neutral-900 transition-colors">See How It Works</a></li>
               </ul>
             </div>
             
@@ -1356,8 +1356,8 @@ export default function HomePage() {
               <h3 className="font-semibold mb-4 text-neutral-900">Support</h3>
               <ul className="space-y-2 text-neutral-600 text-sm">
                 <li><a href="mailto:alex@usealgomind.com" className="hover:text-neutral-900 transition-colors">Contact Support</a></li>
-                <li><a href="/auth/login" className="hover:text-neutral-900 transition-colors">Help Center</a></li>
-                <li><a href="/auth/login" className="hover:text-neutral-900 transition-colors">Documentation</a></li>
+                <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Help Center</a></li>
+                <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Documentation</a></li>
               </ul>
             </div>
             
@@ -1365,8 +1365,8 @@ export default function HomePage() {
               <h3 className="font-semibold mb-4 text-neutral-900">Company</h3>
               <ul className="space-y-2 text-neutral-600 text-sm">
                 <li><a href="mailto:alex@usealgomind.com" className="hover:text-neutral-900 transition-colors">Contact Us</a></li>
-                <li><a href="/auth/login" className="hover:text-neutral-900 transition-colors">About</a></li>
-                <li><a href="/auth/login" className="hover:text-neutral-900 transition-colors">Blog</a></li>
+                <li><a href="#demo" className="hover:text-neutral-900 transition-colors">About</a></li>
+                <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Blog</a></li>
               </ul>
             </div>
           </div>
@@ -1376,8 +1376,8 @@ export default function HomePage() {
               © 2024 ReconcilePro. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="/auth/login" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">Privacy Policy</a>
-              <a href="/auth/login" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">Terms of Service</a>
+              <a href="#demo" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">Privacy Policy</a>
+              <a href="#demo" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm">Terms of Service</a>
             </div>
           </div>
         </div>
