@@ -272,7 +272,7 @@ export default function HomePage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
             <h2 className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6 tracking-tight">
               See It In Action
@@ -282,25 +282,177 @@ export default function HomePage() {
             </p>
           </motion.div>
 
+          {/* Product Screenshots Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+            {/* Left: AI Matching Interface */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <h3 className="text-2xl font-bold text-neutral-900">
+                AI-Powered Transaction Matching
+              </h3>
+              <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-lg">
+                <div className="bg-neutral-50 rounded-xl p-4 mb-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-semibold text-neutral-900">Bank Transactions</h4>
+                    <span className="text-sm text-neutral-500">23 unmatched</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
+                      <span className="text-sm text-neutral-700">$1,250.00 - Office Supplies</span>
+                      <span className="text-xs text-neutral-500">Mar 15, 2024</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
+                      <span className="text-sm text-neutral-700">$89.99 - Software Subscription</span>
+                      <span className="text-xs text-neutral-500">Mar 14, 2024</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
+                      <span className="text-sm text-neutral-700">$2,100.00 - Client Payment</span>
+                      <span className="text-xs text-neutral-500">Mar 13, 2024</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-green-50 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-semibold text-green-900">AI Matches Found</h4>
+                    <span className="text-sm text-green-600">3 matches</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-green-200">
+                      <span className="text-sm text-green-800">✓ $1,250.00 - Office Supplies</span>
+                      <span className="text-xs text-green-600">Matched with Invoice #1001</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-green-200">
+                      <span className="text-sm text-green-800">✓ $89.99 - Software Subscription</span>
+                      <span className="text-xs text-green-600">Matched with Recurring Expense</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Right: QuickBooks Integration */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <h3 className="text-2xl font-bold text-neutral-900">
+                Seamless QuickBooks Integration
+              </h3>
+              <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-lg">
+                <div className="bg-blue-50 rounded-xl p-4 mb-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-semibold text-blue-900">QuickBooks Sync Status</h4>
+                    <span className="text-sm text-blue-600">Connected ✓</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
+                      <span className="text-sm text-blue-800">Invoices Synced</span>
+                      <span className="text-xs text-blue-600">1,247 items</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
+                      <span className="text-sm text-blue-800">Transactions Synced</span>
+                      <span className="text-xs text-blue-600">3,891 items</span>
+                    </div>
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border">
+                      <span className="text-sm text-blue-800">Last Sync</span>
+                      <span className="text-xs text-blue-600">2 minutes ago</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-neutral-50 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-semibold text-neutral-900">Reconciliation Progress</h4>
+                    <span className="text-sm text-neutral-600">85% Complete</span>
+                  </div>
+                  <div className="w-full bg-neutral-200 rounded-full h-2 mb-2">
+                    <div className="bg-blue-600 h-2 rounded-full" style={{ width: '85%' }}></div>
+                  </div>
+                  <p className="text-xs text-neutral-500">3,891 of 4,580 transactions reconciled</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Bottom: Multi-Client Dashboard */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="space-y-6"
+          >
+            <h3 className="text-2xl font-bold text-neutral-900 text-center">
+              Multi-Client Management Dashboard
+            </h3>
+            <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-lg max-w-4xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="bg-neutral-50 rounded-xl p-4">
+                  <h4 className="font-semibold text-neutral-900 mb-2">TechFlow Solutions</h4>
+                  <div className="space-y-1">
+                    <p className="text-xs text-neutral-600">Status: <span className="text-green-600">✓ Reconciled</span></p>
+                    <p className="text-xs text-neutral-600">Transactions: 1,247</p>
+                    <p className="text-xs text-neutral-600">Last Activity: Today</p>
+                  </div>
+                </div>
+                <div className="bg-neutral-50 rounded-xl p-4">
+                  <h4 className="font-semibold text-neutral-900 mb-2">GreenLeaf Retail</h4>
+                  <div className="space-y-1">
+                    <p className="text-xs text-neutral-600">Status: <span className="text-yellow-600">⚠ In Progress</span></p>
+                    <p className="text-xs text-neutral-600">Transactions: 892</p>
+                    <p className="text-xs text-neutral-600">Last Activity: 2 hours ago</p>
+                  </div>
+                </div>
+                <div className="bg-neutral-50 rounded-xl p-4">
+                  <h4 className="font-semibold text-neutral-900 mb-2">Peak Financial</h4>
+                  <div className="space-y-1">
+                    <p className="text-xs text-neutral-600">Status: <span className="text-blue-600">🔄 Syncing</span></p>
+                    <p className="text-xs text-neutral-600">Transactions: 2,156</p>
+                    <p className="text-xs text-neutral-600">Last Activity: 5 minutes ago</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-green-50 rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-green-900">Overall Progress</h4>
+                    <p className="text-sm text-green-700">All clients are up to date with reconciliation</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold text-green-900">4,295</p>
+                    <p className="text-xs text-green-600">Total Transactions</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Demo Video CTA */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
             viewport={{ once: true }}
-            className="relative"
+            className="text-center mt-16"
           >
-            <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-12 text-center text-white">
-              <div className="max-w-4xl mx-auto">
-                <h3 className="text-3xl lg:text-4xl font-bold mb-6">
-                  Demo Video Coming Soon
-                </h3>
-                <p className="text-lg mb-8 opacity-90 leading-relaxed">
-                  We're preparing an in-depth demo showing the complete reconciliation workflow from start to finish.
-                </p>
-                <Button className="bg-white text-neutral-900 hover:bg-neutral-100 px-8 py-3 text-lg rounded-lg font-medium transition-all duration-200">
-                  Get Early Access
-                </Button>
-              </div>
+            <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-12 text-center text-white max-w-4xl mx-auto">
+              <h3 className="text-3xl lg:text-4xl font-bold mb-6">
+                Watch the Complete Demo
+              </h3>
+              <p className="text-lg mb-8 opacity-90 leading-relaxed">
+                See the full reconciliation workflow from start to finish, including AI matching, QuickBooks integration, and multi-client management.
+              </p>
+              <Button className="bg-white text-neutral-900 hover:bg-neutral-100 px-8 py-3 text-lg rounded-lg font-medium transition-all duration-200">
+                <Play className="mr-2 w-5 h-5" />
+                Watch Full Demo
+              </Button>
             </div>
           </motion.div>
         </div>
