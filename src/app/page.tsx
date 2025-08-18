@@ -196,6 +196,11 @@ export default function HomePage() {
                   See How It Works
                 </Button>
               </a>
+              <Link href="/auth/login">
+                <Button variant="ghost" className="text-neutral-600 hover:text-neutral-900 text-sm font-medium">
+                  Log In
+                </Button>
+              </Link>
               <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                 <Button className="bg-neutral-900 hover:bg-neutral-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
                   Start Free Trial
