@@ -424,7 +424,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Professional Demo Section */}
+      {/* Product Showcase - Your Actual Tool */}
       <section id="demo" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
@@ -438,230 +438,596 @@ export default function HomePage() {
               See Your Financial Automation in Action
             </h2>
             <p className="text-xl text-neutral-600 max-w-4xl mx-auto">
-              Watch how our AI-powered tool transforms your reconciliation process step by step.
+              Real screenshots from ReconcilePro showing exactly how AI-powered reconciliation and invoice collections work.
             </p>
           </motion.div>
 
-          {/* Demo Interface */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Left Side: How It Works */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="space-y-8"
-            >
-              <div>
-                <h3 className="text-2xl font-bold text-neutral-900 mb-4">How It Works</h3>
-                <p className="text-neutral-600 mb-6">
-                  Our AI agent actively processes your bank transactions and QuickBooks data to uncover reconciliation opportunities and automatically match transactions.
-                </p>
-                
-                <div className="space-y-4 mb-8">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 text-sm font-bold">1</span>
-                    </div>
-                    <span className="text-neutral-700">Upload CSV files from your bank</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 text-sm font-bold">2</span>
-                    </div>
-                    <span className="text-neutral-700">Connect QuickBooks accounts</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 text-sm font-bold">3</span>
-                    </div>
-                    <span className="text-neutral-700">AI automatically matches transactions</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 text-sm font-bold">4</span>
-                    </div>
-                    <span className="text-neutral-700">Export reconciliation reports</span>
+          {/* Bank Reconciliation Dashboard */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="mb-24"
+          >
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-neutral-900 mb-4">
+                🏦 Bank Reconciliation Dashboard
+              </h3>
+              <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
+                Your complete financial control center with real-time QuickBooks integration and transaction management.
+              </p>
+            </div>
+
+            {/* Dashboard Mockup */}
+            <div className="bg-white border border-neutral-200 rounded-2xl shadow-xl p-8 max-w-6xl mx-auto">
+              {/* Header */}
+              <div className="flex justify-between items-center mb-8 pb-4 border-b border-neutral-200">
+                <div className="flex items-center space-x-6">
+                  <h4 className="text-2xl font-bold text-neutral-900">Bank Reconciliation</h4>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-neutral-600">alex@usealgomind.com</span>
+                    <span className="text-neutral-400">•</span>
+                    <select className="text-sm text-neutral-700 bg-transparent border-none">
+                      <option>Client: All Clients</option>
+                    </select>
                   </div>
                 </div>
-              </div>
-
-              {/* Create New Reconciliation Form */}
-              <div className="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm">
-                <h4 className="text-lg font-semibold text-neutral-900 mb-4">Create New Reconciliation</h4>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">Reconciliation Name</label>
-                    <input 
-                      type="text" 
-                      placeholder="Enter reconciliation name"
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">Bank Account</label>
-                    <select className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                      <option>Select bank account</option>
-                      <option>Chase Business Checking</option>
-                      <option>Wells Fargo Savings</option>
-                      <option>Amex Business Gold</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">Date Range</label>
-                    <select className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                      <option>Select date range</option>
-                      <option>Last 30 days</option>
-                      <option>Last 3 months</option>
-                      <option>Last 6 months</option>
-                      <option>Custom range</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">AI Matching Rules</label>
-                    <select className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                      <option>Select matching rules</option>
-                      <option>Strict (99% confidence)</option>
-                      <option>Standard (95% confidence)</option>
-                      <option>Loose (90% confidence)</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">Keywords</label>
-                    <div className="flex space-x-2">
-                      <input 
-                        type="text" 
-                        placeholder="Type keyword and press Enter"
-                        className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        Add
-                      </button>
-                    </div>
-                    <p className="text-xs text-neutral-500 mt-1">Press Enter to add • 0/50 keywords added</p>
-                  </div>
-                  
-                  <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                    Start Reconciliation
+                <div className="flex items-center space-x-4">
+                  <button className="flex items-center space-x-2 text-sm text-neutral-600 hover:text-neutral-900">
+                    <Users className="w-4 h-4" />
+                    <span>Team</span>
                   </button>
+                  <button className="flex items-center space-x-2 text-sm text-neutral-600 hover:text-neutral-900">
+                    <Shield className="w-4 h-4" />
+                    <span>Support</span>
+                  </button>
+                  <button className="flex items-center space-x-2 text-sm text-neutral-600 hover:text-neutral-900">
+                    <span className="w-4 h-4 bg-blue-600 text-white text-xs font-bold rounded flex items-center justify-center">QB</span>
+                    <span>QuickBooks</span>
+                  </button>
+                  <button className="flex items-center space-x-2 text-sm text-neutral-600 hover:text-neutral-900">
+                    <BarChart3 className="w-4 h-4" />
+                    <span>Settings</span>
+                  </button>
+                  <button className="text-sm text-red-600 hover:text-red-700">Sign Out</button>
                 </div>
               </div>
-            </motion.div>
 
-            {/* Right Side: See Results */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="space-y-8"
-            >
-              <div>
-                <h3 className="text-2xl font-bold text-neutral-900 mb-4">See Results</h3>
-                <p className="text-neutral-600 mb-6">
-                  All insights are organized and stored in a structured database for easy access and analysis.
-                </p>
-              </div>
-
-              {/* Results Panel */}
-              <div className="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm">
-                <div className="flex items-center justify-between mb-6">
-                  <h4 className="text-lg font-semibold text-neutral-900">Bank Reconciliation Results</h4>
-                  <div className="flex space-x-2">
-                    <button className="px-3 py-1 text-sm text-neutral-600 hover:text-neutral-900 transition-colors">Status</button>
-                    <button className="px-3 py-1 text-sm text-neutral-600 hover:text-neutral-900 transition-colors">Refresh</button>
-                    <button className="px-3 py-1 bg-orange-500 text-white text-sm rounded hover:bg-orange-600 transition-colors">Execute Pipeline</button>
+              {/* Summary Cards */}
+              <div className="grid grid-cols-6 gap-4 mb-8">
+                <div className="bg-neutral-50 rounded-lg p-4 text-center">
+                  <div className="text-2xl font-bold text-neutral-900">36</div>
+                  <div className="text-sm text-neutral-600 flex items-center justify-center">
+                    <BarChart3 className="w-4 h-4 mr-1" />
+                    Total
                   </div>
                 </div>
-                
-                <div className="mb-4">
-                  <span className="text-sm text-neutral-500">Account: Chase Business Checking • Duration: Last 30 days</span>
-                </div>
-
-                {/* Results Table */}
-                <div className="overflow-hidden border border-neutral-200 rounded-lg">
-                  <table className="w-full">
-                    <thead className="bg-neutral-50">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Description</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Confidence ↑↓</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Status ↑↓</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Amount</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Created At</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-neutral-200">
-                      <tr>
-                        <td className="px-4 py-3 text-sm text-neutral-900">
-                          Client Payment - ABC Corp automatically matched with Invoice #1001
-                        </td>
-                        <td className="px-4 py-3 text-sm text-green-600 font-medium">99%</td>
-                        <td className="px-4 py-3 text-sm text-green-600 font-medium">✓ Matched</td>
-                        <td className="px-4 py-3 text-sm font-medium text-green-600">$2,500.00</td>
-                        <td className="px-4 py-3 text-sm text-neutral-500">1/30/2024</td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3 text-sm text-neutral-900">
-                          Office Supplies - Staples ready for categorization
-                        </td>
-                        <td className="px-4 py-3 text-sm text-yellow-600 font-medium">85%</td>
-                        <td className="px-4 py-3 text-sm text-yellow-600 font-medium">📋 Review</td>
-                        <td className="px-4 py-3 text-sm font-medium text-red-600">-$89.99</td>
-                        <td className="px-4 py-3 text-sm text-neutral-500">1/30/2024</td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3 text-sm text-neutral-900">
-                          Software Subscription - Adobe auto-matched with expense
-                        </td>
-                        <td className="px-4 py-3 text-sm text-green-600 font-medium">97%</td>
-                        <td className="px-4 py-3 text-sm text-green-600 font-medium">✓ Matched</td>
-                        <td className="px-4 py-3 text-sm font-medium text-red-600">-$52.99</td>
-                        <td className="px-4 py-3 text-sm text-neutral-500">1/30/2024</td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3 text-sm text-neutral-900">
-                          Client Payment - XYZ Inc matched with Invoice #1002
-                        </td>
-                        <td className="px-4 py-3 text-sm text-green-600 font-medium">98%</td>
-                        <td className="px-4 py-3 text-sm text-green-600 font-medium">✓ Matched</td>
-                        <td className="px-4 py-3 text-sm font-medium text-green-600">$1,800.00</td>
-                        <td className="px-4 py-3 text-sm text-neutral-500">1/30/2024</td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3 text-sm text-neutral-900">
-                          Gas station transaction requires manual review
-                        </td>
-                        <td className="px-4 py-3 text-sm text-red-600 font-medium">65%</td>
-                        <td className="px-4 py-3 text-sm text-red-600 font-medium">⚠ Manual</td>
-                        <td className="px-4 py-3 text-sm font-medium text-red-600">-$45.00</td>
-                        <td className="px-4 py-3 text-sm text-neutral-500">1/29/2024</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Summary Stats */}
-                <div className="mt-6 grid grid-cols-3 gap-4 pt-4 border-t border-neutral-200">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">4</div>
-                    <div className="text-sm text-neutral-600">Auto-Matched</div>
+                <div className="bg-green-50 rounded-lg p-4 text-center">
+                  <div className="text-2xl font-bold text-green-600">29</div>
+                  <div className="text-sm text-green-600 flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 mr-1" />
+                    Reconciled
                   </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-yellow-600">1</div>
-                    <div className="text-sm text-neutral-600">Ready to Review</div>
+                </div>
+                <div className="bg-red-50 rounded-lg p-4 text-center">
+                  <div className="text-2xl font-bold text-red-600">7</div>
+                  <div className="text-sm text-red-600 flex items-center justify-center">
+                    <span className="w-4 h-4 mr-1">⚠</span>
+                    Unreconciled
                   </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-red-600">1</div>
-                    <div className="text-sm text-neutral-600">Manual Review</div>
+                </div>
+                <div className="bg-blue-50 rounded-lg p-4 text-center">
+                  <div className="text-2xl font-bold text-blue-600">26</div>
+                  <div className="text-sm text-blue-600 flex items-center justify-center">
+                    <span className="w-4 h-4 mr-1">$</span>
+                    Bank
+                  </div>
+                </div>
+                <div className="bg-emerald-50 rounded-lg p-4 text-center">
+                  <div className="text-2xl font-bold text-emerald-600">10</div>
+                  <div className="text-sm text-emerald-600 flex items-center justify-center">
+                    <ArrowUpRight className="w-4 h-4 mr-1" />
+                    Bookkeeping
+                  </div>
+                </div>
+                <div className="bg-neutral-50 rounded-lg p-4 text-center">
+                  <div className="text-sm text-neutral-600 mb-1">QuickBooks</div>
+                  <div className="flex items-center justify-center">
+                    <span className="w-6 h-6 bg-blue-600 text-white text-xs font-bold rounded flex items-center justify-center">QB</span>
                   </div>
                 </div>
               </div>
-            </motion.div>
-          </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-center space-x-4 mb-8">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3">
+                  <Upload className="w-4 h-4 mr-2" />
+                  Upload CSV
+                </Button>
+                <Button variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 px-6 py-3">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export CSV
+                </Button>
+                <Button variant="outline" className="border-green-200 text-green-600 hover:bg-green-50 px-6 py-3">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Export PDF
+                </Button>
+              </div>
+
+              {/* Transactions Table */}
+              <div className="overflow-hidden border border-neutral-200 rounded-lg">
+                <table className="w-full">
+                  <thead className="bg-neutral-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Date</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">$ Amount</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Type</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Status</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-neutral-200">
+                    <tr>
+                      <td className="px-4 py-3 text-sm text-neutral-900">1/30/2024</td>
+                      <td className="px-4 py-3 text-sm font-medium text-green-600">$2,500.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Client Payment</td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          ✓ Reconciled
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">View Details</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-sm text-neutral-900">1/30/2024</td>
+                      <td className="px-4 py-3 text-sm font-medium text-red-600">-$89.99</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Office Supplies</td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                          ⚠ Pending
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">Review</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-sm text-neutral-900">1/30/2024</td>
+                      <td className="px-4 py-3 text-sm font-medium text-red-600">-$52.99</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Software</td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          ✓ Reconciled
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">View Details</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-sm text-neutral-900">1/30/2024</td>
+                      <td className="px-4 py-3 text-sm font-medium text-green-600">$1,800.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Client Payment</td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          ✓ Reconciled
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">View Details</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-sm text-neutral-900">1/29/2024</td>
+                      <td className="px-4 py-3 text-sm font-medium text-red-600">-$45.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">Gas Station</td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                          ⚠ Manual Review
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">Review</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* AI Smart Matching Interface */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="mb-24"
+          >
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-neutral-900 mb-4">
+                🤖 AI Smart Matching Interface
+              </h3>
+              <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
+                Watch our AI automatically match bank transactions with QuickBooks data using advanced machine learning.
+              </p>
+            </div>
+
+            {/* AI Matching Mockup */}
+            <div className="bg-white border border-neutral-200 rounded-2xl shadow-xl p-8 max-w-6xl mx-auto">
+              {/* Header */}
+              <div className="flex justify-between items-center mb-8 pb-4 border-b border-neutral-200">
+                <h4 className="text-2xl font-bold text-neutral-900">AI Transaction Matching</h4>
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-neutral-500">Processing: 15 of 36 transactions</span>
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+
+              {/* AI Matching Example */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                {/* Bank Transaction */}
+                <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                  <h5 className="text-lg font-semibold text-blue-900 mb-4">Bank Transaction</h5>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-sm text-blue-700">Date:</span>
+                      <span className="text-sm font-medium text-blue-900">1/30/2024</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-blue-700">Amount:</span>
+                      <span className="text-lg font-bold text-blue-900">$2,500.00</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-blue-700">Description:</span>
+                      <span className="text-sm font-medium text-blue-900">Client Payment - ABC Corp</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-blue-700">Account:</span>
+                      <span className="text-sm font-medium text-blue-900">Chase Business Checking</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* QuickBooks Match */}
+                <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                  <h5 className="text-lg font-semibold text-green-900 mb-4">QuickBooks Match</h5>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-sm text-green-700">Invoice:</span>
+                      <span className="text-sm font-medium text-green-900">#1001 - ABC Corp</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-green-700">Amount:</span>
+                      <span className="text-lg font-bold text-green-900">$2,500.00</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-green-700">Service:</span>
+                      <span className="text-sm font-medium text-green-900">Consulting Services</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-green-700">Due Date:</span>
+                      <span className="text-sm font-medium text-green-900">1/30/2024</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* AI Confidence Score */}
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-8">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-green-600 mb-2">99%</div>
+                  <div className="text-lg font-medium text-green-800 mb-2">AI Confidence Score</div>
+                  <div className="text-sm text-green-700">
+                    Perfect match: Amount, date, and description all align
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-center space-x-4">
+                <Button className="bg-green-600 hover:bg-green-700 text-white px-8 py-3">
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Accept Match
+                </Button>
+                <Button variant="outline" className="border-red-200 text-red-600 hover:bg-red-50 px-8 py-3">
+                  <X className="w-4 h-4 mr-2" />
+                  Reject Match
+                </Button>
+                <Button variant="outline" className="border-neutral-200 text-neutral-600 hover:bg-neutral-50 px-8 py-3">
+                  <Clock className="w-4 h-4 mr-2" />
+                  Review Later
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* QuickBooks Integration */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="mb-24"
+          >
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-neutral-900 mb-4">
+                🔗 QuickBooks Integration
+              </h3>
+              <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
+                Connect your QuickBooks account to automatically sync transactions and integrate them into your reconciliation workflow.
+              </p>
+            </div>
+
+            {/* QuickBooks Connected Dashboard Mockup */}
+            <div className="bg-white border border-neutral-200 rounded-2xl shadow-xl p-8 max-w-6xl mx-auto">
+              {/* Header with Connection Status */}
+              <div className="flex justify-between items-center mb-8 pb-4 border-b border-neutral-200">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-green-600 text-white text-lg font-bold rounded-lg flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="text-2xl font-bold text-neutral-900">QuickBooks Connected</h4>
+                    <p className="text-green-600 font-medium">✓ Successfully Connected!</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <span className="text-sm text-neutral-500">Realm ID: 9341455152432773</span>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+              </div>
+
+              {/* Sync Status */}
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <CheckCircle className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-blue-900">Sync completed successfully!</p>
+                      <p className="text-sm text-blue-700">Last sync: 8/17/2025 • Status: completed</p>
+                    </div>
+                  </div>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2">
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Full Historical Sync
+                  </Button>
+                </div>
+              </div>
+
+              {/* QuickBooks Dashboard Metrics */}
+              <div className="grid grid-cols-4 gap-6 mb-8">
+                <div className="bg-neutral-50 rounded-xl p-4 text-center border">
+                  <div className="text-2xl font-bold text-neutral-900">$47,892.45</div>
+                  <div className="text-sm text-neutral-600">Total Balance</div>
+                  <div className="text-xs text-green-600 mt-1">+$2,450.00 this month</div>
+                </div>
+                <div className="bg-neutral-50 rounded-xl p-4 text-center border">
+                  <div className="text-2xl font-bold text-neutral-900">8</div>
+                  <div className="text-sm text-neutral-600">Connected Accounts</div>
+                  <div className="text-xs text-blue-600 mt-1">3 bank, 5 credit</div>
+                </div>
+                <div className="bg-neutral-50 rounded-xl p-4 text-center border">
+                  <div className="text-2xl font-bold text-green-600">1,247</div>
+                  <div className="text-sm text-neutral-600">Reconciled Transactions</div>
+                  <div className="text-xs text-green-600 mt-1">98% accuracy</div>
+                </div>
+                <div className="bg-neutral-50 rounded-xl p-4 text-center border">
+                  <div className="text-2xl font-bold text-orange-600">23</div>
+                  <div className="text-sm text-neutral-600">Pending Reconciliation</div>
+                  <div className="text-xs text-orange-600 mt-1">Requires review</div>
+                </div>
+              </div>
+
+              {/* Connected Bank Accounts */}
+              <div className="bg-neutral-50 rounded-xl p-6 mb-8">
+                <h5 className="text-lg font-semibold text-neutral-900 mb-4">Connected Bank Accounts</h5>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="bg-white p-4 rounded-lg border">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          <Building2 className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-neutral-900">Chase Business Checking</p>
+                          <p className="text-sm text-neutral-500">****1234</p>
+                        </div>
+                      </div>
+                      <span className="text-lg font-bold text-green-600">$23,456.78</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-neutral-500">Last sync: 2 min ago</span>
+                      <span className="text-green-600 font-medium">✓ Connected</span>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-white p-4 rounded-lg border">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                          <CreditCard className="w-5 h-5 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-neutral-900">Chase Business Credit</p>
+                          <p className="text-sm text-neutral-500">****5678</p>
+                        </div>
+                      </div>
+                      <span className="text-lg font-bold text-red-600">-$8,234.56</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-neutral-500">Last sync: 5 min ago</span>
+                      <span className="text-green-600 font-medium">✓ Connected</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-center space-x-4">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3">
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  View Full Dashboard
+                </Button>
+                <Button variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 px-8 py-3">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export Reconciliation Report
+                </Button>
+                <Button variant="outline" className="border-red-200 text-red-600 hover:bg-red-50 px-8 py-3">
+                  <X className="w-4 h-4 mr-2" />
+                  Disconnect QuickBooks
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Invoice Collections Dashboard */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="mb-24"
+          >
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-neutral-900 mb-4">
+                📊 Invoice Collections Dashboard
+              </h3>
+              <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
+                Automate your invoice management with AI-powered payment tracking and automated reminder systems.
+              </p>
+            </div>
+
+            {/* Invoice Collections Mockup */}
+            <div className="bg-white border border-neutral-200 rounded-2xl shadow-xl p-8 max-w-6xl mx-auto">
+              {/* Header */}
+              <div className="flex justify-between items-center mb-8 pb-4 border-b border-neutral-200">
+                <h4 className="text-2xl font-bold text-neutral-900">Invoice Collections</h4>
+                <div className="flex items-center space-x-4">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2">
+                    <Plus className="w-4 h-4 mr-2" />
+                    New Invoice
+                  </Button>
+                  <Button variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 px-4 py-2">
+                    <Upload className="w-4 h-4 mr-2" />
+                    Import Invoices
+                  </Button>
+                </div>
+              </div>
+
+              {/* Summary Cards */}
+              <div className="grid grid-cols-4 gap-6 mb-8">
+                <div className="bg-red-50 rounded-xl p-4 text-center border border-red-200">
+                  <div className="text-2xl font-bold text-red-600">$12,450.00</div>
+                  <div className="text-sm text-red-600">Overdue</div>
+                  <div className="text-xs text-red-500 mt-1">8 invoices</div>
+                </div>
+                <div className="bg-yellow-50 rounded-xl p-4 text-center border border-yellow-200">
+                  <div className="text-2xl font-bold text-yellow-600">$8,900.00</div>
+                  <div className="text-sm text-yellow-600">Due Soon</div>
+                  <div className="text-xs text-yellow-500 mt-1">5 invoices</div>
+                </div>
+                <div className="bg-green-50 rounded-xl p-4 text-center border border-green-200">
+                  <div className="text-2xl font-bold text-green-600">$45,200.00</div>
+                  <div className="text-sm text-green-600">Collected</div>
+                  <div className="text-xs text-green-500 mt-1">This month</div>
+                </div>
+                <div className="bg-blue-50 rounded-xl p-4 text-center border border-blue-200">
+                  <div className="text-2xl font-bold text-blue-600">23</div>
+                  <div className="text-sm text-blue-600">Total Invoices</div>
+                  <div className="text-xs text-blue-500 mt-1">Active</div>
+                </div>
+              </div>
+
+              {/* Invoices Table */}
+              <div className="overflow-hidden border border-neutral-200 rounded-lg">
+                <table className="w-full">
+                  <thead className="bg-neutral-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Invoice</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Client</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Amount</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Due Date</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Status</th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-neutral-200">
+                    <tr>
+                      <td className="px-4 py-3 text-sm font-medium text-neutral-900">#1001</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">ABC Corp</td>
+                      <td className="px-4 py-3 text-sm font-medium text-neutral-900">$2,500.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">1/15/2024</td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                          Overdue
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <Button variant="outline" size="sm" className="border-orange-200 text-orange-600 hover:bg-orange-50">
+                          Send Reminder
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-sm font-medium text-neutral-900">#1002</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">XYZ Inc</td>
+                      <td className="px-4 py-3 text-sm font-medium text-neutral-900">$1,800.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">1/20/2024</td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                          Due Soon
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <Button variant="outline" size="sm" className="border-blue-200 text-blue-600 hover:bg-blue-50">
+                          Send Reminder
+                        </Button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 text-sm font-medium text-neutral-900">#1003</td>
+                      <td className="px-4 py-3 text-sm text-neutral-900">TechFlow</td>
+                      <td className="px-4 py-3 text-sm font-medium text-neutral-900">$950.00</td>
+                      <td className="px-4 py-3 text-sm text-neutral-500">1/25/2024</td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          Paid
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-sm text-neutral-500">✓ Completed</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* AI Insights */}
+              <div className="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6">
+                <h5 className="text-lg font-semibold text-purple-900 mb-4">AI Insights & Recommendations</h5>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white p-4 rounded-lg border border-purple-200">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                        <Zap className="w-4 h-4 text-purple-600" />
+                      </div>
+                      <span className="font-medium text-purple-900">Payment Prediction</span>
+                    </div>
+                    <p className="text-sm text-purple-700">
+                      ABC Corp likely to pay within 3-5 days based on payment history
+                    </p>
+                  </div>
+                  <div className="bg-white p-4 rounded-lg border border-purple-200">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                        <BarChart3 className="w-4 h-4 text-purple-600" />
+                      </div>
+                      <span className="font-medium text-purple-900">Collection Strategy</span>
+                    </div>
+                    <p className="text-sm text-purple-700">
+                      Send personalized reminder to XYZ Inc for best response rate
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
 
           {/* Call to Action */}
           <motion.div
