@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Get total count for pagination
-    const { count } = await query.count();
+    const { count } = await query.select('*', { count: 'exact', head: true });
 
     // Apply pagination
     const offset = (page - 1) * limit;
