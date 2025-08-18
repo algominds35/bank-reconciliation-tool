@@ -263,78 +263,44 @@ export default function HomePage() {
                 <div className="text-lg font-medium text-neutral-400">GreenLeaf Retail</div>
                 <div className="text-lg font-medium text-neutral-400">Peak Financial Group</div>
               </div>
+              
+              {/* Trusted Badge */}
+              <div className="mt-8 flex justify-center">
+                <div className="inline-flex items-center px-6 py-3 bg-white border border-neutral-200 rounded-full shadow-sm">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                      <CheckCircle className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm font-medium text-neutral-700">Trusted by 1,200+ business owners, bookkeepers, accountants & QuickBooks users</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Trust Stats */}
+              <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-neutral-900 mb-1">1,200+</div>
+                  <div className="text-sm text-neutral-600">Active Users</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-neutral-900 mb-1">50,000+</div>
+                  <div className="text-sm text-neutral-600">Transactions</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-neutral-900 mb-1">98.2%</div>
+                  <div className="text-sm text-neutral-600">AI Accuracy</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-neutral-900 mb-1">15,000+</div>
+                  <div className="text-sm text-neutral-600">Hours Saved</div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Trusted Badge Section */}
-      <section className="py-16 bg-neutral-50/50">
-        <div className="max-w-6xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <div className="inline-flex items-center px-6 py-3 bg-white border border-neutral-200 rounded-full shadow-sm mb-8">
-              <div className="flex items-center space-x-2">
-                <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                  <CheckCircle className="w-3 h-3 text-white" />
-                </div>
-                <span className="text-sm font-medium text-neutral-700">Trusted by 1,000+ business owners, bookkeepers, accountants & QuickBooks users</span>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-neutral-900 mb-2">1,000+</div>
-                <div className="text-sm text-neutral-600">Active Users</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-neutral-900 mb-2">50,000+</div>
-                <div className="text-sm text-neutral-600">Transactions Processed</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-neutral-900 mb-2">98.2%</div>
-                <div className="text-sm text-neutral-600">AI Accuracy Rate</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-neutral-900 mb-2">15,000+</div>
-                <div className="text-sm text-neutral-600">Hours Saved Monthly</div>
-              </div>
-            </div>
 
-            <div className="flex flex-wrap justify-center items-center gap-8 opacity-70">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <span className="text-blue-600 font-bold text-sm">QB</span>
-                </div>
-                <span className="text-sm font-medium text-neutral-600">QuickBooks Certified</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Shield className="w-4 h-4 text-green-600" />
-                </div>
-                <span className="text-sm font-medium text-neutral-600">SOC 2 Compliant</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-purple-600" />
-                </div>
-                <span className="text-sm font-medium text-neutral-600">AI-Powered</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <Users className="w-4 h-4 text-orange-600" />
-                </div>
-                <span className="text-sm font-medium text-neutral-600">Multi-Client Ready</span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       {/* Features Grid */}
       <section id="features" className="py-24 bg-neutral-50/50">
