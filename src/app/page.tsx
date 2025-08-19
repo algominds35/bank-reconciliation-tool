@@ -158,6 +158,7 @@ export default function HomePage() {
               <a href="#pricing" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-medium">Pricing</a>
               <a href="#testimonials" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-medium">Reviews</a>
               <a href="#demo" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-medium">Demo</a>
+              <Link href="/contact" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-medium">Contact</Link>
             </nav>
 
             {/* Right Side Buttons */}
@@ -1554,10 +1555,10 @@ export default function HomePage() {
               </ul>
               </div>
 
-            <div>
+                          <div>
               <h3 className="font-semibold mb-4 text-neutral-900">Company</h3>
               <ul className="space-y-2 text-neutral-600 text-sm">
-                <li><a href="mailto:alex@usealgomind.com" className="hover:text-neutral-900 transition-colors">Contact Us</a></li>
+                <li><Link href="/contact" className="hover:text-neutral-900 transition-colors">Contact Us</Link></li>
                 <li><a href="#demo" className="hover:text-neutral-900 transition-colors">About</a></li>
                 <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Blog</a></li>
               </ul>
