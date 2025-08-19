@@ -202,9 +202,9 @@ export default function HomePage() {
             </motion.div>
 
             <h1 className="text-5xl lg:text-6xl font-bold text-neutral-900 leading-tight mb-8 tracking-tight">
-              Bank Reconciliation
+              Stop Wasting Hours on
               <span className="block bg-gradient-to-r from-neutral-900 to-neutral-600 bg-clip-text text-transparent">
-                That Actually Works
+                Manual Reconciliation
               </span>
             </h1>
             
@@ -212,6 +212,10 @@ export default function HomePage() {
               Automate your bank reconciliation with AI-powered matching. 
               Reconcile months of transactions in minutes, not hours. 
               Seamlessly integrated with QuickBooks Online.
+            </p>
+            
+            <p className="text-lg text-neutral-500 max-w-2xl mx-auto mb-8 leading-relaxed">
+              Plus: AI-powered invoice collections that chase payments automatically
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
