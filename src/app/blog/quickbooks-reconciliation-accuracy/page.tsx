@@ -16,7 +16,7 @@ export default function QuickBooksReconciliationAccuracy() {
           </Link>
           <h1 className="text-4xl font-bold mb-4">
             QuickBooks Reconciliation Accuracy: How to Achieve 95%+ Match Rate
-          </h1>
+        </h1>
           <p className="text-xl text-indigo-100">
             Learn proven strategies to improve QuickBooks reconciliation accuracy from 60% to 95%+ and eliminate costly errors.
           </p>
@@ -44,7 +44,7 @@ export default function QuickBooksReconciliationAccuracy() {
                   <li>• Time spent correcting errors</li>
                   <li>• Loss of client trust</li>
                   <li>• Potential legal issues</li>
-                </ul>
+        </ul>
               </div>
             </div>
           </div>
@@ -61,7 +61,7 @@ export default function QuickBooksReconciliationAccuracy() {
             <li>Transaction descriptions not considered</li>
             <li>Recurring payments misidentified</li>
             <li>Duplicate matches created</li>
-          </ul>
+        </ul>
 
           <h3 className="text-2xl font-semibold text-gray-900 mb-4">Problem #2: Missing Transactions</h3>
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
@@ -72,7 +72,7 @@ export default function QuickBooksReconciliationAccuracy() {
               <li>• Date range exclusions</li>
               <li>• Manual entry errors</li>
               <li>• Import format issues</li>
-            </ul>
+        </ul>
           </div>
 
           <h3 className="text-2xl font-semibold text-gray-900 mb-4">Problem #3: Duplicate Transactions</h3>
@@ -109,7 +109,7 @@ export default function QuickBooksReconciliationAccuracy() {
               <li>• Test rules on small batches first</li>
               <li>• Review all matches before accepting</li>
             </ul>
-          </div>
+        </div>
 
           <h3 className="text-2xl font-semibold text-gray-900 mb-4">Step 3: Implement Quality Control</h3>
           <ol className="list-decimal list-inside space-y-3 mb-8">
@@ -132,7 +132,7 @@ export default function QuickBooksReconciliationAccuracy() {
             <li>Bank fees and charges</li>
             <li>Interest payments and deposits</li>
             <li>Transfers between accounts</li>
-          </ul>
+        </ul>
 
           <h3 className="text-2xl font-semibold text-gray-900 mb-4">Technique #2: Data Validation</h3>
           <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
@@ -143,7 +143,7 @@ export default function QuickBooksReconciliationAccuracy() {
               <li>• Confirm transaction descriptions are accurate</li>
               <li>• Ensure proper account categorization</li>
               <li>• Validate bank statement balance</li>
-            </ul>
+        </ul>
           </div>
 
           <h3 className="text-2xl font-semibold text-gray-900 mb-4">Technique #3: Error Prevention</h3>
@@ -153,7 +153,7 @@ export default function QuickBooksReconciliationAccuracy() {
             <li><strong>Import data carefully</strong> - Check CSV format and content</li>
             <li><strong>Backup before changes</strong> - Protect against data loss</li>
             <li><strong>Reconcile regularly</strong> - Don't let errors accumulate</li>
-          </ol>
+        </ol>
 
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Technology Solutions for High Accuracy</h2>
 
@@ -258,8 +258,8 @@ export default function QuickBooksReconciliationAccuracy() {
                 <FileText className="h-5 w-5 text-purple-500 mr-3 mt-0.5" />
                 <span><strong>Report accuracy</strong> - Final reconciliation accuracy</span>
               </li>
-            </ul>
-          </div>
+          </ul>
+        </div>
 
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Common Accuracy Mistakes to Avoid</h2>
 
@@ -340,7 +340,7 @@ export default function QuickBooksReconciliationAccuracy() {
               <li>
                 <Link href="/blog/quickbooks-reconciliation-time-savings" className="text-blue-600 hover:text-blue-800">
                   → QuickBooks Reconciliation Time Savings: How to Cut Hours to Minutes
-                </Link>
+          </Link>
               </li>
             </ul>
           </div>

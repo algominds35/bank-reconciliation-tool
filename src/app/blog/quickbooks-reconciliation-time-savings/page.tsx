@@ -16,7 +16,7 @@ export default function QuickBooksReconciliationTimeSavings() {
           </Link>
           <h1 className="text-4xl font-bold mb-4">
             QuickBooks Reconciliation Time Savings: How to Cut Hours to Minutes
-          </h1>
+        </h1>
           <p className="text-xl text-green-100">
             Learn proven strategies to reduce QuickBooks reconciliation time from 8 hours to under 30 minutes while improving accuracy.
           </p>
@@ -43,7 +43,7 @@ export default function QuickBooksReconciliationTimeSavings() {
                   <li>• 1-2 hours dealing with bank feed issues</li>
                   <li>• 1 hour generating reports for accountants</li>
                   <li>• Opportunity cost of time that could be spent growing your business</li>
-                </ul>
+        </ul>
               </div>
             </div>
           </div>
@@ -68,7 +68,7 @@ export default function QuickBooksReconciliationTimeSavings() {
               <li>• Easier to spot errors early</li>
               <li>• Less overwhelming workload</li>
               <li>• Better accuracy with fresh data</li>
-            </ul>
+        </ul>
           </div>
 
           <h3 className="text-2xl font-semibold text-gray-900 mb-4">Strategy #3: Use CSV Import Instead of Bank Feeds</h3>
@@ -95,7 +95,7 @@ export default function QuickBooksReconciliationTimeSavings() {
               <li>Review and accept matches in groups</li>
               <li>Export reports for accountant review</li>
             </ol>
-          </div>
+        </div>
 
           <h3 className="text-2xl font-semibold text-gray-900 mb-4">Template-Based Approach</h3>
           <ol className="list-decimal list-inside space-y-3 mb-8">
@@ -118,7 +118,7 @@ export default function QuickBooksReconciliationTimeSavings() {
               <li>• <strong>Automatic duplicate detection</strong> - no manual cleanup needed</li>
               <li>• <strong>Professional reports</strong> - ready for accountant review</li>
               <li>• <strong>QuickBooks export</strong> - seamless integration</li>
-            </ul>
+        </ul>
           </div>
 
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Time Savings Comparison</h2>
@@ -179,7 +179,7 @@ export default function QuickBooksReconciliationTimeSavings() {
                 <li>• More time for business growth</li>
                 <li>• Reduced stress and frustration</li>
                 <li>• Better work-life balance</li>
-              </ul>
+        </ul>
             </div>
             <div className="bg-green-50 border border-green-200 rounded-lg p-6">
               <h4 className="font-semibold text-green-900 mb-3">Financial Impact:</h4>
@@ -189,7 +189,7 @@ export default function QuickBooksReconciliationTimeSavings() {
                 <li>• Improved cash flow management</li>
                 <li>• Better financial decision making</li>
                 <li>• Reduced accounting fees</li>
-              </ul>
+        </ul>
             </div>
           </div>
 
@@ -272,7 +272,7 @@ export default function QuickBooksReconciliationTimeSavings() {
                 <span><strong>Report generation time</strong> - Measure time to create final reports</span>
               </li>
             </ul>
-          </div>
+        </div>
 
           <div className="bg-gradient-to-r from-green-500 to-blue-500 text-white p-8 rounded-lg text-center">
             <h3 className="text-2xl font-bold mb-4">Ready to Save Hours on Reconciliation?</h3>
@@ -305,7 +305,7 @@ export default function QuickBooksReconciliationTimeSavings() {
               <li>
                 <Link href="/blog/bank-reconciliation-software-comparison" className="text-blue-600 hover:text-blue-800">
                   → Bank Reconciliation Software Comparison 2024: Find the Best Tool
-                </Link>
+          </Link>
               </li>
             </ul>
           </div>

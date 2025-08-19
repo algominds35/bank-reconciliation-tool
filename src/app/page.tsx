@@ -9,7 +9,7 @@ import {
   Shield, 
   BarChart3, 
   Users, 
-  Clock,
+  Clock, 
   ArrowRight,
   Star,
   Play,
@@ -231,8 +231,8 @@ export default function HomePage() {
                   <Button variant="outline" className="border-2 border-neutral-200 text-neutral-700 px-8 py-4 text-lg rounded-lg hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-200 font-medium">
                     <Play className="mr-2 w-5 h-5" />
                     Try Live Demo
-                  </Button>
-                </a>
+                </Button>
+              </a>
             </div>
 
             {/* Switch from QB Badge */}
@@ -241,9 +241,9 @@ export default function HomePage() {
                 <div className="flex items-center space-x-2">
                   <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
                     <CheckCircle className="w-3 h-3 text-white" />
-                  </div>
+          </div>
                   <span className="text-sm font-medium text-green-700">1,200+ switched from QuickBooks to this</span>
-                </div>
+        </div>
               </div>
             </div>
 
@@ -285,8 +285,8 @@ export default function HomePage() {
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
                 </div>
                 <span className="text-sm text-neutral-600">1,200+ entrepreneurs finding proven solutions</span>
-              </div>
-              
+          </div>
+          
               {/* Quick Testimonial Preview */}
               <div className="max-w-2xl mx-auto text-center">
                 <p className="text-lg text-neutral-700 italic mb-4">
@@ -304,73 +304,73 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-            </div>
+              </div>
 
             {/* Trust indicators */}
             <div className="mt-8 text-center">
               <h3 className="text-lg font-semibold text-neutral-700 mb-4">TRUSTED BY LEADING COMPANIES</h3>
               <div className="flex justify-center items-center space-x-8 mb-6">
-                <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <span className="text-blue-600 font-bold text-sm">TF</span>
-                  </div>
-                  <span className="text-sm font-medium text-neutral-600">TechFlow</span>
-                </div>
-                <div className="flex items-center space-x-2">
+                    <span className="text-blue-600 font-bold text-sm">JP</span>
+                    </div>
+                  <span className="text-sm font-medium text-neutral-600">Johnson & Partners</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                    <span className="text-green-600 font-bold text-sm">RF</span>
+                    <span className="text-green-600 font-bold text-sm">MS</span>
+                    </div>
+                  <span className="text-sm font-medium text-neutral-600">Miller Solutions</span>
                   </div>
-                  <span className="text-sm font-medium text-neutral-600">Rodriguez Financial</span>
-                </div>
-                <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <span className="text-purple-600 font-bold text-sm">TA</span>
-                  </div>
-                  <span className="text-sm font-medium text-neutral-600">Thompson & Associates</span>
-                </div>
-                <div className="flex items-center space-x-2">
+                    <span className="text-purple-600 font-bold text-sm">CW</span>
+                    </div>
+                  <span className="text-sm font-medium text-neutral-600">Clark & Wilson</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <span className="text-orange-600 font-bold text-sm">GL</span>
+                    <span className="text-orange-600 font-bold text-sm">BD</span>
+                    </div>
+                  <span className="text-sm font-medium text-neutral-600">Brown & Davis</span>
                   </div>
-                  <span className="text-sm font-medium text-neutral-600">GreenLeaf</span>
-                </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                    <span className="text-indigo-600 font-bold text-sm">PF</span>
-                  </div>
-                  <span className="text-sm font-medium text-neutral-600">Peak Financial</span>
+                    <span className="text-indigo-600 font-bold text-sm">AG</span>
                 </div>
+                  <span className="text-sm font-medium text-neutral-600">Anderson Group</span>
               </div>
+            </div>
               
               <div className="inline-flex items-center px-6 py-3 bg-green-50 border border-green-200 rounded-full shadow-sm">
                 <div className="flex items-center space-x-2">
                   <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
                     <CheckCircle className="w-3 h-3 text-white" />
-                  </div>
+          </div>
                   <span className="text-sm font-medium text-green-700">Trusted by 1,200+ business owners, bookkeepers, accountants & QuickBooks users</span>
-                </div>
+        </div>
               </div>
               
               {/* Trust Stats */}
               <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-                <div className="text-center">
+            <div className="text-center">
                   <div className="text-2xl font-bold text-neutral-900 mb-1">1,200+</div>
                   <div className="text-sm text-neutral-600">Active Users</div>
-                </div>
+              </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-neutral-900 mb-1">50,000+</div>
                   <div className="text-sm text-neutral-600">Transactions</div>
-                </div>
-                <div className="text-center">
+            </div>
+            <div className="text-center">
                   <div className="text-2xl font-bold text-neutral-900 mb-1">98.2%</div>
                   <div className="text-sm text-neutral-600">AI Accuracy</div>
-                </div>
-                <div className="text-center">
+            </div>
+            <div className="text-center">
                   <div className="text-2xl font-bold text-neutral-900 mb-1">15,000+</div>
                   <div className="text-sm text-neutral-600">Hours Saved</div>
-                </div>
               </div>
             </div>
+          </div>
           </motion.div>
         </div>
       </section>
@@ -401,7 +401,7 @@ export default function HomePage() {
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
                 ))}
-              </div>
+                  </div>
               <p className="text-neutral-700 mb-6 leading-relaxed text-sm italic">
                 "I handle 75+ clients and this tool has saved me 20+ hours weekly. The AI matching is incredibly accurate - I've reduced reconciliation errors by 95%. The invoice collections feature is a game-changer for cash flow management."
               </p>
@@ -415,8 +415,8 @@ export default function HomePage() {
                   <p className="text-sm font-medium text-neutral-900">Alex Rodriguez</p>
                   <p className="text-xs text-neutral-500">Senior Bookkeeper, Rodriguez Financial Services</p>
                 </div>
-              </div>
-            </div>
+          </div>
+                </div>
 
             {/* Testimonial 2 */}
             <div className="bg-white rounded-xl p-6 shadow-lg border border-neutral-200">
@@ -424,7 +424,7 @@ export default function HomePage() {
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
                 ))}
-              </div>
+                  </div>
               <p className="text-neutral-700 mb-6 leading-relaxed text-sm italic">
                 "We process 5,000+ transactions monthly. This tool reconciled 3 months of backlog in 2 hours. The QuickBooks integration is seamless, and the automated invoice reminders have improved our collections by 40%."
               </p>
@@ -437,9 +437,9 @@ export default function HomePage() {
                 <div>
                   <p className="text-sm font-medium text-neutral-900">Sarah Chen</p>
                   <p className="text-xs text-neutral-500">CFO, TechFlow Solutions</p>
-                </div>
               </div>
-            </div>
+                  </div>
+                </div>
 
             {/* Testimonial 3 */}
             <div className="bg-white rounded-xl p-6 shadow-lg border border-neutral-200">
@@ -457,13 +457,13 @@ export default function HomePage() {
                   alt="Michael Thompson"
                   className="w-10 h-10 rounded-full object-cover border-2 border-neutral-100"
                 />
-                <div>
+            <div>
                   <p className="text-sm font-medium text-neutral-900">Michael Thompson</p>
                   <p className="text-xs text-neutral-500">Managing Partner, Thompson & Associates CPA</p>
-                </div>
-              </div>
-            </div>
-          </div>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
 
           {/* View All Testimonials CTA */}
           <motion.div
@@ -511,7 +511,7 @@ export default function HomePage() {
             >
               <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
                 <Zap className="w-6 h-6 text-blue-600" />
-              </div>
+                </div>
               <h3 className="text-xl font-bold text-neutral-900 mb-4">AI-Powered Bank Reconciliation</h3>
               <p className="text-neutral-600 leading-relaxed">
                 Automatically match bank transactions with QuickBooks data using advanced machine learning algorithms. 99% accuracy rate.
@@ -541,7 +541,7 @@ export default function HomePage() {
             >
               <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
                 <BarChart3 className="w-6 h-6 text-purple-600" />
-              </div>
+            </div>
               <h3 className="text-xl font-bold text-neutral-900 mb-4">Real-Time Analytics</h3>
               <p className="text-neutral-600 leading-relaxed">
                 Live dashboards showing reconciliation status, cash flow insights, and financial health metrics.
@@ -572,7 +572,7 @@ export default function HomePage() {
             >
               <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
                 <Users className="w-6 h-6 text-indigo-600" />
-              </div>
+            </div>
               <h3 className="text-xl font-bold text-neutral-900 mb-4">Multi-Client Management</h3>
               <p className="text-neutral-600 leading-relaxed">
                 Handle unlimited clients from one dashboard. Perfect for bookkeepers and accounting firms.
@@ -587,14 +587,14 @@ export default function HomePage() {
             >
               <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center mb-6">
                 <CheckCircle className="w-6 h-6 text-teal-600" />
-              </div>
+                </div>
               <h3 className="text-xl font-bold text-neutral-900 mb-4">QuickBooks Native</h3>
               <p className="text-neutral-600 leading-relaxed">
                 Seamless integration with QuickBooks Online. Sync invoices, transactions, and accounts automatically.
               </p>
             </motion.div>
           </div>
-        </div>
+              </div>
       </section>
 
       {/* Product Showcase - Your Actual Tool */}
@@ -664,8 +664,8 @@ export default function HomePage() {
                     <span>Settings</span>
                   </button>
                   <button className="text-sm text-red-600 hover:text-red-700">Sign Out</button>
-                </div>
-              </div>
+            </div>
+            </div>
 
               {/* Summary Cards */}
               <div className="grid grid-cols-6 gap-4 mb-8">
@@ -674,15 +674,15 @@ export default function HomePage() {
                   <div className="text-sm text-neutral-600 flex items-center justify-center">
                     <BarChart3 className="w-4 h-4 mr-1" />
                     Total
-                  </div>
                 </div>
+                  </div>
                 <div className="bg-green-50 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-green-600">29</div>
                   <div className="text-sm text-green-600 flex items-center justify-center">
                     <CheckCircle className="w-4 h-4 mr-1" />
                     Reconciled
-                  </div>
-                </div>
+              </div>
+            </div>
                 <div className="bg-red-50 rounded-lg p-4 text-center">
                   <div className="text-2xl font-bold text-red-600">7</div>
                   <div className="text-sm text-red-600 flex items-center justify-center">
@@ -726,7 +726,7 @@ export default function HomePage() {
                   <FileText className="w-4 h-4 mr-2" />
                   Export PDF
                 </Button>
-              </div>
+                </div>
 
               {/* Transactions Table */}
               <div className="overflow-hidden border border-neutral-200 rounded-lg">
@@ -817,7 +817,7 @@ export default function HomePage() {
               <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
                 Watch our AI automatically match bank transactions with QuickBooks data using advanced machine learning.
               </p>
-            </div>
+                  </div>
 
             {/* AI Matching Mockup */}
             <div className="bg-white border border-neutral-200 rounded-2xl shadow-xl p-8 max-w-6xl mx-auto">
@@ -827,8 +827,8 @@ export default function HomePage() {
                 <div className="flex items-center space-x-4">
                   <span className="text-sm text-neutral-500">Processing: 15 of 36 transactions</span>
                   <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                </div>
               </div>
+            </div>
 
               {/* AI Matching Example */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -839,19 +839,19 @@ export default function HomePage() {
                     <div className="flex justify-between">
                       <span className="text-sm text-blue-700">Date:</span>
                       <span className="text-sm font-medium text-blue-900">1/30/2024</span>
-                    </div>
+                </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-blue-700">Amount:</span>
                       <span className="text-lg font-bold text-blue-900">$2,500.00</span>
-                    </div>
+                  </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-blue-700">Description:</span>
                       <span className="text-sm font-medium text-blue-900">Client Payment - ABC Corp</span>
-                    </div>
+              </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-blue-700">Account:</span>
                       <span className="text-sm font-medium text-blue-900">Chase Business Checking</span>
-                    </div>
+            </div>
                   </div>
                 </div>
 
@@ -862,19 +862,19 @@ export default function HomePage() {
                     <div className="flex justify-between">
                       <span className="text-sm text-green-700">Invoice:</span>
                       <span className="text-sm font-medium text-green-900">#1001 - ABC Corp</span>
-                    </div>
+                </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-green-700">Amount:</span>
                       <span className="text-lg font-bold text-green-900">$2,500.00</span>
-                    </div>
+                  </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-green-700">Service:</span>
                       <span className="text-sm font-medium text-green-900">Consulting Services</span>
-                    </div>
+              </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-green-700">Due Date:</span>
                       <span className="text-sm font-medium text-green-900">1/30/2024</span>
-                    </div>
+            </div>
                   </div>
                 </div>
               </div>
@@ -886,7 +886,7 @@ export default function HomePage() {
                   <div className="text-lg font-medium text-green-800 mb-2">AI Confidence Score</div>
                   <div className="text-sm text-green-700">
                     Perfect match: Amount, date, and description all align
-                  </div>
+                </div>
                 </div>
               </div>
 
@@ -936,8 +936,8 @@ export default function HomePage() {
                   <div>
                     <h4 className="text-2xl font-bold text-neutral-900">QuickBooks Connected</h4>
                     <p className="text-green-600 font-medium">✓ Successfully Connected!</p>
-                  </div>
-                </div>
+              </div>
+            </div>
                 <div className="flex items-center space-x-3">
                   <span className="text-sm text-neutral-500">Realm ID: 9341455152432773</span>
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -950,18 +950,18 @@ export default function HomePage() {
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                       <CheckCircle className="w-4 h-4 text-blue-600" />
-                    </div>
-                    <div>
+                  </div>
+                  <div>
                       <p className="font-medium text-blue-900">Sync completed successfully!</p>
                       <p className="text-sm text-blue-700">Last sync: 8/17/2025 • Status: completed</p>
-                    </div>
-                  </div>
+              </div>
+            </div>
                   <Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2">
                     <RefreshCw className="w-4 h-4 mr-2" />
                     Full Historical Sync
                   </Button>
-                </div>
-              </div>
+          </div>
+        </div>
 
               {/* QuickBooks Dashboard Metrics */}
               <div className="grid grid-cols-4 gap-6 mb-8">
@@ -985,8 +985,8 @@ export default function HomePage() {
                   <div className="text-sm text-neutral-600">Pending Reconciliation</div>
                   <div className="text-xs text-orange-600 mt-1">Requires review</div>
                 </div>
-              </div>
-
+          </div>
+          
               {/* Connected Bank Accounts */}
               <div className="bg-neutral-50 rounded-xl p-6 mb-8">
                 <h5 className="text-lg font-semibold text-neutral-900 mb-4">Connected Bank Accounts</h5>
@@ -996,11 +996,11 @@ export default function HomePage() {
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                           <Building2 className="w-5 h-5 text-blue-600" />
-                        </div>
+                </div>
                         <div>
                           <p className="font-medium text-neutral-900">Chase Business Checking</p>
                           <p className="text-sm text-neutral-500">****1234</p>
-                        </div>
+                </div>
                       </div>
                       <span className="text-lg font-bold text-green-600">$23,456.78</span>
                     </div>
@@ -1015,11 +1015,11 @@ export default function HomePage() {
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                           <CreditCard className="w-5 h-5 text-green-600" />
-                        </div>
+              </div>
                         <div>
                           <p className="font-medium text-neutral-900">Chase Business Credit</p>
                           <p className="text-sm text-neutral-500">****5678</p>
-                        </div>
+            </div>
                       </div>
                       <span className="text-lg font-bold text-red-600">-$8,234.56</span>
                     </div>
@@ -1036,16 +1036,16 @@ export default function HomePage() {
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3">
                   <BarChart3 className="w-4 h-4 mr-2" />
                   View Full Dashboard
-                </Button>
+                    </Button>
                 <Button variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 px-8 py-3">
                   <Download className="w-4 h-4 mr-2" />
                   Export Reconciliation Report
-                </Button>
+                    </Button>
                 <Button variant="outline" className="border-red-200 text-red-600 hover:bg-red-50 px-8 py-3">
                   <X className="w-4 h-4 mr-2" />
                   Disconnect QuickBooks
                 </Button>
-              </div>
+                </div>
             </div>
           </motion.div>
 
@@ -1064,7 +1064,7 @@ export default function HomePage() {
               <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
                 Automate your invoice management with AI-powered payment tracking and automated reminder systems.
               </p>
-            </div>
+                </div>
 
             {/* Invoice Collections Mockup */}
             <div className="bg-white border border-neutral-200 rounded-2xl shadow-xl p-8 max-w-6xl mx-auto">
@@ -1075,13 +1075,13 @@ export default function HomePage() {
                   <Button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2">
                     <Plus className="w-4 h-4 mr-2" />
                     New Invoice
-                  </Button>
+                    </Button>
                   <Button variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 px-4 py-2">
                     <Upload className="w-4 h-4 mr-2" />
                     Import Invoices
-                  </Button>
-                </div>
+                    </Button>
               </div>
+          </div>
 
               {/* Summary Cards */}
               <div className="grid grid-cols-4 gap-6 mb-8">
@@ -1089,12 +1089,12 @@ export default function HomePage() {
                   <div className="text-2xl font-bold text-red-600">$12,450.00</div>
                   <div className="text-sm text-red-600">Overdue</div>
                   <div className="text-xs text-red-500 mt-1">8 invoices</div>
-                </div>
+          </div>
                 <div className="bg-yellow-50 rounded-xl p-4 text-center border border-yellow-200">
                   <div className="text-2xl font-bold text-yellow-600">$8,900.00</div>
                   <div className="text-sm text-yellow-600">Due Soon</div>
                   <div className="text-xs text-yellow-500 mt-1">5 invoices</div>
-                </div>
+        </div>
                 <div className="bg-green-50 rounded-xl p-4 text-center border border-green-200">
                   <div className="text-2xl font-bold text-green-600">$45,200.00</div>
                   <div className="text-sm text-green-600">Collected</div>
@@ -1134,7 +1134,7 @@ export default function HomePage() {
                       <td className="px-4 py-3">
                         <Button variant="outline" size="sm" className="border-orange-200 text-orange-600 hover:bg-orange-50">
                           Send Reminder
-                        </Button>
+              </Button>
                       </td>
                     </tr>
                     <tr>
@@ -1150,7 +1150,7 @@ export default function HomePage() {
                       <td className="px-4 py-3">
                         <Button variant="outline" size="sm" className="border-blue-200 text-blue-600 hover:bg-blue-50">
                           Send Reminder
-                        </Button>
+              </Button>
                       </td>
                     </tr>
                     <tr>
@@ -1169,8 +1169,8 @@ export default function HomePage() {
                     </tr>
                   </tbody>
                 </table>
-              </div>
-
+          </div>
+          
               {/* AI Insights */}
               <div className="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6">
                 <h5 className="text-lg font-semibold text-purple-900 mb-4">AI Insights & Recommendations</h5>
@@ -1179,20 +1179,20 @@ export default function HomePage() {
                     <div className="flex items-center space-x-3 mb-3">
                       <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
                         <Zap className="w-4 h-4 text-purple-600" />
-                      </div>
+            </div>
                       <span className="font-medium text-purple-900">Payment Prediction</span>
-                    </div>
+            </div>
                     <p className="text-sm text-purple-700">
                       ABC Corp likely to pay within 3-5 days based on payment history
                     </p>
-                  </div>
+            </div>
                   <div className="bg-white p-4 rounded-lg border border-purple-200">
                     <div className="flex items-center space-x-3 mb-3">
                       <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
                         <BarChart3 className="w-4 h-4 text-purple-600" />
-                      </div>
+          </div>
                       <span className="font-medium text-purple-900">Collection Strategy</span>
-                    </div>
+        </div>
                     <p className="text-sm text-purple-700">
                       Send personalized reminder to XYZ Inc for best response rate
                     </p>
@@ -1210,15 +1210,15 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="mb-24"
           >
-            <div className="text-center mb-12">
+          <div className="text-center mb-12">
               <h3 className="text-3xl font-bold text-neutral-900 mb-4">
                 📄 Export & Reporting
               </h3>
               <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
                 Generate professional reports and export data in multiple formats for your team and clients.
-              </p>
-            </div>
-
+            </p>
+          </div>
+          
             {/* Export Report Mockup */}
             <div className="bg-white border border-neutral-200 rounded-2xl shadow-xl p-8 max-w-6xl mx-auto">
               {/* Report Header */}
@@ -1228,9 +1228,9 @@ export default function HomePage() {
                   <p>Export Date: 8/17/2025</p>
                   <p>Account: alex@usealgomind.com</p>
                   <p>Total Reconciled Transactions: 6</p>
-                </div>
               </div>
-
+            </div>
+            
               {/* Report Table */}
               <div className="overflow-hidden border border-neutral-200 rounded-lg mb-8">
                 <table className="w-full">
@@ -1288,13 +1288,13 @@ export default function HomePage() {
                     </tr>
                   </tbody>
                 </table>
-              </div>
-
+            </div>
+            
               {/* Report Summary */}
-              <div className="text-center">
+            <div className="text-center">
                 <div className="text-2xl font-bold text-neutral-900">Total Amount: $2415.00</div>
-              </div>
-
+            </div>
+            
               {/* Export Options */}
               <div className="mt-8 pt-6 border-t border-neutral-200">
                 <h5 className="text-lg font-semibold text-neutral-900 mb-4 text-center">Export Options</h5>
@@ -1311,9 +1311,9 @@ export default function HomePage() {
                     <BarChart3 className="w-4 h-4 mr-2" />
                     Excel Report
                   </Button>
-                </div>
               </div>
             </div>
+          </div>
           </motion.div>
 
           {/* Call to Action */}
@@ -1387,7 +1387,7 @@ export default function HomePage() {
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                       ))}
-                    </div>
+                </div>
                     <p className="text-neutral-700 mb-8 leading-relaxed text-sm italic">
                       "{testimonial.content}"
                     </p>
@@ -1401,7 +1401,7 @@ export default function HomePage() {
                         <p className="font-semibold text-neutral-900">{testimonial.name}</p>
                         <p className="text-sm text-neutral-600">{testimonial.role}</p>
                         <p className="text-sm text-neutral-500">{testimonial.company}</p>
-                      </div>
+              </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -1455,7 +1455,7 @@ export default function HomePage() {
                     <CardTitle className="text-2xl font-semibold text-neutral-900 mb-2">
                       {plan.name}
                     </CardTitle>
-                    <div className="mb-4">
+              <div className="mb-4">
                       <span className="text-4xl font-bold text-neutral-900">{plan.price}</span>
                       <span className="text-neutral-600">{plan.period}</span>
                     </div>
@@ -1485,8 +1485,8 @@ export default function HomePage() {
                 </Card>
               </motion.div>
             ))}
+              </div>
           </div>
-        </div>
       </section>
 
       {/* CTA Banner */}
@@ -1522,9 +1522,9 @@ export default function HomePage() {
                   Try Live Demo
                 </Button>
               </a>
-            </div>
+                </div>
           </motion.div>
-        </div>
+                </div>
       </section>
 
       {/* Footer */}
@@ -1535,15 +1535,15 @@ export default function HomePage() {
               <div className="flex items-center mb-4">
                 <div className="w-8 h-8 bg-gradient-to-br from-neutral-900 to-neutral-700 rounded-lg flex items-center justify-center">
                   <span className="text-white font-semibold text-sm">QB</span>
-                </div>
+              </div>
                 <span className="ml-3 text-xl font-semibold text-neutral-900">ReconcilePro</span>
               </div>
               <p className="text-neutral-600 mb-4 text-sm leading-relaxed">
                 The most powerful bank reconciliation tool for modern businesses.
               </p>
-            </div>
-            
-            <div>
+              </div>
+
+              <div>
               <h3 className="font-semibold mb-4 text-neutral-900">Product</h3>
               <ul className="space-y-2 text-neutral-600 text-sm">
                 <li><a href="#features" className="hover:text-neutral-900 transition-colors">Features</a></li>
@@ -1551,17 +1551,17 @@ export default function HomePage() {
                 <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Demo</a></li>
                 <li><a href="/demo" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-900 transition-colors">Try Live Demo</a></li>
               </ul>
-            </div>
-            
-            <div>
+              </div>
+
+              <div>
               <h3 className="font-semibold mb-4 text-neutral-900">Support</h3>
               <ul className="space-y-2 text-neutral-600 text-sm">
                 <li><a href="mailto:alex@usealgomind.com" className="hover:text-neutral-900 transition-colors">Contact Support</a></li>
                 <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Help Center</a></li>
                 <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Documentation</a></li>
               </ul>
-            </div>
-            
+              </div>
+
             <div>
               <h3 className="font-semibold mb-4 text-neutral-900">Company</h3>
               <ul className="space-y-2 text-neutral-600 text-sm">
@@ -1570,7 +1570,7 @@ export default function HomePage() {
                 <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Blog</a></li>
               </ul>
             </div>
-          </div>
+        </div>
           
           <div className="border-t border-neutral-200 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-neutral-600 text-sm">

@@ -41,7 +41,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { fetchAccounts, fetchTransactions, markSync } from '@/lib/qbo'
 
-export async function POST(req: NextRequest) {
+export async function POST(req) {
   try {
     const body = await req.json().catch(() => ({}))
     const userId = body.userId || 'current-user-id'
