@@ -209,9 +209,7 @@ export default function HomePage() {
             </h1>
             
             <p className="text-xl lg:text-2xl text-neutral-600 max-w-3xl mx-auto mb-12 leading-relaxed">
-              Automate your bank reconciliation with AI-powered matching. 
-              Reconcile months of transactions in minutes, not hours. 
-              Seamlessly integrated with QuickBooks Online.
+              Connect your QuickBooks and watch the magic happen in seconds
             </p>
             
             <p className="text-lg text-neutral-500 max-w-2xl mx-auto mb-8 leading-relaxed">
@@ -229,12 +227,6 @@ export default function HomePage() {
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 font-medium">
                   <Play className="mr-2 w-5 h-5" />
                   Try Live Demo
-                </Button>
-              </a>
-                              <a href="/demo" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="border-2 border-neutral-200 text-neutral-700 px-8 py-4 text-lg rounded-lg hover:border-neutral-400 hover:bg-neutral-50 transition-all duration-200 font-medium">
-                    <Play className="mr-2 w-5 h-5" />
-                    Try Live Demo
                 </Button>
               </a>
             </div>
