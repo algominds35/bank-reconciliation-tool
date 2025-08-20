@@ -158,6 +158,7 @@ export default function HomePage() {
               <a href="#pricing" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-medium">Pricing</a>
               <a href="#testimonials" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-medium">Reviews</a>
               <a href="#demo" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-medium">Demo</a>
+              <Link href="/support" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-medium">Support</Link>
               <Link href="/contact" className="text-neutral-600 hover:text-neutral-900 transition-colors text-sm font-medium">Contact</Link>
             </nav>
 
@@ -1549,9 +1550,9 @@ export default function HomePage() {
               <div>
               <h3 className="font-semibold mb-4 text-neutral-900">Support</h3>
               <ul className="space-y-2 text-neutral-600 text-sm">
-                <li><a href="mailto:alex@usealgomind.com" className="hover:text-neutral-900 transition-colors">Contact Support</a></li>
-                <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Help Center</a></li>
-                <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Documentation</a></li>
+                <li><Link href="/support" className="hover:text-neutral-900 transition-colors">Help Center</Link></li>
+                <li><Link href="/contact" className="hover:text-neutral-900 transition-colors">Contact Support</Link></li>
+                <li><a href="mailto:alex@usealgomind.com" className="hover:text-neutral-900 transition-colors">Email Support</a></li>
               </ul>
               </div>
 
