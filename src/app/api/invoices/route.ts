@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
           name: client_name,
           business_name: client_name,
           email: client_email,
-          user_id: 'temp_user' // Will be updated when user auth is implemented
+          user_id: 'temp_user' // Using text, not UUID
         })
         .select('id')
         .single()

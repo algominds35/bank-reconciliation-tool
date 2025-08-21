@@ -76,6 +76,12 @@ export interface Invoice {
   reminder_phase?: 'friendly' | 'reminder' | 'overdue' | 'final';
   payment_date?: string;
   notes?: string;
+  // Related client data when joined
+  clients?: {
+    name: string;
+    business_name?: string;
+    email?: string;
+  };
 }
 
 export interface InvoiceUpload {
