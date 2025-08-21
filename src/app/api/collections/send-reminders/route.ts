@@ -97,8 +97,8 @@ export async function POST(req: NextRequest) {
           dueDate: dueDate.toLocaleDateString(),
           daysOverdue: daysOverdue > 0 ? daysOverdue : undefined,
           paymentLink: `${process.env.NEXT_PUBLIC_APP_URL}/pay/${invoice.id}`,
-          companyName: process.env.COMPANY_NAME || 'Your Company',
-          companyEmail: process.env.FROM_EMAIL || 'noreply@yourcompany.com'
+          companyName: process.env.COMPANY_NAME || 'ReconcileBook',
+          companyEmail: process.env.FROM_EMAIL || 'alex@usealgomind.com'
         }
 
         // Send the email

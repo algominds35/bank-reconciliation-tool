@@ -183,12 +183,15 @@ export default function InvoicesPage() {
 
       const data = await response.json()
       
+      console.log('Email API Response:', data)
+      
       if (data.success) {
         alert(`Payment reminder sent to ${invoice.clients?.email}!`)
         // Refresh invoices to update reminder status
         fetchInvoices()
       } else {
-        alert(`Failed to send reminder: ${data.error}`)
+        console.error('Email API Error:', data)
+        alert(`Failed to send reminder: ${data.error || 'Unknown error'}`)
       }
     } catch (error) {
       console.error('Error sending reminder:', error)
