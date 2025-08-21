@@ -58,4 +58,60 @@ export interface ReconciliationSummary {
   bankTransactions: number;
   bookkeepingTransactions: number;
   quickbooksTransactions: number;
+}
+
+// NEW: Standalone Invoice Types (No QuickBooks Required)
+export interface Invoice {
+  id: string;
+  user_id: string;
+  client_id: string;
+  invoice_number: string;
+  amount: number;
+  due_date: string;
+  description: string;
+  status: 'pending' | 'paid' | 'overdue' | 'cancelled';
+  created_at: string;
+  updated_at: string;
+  last_reminder_sent?: string;
+  reminder_phase?: 'friendly' | 'reminder' | 'overdue' | 'final';
+  payment_date?: string;
+  notes?: string;
+}
+
+export interface InvoiceUpload {
+  client_name: string;
+  client_email: string;
+  invoice_number: string;
+  amount: number;
+  due_date: string;
+  description: string;
+}
+
+export interface CollectionReminder {
+  id: string;
+  invoice_id: string;
+  user_id: string;
+  phase: 'friendly' | 'reminder' | 'overdue' | 'final';
+  sent_at: string;
+  email: string;
+  subject: string;
+  content: string;
+  status: 'sent' | 'delivered' | 'opened' | 'clicked';
+  response?: string;
+}
+
+export interface CollectionSettings {
+  id: string;
+  user_id: string;
+  friendly_reminder_days: number;
+  reminder_days: number;
+  overdue_days: number;
+  final_notice_days: number;
+  email_template_friendly: string;
+  email_template_reminder: string;
+  email_template_overdue: string;
+  email_template_final: string;
+  company_name: string;
+  company_email: string;
+  payment_link_base: string;
 } 

@@ -1553,15 +1553,16 @@ export default function HomePage() {
                 <li><Link href="/support" className="hover:text-neutral-900 transition-colors">Help Center</Link></li>
                 <li><Link href="/contact" className="hover:text-neutral-900 transition-colors">Contact Support</Link></li>
                 <li><a href="mailto:alex@usealgomind.com" className="hover:text-neutral-900 transition-colors">Email Support</a></li>
+                <li><a href="mailto:alex@usealgomind.com" className="hover:text-neutral-900 transition-colors">Direct Contact: alex@usealgomind.com</a></li>
               </ul>
               </div>
 
-                          <div>
+            <div>
               <h3 className="font-semibold mb-4 text-neutral-900">Company</h3>
               <ul className="space-y-2 text-neutral-600 text-sm">
                 <li><Link href="/contact" className="hover:text-neutral-900 transition-colors">Contact Us</Link></li>
                 <li><a href="#demo" className="hover:text-neutral-900 transition-colors">About</a></li>
-                <li><a href="#demo" className="hover:text-neutral-900 transition-colors">Blog</a></li>
+                <li><Link href="/blog" className="hover:text-neutral-900 transition-colors">Blog</Link></li>
               </ul>
             </div>
         </div>
