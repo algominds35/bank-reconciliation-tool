@@ -9,15 +9,29 @@ const supabase = createClient(
 
 export async function POST(req: NextRequest) {
   try {
-    console.log('🚀 Starting automated payment reminder process...')
+    console.log('🚀 Starting payment reminder process...')
     
-    // Get overdue invoices from QuickBooks data
-    const { data: invoices, error } = await supabase
-      .from('qbo_transactions')
-      .select('*')
-      .eq('type', 'invoice')
+    const body = await req.json()
+    const { invoice_id, user_id } = body
+    
+    let query = supabase
+      .from('invoices')
+      .select(`
+        *,
+        clients (
+          name,
+          email
+        )
+      `)
       .eq('status', 'pending')
       .not('due_date', 'is', null)
+    
+    // If specific invoice_id provided, only process that invoice
+    if (invoice_id) {
+      query = query.eq('id', invoice_id)
+    }
+    
+    const { data: invoices, error } = await query
     
     if (error) {
       console.error('❌ Database error:', error)
@@ -66,12 +80,19 @@ export async function POST(req: NextRequest) {
           phase = 'final'
         }
 
+        // Get client information
+        const client = invoice.clients as any
+        if (!client || !client.email) {
+          console.log(`⚠️ Skipping invoice ${invoice.invoice_number} - no client email`)
+          continue
+        }
+
         // Prepare email data
         const emailData: PaymentReminderData = {
-          clientName: invoice.customer_name || 'Valued Customer',
-          clientEmail: invoice.customer_email || 'customer@example.com',
-          invoiceNumber: invoice.invoice_number || invoice.id,
-          invoiceAmount: invoice.amount ? `$${parseFloat(invoice.amount).toFixed(2)}` : '$0.00',
+          clientName: client.name || 'Valued Customer',
+          clientEmail: client.email,
+          invoiceNumber: invoice.invoice_number,
+          invoiceAmount: `$${parseFloat(invoice.amount.toString()).toFixed(2)}`,
           projectName: invoice.description || 'Project Services',
           dueDate: dueDate.toLocaleDateString(),
           daysOverdue: daysOverdue > 0 ? daysOverdue : undefined,
@@ -89,7 +110,7 @@ export async function POST(req: NextRequest) {
           
           // Update invoice status to track email sent
           await supabase
-            .from('qbo_transactions')
+            .from('invoices')
             .update({ 
               last_reminder_sent: new Date().toISOString(),
               reminder_phase: phase
@@ -134,9 +155,8 @@ export async function GET(req: NextRequest) {
   try {
     // Get reminder statistics
     const { data: invoices, error } = await supabase
-      .from('qbo_transactions')
+      .from('invoices')
       .select('*')
-      .eq('type', 'invoice')
       .eq('status', 'pending')
       .not('due_date', 'is', null)
     
