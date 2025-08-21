@@ -151,6 +151,51 @@ export default function InvoicesPage() {
     return diffDays > 0 ? diffDays : 0
   }
 
+  const handleViewInvoice = (invoiceId: string) => {
+    // For now, just show an alert - you can implement a modal later
+    const invoice = invoices.find(inv => inv.id === invoiceId)
+    if (invoice) {
+      alert(`Invoice Details:\n\nInvoice #: ${invoice.invoice_number}\nClient: ${invoice.clients?.name}\nAmount: $${invoice.amount}\nStatus: ${invoice.status}`)
+    }
+  }
+
+  const handleEditInvoice = (invoiceId: string) => {
+    // For now, just show an alert - you can implement edit functionality later
+    alert('Edit functionality coming soon!')
+  }
+
+  const handleSendReminder = async (invoiceId: string) => {
+    try {
+      const invoice = invoices.find(inv => inv.id === invoiceId)
+      if (!invoice) return
+
+      // Call the collections API to send a reminder
+      const response = await fetch('/api/collections/send-reminders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          invoice_id: invoiceId,
+          user_id: 'temp_user'
+        })
+      })
+
+      const data = await response.json()
+      
+      if (data.success) {
+        alert(`Payment reminder sent to ${invoice.clients?.email}!`)
+        // Refresh invoices to update reminder status
+        fetchInvoices()
+      } else {
+        alert(`Failed to send reminder: ${data.error}`)
+      }
+    } catch (error) {
+      console.error('Error sending reminder:', error)
+      alert('Failed to send reminder. Please try again.')
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -405,13 +450,28 @@ export default function InvoicesPage() {
                         </td>
                         <td className="py-3 px-4">
                           <div className="flex gap-2">
-                            <Button size="sm" variant="outline">
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleViewInvoice(invoice.id)}
+                              title="View Invoice"
+                            >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button size="sm" variant="outline">
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleEditInvoice(invoice.id)}
+                              title="Edit Invoice"
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button size="sm" variant="outline">
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => handleSendReminder(invoice.id)}
+                              title="Send Payment Reminder"
+                            >
                               <Mail className="h-4 w-4" />
                             </Button>
                           </div>
