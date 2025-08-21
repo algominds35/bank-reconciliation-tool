@@ -1,0 +1,4 @@
+client_name,client_email,invoice_number,amount,due_date,description
+Test Client,test@example.com,TEST-001,100.00,2024-01-15,Website Design
+John Smith,john@example.com,TEST-002,250.50,2024-01-10,Logo Design
+Jane Doe,jane@example.com,TEST-003,500.00,2024-01-05,App Development

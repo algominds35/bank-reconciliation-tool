@@ -88,9 +88,13 @@ export default function InvoicesPage() {
           description: ''
         })
         fetchInvoices()
+        alert('Invoice created successfully!')
+      } else {
+        alert(`Error: ${data.error}`)
       }
     } catch (error) {
       console.error('Failed to create invoice:', error)
+      alert('Failed to create invoice. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -115,9 +119,12 @@ export default function InvoicesPage() {
         setSelectedFile(null)
         fetchInvoices()
         alert(`Successfully imported ${data.imported} invoices!`)
+      } else {
+        alert(`Import failed: ${data.error}`)
       }
     } catch (error) {
       console.error('Failed to import CSV:', error)
+      alert('Import failed. Please try again.')
     } finally {
       setImporting(false)
     }
@@ -255,7 +262,7 @@ export default function InvoicesPage() {
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold">Create New Invoice</h3>
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="sm"
                   onClick={() => setShowForm(false)}
                 >
@@ -376,8 +383,8 @@ export default function InvoicesPage() {
                         <td className="py-3 px-4 font-medium">{invoice.invoice_number}</td>
                         <td className="py-3 px-4">
                           <div>
-                            <p className="font-medium">{invoice.client_id}</p>
-                            <p className="text-sm text-gray-500">{invoice.client_id}</p>
+                            <p className="font-medium">{invoice.clients?.name || 'Unknown'}</p>
+                            <p className="text-sm text-gray-500">{invoice.clients?.email}</p>
                           </div>
                         </td>
                         <td className="py-3 px-4">

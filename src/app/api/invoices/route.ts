@@ -11,15 +11,8 @@ const supabase = createClient(
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
-    const userId = searchParams.get('user_id')
+    const userId = searchParams.get('user_id') || 'temp_user' // Default to temp_user for now
     
-    if (!userId) {
-      return NextResponse.json({ 
-        success: false, 
-        error: 'User ID is required' 
-      }, { status: 400 })
-    }
-
     const { data: invoices, error } = await supabase
       .from('invoices')
       .select(`
