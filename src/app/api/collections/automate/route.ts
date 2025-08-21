@@ -179,7 +179,6 @@ export async function GET(req: NextRequest) {
       dueThisWeek: 0,
       friendly: 0,
       reminder: 0,
-      overdue: 0,
       final: 0
     }
 
