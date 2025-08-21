@@ -1264,53 +1264,90 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                {/* Sync Section */}
-                {qboStatus.connected ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
-                          QuickBooks Invoice Sync
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                          Sync your overdue invoices from QuickBooks and start collecting payments automatically.
-                        </p>
-                      </div>
+                {/* Standalone Invoice Management */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        Invoice Management
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Create invoices manually or import from CSV/Excel files. No QuickBooks required.
+                      </p>
+                    </div>
+                    <div className="flex gap-3">
+                      <Link href="/invoices">
+                        <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                          Manage Invoices
+                        </Button>
+                      </Link>
                       <Button 
-                        onClick={syncInvoices}
-                        disabled={loading}
-                        className="bg-green-600 hover:bg-green-700 text-white"
+                        variant="outline"
+                        onClick={() => {
+                          // Create a hidden file input for CSV upload
+                          const input = document.createElement('input')
+                          input.type = 'file'
+                          input.accept = '.csv,.xlsx,.xls'
+                          input.onchange = async (e) => {
+                            const file = (e.target as HTMLInputElement).files?.[0]
+                            if (file) {
+                              const formData = new FormData()
+                              formData.append('file', file)
+                              try {
+                                const response = await fetch('/api/invoices/import', {
+                                  method: 'POST',
+                                  body: formData
+                                })
+                                const result = await response.json()
+                                if (result.success) {
+                                  alert(`Successfully imported ${result.imported} invoices!`)
+                                } else {
+                                  alert(`Import failed: ${result.error}`)
+                                }
+                              } catch (error) {
+                                alert('Import failed. Please try again.')
+                              }
+                            }
+                          }
+                          input.click()
+                        }}
                       >
-                        {loading ? 'Syncing...' : 'Sync Invoices'}
+                        Import CSV
                       </Button>
                     </div>
                   </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <div className="w-8 h-8 bg-gray-400 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">QB</span>
+                  
+                  {/* Features */}
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-sm text-gray-700">Manual Invoice Creation</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span className="text-sm text-gray-700">CSV/Excel Import</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                        <span className="text-sm text-gray-700">Automated Collections</span>
                       </div>
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">Connect QuickBooks</h3>
-                    <p className="text-gray-500 mb-4">
-                      Connect your QuickBooks account to automatically sync invoices and start collecting overdue payments.
-                    </p>
-                    <Link href="/settings/qbo">
-                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                        Connect QuickBooks
-                      </Button>
-                    </Link>
                   </div>
-                )}
+                </div>
 
                 {/* Invoice List Placeholder */}
                 <div className="border rounded-lg">
                   <div className="p-4 border-b bg-gray-50">
-                    <h3 className="font-medium">Overdue Invoices</h3>
+                    <h3 className="font-medium">Recent Invoices</h3>
                   </div>
                   <div className="p-8 text-center text-gray-500">
-                    <p>No overdue invoices found. Sync with QuickBooks to get started.</p>
+                    <p>No invoices yet. Create your first invoice or import from CSV to get started.</p>
+                    <Link href="/invoices">
+                      <Button className="mt-4" variant="outline">
+                        Get Started
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </CardContent>
