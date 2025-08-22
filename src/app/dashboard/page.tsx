@@ -41,6 +41,14 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([])
   const [invoices, setInvoices] = useState<any[]>([])
+  const [invoiceStats, setInvoiceStats] = useState({
+    total: 0,
+    pending: 0,
+    overdue: 0,
+    paid: 0,
+    totalAmount: 0,
+    overdueAmount: 0
+  })
   const [selectedTransactions, setSelectedTransactions] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   
@@ -72,6 +80,7 @@ export default function Dashboard() {
       fetchClients()
       fetchTransactions()
       fetchQboStatus()
+      fetchInvoiceStats()
     }
   }, [user, selectedClientId])
 
@@ -223,6 +232,38 @@ export default function Dashboard() {
     const quickbooksTransactions = transactions.filter(t => t.transaction_type === 'quickbooks').length
 
     setSummary({ total, reconciled, unreconciled, bankTransactions, bookkeepingTransactions, quickbooksTransactions })
+  }
+
+  const fetchInvoiceStats = async () => {
+    try {
+      const response = await fetch('/api/invoices?user_id=temp_user')
+      const data = await response.json()
+      
+      if (data.success && data.invoices) {
+        const invoices = data.invoices
+        const today = new Date()
+        
+        const stats = {
+          total: invoices.length,
+          pending: invoices.filter((inv: any) => inv.status === 'pending').length,
+          overdue: invoices.filter((inv: any) => {
+            const dueDate = new Date(inv.due_date)
+            return inv.status === 'pending' && dueDate < today
+          }).length,
+          paid: invoices.filter((inv: any) => inv.status === 'paid').length,
+          totalAmount: invoices.reduce((sum: number, inv: any) => sum + parseFloat(inv.amount), 0),
+          overdueAmount: invoices.filter((inv: any) => {
+            const dueDate = new Date(inv.due_date)
+            return inv.status === 'pending' && dueDate < today
+          }).reduce((sum: number, inv: any) => sum + parseFloat(inv.amount), 0)
+        }
+        
+        setInvoiceStats(stats)
+        setInvoices(invoices)
+      }
+    } catch (error) {
+      console.error('Failed to fetch invoice stats:', error)
+    }
   }
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>, transactionType: 'bank' | 'bookkeeping') => {
@@ -945,6 +986,57 @@ export default function Dashboard() {
           </TabsList>
 
           <TabsContent value="transactions" className="space-y-6">
+            {/* Dashboard Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <FileText className="h-5 w-5 text-blue-600" />
+                    <div>
+                      <div className="text-2xl font-bold text-blue-600">{summary.total}</div>
+                      <div className="text-sm text-slate-600">Total Transactions</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <div>
+                      <div className="text-2xl font-bold text-green-600">{summary.reconciled}</div>
+                      <div className="text-sm text-slate-600">Reconciled</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <DollarSign className="h-5 w-5 text-yellow-600" />
+                    <div>
+                      <div className="text-2xl font-bold text-yellow-600">{invoiceStats.total}</div>
+                      <div className="text-sm text-slate-600">Total Invoices</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2">
+                    <AlertCircle className="h-5 w-5 text-red-600" />
+                    <div>
+                      <div className="text-2xl font-bold text-red-600">{invoiceStats.overdue}</div>
+                      <div className="text-sm text-slate-600">Overdue Invoices</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
         {/* Controls */}
             <Card>
               <CardContent className="p-6">
@@ -1247,20 +1339,36 @@ export default function Dashboard() {
                 {/* Quick Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <div className="text-2xl font-bold text-blue-600">0</div>
+                    <div className="text-2xl font-bold text-blue-600">{invoiceStats.total}</div>
                     <div className="text-sm text-blue-600">Total Invoices</div>
                   </div>
+                  <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <div className="text-2xl font-bold text-yellow-600">{invoiceStats.pending}</div>
+                    <div className="text-sm text-yellow-600">Pending</div>
+                  </div>
                   <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-                    <div className="text-2xl font-bold text-red-600">0</div>
+                    <div className="text-2xl font-bold text-red-600">{invoiceStats.overdue}</div>
                     <div className="text-sm text-red-600">Overdue</div>
                   </div>
                   <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                    <div className="text-2xl font-bold text-green-600">0</div>
-                    <div className="text-sm text-green-600">Active Campaigns</div>
+                    <div className="text-2xl font-bold text-green-600">{invoiceStats.paid}</div>
+                    <div className="text-sm text-green-600">Paid</div>
                   </div>
-                  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                    <div className="text-2xl font-bold text-purple-600">0%</div>
-                    <div className="text-sm text-purple-600">Collection Rate</div>
+                </div>
+
+                {/* Amount Summary */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <div className="text-2xl font-bold text-slate-600">
+                      ${invoiceStats.totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </div>
+                    <div className="text-sm text-slate-600">Total Invoice Value</div>
+                  </div>
+                  <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                    <div className="text-2xl font-bold text-red-600">
+                      ${invoiceStats.overdueAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </div>
+                    <div className="text-sm text-red-600">Overdue Amount</div>
                   </div>
                 </div>
 
