@@ -19,12 +19,6 @@ import {
   Zap
 } from 'lucide-react'
 
-export const metadata = {
-  title: 'Automated Invoice Collection Software | ReconcileBook - 60% Faster Payments',
-  description: 'Automated invoice collection software with 4-phase email sequences. Improve cash flow by 60% with professional payment reminders. Free trial.',
-  keywords: 'invoice collection software, automated payment reminders, cash flow management, invoice follow up, payment collection automation',
-}
-
 export default function InvoiceCollectionPage() {
   return (
     <div className="min-h-screen bg-white">

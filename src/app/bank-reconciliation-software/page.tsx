@@ -19,12 +19,6 @@ import {
   Upload
 } from 'lucide-react'
 
-export const metadata = {
-  title: 'AI Bank Reconciliation Software | ReconcileBook - 99.9% Accuracy',
-  description: 'AI-powered bank reconciliation software that matches transactions with 99.9% accuracy. Works with any bank CSV. Reduce reconciliation time by 95%. Free trial.',
-  keywords: 'bank reconciliation software, AI reconciliation, automated bank matching, QuickBooks alternative, CSV bank reconciliation',
-}
-
 export default function BankReconciliationPage() {
   return (
     <div className="min-h-screen bg-white">
