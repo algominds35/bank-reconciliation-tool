@@ -155,7 +155,11 @@ export default function InvoicesPage() {
     // For now, just show an alert - you can implement a modal later
     const invoice = invoices.find(inv => inv.id === invoiceId)
     if (invoice) {
-      alert(`Invoice Details:\n\nInvoice #: ${invoice.invoice_number}\nClient: ${invoice.clients?.name}\nAmount: $${invoice.amount}\nStatus: ${invoice.status}`)
+      const reminderInfo = invoice.last_reminder_sent 
+        ? `\nLast Reminder: ${new Date(invoice.last_reminder_sent).toLocaleDateString()} (${invoice.reminder_phase})`
+        : '\nNo reminders sent yet'
+      
+      alert(`Invoice Details:\n\nInvoice #: ${invoice.invoice_number}\nClient: ${invoice.clients?.name}\nAmount: $${invoice.amount}\nDue Date: ${new Date(invoice.due_date).toLocaleDateString()}\nStatus: ${invoice.status}${reminderInfo}`)
     }
   }
 
@@ -457,26 +461,38 @@ export default function InvoicesPage() {
                               size="sm" 
                               variant="outline"
                               onClick={() => handleViewInvoice(invoice.id)}
-                              title="View Invoice"
+                              className="text-xs"
                             >
-                              <Eye className="h-4 w-4" />
+                              View
                             </Button>
                             <Button 
                               size="sm" 
                               variant="outline"
                               onClick={() => handleEditInvoice(invoice.id)}
-                              title="Edit Invoice"
+                              className="text-xs"
                             >
-                              <Edit className="h-4 w-4" />
+                              Edit
                             </Button>
                             <Button 
                               size="sm" 
-                              variant="outline"
+                              variant={invoice.last_reminder_sent ? "secondary" : "default"}
                               onClick={() => handleSendReminder(invoice.id)}
-                              title="Send Payment Reminder"
+                              className="text-xs"
+                              title={invoice.last_reminder_sent ? 
+                                `Last sent: ${new Date(invoice.last_reminder_sent).toLocaleDateString()}` : 
+                                'Send payment reminder'
+                              }
                             >
-                              <Mail className="h-4 w-4" />
+                              {invoice.last_reminder_sent ? 
+                                `Sent ${new Date(invoice.last_reminder_sent).toLocaleDateString()}` : 
+                                'Send Reminder'
+                              }
                             </Button>
+                            {invoice.reminder_phase && (
+                              <Badge variant="outline" className="text-xs">
+                                {invoice.reminder_phase}
+                              </Badge>
+                            )}
                           </div>
                         </td>
                       </tr>
