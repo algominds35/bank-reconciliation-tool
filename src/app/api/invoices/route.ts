@@ -137,8 +137,8 @@ export async function POST(req: NextRequest) {
 // PUT: Update invoice
 export async function PUT(req: NextRequest) {
   try {
-    const body: Partial<Invoice> = await req.json()
-    const { id, ...updateData } = body
+    const body = await req.json()
+    const { id, client_name, client_email, invoice_number, amount, due_date, description } = body
     
     if (!id) {
       return NextResponse.json({ 
@@ -147,10 +147,41 @@ export async function PUT(req: NextRequest) {
       }, { status: 400 })
     }
 
+    // Get current invoice to find client_id
+    const { data: currentInvoice, error: fetchError } = await supabase
+      .from('invoices')
+      .select('client_id')
+      .eq('id', id)
+      .single()
+
+    if (fetchError) {
+      console.error('Invoice fetch error:', fetchError)
+      return NextResponse.json({ 
+        success: false, 
+        error: 'Invoice not found' 
+      }, { status: 404 })
+    }
+
+    // Update client information if provided
+    if (client_name || client_email) {
+      await supabase
+        .from('clients')
+        .update({
+          name: client_name,
+          email: client_email,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', currentInvoice.client_id)
+    }
+
+    // Update invoice
     const { data: invoice, error } = await supabase
       .from('invoices')
       .update({
-        ...updateData,
+        invoice_number,
+        amount: parseFloat(amount.toString()),
+        due_date: new Date(due_date).toISOString(),
+        description,
         updated_at: new Date().toISOString()
       })
       .eq('id', id)

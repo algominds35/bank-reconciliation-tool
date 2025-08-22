@@ -30,12 +30,24 @@ import { Invoice, InvoiceUpload } from '@/types'
 export default function InvoicesPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [showForm, setShowForm] = useState(false)
+  const [showEditForm, setShowEditForm] = useState(false)
+  const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null)
   const [loading, setLoading] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [importing, setImporting] = useState(false)
 
   // Form state
   const [formData, setFormData] = useState<InvoiceUpload>({
+    client_name: '',
+    client_email: '',
+    invoice_number: '',
+    amount: 0,
+    due_date: '',
+    description: ''
+  })
+
+  // Edit form state
+  const [editFormData, setEditFormData] = useState<InvoiceUpload>({
     client_name: '',
     client_email: '',
     invoice_number: '',
@@ -164,8 +176,60 @@ export default function InvoicesPage() {
   }
 
   const handleEditInvoice = (invoiceId: string) => {
-    // For now, just show an alert - you can implement edit functionality later
-    alert('Edit functionality coming soon!')
+    const invoice = invoices.find(inv => inv.id === invoiceId)
+    if (invoice) {
+      setEditingInvoice(invoice)
+      setEditFormData({
+        client_name: invoice.clients?.name || '',
+        client_email: invoice.clients?.email || '',
+        invoice_number: invoice.invoice_number,
+        amount: invoice.amount,
+        due_date: new Date(invoice.due_date).toISOString().split('T')[0],
+        description: invoice.description || ''
+      })
+      setShowEditForm(true)
+    }
+  }
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editingInvoice) return
+
+    try {
+      setLoading(true)
+      
+      const response = await fetch('/api/invoices', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: editingInvoice.id,
+          client_name: editFormData.client_name,
+          client_email: editFormData.client_email,
+          invoice_number: editFormData.invoice_number,
+          amount: editFormData.amount,
+          due_date: editFormData.due_date,
+          description: editFormData.description
+        })
+      })
+
+      const data = await response.json()
+      
+      if (data.success) {
+        alert('Invoice updated successfully!')
+        setShowEditForm(false)
+        setEditingInvoice(null)
+        fetchInvoices() // Refresh the list
+      } else {
+        alert(`Failed to update invoice: ${data.error}`)
+      }
+    } catch (error) {
+      console.error('Failed to update invoice:', error)
+      alert('Failed to update invoice. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleSendReminder = async (invoiceId: string) => {
@@ -395,6 +459,108 @@ export default function InvoicesPage() {
                     type="button" 
                     variant="outline" 
                     onClick={() => setShowForm(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Edit Invoice Modal */}
+        {showEditForm && editingInvoice && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold">Edit Invoice #{editingInvoice.invoice_number}</h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowEditForm(false)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <form onSubmit={handleEditSubmit} className="space-y-4">
+                <div>
+                  <Label htmlFor="edit_client_name">Client Name</Label>
+                  <Input
+                    id="edit_client_name"
+                    value={editFormData.client_name}
+                    onChange={(e) => setEditFormData({...editFormData, client_name: e.target.value})}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="edit_client_email">Client Email</Label>
+                  <Input
+                    id="edit_client_email"
+                    type="email"
+                    value={editFormData.client_email}
+                    onChange={(e) => setEditFormData({...editFormData, client_email: e.target.value})}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="edit_invoice_number">Invoice Number</Label>
+                  <Input
+                    id="edit_invoice_number"
+                    value={editFormData.invoice_number}
+                    onChange={(e) => setEditFormData({...editFormData, invoice_number: e.target.value})}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="edit_amount">Amount ($)</Label>
+                  <Input
+                    id="edit_amount"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={editFormData.amount}
+                    onChange={(e) => setEditFormData({...editFormData, amount: parseFloat(e.target.value) || 0})}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="edit_due_date">Due Date</Label>
+                  <Input
+                    id="edit_due_date"
+                    type="date"
+                    value={editFormData.due_date}
+                    onChange={(e) => setEditFormData({...editFormData, due_date: e.target.value})}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="edit_description">Description</Label>
+                  <Textarea
+                    id="edit_description"
+                    value={editFormData.description}
+                    onChange={(e) => setEditFormData({...editFormData, description: e.target.value})}
+                    rows={3}
+                  />
+                </div>
+
+                <div className="flex gap-2 pt-4">
+                  <Button 
+                    type="submit" 
+                    disabled={loading}
+                    className="flex-1"
+                  >
+                    {loading ? 'Updating...' : 'Update Invoice'}
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => setShowEditForm(false)}
                   >
                     Cancel
                   </Button>
