@@ -35,7 +35,7 @@ export default function HomePage() {
         <link rel="canonical" href="https://reconcilebook.com" />
       </head>
       
-      <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -59,7 +59,7 @@ export default function HomePage() {
               automatically collects overdue invoices with professional email sequences. 
               <strong> Save 20+ hours per month and improve cash flow by 60%.</strong>
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Link href="/dashboard">
                 <Button size="lg" className="text-lg px-8 py-4">
@@ -69,11 +69,11 @@ export default function HomePage() {
               </Link>
               
               <Button variant="outline" size="lg" className="text-lg px-8 py-4">
-                <Play className="mr-2 h-5 w-5" />
+                  <Play className="mr-2 h-5 w-5" />
                 Watch 3-Minute Demo
-              </Button>
+                </Button>
             </div>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
               <div className="flex items-center justify-center space-x-2 text-green-600">
                 <CheckCircle className="h-5 w-5" />
@@ -85,7 +85,7 @@ export default function HomePage() {
               </div>
               <div className="flex items-center justify-center space-x-2 text-green-600">
                 <CheckCircle className="h-5 w-5" />
-                <span className="text-sm font-medium">99.9% matching accuracy</span>
+                <span className="text-sm font-medium">Smart AI matching</span>
               </div>
               <div className="flex items-center justify-center space-x-2 text-green-600">
                 <CheckCircle className="h-5 w-5" />
@@ -123,12 +123,12 @@ export default function HomePage() {
                 <div className="text-sm text-red-600">in wasted time</div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-red-200 bg-red-50">
               <CardContent className="p-8 text-center">
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <DollarSign className="h-8 w-8 text-red-600" />
-                </div>
+              </div>
                 <h3 className="text-xl font-bold text-red-900 mb-4">❌ Cash Flow Crisis from Late Payments</h3>
                 <p className="text-red-700 mb-4">
                   $3 trillion in unpaid invoices globally. 60% of businesses struggle with cash flow 
@@ -138,12 +138,12 @@ export default function HomePage() {
                 <div className="text-sm text-red-600">of businesses fail due to cash flow</div>
               </CardContent>
             </Card>
-            
+
             <Card className="border-red-200 bg-red-50">
               <CardContent className="p-8 text-center">
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <TrendingUp className="h-8 w-8 text-red-600" />
-                </div>
+            </div>
                 <h3 className="text-xl font-bold text-red-900 mb-4">❌ Expensive Tool Juggling</h3>
                 <p className="text-red-700 mb-4">
                   QuickBooks ($200/month) + Chaser ($149/month) + accountant fees ($2,000/month) = 
@@ -160,7 +160,7 @@ export default function HomePage() {
               <CardContent className="p-8">
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <CheckCircle className="h-10 w-10 text-green-600" />
-                </div>
+              </div>
                 <h3 className="text-2xl font-bold text-green-900 mb-4">✅ ReconcileBook Solves All Three</h3>
                 <p className="text-lg text-green-700 mb-6">
                   AI-powered reconciliation + automated collections in one affordable tool. 
@@ -178,12 +178,12 @@ export default function HomePage() {
                   <div>
                     <div className="text-3xl font-bold text-green-600">$49</div>
                     <div className="text-sm text-green-700">Per Month</div>
-                  </div>
+            </div>
                 </div>
               </CardContent>
             </Card>
           </div>
-        </div>
+              </div>
       </section>
 
       {/* Features Section */}
@@ -196,8 +196,8 @@ export default function HomePage() {
             <p className="text-xl text-gray-600">
               Everything you need to manage your finances efficiently
             </p>
-          </div>
-          
+            </div>
+
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Bank Reconciliation */}
             <Card className="border-blue-200">
@@ -207,7 +207,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">AI Bank Reconciliation</h3>
                 <p className="text-gray-600 mb-6">
-                  Match bank transactions with 99.9% accuracy in minutes, not hours. 
+                  Intelligently match bank transactions in minutes, not hours. 
                   Works with any bank CSV - no integrations needed.
                 </p>
                 
@@ -227,8 +227,8 @@ export default function HomePage() {
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-500" />
                     <span>💰 Audit-ready reconciliation reports</span>
-                  </div>
-                </div>
+              </div>
+            </div>
                 
                 <Link href="/bank-reconciliation-software">
                   <Button variant="outline" className="w-full">
@@ -238,7 +238,7 @@ export default function HomePage() {
                 </Link>
               </CardContent>
             </Card>
-            
+
             {/* Invoice Collections */}
             <Card className="border-purple-200">
               <CardContent className="p-8">
@@ -267,8 +267,8 @@ export default function HomePage() {
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-500" />
                     <span>📊 Real-time collection dashboard</span>
-                  </div>
-                </div>
+              </div>
+            </div>
                 
                 <Link href="/invoice-collection-software">
                   <Button variant="outline" className="w-full">
@@ -278,8 +278,8 @@ export default function HomePage() {
                 </Link>
               </CardContent>
             </Card>
-          </div>
-        </div>
+                </div>
+                  </div>
       </section>
 
       {/* Social Proof */}
@@ -296,7 +296,7 @@ export default function HomePage() {
               <span className="ml-2 text-lg font-semibold">4.9/5 from 1,247+ reviews</span>
             </div>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <Card>
               <CardContent className="p-6">
@@ -313,7 +313,7 @@ export default function HomePage() {
                 <div className="text-sm text-gray-600">CFO, TechStart Inc.</div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center space-x-1 mb-4">
@@ -329,7 +329,7 @@ export default function HomePage() {
                 <div className="text-sm text-gray-600">Owner, Creative Agency</div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-center space-x-1 mb-4">
@@ -356,7 +356,7 @@ export default function HomePage() {
             <CardContent className="p-12 text-center">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 Calculate Your Savings
-              </h2>
+            </h2>
               <p className="text-lg text-gray-700 mb-8">
                 See how much ReconcileBook can save your business
               </p>
@@ -385,7 +385,7 @@ export default function HomePage() {
                       <span>Monthly Cost:</span>
                       <span className="text-red-600">$6,349</span>
                     </div>
-                  </div>
+          </div>
                 </div>
                 
                 <div className="bg-white p-6 rounded-lg border-2 border-green-500">
@@ -420,18 +420,18 @@ export default function HomePage() {
                 <div className="text-lg text-gray-700 mb-2">Monthly Savings</div>
                 <div className="text-2xl font-bold text-green-600">$63,600/year</div>
                 <div className="text-gray-600">Annual Savings</div>
-              </div>
+                </div>
               
               <div className="mt-8">
                 <Link href="/dashboard">
                   <Button size="lg" className="text-lg px-8 py-4">
                     Start Saving Today - Free Trial
                     <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
+                    </Button>
                 </Link>
               </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
         </div>
       </section>
 
@@ -455,7 +455,7 @@ export default function HomePage() {
             
             <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-4">
               Schedule Demo
-            </Button>
+              </Button>
           </div>
           
           <div className="flex items-center justify-center space-x-8 text-blue-100">
@@ -475,5 +475,6 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+    </>
   )
-}
+} 
