@@ -96,6 +96,62 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Demo Video Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            See How It Works in 2 Minutes
+          </h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Watch how ReconcileBook transforms hours of manual work into minutes of automated matching
+          </p>
+          
+          <div className="relative max-w-3xl mx-auto">
+            <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-2xl">
+              <iframe
+                src="https://www.youtube.com/embed/_K9NET1njog"
+                title="ReconcileBook Demo - AI Bank Reconciliation in Action"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                className="w-full h-full"
+              ></iframe>
+            </div>
+            
+            {/* Video overlay with play button for visual appeal */}
+            <div className="absolute inset-0 bg-black bg-opacity-20 rounded-xl flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+              <div className="bg-white bg-opacity-90 rounded-full p-4">
+                <Play className="h-12 w-12 text-blue-600" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex items-center space-x-2 text-green-600">
+              <CheckCircle className="h-5 w-5" />
+              <span className="text-sm font-medium">2-minute setup</span>
+            </div>
+            <div className="flex items-center space-x-2 text-green-600">
+              <CheckCircle className="h-5 w-5" />
+              <span className="text-sm font-medium">Smart AI matching</span>
+            </div>
+            <div className="flex items-center space-x-2 text-green-600">
+              <CheckCircle className="h-5 w-5" />
+              <span className="text-sm font-medium">Works with any bank CSV</span>
+            </div>
+          </div>
+          
+          <div className="mt-8">
+            <Link href="/dashboard">
+              <Button size="lg" className="text-lg px-8 py-4">
+                Try It Free - No Credit Card Required
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Problem Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
