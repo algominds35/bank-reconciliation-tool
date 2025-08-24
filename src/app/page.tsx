@@ -47,8 +47,31 @@ export default function HomePage() {
       
     <div className="min-h-screen bg-white overflow-hidden">
       
+      {/* Header with Login/Signup */}
+      <header className="absolute top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-slate-900">ReconcileBook</h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Link href="/auth/login">
+                <Button variant="ghost" className="text-slate-700 hover:text-slate-900">
+                  Login
+                </Button>
+              </Link>
+              <Link href="/auth/signup">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                  Start Free Trial
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-32 pb-24 overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] -z-10"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl -z-10"></div>
@@ -78,18 +101,20 @@ export default function HomePage() {
               <strong className="text-slate-900"> Save 20+ hours monthly and improve cash flow by 60%.</strong>
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <Link href="/dashboard">
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+              <Link href="/auth/signup">
                 <Button size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                   Start Free Trial - No Credit Card
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               
-              <Button variant="outline" size="lg" className="text-lg px-8 py-4 border-2 border-slate-300 hover:border-slate-400 bg-white/80 backdrop-blur-sm hover:bg-white transition-all duration-300">
-                <Play className="mr-2 h-5 w-5" />
-                Watch 2-Minute Demo
-              </Button>
+              <a href="#demo-video">
+                <Button variant="outline" size="lg" className="text-lg px-8 py-4 border-2 border-slate-300 hover:border-slate-400 bg-white/80 backdrop-blur-sm hover:bg-white transition-all duration-300">
+                  <Play className="mr-2 h-5 w-5" />
+                  Watch 2-Minute Demo
+                </Button>
+              </a>
             </div>
 
             {/* Trust Indicators */}
@@ -97,11 +122,11 @@ export default function HomePage() {
               <div className="flex items-center justify-center space-x-2 text-emerald-700 bg-emerald-50 rounded-xl px-4 py-3">
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-sm font-medium">Works with ANY bank CSV</span>
-              </div>
+          </div>
               <div className="flex items-center justify-center space-x-2 text-emerald-700 bg-emerald-50 rounded-xl px-4 py-3">
                 <Zap className="h-5 w-5" />
                 <span className="text-sm font-medium">AI matches in seconds</span>
-              </div>
+        </div>
               <div className="flex items-center justify-center space-x-2 text-emerald-700 bg-emerald-50 rounded-xl px-4 py-3">
                 <Shield className="h-5 w-5" />
                 <span className="text-sm font-medium">No integrations needed</span>
@@ -116,7 +141,7 @@ export default function HomePage() {
       </section>
 
       {/* Demo Video Section */}
-      <section className="py-20 bg-white">
+      <section id="demo-video" className="py-20 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
             See the Magic in Action
@@ -147,7 +172,7 @@ export default function HomePage() {
           </div>
           
           <div className="mt-12">
-            <Link href="/dashboard">
+            <Link href="/auth/signup">
               <Button size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 shadow-xl hover:shadow-2xl transition-all duration-300">
                 Try It Now - It's Free
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -190,7 +215,7 @@ export default function HomePage() {
               <CardContent className="p-8 text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <Clock className="h-8 w-8 text-white" />
-                </div>
+              </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-4">Manual Reconciliation Hell</h3>
                 <p className="text-slate-600 mb-6">
                   20-40 hours every month manually matching transactions, making costly errors, falling behind on reporting.
@@ -221,7 +246,7 @@ export default function HomePage() {
             </h3>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
           </div>
-        </div>
+              </div>
       </section>
 
       {/* Solution Section */}
@@ -241,8 +266,8 @@ export default function HomePage() {
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
               No APIs to break. No integrations to maintain. Just upload your CSV and watch AI do the work.
             </p>
-          </div>
-          
+            </div>
+
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-500 group">
               <CardContent className="p-8 text-center">
@@ -270,8 +295,8 @@ export default function HomePage() {
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>🎯 Smart confidence scoring</span>
-                  </div>
-                </div>
+              </div>
+            </div>
                 
                 <Button variant="outline" className="w-full border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-all duration-300">
                   Learn More
@@ -306,8 +331,8 @@ export default function HomePage() {
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>⚡ 60% faster payments</span>
-                  </div>
-                </div>
+              </div>
+            </div>
                 
                 <Button variant="outline" className="w-full border-2 border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50 transition-all duration-300">
                   Learn More
@@ -342,8 +367,8 @@ export default function HomePage() {
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>👥 Accountant-friendly format</span>
-                  </div>
-                </div>
+              </div>
+            </div>
                 
                 <Button variant="outline" className="w-full border-2 border-purple-200 hover:border-purple-400 hover:bg-purple-50 transition-all duration-300">
                   Learn More
@@ -374,7 +399,7 @@ export default function HomePage() {
               <p className="text-xl text-emerald-100 mb-8">
                 ReconcileBook pays for itself in the first week
               </p>
-              <Link href="/dashboard">
+              <Link href="/auth/signup">
                 <Button size="lg" className="text-lg px-8 py-4 bg-white text-slate-900 hover:bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300">
                   Start Saving Today
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -404,7 +429,7 @@ export default function HomePage() {
                   <div className="flex text-yellow-400">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-5 w-5 fill-current" />
-                    ))}
+                  ))}
                   </div>
                 </div>
                 <p className="text-slate-700 mb-6 italic">
@@ -417,8 +442,8 @@ export default function HomePage() {
                   <div>
                     <div className="font-semibold text-slate-900">Jessica Smith</div>
                     <div className="text-slate-600 text-sm">CEO, TechFlow Solutions</div>
-                  </div>
-                </div>
+              </div>
+            </div>
               </CardContent>
             </Card>
 
@@ -428,7 +453,7 @@ export default function HomePage() {
                   <div className="flex text-yellow-400">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-5 w-5 fill-current" />
-                    ))}
+                  ))}
                   </div>
                 </div>
                 <p className="text-slate-700 mb-6 italic">
@@ -441,8 +466,8 @@ export default function HomePage() {
                   <div>
                     <div className="font-semibold text-slate-900">Mike Rodriguez</div>
                     <div className="text-slate-600 text-sm">Founder, Digital Marketing Pro</div>
-                  </div>
-                </div>
+              </div>
+            </div>
               </CardContent>
             </Card>
 
@@ -452,7 +477,7 @@ export default function HomePage() {
                   <div className="flex text-yellow-400">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-5 w-5 fill-current" />
-                    ))}
+                  ))}
                   </div>
                 </div>
                 <p className="text-slate-700 mb-6 italic">
@@ -465,8 +490,8 @@ export default function HomePage() {
                   <div>
                     <div className="font-semibold text-slate-900">Amanda Lee</div>
                     <div className="text-slate-600 text-sm">Bookkeeper, CPA Firm</div>
-                  </div>
-                </div>
+              </div>
+            </div>
               </CardContent>
             </Card>
           </div>
@@ -507,16 +532,18 @@ export default function HomePage() {
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="h-5 w-5 text-emerald-500" />
                       <span>CSV upload & export</span>
-                    </div>
+                </div>
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="h-5 w-5 text-emerald-500" />
-                      <span>Email support</span>
+                    <span>Email support</span>
                     </div>
                   </div>
                   
-                  <Button className="w-full bg-slate-900 hover:bg-slate-800">
-                    Start Free Trial
-                  </Button>
+                                    <Link href="/auth/signup" className="w-full">
+                    <Button className="w-full bg-slate-900 hover:bg-slate-800">
+                      Start Free Trial
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -556,11 +583,11 @@ export default function HomePage() {
                       <CheckCircle className="h-5 w-5 text-emerald-500" />
                       <span>Priority email support</span>
                     </div>
-                  </div>
+            </div>
                   
                   <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                     Start Free Trial
-                  </Button>
+                    </Button>
                 </div>
               </CardContent>
             </Card>
@@ -595,16 +622,16 @@ export default function HomePage() {
                       <CheckCircle className="h-5 w-5 text-emerald-500" />
                       <span>Phone support</span>
                     </div>
-                  </div>
+                </div>
                   
                   <Button variant="outline" className="w-full border-2 border-slate-300 hover:border-slate-400">
                     Contact Sales
-                  </Button>
-                </div>
+                    </Button>
+              </div>
               </CardContent>
             </Card>
           </div>
-          
+
           <div className="text-center mt-12">
             <p className="text-slate-600 mb-4">
               All plans include a 14-day free trial. No credit card required.
@@ -653,7 +680,7 @@ export default function HomePage() {
             <Button variant="outline" size="lg" className="text-lg px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-slate-900 transition-all duration-300">
               <Play className="mr-2 h-5 w-5" />
               Watch Demo Again
-            </Button>
+              </Button>
           </div>
           
           <div className="flex items-center justify-center space-x-8 text-blue-100">
@@ -675,4 +702,4 @@ export default function HomePage() {
     </div>
     </>
   )
-}
+} 
