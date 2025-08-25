@@ -951,27 +951,22 @@ export default function Dashboard() {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 mb-2">
-                    Connect your QuickBooks account to automatically sync transactions and eliminate manual CSV uploads.
-                  </p>
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
-                    <span>• Auto-sync bank accounts & transactions</span>
-                    <span>• Real-time financial data</span>
-                    <span>• No more manual CSV uploads</span>
-                  </div>
+              <div className="text-center py-8">
+                <div className="text-gray-500 mb-4">
+                  <FileText className="w-16 h-16 mx-auto mb-4 opacity-50" />
                 </div>
-                <div className="flex space-x-3">
-                  <Link href="/settings/qbo">
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                      Connect QuickBooks
-                    </Button>
-                  </Link>
-                  <Button variant="outline" onClick={() => window.open('https://quickbooks.intuit.com', '_blank')}>
-                    Learn More
-                  </Button>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">CSV-First Approach</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Upload your bank CSV files for instant AI-powered transaction matching. No complex integrations required.
+                </p>
+                <div className="flex items-center justify-center space-x-4 text-sm text-gray-500 mb-6">
+                  <span>• Upload CSV files</span>
+                  <span>• AI matches instantly</span>
+                  <span>• No setup required</span>
                 </div>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                  Upload Bank CSV
+                </Button>
               </div>
             )}
           </CardContent>

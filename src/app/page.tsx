@@ -36,10 +36,10 @@ export default function HomePage() {
       {/* SEO Meta Tags */}
       <head>
         <title>ReconcileBook: Stop QuickBooks Headaches - AI Bank Reconciliation</title>
-        <meta name="description" content="Tired of QuickBooks API failures? ReconcileBook's AI matches bank transactions instantly via CSV upload. No integrations, no headaches, just results." />
+        <meta name="description" content="ReconcileBook's AI matches bank transactions instantly via CSV upload. No complex setup, no API failures, just results that work." />
         <meta name="keywords" content="QuickBooks alternative, bank reconciliation software, CSV upload reconciliation, AI transaction matching, invoice collection automation" />
         <meta property="og:title" content="ReconcileBook: The QuickBooks Alternative That Actually Works" />
-        <meta property="og:description" content="Upload CSV, AI matches transactions instantly. No more QuickBooks integration failures." />
+        <meta property="og:description" content="Upload CSV, AI matches transactions instantly. Simple, reliable, and effective." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://reconcilebook.com" />
         <link rel="canonical" href="https://reconcilebook.com" />
@@ -143,7 +143,7 @@ export default function HomePage() {
         </div>
               <div className="flex items-center justify-center space-x-2 text-emerald-700 bg-emerald-50 rounded-xl px-4 py-3">
                 <Shield className="h-5 w-5" />
-                <span className="text-sm font-medium">No integrations needed</span>
+                <span className="text-sm font-medium">CSV-first approach</span>
           </div>
               <div className="flex items-center justify-center space-x-2 text-emerald-700 bg-emerald-50 rounded-xl px-4 py-3">
                 <Target className="h-5 w-5" />
@@ -715,7 +715,7 @@ export default function HomePage() {
               <CardContent className="p-8">
                 <h3 className="text-xl font-bold text-slate-900 mb-4">How does ReconcileBook work?</h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Simply upload your bank CSV file, and our AI instantly matches transactions to your books. No integrations needed - just upload and get perfect reconciliation in minutes, not hours.
+                  Simply upload your bank CSV file, and our AI instantly matches transactions to your books. CSV-first approach means no complex setup - just upload and get perfect reconciliation in minutes, not hours.
                 </p>
               </CardContent>
             </Card>
