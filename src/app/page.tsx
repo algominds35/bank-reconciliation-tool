@@ -153,16 +153,16 @@ export default function HomePage() {
 
             {/* Professional Social Proof */}
             <div className="flex items-center justify-center space-x-8">
-              {/* Customer Avatars */}
+                            {/* Customer Avatars */}
               <div className="flex -space-x-2">
                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face&auto=format" alt="Customer" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
                 <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face&auto=format" alt="Customer" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face&auto=format" alt="Customer" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
-                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face&auto=format" alt="Customer" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
+                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=40&h=40&fit=crop&crop=face&auto=format" alt="Customer" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
                 <div className="w-10 h-10 rounded-full bg-slate-800 border-2 border-white shadow-sm flex items-center justify-center">
                   <span className="text-white text-xs font-semibold">+496</span>
-                    </div>
-                    </div>
+                </div>
+              </div>
               
               {/* Stars and Text */}
               <div className="flex items-center space-x-3">
@@ -173,7 +173,7 @@ export default function HomePage() {
                   <Star className="h-5 w-5 fill-current" />
                   <Star className="h-5 w-5 fill-current" />
                     </div>
-                <span className="text-slate-700 font-medium">500+ business owners finding proven solutions</span>
+                <span className="text-slate-700 font-medium">500+ QuickBooks users switched</span>
                   </div>
                     </div>
           </div>
