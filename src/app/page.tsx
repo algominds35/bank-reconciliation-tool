@@ -53,7 +53,7 @@ export default function HomePage() {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-slate-900">ReconcileBook</h1>
-            </div>
+              </div>
             <div className="flex items-center space-x-4">
               <Link href="/auth/login">
                 <Button variant="ghost" className="text-slate-700 hover:text-slate-900">
@@ -131,12 +131,12 @@ export default function HomePage() {
               <div className="flex items-center justify-center space-x-2 text-emerald-700 bg-emerald-50 rounded-xl px-4 py-3">
                 <Shield className="h-5 w-5" />
                 <span className="text-sm font-medium">No integrations needed</span>
-              </div>
+          </div>
               <div className="flex items-center justify-center space-x-2 text-emerald-700 bg-emerald-50 rounded-xl px-4 py-3">
                 <Target className="h-5 w-5" />
                 <span className="text-sm font-medium">Setup in 2 minutes</span>
               </div>
-            </div>
+              </div>
 
             {/* Professional Social Proof */}
             <div className="flex items-center justify-center space-x-8">
@@ -148,8 +148,8 @@ export default function HomePage() {
                 <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face&auto=format" alt="Customer" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
                 <div className="w-10 h-10 rounded-full bg-slate-800 border-2 border-white shadow-sm flex items-center justify-center">
                   <span className="text-white text-xs font-semibold">+496</span>
-                </div>
-              </div>
+                    </div>
+                    </div>
               
               {/* Stars and Text */}
               <div className="flex items-center space-x-3">
@@ -159,10 +159,10 @@ export default function HomePage() {
                   <Star className="h-5 w-5 fill-current" />
                   <Star className="h-5 w-5 fill-current" />
                   <Star className="h-5 w-5 fill-current" />
-                </div>
+                    </div>
                 <span className="text-slate-700 font-medium">500+ business owners finding proven solutions</span>
-              </div>
-            </div>
+                  </div>
+                    </div>
           </div>
         </div>
       </section>
@@ -187,7 +187,7 @@ export default function HomePage() {
                 allowFullScreen
                 className="w-full h-full"
               ></iframe>
-            </div>
+              </div>
             
             {/* Floating elements around video */}
             <div className="absolute -top-4 -left-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg animate-pulse">
@@ -195,8 +195,8 @@ export default function HomePage() {
             </div>
             <div className="absolute -bottom-4 -right-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg animate-pulse">
               🚀 Instant results
+              </div>
             </div>
-          </div>
           
           <div className="mt-12">
             <a href="https://buy.stripe.com/test_professional_79" target="_blank" rel="noopener noreferrer">
@@ -256,7 +256,7 @@ export default function HomePage() {
               <CardContent className="p-8 text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <AlertTriangle className="h-8 w-8 text-white" />
-                </div>
+            </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-4">Cash Flow Crisis</h3>
                 <p className="text-slate-600 mb-6">
                   Unpaid invoices pile up while you're stuck fixing QB problems instead of collecting payments.
@@ -272,7 +272,7 @@ export default function HomePage() {
               Sound Familiar? There's a Better Way...
             </h3>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto rounded-full"></div>
-          </div>
+              </div>
               </div>
       </section>
 
@@ -300,7 +300,7 @@ export default function HomePage() {
               <CardContent className="p-8 text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
                   <FileText className="h-8 w-8 text-white" />
-                </div>
+            </div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">AI Bank Reconciliation</h3>
                 <p className="text-slate-600 mb-8">
                   Intelligently match bank transactions in minutes, not hours. Works with any bank CSV - no integrations needed.
@@ -310,21 +310,21 @@ export default function HomePage() {
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>🤖 AI-powered transaction matching</span>
-                  </div>
+                </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>📊 Works with any bank CSV format</span>
-                  </div>
+          </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>⚡ Results in under 2 minutes</span>
-                  </div>
+              </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>🎯 Smart confidence scoring</span>
-              </div>
             </div>
-                
+            </div>
+
                 <Button variant="outline" className="w-full border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-all duration-300">
                   Learn More
                   <ChevronRight className="ml-2 h-4 w-4" />
@@ -350,11 +350,11 @@ export default function HomePage() {
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>🔄 4-phase automated sequences</span>
-                  </div>
+              </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>📊 Payment tracking & analytics</span>
-                  </div>
+            </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>⚡ 60% faster payments</span>
@@ -386,11 +386,11 @@ export default function HomePage() {
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>📊 Detailed CSV exports</span>
-                  </div>
+              </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>🎯 Audit trail included</span>
-                  </div>
+            </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-500" />
                     <span>👥 Accountant-friendly format</span>
@@ -417,12 +417,12 @@ export default function HomePage() {
                 <div>
                   <div className="text-4xl font-bold mb-2">$2,400</div>
                   <div className="text-emerald-100">value of time saved</div>
-                </div>
-                <div>
+                  </div>
+                  <div>
                   <div className="text-4xl font-bold mb-2">60%</div>
                   <div className="text-emerald-100">faster payments</div>
-                </div>
               </div>
+            </div>
               <p className="text-xl text-emerald-100 mb-8">
                 ReconcileBook pays for itself in the first week
               </p>
@@ -432,8 +432,8 @@ export default function HomePage() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </a>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
         </div>
       </section>
 
@@ -457,7 +457,7 @@ export default function HomePage() {
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-5 w-5 fill-current" />
                   ))}
-                  </div>
+                </div>
                 </div>
                 <p className="text-slate-700 mb-6 italic">
                   "My XERO reminders kept hitting spam folders. ReconcileBook's professional templates get delivered every time and I got paid 60% faster!"
@@ -481,7 +481,7 @@ export default function HomePage() {
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-5 w-5 fill-current" />
                   ))}
-                  </div>
+                </div>
                 </div>
                 <p className="text-slate-700 mb-6 italic">
                   "We were spending $500/month on a bookkeeper just for reconciliation. ReconcileBook does it better for $79. ROI was immediate."
@@ -505,7 +505,7 @@ export default function HomePage() {
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-5 w-5 fill-current" />
                   ))}
-                  </div>
+                </div>
                 </div>
                 <p className="text-slate-700 mb-6 italic">
                   "I was working every weekend chasing payments. Now ReconcileBook handles it all automatically. My Sundays are finally free!"
@@ -551,7 +551,7 @@ export default function HomePage() {
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="h-5 w-5 text-emerald-500" />
                       <span>Up to 500 transactions/month</span>
-                    </div>
+                </div>
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="h-5 w-5 text-emerald-500" />
                       <span>AI bank reconciliation</span>
@@ -593,7 +593,7 @@ export default function HomePage() {
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="h-5 w-5 text-emerald-500" />
                       <span>Up to 2,000 transactions/month</span>
-                    </div>
+            </div>
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="h-5 w-5 text-emerald-500" />
                       <span>AI bank reconciliation</span>
@@ -633,7 +633,7 @@ export default function HomePage() {
                   <div className="space-y-4 mb-8 text-left">
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="h-5 w-5 text-emerald-500" />
-                      <span>Unlimited transactions</span>
+                    <span>Unlimited transactions</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="h-5 w-5 text-emerald-500" />
@@ -685,6 +685,247 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="py-24 bg-slate-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+              Frequently Asked Questions
+          </h2>
+            <p className="text-xl text-slate-600">
+              Everything you need to know about ReconcileBook
+            </p>
+          </div>
+          
+          <div className="space-y-8">
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-8">
+                <h3 className="text-xl font-bold text-slate-900 mb-4">How does ReconcileBook work?</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  Simply upload your bank CSV file, and our AI instantly matches transactions to your books. No integrations needed - just upload and get perfect reconciliation in minutes, not hours.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-8">
+                <h3 className="text-xl font-bold text-slate-900 mb-4">What banks does it work with?</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  ALL banks! We support any bank CSV format - Chase, Bank of America, Wells Fargo, local credit unions, international banks. If your bank exports CSV, we can handle it.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-8">
+                <h3 className="text-xl font-bold text-slate-900 mb-4">How accurate is the AI matching?</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  Our AI achieves 97%+ accuracy by using multi-factor matching (amount, description, date, patterns). Unlike QuickBooks that matches coffee to rent, we understand context and relationships.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-8">
+                <h3 className="text-xl font-bold text-slate-900 mb-4">Do invoice reminders really avoid spam?</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  Yes! Our professional templates are designed to pass spam filters. We use proper authentication, clean HTML, and proven messaging that gets delivered to inboxes, not spam folders.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-8">
+                <h3 className="text-xl font-bold text-slate-900 mb-4">Can I cancel anytime?</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  Absolutely. No contracts, no cancellation fees. Cancel with one click from your dashboard. We're confident you'll love ReconcileBook, but you're never locked in.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 bg-white shadow-lg">
+              <CardContent className="p-8">
+                <h3 className="text-xl font-bold text-slate-900 mb-4">Is my financial data secure?</h3>
+                <p className="text-slate-600 leading-relaxed">
+                  Bank-level security with 256-bit encryption, SOC 2 compliance, and zero data retention policies. We process your data, match transactions, then securely delete everything.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Detailed Testimonials Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+              What Our Customers Say
+            </h2>
+            <p className="text-xl text-slate-600">
+              Real stories from business owners who ditched QuickBooks headaches
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="border-0 bg-slate-50 shadow-lg">
+              <CardContent className="p-8">
+                <div className="flex items-center mb-4">
+                  <div className="flex text-yellow-400">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 fill-current" />
+                    ))}
+              </div>
+            </div>
+                <p className="text-slate-700 mb-6 italic">
+                  "QuickBooks kept matching my $4 coffee purchases to my $2,000 rent payment. I was spending 8 hours every month fixing these ridiculous mistakes. ReconcileBook's AI actually understands transactions - coffee stays coffee, rent stays rent. Saved me 20+ hours monthly!"
+                </p>
+                <div className="flex items-center">
+                  <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=48&h=48&fit=crop&crop=face&auto=format" alt="Sarah Chen" className="w-12 h-12 rounded-full mr-4" />
+                  <div>
+                    <div className="font-semibold text-slate-900">Sarah Chen</div>
+                    <div className="text-slate-600 text-sm">CPA, TechFlow Solutions</div>
+              </div>
+            </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 bg-slate-50 shadow-lg">
+              <CardContent className="p-8">
+                <div className="flex items-center mb-4">
+                  <div className="flex text-yellow-400">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 fill-current" />
+                    ))}
+              </div>
+            </div>
+                <p className="text-slate-700 mb-6 italic">
+                  "I was working every weekend chasing unpaid invoices because XERO's reminders kept hitting spam folders. ReconcileBook's professional emails get delivered and my clients actually respond. Got paid 60% faster and my Sundays are finally free!"
+                </p>
+                <div className="flex items-center">
+                  <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face&auto=format" alt="Mike Rodriguez" className="w-12 h-12 rounded-full mr-4" />
+                  <div>
+                    <div className="font-semibold text-slate-900">Mike Rodriguez</div>
+                    <div className="text-slate-600 text-sm">Founder, Digital Marketing Pro</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 bg-slate-50 shadow-lg">
+              <CardContent className="p-8">
+                <div className="flex items-center mb-4">
+                  <div className="flex text-yellow-400">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 fill-current" />
+                    ))}
+              </div>
+            </div>
+                <p className="text-slate-700 mb-6 italic">
+                  "We were paying a bookkeeper $500/month just to fix QuickBooks' matching errors. ReconcileBook does it perfectly for $79/month. ROI was immediate - saved us $421 monthly plus eliminated all the frustration!"
+                </p>
+                <div className="flex items-center">
+                  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=48&h=48&fit=crop&crop=face&auto=format" alt="Amanda Thompson" className="w-12 h-12 rounded-full mr-4" />
+                  <div>
+                    <div className="font-semibold text-slate-900">Amanda Thompson</div>
+                    <div className="text-slate-600 text-sm">Small Business Owner</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* About Us Section */}
+      <section className="py-24 bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-8">
+            Built by Frustrated Business Owners
+          </h2>
+          <p className="text-xl text-slate-600 mb-12 leading-relaxed">
+            We created ReconcileBook after spending countless hours fixing QuickBooks' ridiculous matching errors and watching our invoice reminders disappear into spam folders. There had to be a better way.
+          </p>
+          
+          <div className="grid md:grid-cols-2 gap-12 text-left">
+            <div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h3>
+              <p className="text-slate-600 leading-relaxed">
+                To eliminate the frustration of financial management for small businesses. No more weekend work fixing software mistakes. No more chasing payments because reminders hit spam. Just accurate, reliable tools that work.
+              </p>
+                </div>
+            
+            <div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Why We're Different</h3>
+              <p className="text-slate-600 leading-relaxed">
+                We focus on solving real problems, not adding features. Our AI understands context, our emails get delivered, and our support team actually helps. We're business owners serving business owners.
+              </p>
+              </div>
+          </div>
+                </div>
+      </section>
+
+      {/* Blog Preview Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+              Latest Insights
+            </h2>
+            <p className="text-xl text-slate-600">
+              Tips, guides, and insights for better financial management
+            </p>
+                </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+              <CardContent className="p-0">
+                <div className="h-48 bg-gradient-to-r from-blue-500 to-purple-600 rounded-t-lg"></div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">
+                    Why QuickBooks Matching Fails (And How to Fix It)
+                  </h3>
+                  <p className="text-slate-600 mb-4">
+                    Discover the technical reasons behind QuickBooks' notorious matching errors and learn how modern AI solves these problems.
+                  </p>
+                  <div className="text-blue-600 font-medium">Read More →</div>
+              </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+              <CardContent className="p-0">
+                <div className="h-48 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-t-lg"></div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">
+                    Invoice Collection: Stop Working Weekends
+                  </h3>
+                  <p className="text-slate-600 mb-4">
+                    Learn how to automate invoice collections without spam folders, improving cash flow by 60% while reclaiming your weekends.
+                  </p>
+                  <div className="text-blue-600 font-medium">Read More →</div>
+              </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+              <CardContent className="p-0">
+                <div className="h-48 bg-gradient-to-r from-purple-500 to-pink-600 rounded-t-lg"></div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">
+                    Small Business Cash Flow Crisis: The Real Numbers
+                  </h3>
+                  <p className="text-slate-600 mb-4">
+                    82% of small businesses fail due to cash flow problems. Here's how to avoid becoming a statistic with better financial management.
+                  </p>
+                  <div className="text-blue-600 font-medium">Read More →</div>
+              </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA Section */}
       <section className="py-24 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 relative overflow-hidden">
         {/* Background Elements */}
@@ -712,8 +953,8 @@ export default function HomePage() {
               <Play className="mr-2 h-5 w-5" />
               Watch Demo Again
               </Button>
-          </div>
-          
+              </div>
+
           <div className="flex items-center justify-center space-x-8 text-blue-100">
             <div className="flex items-center space-x-2">
               <Shield className="h-5 w-5" />
@@ -722,13 +963,13 @@ export default function HomePage() {
             <div className="flex items-center space-x-2">
               <Zap className="h-5 w-5" />
               <span>Setup in 2 Minutes</span>
-            </div>
+        </div>
             <div className="flex items-center space-x-2">
               <Users className="h-5 w-5" />
               <span>24/7 Support</span>
-            </div>
           </div>
         </div>
+    </div>
       </section>
     </div>
     </>
