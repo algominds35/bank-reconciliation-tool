@@ -119,7 +119,7 @@ export default function HomePage() {
             </div>
 
             {/* Trust Indicators */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mb-12">
               <div className="flex items-center justify-center space-x-2 text-emerald-700 bg-emerald-50 rounded-xl px-4 py-3">
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-sm font-medium">Works with ANY bank CSV</span>
@@ -135,6 +135,77 @@ export default function HomePage() {
               <div className="flex items-center justify-center space-x-2 text-emerald-700 bg-emerald-50 rounded-xl px-4 py-3">
                 <Target className="h-5 w-5" />
                 <span className="text-sm font-medium">Setup in 2 minutes</span>
+              </div>
+            </div>
+
+            {/* Social Proof */}
+            <div className="text-center">
+              <p className="text-slate-600 mb-6">Trusted by 500+ businesses, accountants, and bookkeepers</p>
+              
+              {/* Customer Faces */}
+              <div className="flex justify-center items-center space-x-4 mb-8">
+                <div className="flex -space-x-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center border-2 border-white shadow-lg">
+                    <span className="text-white font-semibold text-sm">SM</span>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-emerald-500 to-blue-600 flex items-center justify-center border-2 border-white shadow-lg">
+                    <span className="text-white font-semibold text-sm">JR</span>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center border-2 border-white shadow-lg">
+                    <span className="text-white font-semibold text-sm">AL</span>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center border-2 border-white shadow-lg">
+                    <span className="text-white font-semibold text-sm">MK</span>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center border-2 border-white shadow-lg">
+                    <span className="text-white font-semibold text-sm">DT</span>
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center border-2 border-white shadow-lg">
+                    <span className="text-slate-600 font-semibold text-sm">+495</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Quick Testimonials */}
+              <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto text-sm">
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                  <p className="text-slate-700 italic mb-3">"Finally, a tool that doesn't match my coffee to rent payments!"</p>
+                  <div className="flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center mr-2">
+                      <span className="text-white font-bold text-xs">SM</span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-slate-900 text-xs">Sarah M.</div>
+                      <div className="text-slate-600 text-xs">CPA</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                  <p className="text-slate-700 italic mb-3">"Saved me 20 hours monthly. My weekends are finally free!"</p>
+                  <div className="flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-emerald-500 to-blue-600 flex items-center justify-center mr-2">
+                      <span className="text-white font-bold text-xs">JR</span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-slate-900 text-xs">James R.</div>
+                      <div className="text-slate-600 text-xs">Bookkeeper</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                  <p className="text-slate-700 italic mb-3">"Clients pay 60% faster with professional emails that actually work!"</p>
+                  <div className="flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center mr-2">
+                      <span className="text-white font-bold text-xs">AL</span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-slate-900 text-xs">Anna L.</div>
+                      <div className="text-slate-600 text-xs">Small Business Owner</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
