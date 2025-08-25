@@ -138,74 +138,29 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Social Proof */}
-            <div className="text-center">
-              <p className="text-slate-600 mb-6">Trusted by 500+ businesses, accountants, and bookkeepers</p>
-              
-              {/* Customer Faces */}
-              <div className="flex justify-center items-center space-x-4 mb-8">
-                <div className="flex -space-x-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center border-2 border-white shadow-lg">
-                    <span className="text-white font-semibold text-sm">SM</span>
-                  </div>
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-emerald-500 to-blue-600 flex items-center justify-center border-2 border-white shadow-lg">
-                    <span className="text-white font-semibold text-sm">JR</span>
-                  </div>
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center border-2 border-white shadow-lg">
-                    <span className="text-white font-semibold text-sm">AL</span>
-                  </div>
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center border-2 border-white shadow-lg">
-                    <span className="text-white font-semibold text-sm">MK</span>
-                  </div>
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center border-2 border-white shadow-lg">
-                    <span className="text-white font-semibold text-sm">DT</span>
-                  </div>
-                  <div className="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center border-2 border-white shadow-lg">
-                    <span className="text-slate-600 font-semibold text-sm">+495</span>
-                  </div>
+            {/* Professional Social Proof */}
+            <div className="flex items-center justify-center space-x-8">
+              {/* Customer Avatars */}
+              <div className="flex -space-x-2">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face&auto=format" alt="Customer" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face&auto=format" alt="Customer" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face&auto=format" alt="Customer" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face&auto=format" alt="Customer" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
+                <div className="w-10 h-10 rounded-full bg-slate-800 border-2 border-white shadow-sm flex items-center justify-center">
+                  <span className="text-white text-xs font-semibold">+496</span>
                 </div>
               </div>
               
-              {/* Quick Testimonials */}
-              <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto text-sm">
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg">
-                  <p className="text-slate-700 italic mb-3">"Finally, a tool that doesn't match my coffee to rent payments!"</p>
-                  <div className="flex items-center justify-center">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center mr-2">
-                      <span className="text-white font-bold text-xs">SM</span>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-slate-900 text-xs">Sarah M.</div>
-                      <div className="text-slate-600 text-xs">CPA</div>
-                    </div>
-                  </div>
+              {/* Stars and Text */}
+              <div className="flex items-center space-x-3">
+                <div className="flex text-yellow-400">
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
+                  <Star className="h-5 w-5 fill-current" />
                 </div>
-                
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg">
-                  <p className="text-slate-700 italic mb-3">"Saved me 20 hours monthly. My weekends are finally free!"</p>
-                  <div className="flex items-center justify-center">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-emerald-500 to-blue-600 flex items-center justify-center mr-2">
-                      <span className="text-white font-bold text-xs">JR</span>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-slate-900 text-xs">James R.</div>
-                      <div className="text-slate-600 text-xs">Bookkeeper</div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg">
-                  <p className="text-slate-700 italic mb-3">"Clients pay 60% faster with professional emails that actually work!"</p>
-                  <div className="flex items-center justify-center">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center mr-2">
-                      <span className="text-white font-bold text-xs">AL</span>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-slate-900 text-xs">Anna L.</div>
-                      <div className="text-slate-600 text-xs">Small Business Owner</div>
-                    </div>
-                  </div>
-                </div>
+                <span className="text-slate-700 font-medium">500+ business owners finding proven solutions</span>
               </div>
             </div>
           </div>
