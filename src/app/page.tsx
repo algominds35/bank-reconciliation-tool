@@ -38,6 +38,7 @@ export default function HomePage() {
         <title>ReconcileBook: Stop QuickBooks Headaches - AI Bank Reconciliation</title>
         <meta name="description" content="ReconcileBook's AI matches bank transactions instantly via CSV upload. No complex setup, no API failures, just results that work." />
         <meta name="keywords" content="QuickBooks alternative, bank reconciliation software, CSV upload reconciliation, AI transaction matching, invoice collection automation" />
+        <meta name="google-site-verification" content="ZLag0yEkK24-55yqjsnAfJzmEEmSEpdy-t0aMSrJon8" />
         <meta property="og:title" content="ReconcileBook: The QuickBooks Alternative That Actually Works" />
         <meta property="og:description" content="Upload CSV, AI matches transactions instantly. Simple, reliable, and effective." />
         <meta property="og:type" content="website" />
@@ -1017,6 +1018,4 @@ export default function HomePage() {
     </div>
       </section>
     </div>
-    </>
-  )
-} 
+    </> 
