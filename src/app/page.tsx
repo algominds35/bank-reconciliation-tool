@@ -193,7 +193,7 @@ export default function HomePage() {
             <Badge className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 px-4 py-2 text-sm font-medium">
               🏦 Bank Reconciliation Demo - Upload CSV → Perfect Matches in Seconds
             </Badge>
-          </div>
+              </div>
           
           <div className="relative group">
             <div className="aspect-video bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl overflow-hidden shadow-2xl group-hover:shadow-3xl transition-all duration-500 transform group-hover:scale-[1.02]">
@@ -205,16 +205,16 @@ export default function HomePage() {
                 allowFullScreen
                 className="w-full h-full"
               ></iframe>
-              </div>
+            </div>
             
             {/* Floating elements around video */}
             <div className="absolute -top-4 -left-4 bg-gradient-to-r from-green-400 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg animate-pulse">
               ✨ 2 min setup
-            </div>
+              </div>
             <div className="absolute -bottom-4 -right-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg animate-pulse">
               🚀 Instant results
-              </div>
             </div>
+              </div>
           
           {/* Invoice Collections Teaser */}
           <div className="mt-16 p-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl border border-purple-100">
@@ -222,10 +222,10 @@ export default function HomePage() {
               <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 px-4 py-2 text-sm font-medium">
                 💸 Coming Next: Invoice Collections Demo
               </Badge>
-            </div>
+                  </div>
             <h3 className="text-2xl font-bold text-slate-900 mb-3">
               Plus: Automated Invoice Collections That Actually Work
-            </h3>
+                </h3>
             <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
               See how our 4-phase email system gets clients to pay 40% faster - with professional payment pages that don't go to spam (unlike QuickBooks).
             </p>
@@ -233,8 +233,8 @@ export default function HomePage() {
               <span>📧 Professional email sequences</span>
               <span>💳 Stripe payment processing</span>
               <span>📊 Payment tracking dashboard</span>
-            </div>
-          </div>
+                  </div>
+                  </div>
 
           <div className="mt-12">
             <a href="https://buy.stripe.com/test_professional_79" target="_blank" rel="noopener noreferrer">
@@ -691,9 +691,9 @@ export default function HomePage() {
                     </div>
                 </div>
                   
-                  <a href="https://buy.stripe.com/test_enterprise_199" target="_blank" rel="noopener noreferrer" className="w-full">
+                  <a href="mailto:alex@usealgomind.com?subject=Enterprise%20Sales%20Inquiry&body=Hi,%0D%0A%0D%0AI'm%20interested%20in%20ReconcileBook%20Enterprise%20for%20my%20business.%0D%0A%0D%0ACompany:%20%0D%0AEmployees:%20%0D%0AMonthly%20Transactions:%20%0D%0A%0D%0APlease%20contact%20me%20to%20discuss%20pricing%20and%20implementation." className="w-full">
                     <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white">
-                      Start Free Trial - $199/mo
+                      Contact Sales
                     </Button>
                   </a>
               </div>
