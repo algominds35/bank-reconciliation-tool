@@ -84,21 +84,21 @@ export default function HomePage() {
             </Badge>
             
             <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 tracking-tight">
-              <span className="block">Tired of</span>
+              <span className="block">Tired of Invoice Reminders</span>
               <span className="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 bg-clip-text text-transparent">
-                QuickBooks Failures?
+                Going to Spam?
               </span>
             </h1>
             
             <h2 className="text-2xl md:text-3xl text-slate-600 mb-8 font-light max-w-4xl mx-auto leading-relaxed">
-              Upload CSV → AI Matches Everything → Get Results
+              Stop Working Weekends Chasing Payments
               <br />
-              <span className="text-slate-800 font-medium">No Integrations. No Headaches. No Excuses.</span>
+              <span className="text-slate-800 font-medium">Professional Emails That Actually Get Delivered</span>
             </h2>
             
             <p className="text-lg text-slate-700 mb-12 max-w-3xl mx-auto leading-relaxed">
-              While other tools break when QuickBooks changes their API, ReconcileBook works with simple CSV files that never fail. 
-              <strong className="text-slate-900"> Save 20+ hours monthly and improve cash flow by 60%.</strong>
+              While XERO and QuickBooks reminders hit spam folders, ReconcileBook's professional templates get delivered every time. 
+              <strong className="text-slate-900"> Get paid 60% faster with emails that actually work.</strong>
             </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
@@ -202,12 +202,12 @@ export default function HomePage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <XCircle className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-4">QuickBooks API Hell</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-4">Invoice Reminders Hit Spam</h3>
                 <p className="text-slate-600 mb-6">
-                  "Connection lost", random timeouts, authentication failures. QB integration breaks when you need it most.
+                  XERO and QuickBooks automated reminders trigger spam filters. Your customers never see them, you never get paid.
                 </p>
-                <div className="text-3xl font-bold text-red-600 mb-2">73%</div>
-                <div className="text-sm text-red-600 font-medium">of QB integrations fail monthly</div>
+                <div className="text-3xl font-bold text-red-600 mb-2">68%</div>
+                <div className="text-sm text-red-600 font-medium">of automated reminders hit spam</div>
               </CardContent>
             </Card>
 
@@ -216,12 +216,12 @@ export default function HomePage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <Clock className="h-8 w-8 text-white" />
               </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-4">Manual Reconciliation Hell</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-4">Weekend Work Hell</h3>
                 <p className="text-slate-600 mb-6">
-                  20-40 hours every month manually matching transactions, making costly errors, falling behind on reporting.
+                  "Running a business is already a pain, now even the sundays are ruined" chasing unpaid invoices manually.
                 </p>
-                <div className="text-3xl font-bold text-orange-600 mb-2">$4,000</div>
-                <div className="text-sm text-orange-600 font-medium">monthly cost in wasted time</div>
+                <div className="text-3xl font-bold text-orange-600 mb-2">20+ hrs</div>
+                <div className="text-sm text-orange-600 font-medium">weekend work monthly</div>
               </CardContent>
             </Card>
 
@@ -433,7 +433,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <p className="text-slate-700 mb-6 italic">
-                  "After 6 months of QuickBooks integration failures, ReconcileBook saved our business. Upload CSV, get results. It's that simple."
+                  "My XERO reminders kept hitting spam folders. ReconcileBook's professional templates get delivered every time and I got paid 60% faster!"
                 </p>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4">
@@ -481,7 +481,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <p className="text-slate-700 mb-6 italic">
-                  "The AI matching is incredible. What took me 4 hours now takes 5 minutes. I actually look forward to month-end now!"
+                  "I was working every weekend chasing payments. Now ReconcileBook handles it all automatically. My Sundays are finally free!"
                 </p>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mr-4">
@@ -489,7 +489,7 @@ export default function HomePage() {
                   </div>
                   <div>
                     <div className="font-semibold text-slate-900">Amanda Lee</div>
-                    <div className="text-slate-600 text-sm">Bookkeeper, CPA Firm</div>
+                    <div className="text-slate-600 text-sm">Small Business Owner</div>
               </div>
             </div>
               </CardContent>
