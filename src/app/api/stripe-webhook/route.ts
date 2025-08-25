@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { createClient } from '@supabase/supabase-js'
-import Stripe from 'stripe'
+import { stripe } from '@/lib/stripe'
 
 // Create admin client with service role key for user lookup
 const supabaseAdmin = process.env.SUPABASE_SERVICE_ROLE_KEY ? createClient(
@@ -14,11 +14,6 @@ const supabaseAdmin = process.env.SUPABASE_SERVICE_ROLE_KEY ? createClient(
     }
   }
 ) : null
-
-// Initialize Stripe with live keys
-const stripe = process.env.STRIPE_SECRET_KEY_LIVE ? new Stripe(process.env.STRIPE_SECRET_KEY_LIVE, {
-  apiVersion: '2024-06-20',
-}) : null
 
 export async function POST(request: NextRequest) {
   try {
