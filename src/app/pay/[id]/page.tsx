@@ -5,6 +5,11 @@ import { useParams } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
+import StripePaymentForm from '@/components/StripePaymentForm'
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
 interface Invoice {
   id: string
@@ -20,11 +25,13 @@ interface Invoice {
   }
 }
 
-export default function PayInvoicePage() {
+function PaymentPageContent() {
   const params = useParams()
   const [invoice, setInvoice] = useState<Invoice | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const [showStripeForm, setShowStripeForm] = useState(false)
 
   useEffect(() => {
     async function fetchInvoice() {
@@ -47,10 +54,17 @@ export default function PayInvoicePage() {
     }
   }, [params.id])
 
-  const handlePayment = () => {
-    // For now, redirect to a simple payment confirmation
-    // In production, this would integrate with Stripe/PayPal/etc
+  const handleEmailPayment = () => {
     window.location.href = `mailto:alex@usealgomind.com?subject=Payment for Invoice ${invoice?.invoice_number}&body=I would like to pay invoice ${invoice?.invoice_number} for $${invoice?.amount}. Please send payment instructions.`
+  }
+
+  const handlePaymentSuccess = () => {
+    setPaymentSuccess(true)
+    setShowStripeForm(false)
+  }
+
+  const handlePaymentError = (error: string) => {
+    console.error('Payment error:', error)
   }
 
   if (loading) {
@@ -84,6 +98,36 @@ export default function PayInvoicePage() {
             >
               Contact Support
             </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  if (paymentSuccess) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="max-w-md w-full mx-4">
+          <CardHeader>
+            <CardTitle className="text-green-600">✅ Payment Successful!</CardTitle>
+            <CardDescription>
+              Thank you for your payment.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <p className="text-green-800 font-medium">
+                  Invoice #{invoice.invoice_number} has been paid
+                </p>
+                <p className="text-green-700 text-sm">
+                  Amount: ${parseFloat(invoice.amount.toString()).toFixed(2)}
+                </p>
+              </div>
+              <p className="text-sm text-gray-600">
+                You will receive a receipt via email shortly.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -152,41 +196,76 @@ export default function PayInvoicePage() {
         </Card>
 
         {/* Payment Options */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Payment Options</CardTitle>
-            <CardDescription>
-              Choose your preferred payment method
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button 
-              onClick={handlePayment}
-              className="w-full h-12 text-lg font-semibold"
-              size="lg"
-            >
-              Pay ${parseFloat(invoice.amount.toString()).toFixed(2)} Now
-            </Button>
-            
-            <div className="text-center">
-              <p className="text-sm text-gray-500 mb-2">
-                Secure payment powered by ReconcileBook
-              </p>
-              <p className="text-xs text-gray-400">
-                Questions? Contact us at alex@usealgomind.com
-              </p>
-            </div>
+        {!showStripeForm ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Payment Options</CardTitle>
+              <CardDescription>
+                Choose your preferred payment method
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Button 
+                onClick={() => setShowStripeForm(true)}
+                className="w-full h-12 text-lg font-semibold"
+                size="lg"
+              >
+                💳 Pay ${parseFloat(invoice.amount.toString()).toFixed(2)} with Credit Card
+              </Button>
 
-            <div className="border-t pt-4">
-              <h4 className="font-medium text-gray-900 mb-2">Alternative Payment Methods</h4>
-              <div className="space-y-2 text-sm text-gray-600">
-                <p>• Bank Transfer: Contact us for wire details</p>
-                <p>• Check: Make payable to ReconcileBook</p>
-                <p>• Questions: alex@usealgomind.com</p>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-gray-50 px-2 text-gray-500">Or</span>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+
+              <Button 
+                onClick={handleEmailPayment}
+                variant="outline"
+                className="w-full h-12 text-lg"
+                size="lg"
+              >
+                📧 Request Payment Instructions
+              </Button>
+              
+              <div className="text-center">
+                <p className="text-sm text-gray-500 mb-2">
+                  Secure payment powered by Stripe
+                </p>
+                <p className="text-xs text-gray-400">
+                  Questions? Contact us at alex@usealgomind.com
+                </p>
+              </div>
+
+              <div className="border-t pt-4">
+                <h4 className="font-medium text-gray-900 mb-2">Alternative Payment Methods</h4>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <p>• Bank Transfer: Contact us for wire details</p>
+                  <p>• Check: Make payable to ReconcileBook</p>
+                  <p>• Questions: alex@usealgomind.com</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="space-y-4">
+            <Button 
+              onClick={() => setShowStripeForm(false)}
+              variant="outline"
+              className="mb-4"
+            >
+              ← Back to Payment Options
+            </Button>
+            <StripePaymentForm 
+              invoice={invoice}
+              onSuccess={handlePaymentSuccess}
+              onError={handlePaymentError}
+            />
+          </div>
+        )}
 
         {/* Security Notice */}
         <div className="mt-6 text-center">
@@ -196,5 +275,13 @@ export default function PayInvoicePage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function PayInvoicePage() {
+  return (
+    <Elements stripe={stripePromise}>
+      <PaymentPageContent />
+    </Elements>
   )
 }
