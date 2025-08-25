@@ -80,25 +80,26 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center">
             <Badge className="mb-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 px-6 py-2 text-sm font-medium shadow-lg hover:shadow-xl transition-all duration-300">
-              🚀 The #1 QuickBooks Alternative for Bank Reconciliation
+              🎯 The Only Tool That Gets Bank Reconciliation RIGHT
             </Badge>
             
             <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 tracking-tight">
-              <span className="block">Tired of Invoice Reminders</span>
+              <span className="block">Tired of</span>
               <span className="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 bg-clip-text text-transparent">
-                Going to Spam?
+                QuickBooks Mistakes?
               </span>
             </h1>
             
             <h2 className="text-2xl md:text-3xl text-slate-600 mb-8 font-light max-w-4xl mx-auto leading-relaxed">
-              Stop Working Weekends Chasing Payments
+              Upload Bank CSV → AI Matches Transactions → Perfect Reconciliation
               <br />
-              <span className="text-slate-800 font-medium">Professional Emails That Actually Get Delivered</span>
+              <span className="text-slate-800 font-medium">Plus Automated Invoice Collections That Actually Work</span>
             </h2>
             
             <p className="text-lg text-slate-700 mb-12 max-w-3xl mx-auto leading-relaxed">
-              While XERO and QuickBooks reminders hit spam folders, ReconcileBook's professional templates get delivered every time. 
-              <strong className="text-slate-900"> Get paid 60% faster with emails that actually work.</strong>
+              <strong className="text-slate-900">Bank Reconciliation:</strong> Upload any bank CSV, AI matches transactions to your books instantly - no more coffee purchases matched to rent payments!
+              <br />
+              <strong className="text-slate-900">Invoice Collections:</strong> Professional email sequences that don't hit spam and get you paid 60% faster.
             </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
