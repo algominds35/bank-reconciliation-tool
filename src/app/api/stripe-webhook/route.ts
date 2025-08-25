@@ -17,7 +17,7 @@ const supabaseAdmin = process.env.SUPABASE_SERVICE_ROLE_KEY ? createClient(
 
 // Initialize Stripe with live keys
 const stripe = process.env.STRIPE_SECRET_KEY_LIVE ? new Stripe(process.env.STRIPE_SECRET_KEY_LIVE, {
-  apiVersion: '2025-06-30.basil',
+  apiVersion: '2024-06-20',
 }) : null
 
 export async function POST(request: NextRequest) {
