@@ -53,7 +53,7 @@ export default function HomePage() {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-slate-900">ReconcileBook</h1>
-            </div>
+              </div>
             
             {/* Navigation Menu */}
             <nav className="hidden md:flex items-center space-x-8">
@@ -118,7 +118,7 @@ export default function HomePage() {
                         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
               <a href="https://buy.stripe.com/test_professional_79" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                  Start Free Trial - $79/mo
+                  Start Free Trial
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </a>
@@ -161,8 +161,8 @@ export default function HomePage() {
                 <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=40&h=40&fit=crop&crop=face&auto=format" alt="Customer" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
                 <div className="w-10 h-10 rounded-full bg-slate-800 border-2 border-white shadow-sm flex items-center justify-center">
                   <span className="text-white text-xs font-semibold">+496</span>
-                </div>
-              </div>
+                    </div>
+                    </div>
               
               {/* Stars and Text */}
               <div className="flex items-center space-x-3">
@@ -214,7 +214,7 @@ export default function HomePage() {
           <div className="mt-12">
             <a href="https://buy.stripe.com/test_professional_79" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 shadow-xl hover:shadow-2xl transition-all duration-300">
-                Start Free Trial - $79/mo
+                Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </a>
@@ -441,7 +441,7 @@ export default function HomePage() {
               </p>
               <a href="https://buy.stripe.com/test_professional_79" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="text-lg px-8 py-4 bg-white text-slate-900 hover:bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300">
-                  Start Saving Today - $79/mo
+                  Start Free Trial
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </a>
@@ -957,7 +957,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
             <a href="https://buy.stripe.com/test_professional_79" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="text-lg px-8 py-4 bg-white text-slate-900 hover:bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                Start Free Trial - $79/mo
+                Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </a>
