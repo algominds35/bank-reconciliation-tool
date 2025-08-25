@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { createClient } from '@supabase/supabase-js'
 import { stripe } from '@/lib/stripe'
+import Stripe from 'stripe'
 
 // Create admin client with service role key for user lookup
 const supabaseAdmin = process.env.SUPABASE_SERVICE_ROLE_KEY ? createClient(
