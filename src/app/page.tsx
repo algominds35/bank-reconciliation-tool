@@ -65,6 +65,7 @@ export default function HomePage() {
               <Link href="/blog">
                 <span className="text-slate-700 hover:text-slate-900 font-medium">Blog</span>
               </Link>
+              <a href="mailto:alex@usealgomind.com?subject=ReconcileBook%20Inquiry&body=Hi%20Alex,%0D%0A%0D%0AI'm%20interested%20in%20learning%20more%20about%20ReconcileBook.%0D%0A%0D%0APlease%20contact%20me%20to%20discuss." className="text-slate-700 hover:text-slate-900 font-medium">Contact</a>
             </nav>
             
             <div className="flex items-center space-x-4">
