@@ -47,13 +47,26 @@ export default function HomePage() {
       
     <div className="min-h-screen bg-white overflow-hidden">
       
-      {/* Header with Login/Signup */}
+            {/* Header with Navigation */}
       <header className="absolute top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-slate-900">ReconcileBook</h1>
-              </div>
+            </div>
+            
+            {/* Navigation Menu */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <a href="#demo-video" className="text-slate-700 hover:text-slate-900 font-medium">Demo</a>
+              <a href="#features" className="text-slate-700 hover:text-slate-900 font-medium">Features</a>
+              <a href="#testimonials" className="text-slate-700 hover:text-slate-900 font-medium">Testimonials</a>
+              <a href="#faq" className="text-slate-700 hover:text-slate-900 font-medium">FAQ</a>
+              <a href="#pricing" className="text-slate-700 hover:text-slate-900 font-medium">Pricing</a>
+              <Link href="/blog">
+                <span className="text-slate-700 hover:text-slate-900 font-medium">Blog</span>
+              </Link>
+            </nav>
+            
             <div className="flex items-center space-x-4">
               <Link href="/auth/login">
                 <Button variant="ghost" className="text-slate-700 hover:text-slate-900">
@@ -277,7 +290,7 @@ export default function HomePage() {
       </section>
 
       {/* Solution Section */}
-      <section className="py-24 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <section id="features" className="py-24 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge className="mb-6 bg-gradient-to-r from-emerald-600 to-blue-600 text-white border-0 px-6 py-2 text-sm font-medium shadow-lg">
@@ -526,7 +539,7 @@ export default function HomePage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-24 bg-gradient-to-br from-slate-50 to-blue-50">
+      <section id="pricing" className="py-24 bg-gradient-to-br from-slate-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
@@ -686,7 +699,7 @@ export default function HomePage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 bg-slate-50">
+      <section id="faq" className="py-24 bg-slate-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
@@ -756,7 +769,7 @@ export default function HomePage() {
       </section>
 
       {/* Detailed Testimonials Section */}
-      <section className="py-24 bg-white">
+      <section id="testimonials" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
