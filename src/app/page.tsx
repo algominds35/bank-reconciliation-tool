@@ -793,13 +793,15 @@ export default function HomePage() {
                 <p className="text-slate-700 mb-6 italic">
                   "QuickBooks kept matching my $4 coffee purchases to my $2,000 rent payment. I was spending 8 hours every month fixing these ridiculous mistakes. ReconcileBook's AI actually understands transactions - coffee stays coffee, rent stays rent. Saved me 20+ hours monthly!"
                 </p>
-                <div className="flex items-center">
-                  <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=48&h=48&fit=crop&crop=face&auto=format" alt="Sarah Chen" className="w-12 h-12 rounded-full mr-4" />
+                                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-white font-bold text-lg">SC</span>
+              </div>
                   <div>
                     <div className="font-semibold text-slate-900">Sarah Chen</div>
                     <div className="text-slate-600 text-sm">CPA, TechFlow Solutions</div>
-              </div>
             </div>
+              </div>
               </CardContent>
             </Card>
 
@@ -816,11 +818,13 @@ export default function HomePage() {
                   "I was working every weekend chasing unpaid invoices because XERO's reminders kept hitting spam folders. ReconcileBook's professional emails get delivered and my clients actually respond. Got paid 60% faster and my Sundays are finally free!"
                 </p>
                 <div className="flex items-center">
-                  <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face&auto=format" alt="Mike Rodriguez" className="w-12 h-12 rounded-full mr-4" />
+                  <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-white font-bold text-lg">MR</span>
+          </div>
                   <div>
                     <div className="font-semibold text-slate-900">Mike Rodriguez</div>
                     <div className="text-slate-600 text-sm">Founder, Digital Marketing Pro</div>
-                  </div>
+        </div>
                 </div>
               </CardContent>
             </Card>
@@ -832,22 +836,24 @@ export default function HomePage() {
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-5 w-5 fill-current" />
                     ))}
+                </div>
               </div>
-            </div>
                 <p className="text-slate-700 mb-6 italic">
                   "We were paying a bookkeeper $500/month just to fix QuickBooks' matching errors. ReconcileBook does it perfectly for $79/month. ROI was immediate - saved us $421 monthly plus eliminated all the frustration!"
                 </p>
                 <div className="flex items-center">
-                  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=48&h=48&fit=crop&crop=face&auto=format" alt="Amanda Thompson" className="w-12 h-12 rounded-full mr-4" />
+                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-white font-bold text-lg">AT</span>
+              </div>
                   <div>
                     <div className="font-semibold text-slate-900">Amanda Thompson</div>
                     <div className="text-slate-600 text-sm">Small Business Owner</div>
-                  </div>
+          </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
-        </div>
+                </div>
+              </div>
       </section>
 
       {/* About Us Section */}
@@ -861,14 +867,14 @@ export default function HomePage() {
           </p>
           
           <div className="grid md:grid-cols-2 gap-12 text-left">
-            <div>
+              <div>
               <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h3>
               <p className="text-slate-600 leading-relaxed">
                 To eliminate the frustration of financial management for small businesses. No more weekend work fixing software mistakes. No more chasing payments because reminders hit spam. Just accurate, reliable tools that work.
               </p>
-                </div>
-            
-            <div>
+              </div>
+
+              <div>
               <h3 className="text-2xl font-bold text-slate-900 mb-4">Why We're Different</h3>
               <p className="text-slate-600 leading-relaxed">
                 We focus on solving real problems, not adding features. Our AI understands context, our emails get delivered, and our support team actually helps. We're business owners serving business owners.
@@ -888,7 +894,7 @@ export default function HomePage() {
             <p className="text-xl text-slate-600">
               Tips, guides, and insights for better financial management
             </p>
-                </div>
+            </div>
           
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300">
@@ -902,7 +908,7 @@ export default function HomePage() {
                     Discover the technical reasons behind QuickBooks' notorious matching errors and learn how modern AI solves these problems.
                   </p>
                   <div className="text-blue-600 font-medium">Read More →</div>
-              </div>
+        </div>
               </CardContent>
             </Card>
 
@@ -917,7 +923,7 @@ export default function HomePage() {
                     Learn how to automate invoice collections without spam folders, improving cash flow by 60% while reclaiming your weekends.
                   </p>
                   <div className="text-blue-600 font-medium">Read More →</div>
-              </div>
+          </div>
               </CardContent>
             </Card>
 
@@ -932,10 +938,10 @@ export default function HomePage() {
                     82% of small businesses fail due to cash flow problems. Here's how to avoid becoming a statistic with better financial management.
                   </p>
                   <div className="text-blue-600 font-medium">Read More →</div>
-              </div>
+        </div>
               </CardContent>
             </Card>
-          </div>
+    </div>
         </div>
       </section>
 
