@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -164,6 +165,16 @@ export default function BookkeeperDashboard() {
                 <Mail className="h-4 w-4 mr-2" />
                 Reports
               </Button>
+              <Link href="/client-intake">
+                <Button 
+                  variant="outline"
+                  size="sm"
+                  className="bg-green-50 border-green-200 hover:bg-green-100"
+                >
+                  <Plus className="h-4 w-4 mr-2 text-green-600" />
+                  <span className="text-green-600 font-medium">New Client</span>
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
