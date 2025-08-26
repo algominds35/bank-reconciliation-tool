@@ -78,7 +78,7 @@ export default function BookkeeperDashboard() {
                  totalTransactions: realClients.reduce((sum: number, c: any) => sum + c.totalTransactions, 0)
                })
         } else {
-          // If no real clients exist, show empty state
+          // If no real clients exist, show empty state but keep functionality working
           setClients([])
           setStats({
             totalClients: 0,
@@ -370,9 +370,35 @@ export default function BookkeeperDashboard() {
             </CardHeader>
             <CardContent>
               <PDFUpload 
-                onFilesUploaded={(files) => {
+                onFilesUploaded={async (files) => {
                   console.log('Files uploaded:', files)
-                  // In a real app, this would update the client data
+                  // Refresh client data after upload
+                  try {
+                    const response = await fetch('/api/bookkeeper/clients')
+                    const data = await response.json()
+                    if (data.success) {
+                      const realClients = data.clients.map((client: any) => ({
+                        id: client.id,
+                        name: client.name,
+                        lastUpload: client.last_upload,
+                        status: client.status || 'ready',
+                        unmatchedTransactions: client.unmatched_transactions || 0,
+                        totalTransactions: client.total_transactions || 0,
+                        bankTransactions: client.bank_transactions || [],
+                        progress: 0
+                      }))
+                      setClients(realClients)
+                      // Update stats
+                      setStats({
+                        totalClients: realClients.length,
+                        pendingUploads: realClients.filter((c: any) => c.status === 'pending').length,
+                        completedToday: realClients.filter((c: any) => c.status === 'completed').length,
+                        totalTransactions: realClients.reduce((sum: number, c: any) => sum + c.totalTransactions, 0)
+                      })
+                    }
+                  } catch (error) {
+                    console.error('Failed to refresh client data:', error)
+                  }
                 }}
                 maxFiles={20}
               />

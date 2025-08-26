@@ -274,9 +274,9 @@ export default function BulkReconciliation({ clients, onReconciliationComplete }
         <Card>
           <CardContent className="p-6 text-center">
             <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Clients Ready</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Ready to Get Started?</h3>
             <p className="text-gray-600 mb-4">
-              Upload PDF bank statements for your clients to enable bulk reconciliation
+              Upload PDF bank statements to automatically create clients and enable bulk reconciliation. The system will extract transactions and create client profiles automatically.
             </p>
             <Button variant="outline">
               <FileText className="h-4 w-4 mr-2" />
