@@ -55,7 +55,7 @@ export default function BulkReconciliation({ clients, onReconciliationComplete }
         setProcessedClients(prev => 
           prev.map(client => ({
             ...client,
-            progress: Math.min(client.progress + Math.random() * 20, 95)
+            progress: Math.min((client.progress || 0) + Math.random() * 20, 95)
           }))
         )
       }, 500)
