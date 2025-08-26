@@ -284,7 +284,8 @@ class PDFProcessor {
       if (year.length === 2) {
         const currentYear = new Date().getFullYear()
         const currentCentury = Math.floor(currentYear / 100) * 100
-        year = (parseInt(year) > 50 ? currentCentury - 100 : currentCentury) + parseInt(year)
+        const fullYear = (parseInt(year) > 50 ? currentCentury - 100 : currentCentury) + parseInt(year)
+        year = fullYear.toString()
       }
       
       // Validate date
