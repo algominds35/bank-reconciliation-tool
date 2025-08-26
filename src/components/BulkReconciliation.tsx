@@ -23,7 +23,7 @@ interface Client {
   lastUpload?: string
   bankTransactions?: any[]
   status: 'ready' | 'processing' | 'completed' | 'error' | 'pending' | 'needs_review'
-  progress: number
+  progress?: number
   matches?: number
   unmatched?: number
   unmatchedTransactions?: number
