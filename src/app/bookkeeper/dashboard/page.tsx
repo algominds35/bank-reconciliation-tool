@@ -71,12 +71,12 @@ export default function BookkeeperDashboard() {
           }))
           
           setClients(realClients)
-          setStats({
-            totalClients: realClients.length,
-            pendingUploads: realClients.filter(c => c.status === 'pending').length,
-            completedToday: realClients.filter(c => c.status === 'completed').length,
-            totalTransactions: realClients.reduce((sum, c) => sum + c.totalTransactions, 0)
-          })
+                         setStats({
+                 totalClients: realClients.length,
+                 pendingUploads: realClients.filter((c: any) => c.status === 'pending').length,
+                 completedToday: realClients.filter((c: any) => c.status === 'completed').length,
+                 totalTransactions: realClients.reduce((sum: number, c: any) => sum + c.totalTransactions, 0)
+               })
         } else {
           // If no real clients exist, show empty state
           setClients([])
