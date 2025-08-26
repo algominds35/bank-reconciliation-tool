@@ -135,49 +135,7 @@ class BulkReconciliationEngine {
     console.log(`Completed ${job.clientName}: ${job.matches.filter(m => m.matchType !== 'unmatched').length} matches, ${job.unmatchedBank.length} unmatched bank, ${job.unmatchedBook.length} unmatched book`)
   }
 
-  private findExactMatches(bankTransactions: Transaction[], bookTransactions: Transaction[]): ReconciliationMatch[] {
-    const matches: ReconciliationMatch[] = []
-    const usedBookTransactions = new Set<string>()
 
-    for (const bankTxn of bankTransactions) {
-      // Find exact amount matches within 3 days
-      const potentialMatches = bookTransactions.filter(bookTxn => 
-        !usedBookTransactions.has(bookTxn.id) &&
-        Math.abs(bankTxn.amount - bookTxn.amount) < 0.01 &&
-        this.isWithinDateRange(bankTxn.date, bookTxn.date, 3)
-      )
-
-      if (potentialMatches.length === 1) {
-        // Single exact match found
-        const bookTxn = potentialMatches[0]
-        matches.push({
-          id: `exact-${bankTxn.id}-${bookTxn.id}`,
-          bankTransaction: bankTxn,
-          bookTransaction: bookTxn,
-          matchType: 'exact',
-          confidence: 0.95,
-          difference: Math.abs(bankTxn.amount - bookTxn.amount)
-        })
-        usedBookTransactions.add(bookTxn.id)
-      } else if (potentialMatches.length > 1) {
-        // Multiple matches - find best description match
-        const bestMatch = this.findBestDescriptionMatch(bankTxn, potentialMatches)
-        if (bestMatch && this.calculateDescriptionSimilarity(bankTxn.description, bestMatch.description) > 0.7) {
-          matches.push({
-            id: `exact-${bankTxn.id}-${bestMatch.id}`,
-            bankTransaction: bankTxn,
-            bookTransaction: bestMatch,
-            matchType: 'exact',
-            confidence: 0.9,
-            difference: Math.abs(bankTxn.amount - bestMatch.amount)
-          })
-          usedBookTransactions.add(bestMatch.id)
-        }
-      }
-    }
-
-    return matches
-  }
 
   private findFuzzyMatches(bankTransactions: Transaction[], bookTransactions: Transaction[]): ReconciliationMatch[] {
     const matches: ReconciliationMatch[] = []
