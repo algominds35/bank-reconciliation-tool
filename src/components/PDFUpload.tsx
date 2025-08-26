@@ -48,7 +48,8 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
     setUploadedFiles(prev => [...prev, ...newFiles])
 
     // Process each file with real API
-    for (const [index, file] of acceptedFiles.entries()) {
+    for (let index = 0; index < acceptedFiles.length; index++) {
+      const file = acceptedFiles[index]
       const fileId = newFiles[index].id
       await processFileWithAPI(file, fileId, clientId)
     }
