@@ -1,4 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,6 +35,43 @@ export async function POST(request: NextRequest) {
       
       console.log(`PDF processing complete: ${result.totalTransactions} transactions found`)
       
+      // CREATE OR UPDATE CLIENT IN DATABASE
+      try {
+        // Extract client name from PDF or use filename
+        const clientName = result.bankName ? 
+          `${result.bankName} Client` : 
+          file.name.replace('.pdf', '').replace(/[^a-zA-Z0-9\s]/g, '')
+        
+        // Create/update client record
+        const { data: client, error: clientError } = await supabase
+          .from('clients')
+          .upsert({
+            id: clientId || `client-${Date.now()}`,
+            name: clientName,
+            email: '', // Will be filled later
+            phone: '',
+            industry: '',
+            status: 'ready', // Ready for reconciliation
+            total_transactions: result.totalTransactions,
+            unmatched_transactions: result.totalTransactions, // All unmatched initially
+            bank_transactions: result.transactions,
+            last_upload: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+          .select()
+          .single()
+
+        if (clientError) {
+          console.error('Error creating/updating client:', clientError)
+        } else {
+          console.log(`Client created/updated: ${client.name} with ${result.totalTransactions} transactions`)
+        }
+
+      } catch (clientUpdateError) {
+        console.error('Client update failed:', clientUpdateError)
+      }
+      
       return NextResponse.json({
         success: true,
         result: {
@@ -50,6 +93,36 @@ export async function POST(request: NextRequest) {
       const mockTransactions = Math.floor(Math.random() * 50) + 10
       const bankNames = ['Chase Bank', 'Bank of America', 'Wells Fargo', 'Citibank', 'US Bank']
       const mockBankName = bankNames[Math.floor(Math.random() * bankNames.length)]
+      
+      // CREATE CLIENT WITH MOCK DATA
+      try {
+        const clientName = file.name.replace('.pdf', '').replace(/[^a-zA-Z0-9\s]/g, '')
+        
+        const { data: client, error: clientError } = await supabase
+          .from('clients')
+          .upsert({
+            id: clientId || `client-${Date.now()}`,
+            name: clientName,
+            email: '',
+            phone: '',
+            industry: '',
+            status: 'ready',
+            total_transactions: mockTransactions,
+            unmatched_transactions: mockTransactions,
+            bank_transactions: [],
+            last_upload: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+          .select()
+          .single()
+
+        if (!clientError) {
+          console.log(`Mock client created: ${client.name} with ${mockTransactions} transactions`)
+        }
+      } catch (mockClientError) {
+        console.error('Mock client creation failed:', mockClientError)
+      }
       
       return NextResponse.json({
         success: true,
