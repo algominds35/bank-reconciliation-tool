@@ -20,11 +20,14 @@ import {
 interface Client {
   id: string
   name: string
-  bankTransactions: any[]
-  status: 'ready' | 'processing' | 'completed' | 'error'
+  lastUpload?: string
+  bankTransactions?: any[]
+  status: 'ready' | 'processing' | 'completed' | 'error' | 'pending' | 'needs_review'
   progress: number
   matches?: number
   unmatched?: number
+  unmatchedTransactions?: number
+  totalTransactions?: number
 }
 
 interface BulkReconciliationProps {
@@ -38,7 +41,7 @@ export default function BulkReconciliation({ clients, onReconciliationComplete }
   const [results, setResults] = useState<any>(null)
 
   const readyClients = clients.filter(c => c.bankTransactions && c.bankTransactions.length > 0)
-  const totalTransactions = readyClients.reduce((sum, c) => sum + c.bankTransactions.length, 0)
+  const totalTransactions = readyClients.reduce((sum, c) => sum + (c.bankTransactions?.length || 0), 0)
 
   const handleBulkReconciliation = async () => {
     if (readyClients.length === 0) return
@@ -67,7 +70,7 @@ export default function BulkReconciliation({ clients, onReconciliationComplete }
           clientJobs: readyClients.map(client => ({
             clientId: client.id,
             clientName: client.name,
-            bankTransactions: client.bankTransactions
+            bankTransactions: client.bankTransactions || []
           }))
         })
       })
@@ -85,7 +88,10 @@ export default function BulkReconciliation({ clients, onReconciliationComplete }
           status: job.status,
           progress: 100,
           matches: job.matches.filter((m: any) => m.matchType !== 'unmatched').length,
-          unmatched: job.unmatchedBank.length + job.unmatchedBook.length
+          unmatched: job.unmatchedBank.length + job.unmatchedBook.length,
+          lastUpload: new Date().toISOString().split('T')[0],
+          unmatchedTransactions: job.unmatchedBank.length + job.unmatchedBook.length,
+          totalTransactions: job.bankTransactions?.length || 0
         }))
 
         setProcessedClients(updatedClients)
