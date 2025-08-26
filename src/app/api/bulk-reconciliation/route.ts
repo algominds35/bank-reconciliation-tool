@@ -39,9 +39,12 @@ export async function POST(request: NextRequest) {
 
           // Transform database format to Transaction format
           const formattedTransactions: Transaction[] = (bookTransactions || []).map(tx => ({
+            id: tx.id,
             date: tx.date,
             description: tx.description,
             amount: parseFloat(tx.amount.toString()),
+            type: tx.amount >= 0 ? 'credit' : 'debit' as 'credit' | 'debit',
+            confidence: 1.0, // Database transactions are 100% confident
             category: tx.category || '',
             account: tx.account || '',
             reference: tx.reference || ''
