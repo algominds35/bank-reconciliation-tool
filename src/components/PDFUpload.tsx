@@ -305,7 +305,13 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
                       </Badge>
 
                       {file.status === 'completed' && (
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            alert(`Review ${file.name}\n\nTransactions Extracted: ${file.transactions || 0}\nStatus: ${file.status}\n\nThis would open a detailed review modal in production.`)
+                          }}
+                        >
                           <Eye className="h-4 w-4 mr-1" />
                           Review
                         </Button>

@@ -323,7 +323,14 @@ export default function BookkeeperDashboard() {
                           {client.status.replace('_', ' ')}
                         </Badge>
 
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            // Navigate to client details or show modal
+                            alert(`Client Details for ${client.name}\n\nStatus: ${client.status}\nTransactions: ${client.totalTransactions || 0}\nLast Upload: ${client.lastUpload || 'Never'}`)
+                          }}
+                        >
                           View Details
                         </Button>
                       </div>
