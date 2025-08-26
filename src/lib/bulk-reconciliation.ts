@@ -275,31 +275,40 @@ class BulkReconciliationEngine {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
   }
 
-  // Generate mock book transactions for testing
+  // Generate realistic book transactions for testing (simulates QuickBooks data)
   generateMockBookTransactions(bankTransactions: Transaction[]): Transaction[] {
     const mockTransactions: Transaction[] = []
 
     bankTransactions.forEach((bankTxn, index) => {
-      // 80% chance of having a matching book transaction
-      if (Math.random() < 0.8) {
+      // 85% chance of having a matching book transaction (realistic match rate)
+      if (Math.random() < 0.85) {
         const bookTxn: Transaction = {
           id: `book-${bankTxn.id}`,
           date: this.adjustDate(bankTxn.date, Math.floor(Math.random() * 3) - 1), // ±1 day variation
           description: this.varyDescription(bankTxn.description),
-          amount: bankTxn.amount + (Math.random() < 0.1 ? (Math.random() - 0.5) * 0.02 : 0), // Small amount variations
+          amount: bankTxn.amount + (Math.random() < 0.15 ? (Math.random() - 0.5) * 0.05 : 0), // Small amount variations (15% chance)
           type: bankTxn.type,
           confidence: 0.9
         }
         mockTransactions.push(bookTxn)
       }
 
-      // Add some extra book transactions (manual entries, etc.)
-      if (Math.random() < 0.2) {
+      // Add some extra book transactions (manual entries, accruals, etc.)
+      if (Math.random() < 0.25) {
+        const descriptions = [
+          'Manual Journal Entry',
+          'Accrual Adjustment', 
+          'Depreciation Expense',
+          'Prepaid Adjustment',
+          'Reclassification Entry',
+          'Month End Adjustment'
+        ]
+        
         mockTransactions.push({
           id: `book-extra-${index}`,
           date: bankTxn.date,
-          description: `Manual Entry ${index + 1}`,
-          amount: Math.random() * 100 + 10,
+          description: descriptions[Math.floor(Math.random() * descriptions.length)],
+          amount: Math.random() * 500 + 25,
           type: Math.random() < 0.5 ? 'debit' : 'credit',
           confidence: 0.9
         })
@@ -307,6 +316,55 @@ class BulkReconciliationEngine {
     })
 
     return mockTransactions
+  }
+
+  // Enhanced matching algorithm with better logic
+  private findExactMatches(bankTransactions: Transaction[], bookTransactions: Transaction[]): ReconciliationMatch[] {
+    const matches: ReconciliationMatch[] = []
+    const usedBookTransactions = new Set<string>()
+
+    for (const bankTxn of bankTransactions) {
+      // Find exact amount matches within 5 days (more realistic)
+      const potentialMatches = bookTransactions.filter(bookTxn => 
+        !usedBookTransactions.has(bookTxn.id) &&
+        Math.abs(bankTxn.amount - bookTxn.amount) < 0.01 &&
+        this.isWithinDateRange(bankTxn.date, bookTxn.date, 5)
+      )
+
+      if (potentialMatches.length === 1) {
+        // Single exact match found - high confidence
+        const bookTxn = potentialMatches[0]
+        matches.push({
+          id: `exact-${bankTxn.id}-${bookTxn.id}`,
+          bankTransaction: bankTxn,
+          bookTransaction: bookTxn,
+          matchType: 'exact',
+          confidence: 0.98,
+          difference: Math.abs(bankTxn.amount - bookTxn.amount)
+        })
+        usedBookTransactions.add(bookTxn.id)
+      } else if (potentialMatches.length > 1) {
+        // Multiple matches - find best description match
+        const bestMatch = this.findBestDescriptionMatch(bankTxn, potentialMatches)
+        if (bestMatch) {
+          const descriptionSimilarity = this.calculateDescriptionSimilarity(bankTxn.description, bestMatch.description)
+          if (descriptionSimilarity > 0.6) {
+            matches.push({
+              id: `exact-${bankTxn.id}-${bestMatch.id}`,
+              bankTransaction: bankTxn,
+              bookTransaction: bestMatch,
+              matchType: 'exact',
+              confidence: 0.85 + (descriptionSimilarity * 0.1),
+              difference: Math.abs(bankTxn.amount - bestMatch.amount),
+              notes: descriptionSimilarity < 0.8 ? 'Multiple amount matches - selected best description match' : undefined
+            })
+            usedBookTransactions.add(bestMatch.id)
+          }
+        }
+      }
+    }
+
+    return matches
   }
 
   private adjustDate(dateStr: string, days: number): string {
