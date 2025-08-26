@@ -109,6 +109,9 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
       const result = await response.json()
 
       if (result.success) {
+        // Create or update client with real transaction data
+        await createOrUpdateClient(result.result)
+        
         // Complete with real results
         setUploadedFiles(prev => 
           prev.map(f => 
@@ -153,6 +156,38 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
             : f
         )
       )
+    }
+  }
+
+  const createOrUpdateClient = async (pdfResult: any) => {
+    try {
+      // Create a client name from the bank name and account
+      const clientName = `${pdfResult.bankName} - ${pdfResult.accountNumber}`
+      
+      const clientData = {
+        name: clientName,
+        contactPerson: 'Auto-generated from PDF',
+        email: 'contact@client.com',
+        industry: 'Unknown',
+        status: 'ready',
+        bankTransactions: pdfResult.transactions,
+        totalTransactions: pdfResult.totalTransactions,
+        lastUpload: new Date().toISOString().split('T')[0]
+      }
+
+      const response = await fetch('/api/bookkeeper/clients', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(clientData)
+      })
+
+      const result = await response.json()
+      console.log('Client created/updated:', result)
+      
+    } catch (error) {
+      console.error('Error creating client:', error)
     }
   }
 

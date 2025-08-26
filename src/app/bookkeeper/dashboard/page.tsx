@@ -46,66 +46,56 @@ export default function BookkeeperDashboard() {
   const [showPDFUpload, setShowPDFUpload] = useState(false)
   const [reconciliationResults, setReconciliationResults] = useState<any>(null)
 
-  // Mock data for now - will connect to real API later
+  // Load real client data from API
   useEffect(() => {
-    const mockClients: Client[] = [
-      {
-        id: '1',
-        name: 'ABC Consulting LLC',
-        lastUpload: '2025-01-26',
-        status: 'ready',
-        unmatchedTransactions: 0,
-        totalTransactions: 45,
-        bankTransactions: Array.from({length: 45}, (_, i) => ({
-          id: `abc-${i}`,
-          date: '2025-01-26',
-          description: `Transaction ${i + 1}`,
-          amount: Math.random() * 1000 + 50,
-          type: Math.random() > 0.5 ? 'debit' : 'credit',
-          confidence: 0.9
-        }))
-      },
-      {
-        id: '2', 
-        name: 'XYZ Marketing Inc',
-        lastUpload: '2025-01-25',
-        status: 'ready',
-        unmatchedTransactions: 3,
-        totalTransactions: 67,
-        bankTransactions: Array.from({length: 67}, (_, i) => ({
-          id: `xyz-${i}`,
-          date: '2025-01-25',
-          description: `Marketing Transaction ${i + 1}`,
-          amount: Math.random() * 500 + 25,
-          type: Math.random() > 0.5 ? 'debit' : 'credit',
-          confidence: 0.9
-        }))
-      },
-      {
-        id: '3',
-        name: 'DEF Retail Store',
-        lastUpload: '2025-01-24',
-        status: 'ready',
-        unmatchedTransactions: 0,
-        totalTransactions: 89,
-        bankTransactions: Array.from({length: 89}, (_, i) => ({
-          id: `def-${i}`,
-          date: '2025-01-24',
-          description: `Retail Transaction ${i + 1}`,
-          amount: Math.random() * 200 + 10,
-          type: Math.random() > 0.5 ? 'debit' : 'credit',
-          confidence: 0.9
-        }))
+    const fetchClients = async () => {
+      try {
+        const response = await fetch('/api/bookkeeper/clients')
+        const data = await response.json()
+        
+        if (data.success) {
+          const realClients = data.clients.map((client: any) => ({
+            id: client.id,
+            name: client.name,
+            lastUpload: client.last_upload,
+            status: client.status || 'pending',
+            unmatchedTransactions: client.unmatched_transactions || 0,
+            totalTransactions: client.total_transactions || 0,
+            bankTransactions: client.bank_transactions || [],
+            progress: 0
+          }))
+          
+          setClients(realClients)
+          setStats({
+            totalClients: realClients.length,
+            pendingUploads: realClients.filter(c => c.status === 'pending').length,
+            completedToday: realClients.filter(c => c.status === 'completed').length,
+            totalTransactions: realClients.reduce((sum, c) => sum + c.totalTransactions, 0)
+          })
+        } else {
+          // If no real clients exist, show empty state
+          setClients([])
+          setStats({
+            totalClients: 0,
+            pendingUploads: 0,
+            completedToday: 0,
+            totalTransactions: 0
+          })
+        }
+      } catch (error) {
+        console.error('Error fetching clients:', error)
+        // Show empty state on error
+        setClients([])
+        setStats({
+          totalClients: 0,
+          pendingUploads: 0,
+          completedToday: 0,
+          totalTransactions: 0
+        })
       }
-    ]
+    }
 
-    setClients(mockClients)
-    setStats({
-      totalClients: mockClients.length,
-      pendingUploads: mockClients.filter(c => c.status === 'pending').length,
-      completedToday: mockClients.filter(c => c.status === 'completed').length,
-      totalTransactions: mockClients.reduce((sum, c) => sum + c.totalTransactions, 0)
-    })
+    fetchClients()
   }, [])
 
   const getStatusColor = (status: string) => {
