@@ -332,7 +332,24 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
 
               {completedFiles > 0 && (
                 <div className="mt-6 pt-4 border-t border-gray-200">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  <Button 
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    onClick={() => {
+                      // Process the uploaded files for reconciliation
+                      const completedFilesList = uploadedFiles.filter(f => f.status === 'completed')
+                      if (completedFilesList.length > 0) {
+                        alert(`Processing ${completedFilesList.length} files for reconciliation!\n\nFiles:\n${completedFilesList.map(f => `• ${f.name} (${f.extractedTransactions || 0} transactions)`).join('\n')}\n\nThis would trigger the bulk reconciliation process in production.`)
+                        
+                        // In production, this would:
+                        // 1. Navigate to bulk reconciliation tab
+                        // 2. Auto-start reconciliation process
+                        // 3. Show processing status
+                        if (onFilesUploaded) {
+                          onFilesUploaded(completedFilesList)
+                        }
+                      }
+                    }}
+                  >
                     Process {completedFiles} Files for Reconciliation
                   </Button>
                 </div>
