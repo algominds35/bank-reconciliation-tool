@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { reportGenerator, defaultTemplates } from '@/lib/report-generator'
-import { SendGridService } from '@/lib/sendgrid'
+import SendGridService from '@/lib/sendgrid'
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     // Auto-deliver reports if enabled
     const deliveryResults = []
     if (autoDeliver && template.autoDeliver) {
-      const sendGrid = new SendGridService()
+      const sendGrid = SendGridService.getInstance()
       
       for (const report of reports) {
         try {
