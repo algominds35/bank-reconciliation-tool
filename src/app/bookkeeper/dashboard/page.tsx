@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge'
 import BulkReconciliation from '@/components/BulkReconciliation'
 import PDFUpload from '@/components/PDFUpload'
 import AutomatedReports from '@/components/AutomatedReports'
+import AutomatedReminders from '@/components/AutomatedReminders'
+import CommunicationDashboard from '@/components/CommunicationDashboard'
 import { 
   Users, 
   FileText, 
@@ -20,7 +22,9 @@ import {
   Settings,
   Zap,
   Plus,
-  Mail
+  Mail,
+  Bell,
+  MessageSquare
 } from 'lucide-react'
 
 interface Client {
@@ -43,7 +47,7 @@ export default function BookkeeperDashboard() {
     completedToday: 0,
     totalTransactions: 0
   })
-  const [activeTab, setActiveTab] = useState<'overview' | 'bulk-reconcile' | 'upload' | 'reports'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'bulk-reconcile' | 'upload' | 'reports' | 'reminders' | 'communications'>('overview')
   const [showPDFUpload, setShowPDFUpload] = useState(false)
   const [reconciliationResults, setReconciliationResults] = useState<any>(null)
 
@@ -164,6 +168,22 @@ export default function BookkeeperDashboard() {
               >
                 <Mail className="h-4 w-4 mr-2" />
                 Reports
+              </Button>
+              <Button 
+                variant={activeTab === 'reminders' ? 'default' : 'outline'} 
+                size="sm"
+                onClick={() => setActiveTab('reminders')}
+              >
+                <Bell className="h-4 w-4 mr-2" />
+                Reminders
+              </Button>
+              <Button 
+                variant={activeTab === 'communications' ? 'default' : 'outline'} 
+                size="sm"
+                onClick={() => setActiveTab('communications')}
+              >
+                <MessageSquare className="h-4 w-4 mr-2" />
+                Messages
               </Button>
               <Link href="/client-intake">
                 <Button 
@@ -378,6 +398,14 @@ export default function BookkeeperDashboard() {
               // In a real app, you might update some state here
             }}
           />
+        )}
+
+        {activeTab === 'reminders' && (
+          <AutomatedReminders />
+        )}
+
+        {activeTab === 'communications' && (
+          <CommunicationDashboard />
         )}
       </div>
     </div>

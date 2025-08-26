@@ -28,6 +28,7 @@ import {
   Users,
   DollarSign,
   CheckCircle,
+  Shield,
   AlertCircle,
   LogOut,
   Settings,
@@ -719,6 +720,12 @@ export default function Dashboard() {
                   <Badge variant="secondary" className="ml-1 text-xs bg-blue-100 text-blue-800">
                     BETA
                   </Badge>
+                </Button>
+              </Link>
+              <Link href="/client-portal">
+                <Button variant="outline" size="sm" className="flex items-center space-x-2 bg-green-50 border-green-200 hover:bg-green-100">
+                  <Shield className="h-4 w-4 text-green-600" />
+                  <span className="text-green-600 font-medium">Client Portal</span>
                 </Button>
               </Link>
               
