@@ -36,7 +36,7 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [isProcessing, setIsProcessing] = useState(false)
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const newFiles: UploadedFile[] = acceptedFiles.map((file, index) => ({
       id: `file-${Date.now()}-${index}`,
       name: file.name,
@@ -47,15 +47,16 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
 
     setUploadedFiles(prev => [...prev, ...newFiles])
 
-    // Simulate file processing
-    newFiles.forEach((file, index) => {
-      simulateFileProcessing(file.id, index * 500)
-    })
+    // Process each file with real API
+    for (const [index, file] of acceptedFiles.entries()) {
+      const fileId = newFiles[index].id
+      await processFileWithAPI(file, fileId, clientId)
+    }
 
     if (onFilesUploaded) {
       onFilesUploaded(newFiles)
     }
-  }, [onFilesUploaded])
+  }, [onFilesUploaded, clientId])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -66,62 +67,92 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
     disabled: isProcessing
   })
 
-  const simulateFileProcessing = (fileId: string, delay: number = 0) => {
-    setTimeout(() => {
-      // Simulate upload progress
-      const progressInterval = setInterval(() => {
+  const processFileWithAPI = async (file: File, fileId: string, clientId?: string) => {
+    try {
+      // Update to uploading with progress
+      const uploadInterval = setInterval(() => {
         setUploadedFiles(prev => 
-          prev.map(file => {
-            if (file.id === fileId && file.status === 'uploading') {
-              const newProgress = Math.min(file.progress + 10, 100)
-              if (newProgress === 100) {
-                clearInterval(progressInterval)
-                // Start processing
-                setTimeout(() => {
-                  setUploadedFiles(prev2 => 
-                    prev2.map(f => 
-                      f.id === fileId 
-                        ? { ...f, status: 'processing', progress: 0 }
-                        : f
-                    )
-                  )
-                  
-                  // Simulate AI processing
-                  simulateAIProcessing(fileId)
-                }, 500)
-              }
-              return { ...file, progress: newProgress }
+          prev.map(f => {
+            if (f.id === fileId && f.status === 'uploading' && f.progress < 90) {
+              return { ...f, progress: f.progress + 10 }
             }
-            return file
+            return f
           })
         )
-      }, 200)
-    }, delay)
-  }
+      }, 100)
 
-  const simulateAIProcessing = (fileId: string) => {
-    const processingInterval = setInterval(() => {
+      // Prepare form data
+      const formData = new FormData()
+      formData.append('file', file)
+      if (clientId) {
+        formData.append('clientId', clientId)
+      }
+
+      // Call API
+      const response = await fetch('/api/process-pdf', {
+        method: 'POST',
+        body: formData
+      })
+
+      clearInterval(uploadInterval)
+
+      // Update to processing
       setUploadedFiles(prev => 
-        prev.map(file => {
-          if (file.id === fileId && file.status === 'processing') {
-            const newProgress = Math.min(file.progress + 15, 100)
-            if (newProgress === 100) {
-              clearInterval(processingInterval)
-              // Complete processing with mock results
-              const mockTransactions = Math.floor(Math.random() * 50) + 10
-              return { 
-                ...file, 
-                status: 'completed', 
-                progress: 100,
-                extractedTransactions: mockTransactions
-              }
-            }
-            return { ...file, progress: newProgress }
-          }
-          return file
-        })
+        prev.map(f => 
+          f.id === fileId 
+            ? { ...f, status: 'processing', progress: 0 }
+            : f
+        )
       )
-    }, 300)
+
+      const result = await response.json()
+
+      if (result.success) {
+        // Complete with real results
+        setUploadedFiles(prev => 
+          prev.map(f => 
+            f.id === fileId 
+              ? { 
+                  ...f, 
+                  status: 'completed', 
+                  progress: 100,
+                  extractedTransactions: result.result.totalTransactions,
+                  clientName: result.result.bankName
+                }
+              : f
+          )
+        )
+      } else {
+        // Handle error
+        setUploadedFiles(prev => 
+          prev.map(f => 
+            f.id === fileId 
+              ? { 
+                  ...f, 
+                  status: 'error', 
+                  progress: 100,
+                  errors: [result.error || 'Processing failed']
+                }
+              : f
+          )
+        )
+      }
+
+    } catch (error) {
+      console.error('File processing error:', error)
+      setUploadedFiles(prev => 
+        prev.map(f => 
+          f.id === fileId 
+            ? { 
+                ...f, 
+                status: 'error', 
+                progress: 100,
+                errors: ['Network error - please try again']
+              }
+            : f
+        )
+      )
+    }
   }
 
   const removeFile = (fileId: string) => {
