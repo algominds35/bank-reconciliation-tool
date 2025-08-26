@@ -239,7 +239,7 @@ export default function HomePage() {
                   </div>
 
           <div className="mt-12">
-            <a href="https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c" target="_blank" rel="noopener noreferrer">
+            <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 shadow-xl hover:shadow-2xl transition-all duration-300">
                 Start Free Trial - Get Both Solutions
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -466,7 +466,7 @@ export default function HomePage() {
               <p className="text-xl text-emerald-100 mb-8">
                 ReconcileBook pays for itself in the first week
               </p>
-              <a href="https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c" target="_blank" rel="noopener noreferrer">
+              <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="text-lg px-8 py-4 bg-white text-slate-900 hover:bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300">
                   Start Free Trial
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -652,7 +652,7 @@ export default function HomePage() {
                     </div>
             </div>
                   
-                  <a href="https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c" target="_blank" rel="noopener noreferrer" className="w-full">
+                  <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer" className="w-full">
                     <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                       Start Free Trial - $79/mo
                     </Button>
@@ -988,7 +988,7 @@ export default function HomePage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-            <a href="https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c" target="_blank" rel="noopener noreferrer">
+            <a href="https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="text-lg px-8 py-4 bg-white text-slate-900 hover:bg-slate-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                 Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
