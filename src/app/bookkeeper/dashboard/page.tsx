@@ -357,6 +357,7 @@ export default function BookkeeperDashboard() {
               // Auto-switch to reports tab
               setActiveTab('reports')
             }}
+            onNavigateToUpload={() => setActiveTab('upload')}
           />
         )}
 

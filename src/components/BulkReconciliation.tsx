@@ -33,9 +33,10 @@ interface Client {
 interface BulkReconciliationProps {
   clients: Client[]
   onReconciliationComplete?: (results: any) => void
+  onNavigateToUpload?: () => void
 }
 
-export default function BulkReconciliation({ clients, onReconciliationComplete }: BulkReconciliationProps) {
+export default function BulkReconciliation({ clients, onReconciliationComplete, onNavigateToUpload }: BulkReconciliationProps) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [processedClients, setProcessedClients] = useState<Client[]>([])
   const [results, setResults] = useState<any>(null)
@@ -278,7 +279,7 @@ export default function BulkReconciliation({ clients, onReconciliationComplete }
             <p className="text-gray-600 mb-4">
               Upload PDF bank statements to automatically create clients and enable bulk reconciliation. The system will extract transactions and create client profiles automatically.
             </p>
-            <Button variant="outline">
+            <Button variant="outline" onClick={onNavigateToUpload}>
               <FileText className="h-4 w-4 mr-2" />
               Upload PDFs
             </Button>
