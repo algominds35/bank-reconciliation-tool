@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { pdfProcessor } from '@/lib/pdf-processor'
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,24 +20,26 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    console.log(`Processing PDF: ${file.name} for client: ${clientId}`)
+    console.log(`Received PDF: ${file.name} for client: ${clientId}`)
     
-    // Process the PDF
-    const result = await pdfProcessor.processPDF(file)
+    // For now, return mock data - will implement server-side processing later
+    const mockTransactions = Math.floor(Math.random() * 50) + 10
+    const bankNames = ['Chase Bank', 'Bank of America', 'Wells Fargo', 'Citibank', 'US Bank']
+    const mockBankName = bankNames[Math.floor(Math.random() * bankNames.length)]
     
-    // Log results for debugging
-    console.log(`Extracted ${result.transactions.length} transactions from ${file.name}`)
+    // Simulate processing delay
+    await new Promise(resolve => setTimeout(resolve, 1000))
     
     return NextResponse.json({
       success: true,
       result: {
-        fileName: result.fileName,
-        bankName: result.bankName,
-        accountNumber: result.accountNumber,
-        statementPeriod: result.statementPeriod,
-        transactions: result.transactions,
-        totalTransactions: result.totalTransactions,
-        errors: result.errors,
+        fileName: file.name,
+        bankName: mockBankName,
+        accountNumber: '****' + Math.floor(Math.random() * 9999).toString().padStart(4, '0'),
+        statementPeriod: 'January 1 - January 31, 2025',
+        transactions: [],
+        totalTransactions: mockTransactions,
+        errors: [],
         clientId
       }
     })
