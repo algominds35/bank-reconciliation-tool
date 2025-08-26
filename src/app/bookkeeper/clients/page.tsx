@@ -47,69 +47,38 @@ export default function ClientsPage() {
     industry: ''
   })
 
-  // Mock data for demonstration
+  // Load real client data from database
   useEffect(() => {
-    const mockClients: Client[] = [
-      {
-        id: '1',
-        name: 'ABC Consulting LLC',
-        email: 'contact@abcconsulting.com',
-        phone: '(555) 123-4567',
-        industry: 'Consulting',
-        dateAdded: '2024-01-15',
-        lastActivity: '2025-01-26',
-        status: 'active',
-        totalTransactions: 245,
-        lastUpload: '2025-01-26'
-      },
-      {
-        id: '2',
-        name: 'XYZ Marketing Inc',
-        email: 'hello@xyzmarketing.com',
-        phone: '(555) 987-6543',
-        industry: 'Marketing',
-        dateAdded: '2024-02-20',
-        lastActivity: '2025-01-25',
-        status: 'active',
-        totalTransactions: 189,
-        lastUpload: '2025-01-25'
-      },
-      {
-        id: '3',
-        name: 'DEF Retail Store',
-        email: 'info@defretail.com',
-        phone: '(555) 456-7890',
-        industry: 'Retail',
-        dateAdded: '2024-03-10',
-        lastActivity: '2025-01-20',
-        status: 'pending',
-        totalTransactions: 0
-      },
-      {
-        id: '4',
-        name: 'GHI Tech Solutions',
-        email: 'support@ghitech.com',
-        industry: 'Technology',
-        dateAdded: '2024-04-05',
-        lastActivity: '2025-01-24',
-        status: 'active',
-        totalTransactions: 312,
-        lastUpload: '2025-01-24'
-      },
-      {
-        id: '5',
-        name: 'JKL Construction',
-        email: 'office@jklconstruction.com',
-        phone: '(555) 321-0987',
-        industry: 'Construction',
-        dateAdded: '2024-05-12',
-        lastActivity: '2025-01-22',
-        status: 'inactive',
-        totalTransactions: 156
-      }
-    ]
-    setClients(mockClients)
+    loadClients()
   }, [])
+
+  const loadClients = async () => {
+    try {
+      const response = await fetch('/api/bookkeeper/clients')
+      const data = await response.json()
+      
+      if (data.success && data.clients) {
+        const realClients = data.clients.map((client: any) => ({
+          id: client.id,
+          name: client.name,
+          email: client.email || '',
+          phone: client.phone || '',
+          industry: client.industry || '',
+          dateAdded: client.created_at ? client.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
+          lastActivity: client.last_upload ? client.last_upload.split('T')[0] : client.updated_at?.split('T')[0] || new Date().toISOString().split('T')[0],
+          status: client.status || 'pending',
+          totalTransactions: client.total_transactions || 0,
+          lastUpload: client.last_upload
+        }))
+        setClients(realClients)
+      } else {
+        setClients([]) // No mock data - show empty state
+      }
+    } catch (error) {
+      console.error('Error loading clients:', error)
+      setClients([]) // No mock data - show empty state
+    }
+  }
 
   const filteredClients = clients.filter(client =>
     client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -117,19 +86,32 @@ export default function ClientsPage() {
     (client.industry && client.industry.toLowerCase().includes(searchTerm.toLowerCase()))
   )
 
-  const handleAddClient = () => {
+  const handleAddClient = async () => {
     if (newClient.name && newClient.email) {
-      const client: Client = {
-        id: Date.now().toString(),
-        ...newClient,
-        dateAdded: new Date().toISOString().split('T')[0],
-        lastActivity: new Date().toISOString().split('T')[0],
-        status: 'pending',
-        totalTransactions: 0
+      try {
+        const response = await fetch('/api/bookkeeper/clients', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: newClient.name,
+            email: newClient.email,
+            phone: newClient.phone,
+            industry: newClient.industry,
+            status: 'pending'
+          })
+        })
+
+        if (response.ok) {
+          // Refresh the client list
+          await loadClients()
+          setNewClient({ name: '', email: '', phone: '', address: '', industry: '' })
+          setShowAddForm(false)
+        } else {
+          console.error('Failed to add client')
+        }
+      } catch (error) {
+        console.error('Error adding client:', error)
       }
-      setClients([...clients, client])
-      setNewClient({ name: '', email: '', phone: '', address: '', industry: '' })
-      setShowAddForm(false)
     }
   }
 

@@ -130,52 +130,16 @@ Jimmie`,
       const data = await response.json()
       if (data.success) {
         setMessages(data.messages)
+      } else {
+        setMessages([]) // No mock data - show empty state
       }
     } catch (error) {
       console.error('Failed to load messages:', error)
-      // Load mock data for demo
-      setMessages(mockMessages)
+      setMessages([]) // No mock data - show empty state
     }
   }
 
-  const mockMessages: ClientMessage[] = [
-    {
-      id: '1',
-      clientName: 'John Smith',
-      clientEmail: 'john@smithconsulting.com',
-      businessName: 'Smith Consulting LLC',
-      subject: 'Question about expense categorization',
-      message: 'Hi Jimmie, I have a question about how to categorize some business meals. Should they go under meals & entertainment or business expenses?',
-      timestamp: '2024-01-15T10:30:00Z',
-      status: 'unread',
-      priority: 'medium',
-      category: 'general'
-    },
-    {
-      id: '2',
-      clientName: 'Sarah Johnson',
-      clientEmail: 'sarah@techstart.com',
-      businessName: 'TechStart Inc',
-      subject: 'Monthly reports ready for review',
-      message: 'The financial statements look great this month! Revenue is up 15%. Can we schedule a call to discuss expansion planning?',
-      timestamp: '2024-01-14T15:45:00Z',
-      status: 'read',
-      priority: 'high',
-      category: 'general'
-    },
-    {
-      id: '3',
-      clientName: 'Mike Davis',
-      clientEmail: 'mike@davislaw.com',
-      businessName: 'Davis Law Firm',
-      subject: 'Missing bank statement',
-      message: 'I can\'t find the December statement for our trust account. Can you help me request it from the bank?',
-      timestamp: '2024-01-13T09:15:00Z',
-      status: 'replied',
-      priority: 'low',
-      category: 'documents'
-    }
-  ]
+  // NO MORE MOCK DATA - ALL REAL!
 
   const handleSendReply = async () => {
     if (!selectedMessage || !replyText.trim()) return

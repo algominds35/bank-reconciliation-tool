@@ -63,9 +63,12 @@ export default function AutomatedReminders() {
       const data = await response.json()
       if (data.success) {
         setTemplates(data.templates)
+      } else {
+        setTemplates([]) // No mock data - show empty state
       }
     } catch (error) {
       console.error('Failed to load templates:', error)
+      setTemplates([]) // No mock data - show empty state
     }
   }
 
@@ -75,13 +78,17 @@ export default function AutomatedReminders() {
       const data = await response.json()
       if (data.success) {
         setScheduledReminders(data.reminders)
+      } else {
+        setScheduledReminders([]) // No mock data - show empty state
       }
     } catch (error) {
       console.error('Failed to load scheduled reminders:', error)
+      setScheduledReminders([]) // No mock data - show empty state
     }
   }
 
-  const defaultTemplates: ReminderTemplate[] = [
+  // ALL TEMPLATES NOW COME FROM DATABASE - NO MORE HARDCODED DATA!
+  const removedDefaultTemplates = [
     {
       id: 'welcome-day1',
       name: 'Welcome Email (Day 1)',
@@ -294,12 +301,7 @@ ReconcileBook Team`,
     return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800'
   }
 
-  // Initialize with default templates if none exist
-  useEffect(() => {
-    if (templates.length === 0) {
-      setTemplates(defaultTemplates)
-    }
-  }, [templates.length])
+  // NO MORE DEFAULT TEMPLATES - ALL REAL DATA FROM DATABASE!
 
   return (
     <div className="space-y-6">
