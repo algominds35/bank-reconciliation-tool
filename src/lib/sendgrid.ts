@@ -73,6 +73,46 @@ class SendGridService {
     }
   }
 
+  public async sendEmail(emailData: {
+    to: string
+    subject: string
+    html: string
+    text: string
+  }): Promise<boolean> {
+    try {
+      if (!this.isInitialized) {
+        this.initialize()
+      }
+
+      const msg = {
+        to: emailData.to,
+        from: {
+          email: process.env.SENDGRID_FROM_EMAIL || 'noreply@reconcilebook.com',
+          name: 'ReconcileBook Pro'
+        },
+        subject: emailData.subject,
+        html: emailData.html,
+        text: emailData.text,
+        trackingSettings: {
+          clickTracking: {
+            enable: true
+          },
+          openTracking: {
+            enable: true
+          }
+        }
+      }
+
+      await sgMail.send(msg)
+      console.log(`✅ Email sent to ${emailData.to}`)
+      return true
+
+    } catch (error) {
+      console.error('❌ Failed to send email:', error)
+      return false
+    }
+  }
+
   private getEmailTemplate(
     data: PaymentReminderData,
     phase: 'friendly' | 'reminder' | 'overdue' | 'final'
