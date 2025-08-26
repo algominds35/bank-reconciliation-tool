@@ -335,8 +335,13 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
                   <Button 
                     className="w-full bg-blue-600 hover:bg-blue-700"
                     onClick={() => {
+                      console.log('BLUE BUTTON CLICKED!', uploadedFiles)
+                      alert('BLUE BUTTON WORKS! Click OK to see file details.')
+                      
                       // Process the uploaded files for reconciliation
                       const completedFilesList = uploadedFiles.filter(f => f.status === 'completed')
+                      console.log('Completed files:', completedFilesList)
+                      
                       if (completedFilesList.length > 0) {
                         alert(`Processing ${completedFilesList.length} files for reconciliation!\n\nFiles:\n${completedFilesList.map(f => `• ${f.name} (${f.extractedTransactions || 0} transactions)`).join('\n')}\n\nThis would trigger the bulk reconciliation process in production.`)
                         
@@ -347,6 +352,8 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
                         if (onFilesUploaded) {
                           onFilesUploaded(completedFilesList)
                         }
+                      } else {
+                        alert('No completed files found. Files status: ' + uploadedFiles.map(f => f.name + ' = ' + f.status).join(', '))
                       }
                     }}
                   >

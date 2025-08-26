@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     // For now, we'll return all clients for the bookkeeper
     
     const { data: clients, error } = await supabase
-      .from('bookkeeper_clients')
+      .from('clients')
       .select('*')
       .order('created_at', { ascending: false })
 
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     const clientData = await request.json()
     
     const { data: client, error } = await supabase
-      .from('bookkeeper_clients')
+      .from('clients')
       .insert([{
         name: clientData.name,
         contact_person: clientData.contactPerson,
