@@ -226,7 +226,7 @@ export default function BulkReconciliation({ clients, onReconciliationComplete }
                         {client.name}
                       </p>
                       <p className="text-xs text-gray-500">
-                        {client.bankTransactions.length} bank transactions
+                        {client.bankTransactions?.length || 0} bank transactions
                       </p>
                     </div>
                   </div>
