@@ -175,10 +175,10 @@ Jimmie`,
 Your Q{QUARTER} financial review is complete! Here's a quick summary:
 
 📊 Key Metrics:
-• Revenue: ${REVENUE}
-• Expenses: ${EXPENSES}  
-• Net Profit: ${PROFIT}
-• Cash Position: ${CASH}
+• Revenue: {REVENUE}
+• Expenses: {EXPENSES}  
+• Net Profit: {PROFIT}
+• Cash Position: {CASH}
 
 📈 Insights:
 • Revenue trend vs last quarter
