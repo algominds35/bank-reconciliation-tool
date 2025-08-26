@@ -35,6 +35,7 @@ interface PDFUploadProps {
 export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: PDFUploadProps) {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [isProcessing, setIsProcessing] = useState(false)
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const newFiles: UploadedFile[] = acceptedFiles.map((file, index) => ({
@@ -343,22 +344,39 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
                       console.log('Completed files:', completedFilesList)
                       
                       if (completedFilesList.length > 0) {
-                        alert(`Processing ${completedFilesList.length} files for reconciliation!\n\nFiles:\n${completedFilesList.map(f => `• ${f.name} (${f.extractedTransactions || 0} transactions)`).join('\n')}\n\nThis would trigger the bulk reconciliation process in production.`)
+                        // Show success message
+                        setShowSuccessMessage(true)
                         
-                        // In production, this would:
-                        // 1. Navigate to bulk reconciliation tab
-                        // 2. Auto-start reconciliation process
-                        // 3. Show processing status
+                        // Trigger callback to refresh dashboard
                         if (onFilesUploaded) {
                           onFilesUploaded(completedFilesList)
                         }
-                      } else {
-                        alert('No completed files found. Files status: ' + uploadedFiles.map(f => f.name + ' = ' + f.status).join(', '))
+                        
+                        // Hide success message after 5 seconds
+                        setTimeout(() => {
+                          setShowSuccessMessage(false)
+                        }, 5000)
                       }
                     }}
                   >
                     Process {completedFiles} Files for Reconciliation
                   </Button>
+                </div>
+              )}
+
+              {/* Professional Success Message */}
+              {showSuccessMessage && (
+                <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                    <div>
+                      <h4 className="text-green-900 font-medium">Files Successfully Processed</h4>
+                      <p className="text-green-700 text-sm mt-1">
+                        {completedFiles} bank statement{completedFiles > 1 ? 's' : ''} ready for reconciliation. 
+                        You can now proceed to the <strong>Bulk Reconciliation</strong> tab to process these transactions.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
