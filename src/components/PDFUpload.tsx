@@ -1,0 +1,273 @@
+'use client'
+
+import { useState, useCallback } from 'react'
+import { useDropzone } from 'react-dropzone'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { 
+  Upload, 
+  FileText, 
+  CheckCircle, 
+  AlertTriangle, 
+  X,
+  Eye
+} from 'lucide-react'
+
+interface UploadedFile {
+  id: string
+  name: string
+  size: number
+  clientName?: string
+  status: 'uploading' | 'processing' | 'completed' | 'error'
+  progress: number
+  extractedTransactions?: number
+  errors?: string[]
+}
+
+interface PDFUploadProps {
+  onFilesUploaded?: (files: UploadedFile[]) => void
+  maxFiles?: number
+  clientId?: string
+}
+
+export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: PDFUploadProps) {
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
+  const [isProcessing, setIsProcessing] = useState(false)
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    const newFiles: UploadedFile[] = acceptedFiles.map((file, index) => ({
+      id: `file-${Date.now()}-${index}`,
+      name: file.name,
+      size: file.size,
+      status: 'uploading',
+      progress: 0
+    }))
+
+    setUploadedFiles(prev => [...prev, ...newFiles])
+
+    // Simulate file processing
+    newFiles.forEach((file, index) => {
+      simulateFileProcessing(file.id, index * 500)
+    })
+
+    if (onFilesUploaded) {
+      onFilesUploaded(newFiles)
+    }
+  }, [onFilesUploaded])
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      'application/pdf': ['.pdf']
+    },
+    maxFiles,
+    disabled: isProcessing
+  })
+
+  const simulateFileProcessing = (fileId: string, delay: number = 0) => {
+    setTimeout(() => {
+      // Simulate upload progress
+      const progressInterval = setInterval(() => {
+        setUploadedFiles(prev => 
+          prev.map(file => {
+            if (file.id === fileId && file.status === 'uploading') {
+              const newProgress = Math.min(file.progress + 10, 100)
+              if (newProgress === 100) {
+                clearInterval(progressInterval)
+                // Start processing
+                setTimeout(() => {
+                  setUploadedFiles(prev2 => 
+                    prev2.map(f => 
+                      f.id === fileId 
+                        ? { ...f, status: 'processing', progress: 0 }
+                        : f
+                    )
+                  )
+                  
+                  // Simulate AI processing
+                  simulateAIProcessing(fileId)
+                }, 500)
+              }
+              return { ...file, progress: newProgress }
+            }
+            return file
+          })
+        )
+      }, 200)
+    }, delay)
+  }
+
+  const simulateAIProcessing = (fileId: string) => {
+    const processingInterval = setInterval(() => {
+      setUploadedFiles(prev => 
+        prev.map(file => {
+          if (file.id === fileId && file.status === 'processing') {
+            const newProgress = Math.min(file.progress + 15, 100)
+            if (newProgress === 100) {
+              clearInterval(processingInterval)
+              // Complete processing with mock results
+              const mockTransactions = Math.floor(Math.random() * 50) + 10
+              return { 
+                ...file, 
+                status: 'completed', 
+                progress: 100,
+                extractedTransactions: mockTransactions
+              }
+            }
+            return { ...file, progress: newProgress }
+          }
+          return file
+        })
+      )
+    }, 300)
+  }
+
+  const removeFile = (fileId: string) => {
+    setUploadedFiles(prev => prev.filter(file => file.id !== fileId))
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'bg-green-100 text-green-800'
+      case 'processing': return 'bg-blue-100 text-blue-800'
+      case 'uploading': return 'bg-yellow-100 text-yellow-800'
+      case 'error': return 'bg-red-100 text-red-800'
+      default: return 'bg-gray-100 text-gray-800'
+    }
+  }
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'completed': return <CheckCircle className="h-4 w-4" />
+      case 'processing': return <Eye className="h-4 w-4" />
+      case 'uploading': return <Upload className="h-4 w-4" />
+      case 'error': return <AlertTriangle className="h-4 w-4" />
+      default: return <FileText className="h-4 w-4" />
+    }
+  }
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes'
+    const k = 1024
+    const sizes = ['Bytes', 'KB', 'MB', 'GB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+  }
+
+  const completedFiles = uploadedFiles.filter(f => f.status === 'completed').length
+  const totalTransactions = uploadedFiles.reduce((sum, f) => sum + (f.extractedTransactions || 0), 0)
+
+  return (
+    <div className="space-y-6">
+      {/* Upload Zone */}
+      <Card>
+        <CardHeader>
+          <CardTitle>PDF Bank Statement Upload</CardTitle>
+          <CardDescription>
+            Upload multiple PDF bank statements for automatic transaction extraction
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div
+            {...getRootProps()}
+            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
+              ${isDragActive 
+                ? 'border-blue-400 bg-blue-50' 
+                : 'border-gray-300 hover:border-gray-400'
+              }
+              ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}
+            `}
+          >
+            <input {...getInputProps()} />
+            <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            {isDragActive ? (
+              <p className="text-lg text-blue-600">Drop the PDF files here...</p>
+            ) : (
+              <div>
+                <p className="text-lg text-gray-600 mb-2">
+                  Drag & drop PDF bank statements here, or click to select
+                </p>
+                <p className="text-sm text-gray-500">
+                  Supports multiple files • Max {maxFiles} files • PDF only
+                </p>
+              </div>
+            )}
+          </div>
+
+          {uploadedFiles.length > 0 && (
+            <div className="mt-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium">Processing Status</h3>
+                <div className="flex items-center space-x-4 text-sm text-gray-600">
+                  <span>{completedFiles} of {uploadedFiles.length} completed</span>
+                  {totalTransactions > 0 && (
+                    <span>• {totalTransactions} transactions extracted</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {uploadedFiles.map((file) => (
+                  <div key={file.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center space-x-3 flex-1">
+                      {getStatusIcon(file.status)}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {file.name}
+                        </p>
+                        <div className="flex items-center space-x-2 text-xs text-gray-500">
+                          <span>{formatFileSize(file.size)}</span>
+                          {file.extractedTransactions && (
+                            <span>• {file.extractedTransactions} transactions</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-3">
+                      {(file.status === 'uploading' || file.status === 'processing') && (
+                        <div className="w-20">
+                          <Progress value={file.progress} className="h-2" />
+                        </div>
+                      )}
+                      
+                      <Badge className={getStatusColor(file.status)}>
+                        {file.status}
+                      </Badge>
+
+                      {file.status === 'completed' && (
+                        <Button variant="outline" size="sm">
+                          <Eye className="h-4 w-4 mr-1" />
+                          Review
+                        </Button>
+                      )}
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeFile(file.id)}
+                        className="text-gray-400 hover:text-red-600"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {completedFiles > 0 && (
+                <div className="mt-6 pt-4 border-t border-gray-200">
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    Process {completedFiles} Files for Reconciliation
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
