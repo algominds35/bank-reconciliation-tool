@@ -89,13 +89,13 @@ async function sendNotificationEmails(clientData: any) {
       text: clientEmailTemplate.text
     })
 
-    // Send notification to Jimmie
-    const jimmieEmailTemplate = generateJimmieNotificationEmail(clientData)
+    // Send notification to admin
+    const adminEmailTemplate = generateAdminNotificationEmail(clientData)
     await sendGrid.sendEmail({
-      to: 'jimmie@j2bookkeeping.com',
-      subject: jimmieEmailTemplate.subject,
-      html: jimmieEmailTemplate.html,
-      text: jimmieEmailTemplate.text
+      to: 'alex@usealgomind.com',
+      subject: adminEmailTemplate.subject,
+      html: adminEmailTemplate.html,
+      text: adminEmailTemplate.text
     })
 
   } catch (error) {
@@ -196,7 +196,7 @@ Questions? Reply to this email or call (830) 590-1323
   }
 }
 
-function generateJimmieNotificationEmail(clientData: any) {
+function generateAdminNotificationEmail(clientData: any) {
   return {
     subject: `🚀 New Client Intake: ${clientData.businessName}`,
     html: `

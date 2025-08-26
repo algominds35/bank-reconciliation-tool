@@ -378,7 +378,7 @@ export default function BookkeeperDashboard() {
               />
               
               <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                <h4 className="font-medium text-blue-900 mb-2">Pro Tip for Jimmie:</h4>
+                <h4 className="font-medium text-blue-900 mb-2">How It Works:</h4>
                 <ul className="text-sm text-blue-800 space-y-1">
                   <li>• Upload multiple PDFs at once - the system handles them in parallel</li>
                   <li>• AI extracts transactions with 95% accuracy</li>

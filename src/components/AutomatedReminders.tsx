@@ -85,10 +85,10 @@ export default function AutomatedReminders() {
     {
       id: 'welcome-day1',
       name: 'Welcome Email (Day 1)',
-      subject: 'Welcome to J2 Bookkeeping - Next Steps',
+      subject: 'Welcome to ReconcileBook - Next Steps',
       message: `Hi {CLIENT_NAME},
 
-Welcome to J2 Bookkeeping! We're excited to help streamline your financial operations.
+Welcome to ReconcileBook! We're excited to help streamline your financial operations.
 
 Here's what happens next:
 • We'll review your business requirements
@@ -104,8 +104,7 @@ Please have the following ready for our call:
 We'll be in touch soon!
 
 Best regards,
-Jimmie Williams
-J2 Bookkeeping`,
+ReconcileBook Team`,
       triggerType: 'days_after',
       triggerValue: 1,
       isActive: true,
@@ -127,10 +126,10 @@ Still needed:
 
 Having these documents will help us get your books up to date quickly and accurately.
 
-Could you please upload these to your secure client portal or email them to me by {DUE_DATE}?
+Could you please upload these to your secure client portal or email them to us by {DUE_DATE}?
 
 Thanks!
-Jimmie`,
+ReconcileBook Team`,
       triggerType: 'days_after',
       triggerValue: 3,
       isActive: true,
@@ -160,7 +159,7 @@ Questions for you:
 Let me know if you'd like to schedule a quick call to review your numbers.
 
 Best,
-Jimmie`,
+ReconcileBook Team`,
       triggerType: 'monthly',
       triggerValue: 1,
       isActive: true,
@@ -191,7 +190,7 @@ I've prepared your complete quarterly report with detailed P&L, Balance Sheet, a
 Would you like to schedule a 30-minute review call to go through these numbers and discuss strategy for next quarter?
 
 Best regards,
-Jimmie`,
+ReconcileBook Team`,
       triggerType: 'quarterly',
       triggerValue: 1,
       isActive: true,
@@ -217,7 +216,7 @@ Would a quick 15-minute call help clarify next steps?
 I'm here when you're ready.
 
 Best,
-Jimmie`,
+ReconcileBook Team`,
       triggerType: 'days_after',
       triggerValue: 7,
       isActive: true,

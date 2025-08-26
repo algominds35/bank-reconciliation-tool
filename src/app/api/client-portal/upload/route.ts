@@ -64,7 +64,7 @@ async function notifyBookkeeperOfUpload(clientEmail: string, filename: string, c
     const sendGrid = SendGridService.getInstance()
     
     await sendGrid.sendEmail({
-      to: 'jimmie@j2bookkeeping.com',
+      to: 'alex@usealgomind.com',
       subject: `📄 New Document Upload from ${clientEmail}`,
       html: `
         <h2>New Document Upload</h2>

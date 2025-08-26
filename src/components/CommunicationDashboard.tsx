@@ -62,7 +62,7 @@ Thank you for sending the documents! I've received them and will review everythi
 I'll let you know if I need any additional information.
 
 Best regards,
-Jimmie`,
+ReconcileBook Team`,
       category: 'documents'
     },
     {
@@ -80,7 +80,7 @@ Your monthly reconciliation is complete! Here's a quick summary:
 Your reports are attached. Let me know if you have any questions!
 
 Best,
-Jimmie`,
+ReconcileBook Team`,
       category: 'general'
     },
     {
@@ -97,7 +97,7 @@ I'm working on your books and need a few additional documents to complete the re
 Could you please send these when you have a moment?
 
 Thanks!
-Jimmie`,
+ReconcileBook Team`,
       category: 'documents'
     },
     {

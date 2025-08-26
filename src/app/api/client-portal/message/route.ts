@@ -56,7 +56,7 @@ async function forwardMessageToBookkeeper(clientEmail: string, clientName: strin
     const sendGrid = SendGridService.getInstance()
     
     await sendGrid.sendEmail({
-      to: 'jimmie@j2bookkeeping.com',
+      to: 'alex@usealgomind.com',
       subject: `💬 New Message from ${clientName} (${businessName})`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
