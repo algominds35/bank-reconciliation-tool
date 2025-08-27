@@ -458,7 +458,10 @@ ReconcileBook Team`,
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setEditingTemplate(template)}
+                      onClick={() => {
+                        setEditingTemplate(template)
+                        setShowTemplateForm(true)
+                      }}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -508,6 +511,144 @@ ReconcileBook Team`,
               </Card>
             ))
           )}
+        </div>
+      )}
+
+      {/* Template Creation/Edit Form Modal */}
+      {showTemplateForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">
+                {editingTemplate ? 'Edit Template' : 'Create New Template'}
+              </h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setShowTemplateForm(false)
+                  setEditingTemplate(null)
+                }}
+              >
+                ✕
+              </Button>
+            </div>
+
+            <form onSubmit={(e) => {
+              e.preventDefault()
+              const formData = new FormData(e.target as HTMLFormElement)
+              const template = {
+                id: editingTemplate?.id || `template-${Date.now()}`,
+                name: formData.get('name') as string,
+                subject: formData.get('subject') as string,
+                message: formData.get('message') as string,
+                triggerType: formData.get('triggerType') as 'days_after' | 'monthly' | 'quarterly',
+                triggerValue: parseInt(formData.get('triggerValue') as string),
+                isActive: true,
+                category: formData.get('category') as 'onboarding' | 'documents' | 'follow_up' | 'reporting'
+              }
+              handleSaveTemplate(template)
+            }} className="space-y-4">
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Template Name</label>
+                <input
+                  name="name"
+                  type="text"
+                  required
+                  defaultValue={editingTemplate?.name || ''}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                  placeholder="e.g., Welcome Email"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Email Subject</label>
+                <input
+                  name="subject"
+                  type="text"
+                  required
+                  defaultValue={editingTemplate?.subject || ''}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                  placeholder="e.g., Welcome to ReconcileBook - {CLIENT_NAME}"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Category</label>
+                <select
+                  name="category"
+                  required
+                  defaultValue={editingTemplate?.category || 'onboarding'}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                >
+                  <option value="onboarding">Onboarding</option>
+                  <option value="documents">Documents</option>
+                  <option value="follow_up">Follow Up</option>
+                  <option value="reporting">Reporting</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Trigger Type</label>
+                  <select
+                    name="triggerType"
+                    required
+                    defaultValue={editingTemplate?.triggerType || 'days_after'}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2"
+                  >
+                    <option value="days_after">Days After</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Trigger Value</label>
+                  <input
+                    name="triggerValue"
+                    type="number"
+                    required
+                    min="1"
+                    defaultValue={editingTemplate?.triggerValue || 1}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2"
+                    placeholder="1"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Email Message</label>
+                <textarea
+                  name="message"
+                  required
+                  rows={8}
+                  defaultValue={editingTemplate?.message || ''}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                  placeholder="Hi {CLIENT_NAME},&#10;&#10;Your message here...&#10;&#10;Best regards,&#10;ReconcileBook Team"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Use {`{CLIENT_NAME}`} for dynamic client names
+                </p>
+              </div>
+
+              <div className="flex justify-end space-x-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setShowTemplateForm(false)
+                    setEditingTemplate(null)
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+                  {editingTemplate ? 'Update Template' : 'Create Template'}
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>
