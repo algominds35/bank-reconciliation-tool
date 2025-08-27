@@ -255,7 +255,43 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
                       <Eye className="h-4 w-4 mr-1" />
                       View
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={async () => {
+                        try {
+                          console.log(`📧 Sending report for ${report.clientName}`)
+                          
+                          // Call the generate-reports API to send the email
+                          const response = await fetch('/api/generate-reports', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              reconciliationJobs: [{
+                                clientId: report.clientId,
+                                clientName: report.clientName,
+                                summary: report.summary
+                              }],
+                              templateId: selectedTemplate,
+                              autoDeliver: true
+                            })
+                          })
+                          
+                          const result = await response.json()
+                          
+                          if (result.success) {
+                            alert(`✅ Report sent successfully to ${report.clientName}!`)
+                            console.log('✅ Email sent:', result)
+                          } else {
+                            alert(`❌ Failed to send report: ${result.error}`)
+                            console.error('❌ Email failed:', result)
+                          }
+                        } catch (error) {
+                          console.error('❌ Send error:', error)
+                          alert(`❌ Failed to send report: ${error}`)
+                        }
+                      }}
+                    >
                       <Send className="h-4 w-4 mr-1" />
                       Send
                     </Button>
