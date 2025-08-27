@@ -55,6 +55,7 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
       await processFileWithAPI(file, fileId, clientId)
     }
 
+    // Call callback AFTER all files are processed
     if (onFilesUploaded) {
       onFilesUploaded(newFiles)
     }

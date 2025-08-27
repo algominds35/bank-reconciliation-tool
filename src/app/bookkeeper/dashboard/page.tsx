@@ -286,6 +286,16 @@ export default function BookkeeperDashboard() {
                   </Button>
 
                   {/* EMERGENCY DELETE BROKEN CLIENTS BUTTON */}
+                  <Button
+                    variant="outline"
+                    onClick={async () => {
+                      console.log('🔄 Manual refresh requested...')
+                      await loadClients()
+                      alert('✅ Client list refreshed!')
+                    }}
+                  >
+                    🔄 Refresh Clients
+                  </Button>
                   <Button 
                     variant="destructive"
                     onClick={async () => {
