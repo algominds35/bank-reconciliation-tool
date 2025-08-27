@@ -58,7 +58,13 @@ export async function POST(request: NextRequest) {
             status: 'ready',
             total_transactions: mockTransactions,
             unmatched_transactions: mockTransactions,
-            bank_transactions: [],
+            bank_transactions: Array.from({length: mockTransactions}, (_, i) => ({
+              id: `txn-${i+1}`,
+              date: new Date(2025, 0, Math.floor(Math.random() * 28) + 1).toISOString().split('T')[0],
+              description: ['Walmart Purchase', 'Gas Station', 'Office Supplies', 'Client Payment', 'Rent Payment'][Math.floor(Math.random() * 5)],
+              amount: -(Math.random() * 500 + 10),
+              type: 'debit'
+            })),
             last_upload: new Date().toISOString(),
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
