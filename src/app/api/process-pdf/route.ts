@@ -83,26 +83,38 @@ export async function POST(request: NextRequest) {
           .select()
           .single()
 
-        if (!clientError) {
-          console.log(`✅ Client created: ${client.name} with ${transactionCount} transactions`)
+        if (clientError) {
+          console.error('❌ Client creation failed:', clientError)
+          throw new Error(`Database error: ${clientError.message}`)
         }
+
+        console.log(`✅ Client created: ${client.name} with ${transactionCount} transactions`)
+        
+        return NextResponse.json({
+          success: true,
+          result: {
+            fileName: file.name,
+            bankName: bankName,
+            accountNumber: '****' + Math.floor(Math.random() * 9999).toString().padStart(4, '0'),
+            statementPeriod: 'January 1 - January 31, 2025',
+            transactions: [],
+            totalTransactions: transactionCount,
+            errors: ['Using fallback processing - PDF extracted successfully'],
+            clientId: client.id
+          }
+        })
+        
       } catch (clientError) {
-        console.error('Client creation failed:', clientError)
+        console.error('❌ Client creation failed:', clientError)
+        return NextResponse.json(
+          { 
+            success: false,
+            error: 'Failed to create client',
+            details: clientError instanceof Error ? clientError.message : 'Unknown error'
+          },
+          { status: 500 }
+        )
       }
-      
-      return NextResponse.json({
-        success: true,
-        result: {
-          fileName: file.name,
-          bankName: bankName,
-          accountNumber: '****' + Math.floor(Math.random() * 9999).toString().padStart(4, '0'),
-          statementPeriod: 'January 1 - January 31, 2025',
-          transactions: [],
-          totalTransactions: transactionCount,
-          errors: ['Using fallback processing - PDF extracted successfully'],
-          clientId: clientId || `client-${Date.now()}`
-        }
-      })
     }
     
   } catch (error) {
