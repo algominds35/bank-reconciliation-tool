@@ -52,44 +52,32 @@ export default function BookkeeperDashboard() {
   const [reconciliationResults, setReconciliationResults] = useState<any>(null)
 
   // Load real client data from API
-  useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        const response = await fetch('/api/bookkeeper/clients')
-        const data = await response.json()
+  const loadClients = async () => {
+    try {
+      const response = await fetch('/api/bookkeeper/clients')
+      const data = await response.json()
+      
+      if (data.success) {
+        const realClients = data.clients.map((client: any) => ({
+          id: client.id,
+          name: client.name,
+          lastUpload: client.last_upload,
+          status: client.status || 'pending',
+          unmatchedTransactions: client.unmatched_transactions || 0,
+          totalTransactions: client.total_transactions || 0,
+          bankTransactions: client.bank_transactions || [],
+          progress: 0
+        }))
         
-        if (data.success) {
-          const realClients = data.clients.map((client: any) => ({
-            id: client.id,
-            name: client.name,
-            lastUpload: client.last_upload,
-            status: client.status || 'pending',
-            unmatchedTransactions: client.unmatched_transactions || 0,
-            totalTransactions: client.total_transactions || 0,
-            bankTransactions: client.bank_transactions || [],
-            progress: 0
-          }))
-          
-          setClients(realClients)
-                         setStats({
-                 totalClients: realClients.length,
-                 pendingUploads: realClients.filter((c: any) => c.status === 'pending').length,
-                 completedToday: realClients.filter((c: any) => c.status === 'completed').length,
-                 totalTransactions: realClients.reduce((sum: number, c: any) => sum + c.totalTransactions, 0)
-               })
-        } else {
-          // If no real clients exist, show empty state but keep functionality working
-          setClients([])
-          setStats({
-            totalClients: 0,
-            pendingUploads: 0,
-            completedToday: 0,
-            totalTransactions: 0
-          })
-        }
-      } catch (error) {
-        console.error('Error fetching clients:', error)
-        // Show empty state on error
+        setClients(realClients)
+        setStats({
+          totalClients: realClients.length,
+          pendingUploads: realClients.filter((c: any) => c.status === 'pending').length,
+          completedToday: realClients.filter((c: any) => c.status === 'completed').length,
+          totalTransactions: realClients.reduce((sum: number, c: any) => sum + c.totalTransactions, 0)
+        })
+      } else {
+        // If no real clients exist, show empty state but keep functionality working
         setClients([])
         setStats({
           totalClients: 0,
@@ -98,9 +86,21 @@ export default function BookkeeperDashboard() {
           totalTransactions: 0
         })
       }
+    } catch (error) {
+      console.error('Error fetching clients:', error)
+      // Show empty state on error
+      setClients([])
+      setStats({
+        totalClients: 0,
+        pendingUploads: 0,
+        completedToday: 0,
+        totalTransactions: 0
+      })
     }
+  }
 
-    fetchClients()
+  useEffect(() => {
+    loadClients()
   }, [])
 
   const getStatusColor = (status: string) => {
