@@ -137,7 +137,9 @@ export default function ClientIntakePage() {
       if (response.ok) {
         setIsComplete(true)
       } else {
-        throw new Error('Failed to submit')
+        const errorData = await response.json()
+        console.error('Client intake API error:', errorData)
+        throw new Error(errorData.details || 'Failed to submit')
       }
     } catch (error) {
       console.error('Submission error:', error)
