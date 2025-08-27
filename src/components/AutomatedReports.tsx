@@ -357,19 +357,19 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
       )}
 
       {/* Generate Reports from Client Data */}
-      {(!reconciliationResults && clients.length > 0) && (
+      {(!reconciliationResults && clients && clients.length > 0) && (
         <Card>
           <CardContent className="p-6">
             <div className="text-center mb-6">
               <BarChart3 className="h-12 w-12 text-blue-500 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">Ready to Generate Reports</h3>
               <p className="text-gray-600 mb-4">
-                Found {clients.length} clients with {clients.reduce((sum, c) => sum + (c.totalTransactions || 0), 0)} total transactions
+                Found {clients?.length || 0} clients with {clients?.reduce((sum, c) => sum + (c.totalTransactions || 0), 0) || 0} total transactions
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              {clients.map((client, index) => (
+              {clients?.map((client, index) => (
                 <div key={index} className="bg-gray-50 p-4 rounded-lg">
                   <h4 className="font-medium text-gray-900">{client.name}</h4>
                   <p className="text-sm text-gray-600">{client.totalTransactions || 0} transactions</p>
@@ -386,7 +386,7 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
                   setIsGenerating(true)
                   try {
                     // Generate reports from client data
-                    const mockReports = clients.map(client => ({
+                    const mockReports = (clients || []).map(client => ({
                       clientId: client.id,
                       clientName: client.name,
                       summary: {
@@ -403,12 +403,12 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
                     setReports(mockReports)
                     
                     // Create summary report
-                    const totalTransactions = clients.reduce((sum, c) => sum + (c.totalTransactions || 0), 0)
+                    const totalTransactions = (clients || []).reduce((sum, c) => sum + (c.totalTransactions || 0), 0)
                     const summary = {
-                      totalClients: clients.length,
+                      totalClients: clients?.length || 0,
                       totalTransactions,
                       averageMatchRate: 85,
-                      totalProcessingTime: clients.length * 45 + Math.random() * 30,
+                      totalProcessingTime: (clients?.length || 0) * 45 + Math.random() * 30,
                       reportsGenerated: mockReports.length
                     }
                     setSummaryReport(summary)
@@ -435,7 +435,7 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
                 ) : (
                   <>
                     <FileText className="h-4 w-4 mr-2" />
-                    Generate Reports for {clients.length} Clients
+                    Generate Reports for {clients?.length || 0} Clients
                   </>
                 )}
               </Button>
@@ -445,7 +445,7 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
       )}
 
       {/* Help Section - Only show if no clients */}
-      {(!reconciliationResults && clients.length === 0) && (
+      {(!reconciliationResults && (!clients || clients.length === 0)) && (
         <Card>
           <CardContent className="p-6 text-center">
             <BarChart3 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
