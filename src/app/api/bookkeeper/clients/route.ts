@@ -52,17 +52,17 @@ export async function POST(request: NextRequest) {
       .from('clients')
       .insert([{
         name: clientData.name,
-        contact_person: clientData.contactPerson,
         email: clientData.email,
         phone: clientData.phone,
         industry: clientData.industry,
         status: clientData.status || 'active',
         notes: clientData.notes,
-        last_upload: null,
-        total_transactions: 0,
-        unmatched_transactions: 0,
-        bank_transactions: [],
-        created_at: new Date().toISOString()
+        last_upload: clientData.last_upload || null,
+        total_transactions: clientData.total_transactions || 0,
+        unmatched_transactions: clientData.unmatched_transactions || 0,
+        bank_transactions: clientData.bank_transactions || [],
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       }])
       .select()
       .single()
