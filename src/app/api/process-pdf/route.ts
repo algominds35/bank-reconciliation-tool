@@ -11,6 +11,8 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData()
     const file = formData.get('file') as File
     const clientId = formData.get('clientId') as string
+    const clientName = formData.get('clientName') as string
+    const clientEmail = formData.get('clientEmail') as string
     
     if (!file) {
       return NextResponse.json(
@@ -45,11 +47,14 @@ export async function POST(request: NextRequest) {
       
       // CREATE CLIENT WITH REALISTIC DATA
       try {
-        const clientName = file.name.replace('.pdf', '').replace(/[^a-zA-Z0-9\s]/g, '')
-        console.log(`🔄 Creating client: ${clientName} with ${transactionCount} transactions`)
+        const finalClientName = clientName || file.name.replace('.pdf', '').replace(/[^a-zA-Z0-9\s]/g, '')
+        const finalClientEmail = clientEmail || `client-${Date.now()}@example.com`
+        
+        console.log(`🔄 Creating client: ${finalClientName} (${finalClientEmail}) with ${transactionCount} transactions`)
         
         const clientData = {
-          name: clientName,
+          name: finalClientName,
+          email: finalClientEmail,
           status: 'ready',
           user_id: request.headers.get('user-id') || 'demo-user',
           total_transactions: transactionCount,

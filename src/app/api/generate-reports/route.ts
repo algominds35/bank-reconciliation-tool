@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { reportGenerator, defaultTemplates } from '@/lib/report-generator'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 import SendGridService from '@/lib/sendgrid'
 
 export async function POST(request: NextRequest) {
@@ -32,8 +38,14 @@ export async function POST(request: NextRequest) {
         try {
           const emailTemplate = reportGenerator.getEmailTemplate(report)
           
-          // In a real app, you'd get the client's email from the database
-          const clientEmail = `client-${report.clientId}@example.com`
+          // Get real client email from database
+          const { data: clientData } = await supabase
+            .from('clients')
+            .select('email, name')
+            .eq('id', report.clientId)
+            .single()
+          
+          const clientEmail = clientData?.email || `${report.clientName}@company.com`
           
           await sendGrid.sendEmail({
             to: clientEmail,
@@ -64,7 +76,7 @@ export async function POST(request: NextRequest) {
       try {
         const summaryHTML = reportGenerator.formatSummaryReportAsHTML(summaryReport)
         await sendGrid.sendEmail({
-          to: 'alex@usealgomind.com', // In real app, get from user session
+          to: 'jimmie@j2bookkeeping.com', // Jimmie gets summary reports
           subject: `📊 Bulk Reconciliation Complete - ${summaryReport.totalClients} Clients Processed`,
           html: summaryHTML,
           text: `Bulk reconciliation completed for ${summaryReport.totalClients} clients. Overall accuracy: ${summaryReport.overallAccuracy.toFixed(1)}%`

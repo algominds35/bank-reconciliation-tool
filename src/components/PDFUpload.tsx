@@ -32,10 +32,16 @@ interface PDFUploadProps {
   clientId?: string
 }
 
+interface ClientInfo {
+  name: string
+  email: string
+}
+
 export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: PDFUploadProps) {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [isProcessing, setIsProcessing] = useState(false)
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const [clientInfoMap, setClientInfoMap] = useState<Record<string, ClientInfo>>({})
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const newFiles: UploadedFile[] = acceptedFiles.map((file, index) => ({
@@ -89,6 +95,13 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
       formData.append('file', file)
       if (clientId) {
         formData.append('clientId', clientId)
+      }
+      
+      // Add client info if available
+      const clientInfo = clientInfoMap[fileId]
+      if (clientInfo) {
+        formData.append('clientName', clientInfo.name)
+        formData.append('clientEmail', clientInfo.email)
       }
 
       // Call API with user identification
