@@ -8,12 +8,13 @@ const supabase = createClient(
 
 export async function GET(request: NextRequest) {
   try {
-    // Get user from session (in real app, you'd validate the session)
-    // For now, we'll return all clients for the bookkeeper
+    // URGENT: Add user filtering for privacy
+    const userId = request.headers.get('user-id') || 'demo-user'
     
     const { data: clients, error } = await supabase
       .from('clients')
       .select('*')
+      .eq('user_id', userId)
       .order('created_at', { ascending: false })
 
     if (error) {

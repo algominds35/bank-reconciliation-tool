@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
             phone: '',
             industry: '',
             status: 'ready',
+            user_id: 'demo-user', // URGENT: Add user separation
             total_transactions: mockTransactions,
             unmatched_transactions: mockTransactions,
             bank_transactions: Array.from({length: mockTransactions}, (_, i) => ({
