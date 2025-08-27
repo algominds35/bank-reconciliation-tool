@@ -54,7 +54,11 @@ export default function BookkeeperDashboard() {
   // Load real client data from API
   const loadClients = async () => {
     try {
-      const response = await fetch('/api/bookkeeper/clients')
+      const response = await fetch('/api/bookkeeper/clients', {
+        headers: {
+          'user-id': 'demo-user' // TODO: Get from auth context
+        }
+      })
       const data = await response.json()
       
       if (data.success) {
@@ -438,7 +442,11 @@ export default function BookkeeperDashboard() {
                   console.log('Files uploaded:', files)
                   // Refresh client data after upload
                   try {
-                    const response = await fetch('/api/bookkeeper/clients')
+                    const response = await fetch('/api/bookkeeper/clients', {
+                      headers: {
+                        'user-id': 'demo-user'
+                      }
+                    })
                     const data = await response.json()
                     if (data.success) {
                       const realClients = data.clients.map((client: any) => ({

@@ -90,9 +90,12 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
         formData.append('clientId', clientId)
       }
 
-      // Call API
+      // Call API with user identification
       const response = await fetch('/api/process-pdf', {
         method: 'POST',
+        headers: {
+          'user-id': 'demo-user' // TODO: Get from auth context
+        },
         body: formData
       })
 
