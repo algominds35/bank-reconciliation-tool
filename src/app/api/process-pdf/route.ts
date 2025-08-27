@@ -52,9 +52,6 @@ export async function POST(request: NextRequest) {
           .upsert({
             id: clientId || `client-${Date.now()}`,
             name: clientName,
-            email: '',
-            phone: '',
-            industry: '',
             status: 'ready',
             user_id: request.headers.get('user-id') || 'demo-user',
             total_transactions: transactionCount,
