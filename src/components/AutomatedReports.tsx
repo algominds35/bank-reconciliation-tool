@@ -176,7 +176,7 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              {clients.map((client, index) => (
+              {clients?.map((client, index) => (
                 <div key={client.id || index} className="bg-gray-50 p-4 rounded-lg">
                   <h4 className="font-medium text-gray-900">{client.name || 'Unknown Client'}</h4>
                   <p className="text-sm text-gray-600">{client.totalTransactions || 0} transactions</p>
