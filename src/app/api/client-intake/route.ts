@@ -132,7 +132,7 @@ async function triggerWelcomeSequence(clientData: any) {
 
 function generateClientConfirmationEmail(clientData: any) {
   return {
-    subject: `Welcome to J2 Bookkeeping, ${clientData.businessName}!`,
+    subject: `Welcome to ReconcileBook Pro, ${clientData.businessName}!`,
     html: `
 <!DOCTYPE html>
 <html>
@@ -150,7 +150,7 @@ function generateClientConfirmationEmail(clientData: any) {
 <body>
     <div class="container">
         <div class="header">
-            <h1>Welcome to J2 Bookkeeping!</h1>
+            <h1>Welcome to ReconcileBook Pro!</h1>
         </div>
         
         <div class="content">
@@ -176,15 +176,15 @@ function generateClientConfirmationEmail(clientData: any) {
         </div>
         
         <div class="footer">
-            <p>J2 Bookkeeping - Professional Bookkeeping Services</p>
-            <p>Questions? Reply to this email or call (830) 590-1323</p>
+            <p>ReconcileBook Pro - AI-Powered Bank Reconciliation</p>
+            <p>Questions? Reply to this email or visit reconcilebook.com</p>
         </div>
     </div>
 </body>
 </html>
     `,
     text: `
-Welcome to J2 Bookkeeping, ${clientData.contactPerson}!
+Welcome to ReconcileBook Pro, ${clientData.contactPerson}!
 
 We've received your information for ${clientData.businessName} and are excited to help streamline your financial operations.
 
@@ -199,8 +199,8 @@ ${clientData.servicesNeeded.join('\n')}
 
 We'll contact you within 24 hours to schedule your consultation.
 
-J2 Bookkeeping - Professional Bookkeeping Services
-Questions? Reply to this email or call (830) 590-1323
+ReconcileBook Pro - AI-Powered Bank Reconciliation  
+Questions? Reply to this email or visit reconcilebook.com
     `
   }
 }
