@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       // Continue even if database fails
     }
 
-    // Notify Jimmie about new upload
+    // Notify bookkeeper about new upload
     await notifyBookkeeperOfUpload(clientEmail, file.name, category)
 
     return NextResponse.json({

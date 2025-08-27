@@ -8,10 +8,10 @@ export async function POST(request: NextRequest) {
     // Get template (for now using hardcoded templates, in real app would fetch from DB)
     const templates = {
       'welcome-day1': {
-        subject: 'Welcome to J2 Bookkeeping - Next Steps',
+        subject: 'Welcome to ReconcileBook Pro - Next Steps',
         message: `Hi Test Client,
 
-Welcome to J2 Bookkeeping! We're excited to help streamline your financial operations.
+Welcome to ReconcileBook Pro! We're excited to help streamline your financial operations.
 
 Here's what happens next:
 • We'll review your business requirements
@@ -27,8 +27,8 @@ Please have the following ready for our call:
 We'll be in touch soon!
 
 Best regards,
-Jimmie Williams
-J2 Bookkeeping
+ReconcileBook Pro Team
+ReconcileBook Pro
 
 ---
 This is a test email from the automated reminder system.`
@@ -50,7 +50,7 @@ Having these documents will help us get your books up to date quickly and accura
 Could you please upload these to your secure client portal or email them to me by next Friday?
 
 Thanks!
-Jimmie
+ReconcileBook Team
 
 ---
 This is a test email from the automated reminder system.`
@@ -77,7 +77,7 @@ Questions for you:
 Let me know if you'd like to schedule a quick call to review your numbers.
 
 Best,
-Jimmie
+ReconcileBook Team
 
 ---
 This is a test email from the automated reminder system.`

@@ -115,7 +115,7 @@ I'm available:
 Which works best for you? The call should take about 30 minutes.
 
 Best regards,
-Jimmie`,
+ReconcileBook Team`,
       category: 'general'
     }
   ]

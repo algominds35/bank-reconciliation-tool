@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       // Continue even if database fails
     }
 
-    // Send message to Jimmie
+    // Send message to bookkeeper
     await forwardMessageToBookkeeper(clientEmail, clientName, businessName, message)
 
     // Send confirmation to client
@@ -114,7 +114,7 @@ async function sendConfirmationToClient(clientEmail: string, clientName: string)
     
     await sendGrid.sendEmail({
       to: clientEmail,
-      subject: 'Message Received - J2 Bookkeeping',
+      subject: 'Message Received - ReconcileBook Pro',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: #059669; color: white; padding: 20px; text-align: center;">
@@ -124,12 +124,12 @@ async function sendConfirmationToClient(clientEmail: string, clientName: string)
           <div style="padding: 20px;">
             <h2>Hi ${clientName},</h2>
             
-            <p>Thank you for your message! We've received it and Jimmie will respond within 24 hours.</p>
+            <p>Thank you for your message! We've received it and our team will respond within 24 hours.</p>
             
             <div style="background: #ecfdf5; padding: 15px; border-radius: 8px; border-left: 4px solid #059669;">
               <h3 style="margin-top: 0;">What happens next:</h3>
               <ul style="margin: 0;">
-                <li>Your message has been forwarded to Jimmie Williams</li>
+                <li>Your message has been forwarded to our team</li>
                 <li>You'll receive a response within 24 hours</li>
                 <li>For urgent matters, call (830) 590-1323</li>
               </ul>
@@ -138,11 +138,11 @@ async function sendConfirmationToClient(clientEmail: string, clientName: string)
             <p>You can continue to upload documents or send additional messages through your secure client portal.</p>
             
             <p>Best regards,<br/>
-            J2 Bookkeeping Team</p>
+            ReconcileBook Pro Team</p>
           </div>
           
           <div style="background: #374151; color: white; padding: 20px; text-align: center;">
-            <p>J2 Bookkeeping - Professional Bookkeeping Services</p>
+            <p>ReconcileBook Pro - AI-Powered Bank Reconciliation</p>
             <p>Questions? Call (830) 590-1323</p>
           </div>
         </div>
@@ -150,19 +150,19 @@ async function sendConfirmationToClient(clientEmail: string, clientName: string)
       text: `
 Hi ${clientName},
 
-Thank you for your message! We've received it and Jimmie will respond within 24 hours.
+Thank you for your message! We've received it and our team will respond within 24 hours.
 
 What happens next:
-• Your message has been forwarded to Jimmie Williams
+• Your message has been forwarded to our team
 • You'll receive a response within 24 hours
 • For urgent matters, call (830) 590-1323
 
 You can continue to upload documents or send additional messages through your secure client portal.
 
 Best regards,
-J2 Bookkeeping Team
+ReconcileBook Pro Team
 
-J2 Bookkeeping - Professional Bookkeeping Services
+ReconcileBook Pro - AI-Powered Bank Reconciliation
 Questions? Call (830) 590-1323
       `
     })

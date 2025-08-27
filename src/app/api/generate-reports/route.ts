@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
       try {
         const summaryHTML = reportGenerator.formatSummaryReportAsHTML(summaryReport)
         await sendGrid.sendEmail({
-          to: 'jimmie@bookkeeper.com', // In real app, get from user session
+          to: 'alex@usealgomind.com', // In real app, get from user session
           subject: `📊 Bulk Reconciliation Complete - ${summaryReport.totalClients} Clients Processed`,
           html: summaryHTML,
           text: `Bulk reconciliation completed for ${summaryReport.totalClients} clients. Overall accuracy: ${summaryReport.overallAccuracy.toFixed(1)}%`
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
           clientId: 'bookkeeper-summary',
           clientName: 'Bookkeeper Summary',
           status: 'delivered',
-          email: 'jimmie@bookkeeper.com'
+          email: 'alex@usealgomind.com'
         })
       } catch (error) {
         console.error('Failed to deliver summary report:', error)

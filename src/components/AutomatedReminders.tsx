@@ -270,7 +270,7 @@ ReconcileBook Team`,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           templateId,
-          testEmail: 'jimmie@j2bookkeeping.com'
+          testEmail: 'alex@usealgomind.com'
         })
       })
 

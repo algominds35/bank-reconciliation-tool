@@ -45,7 +45,7 @@ export default function ClientPortalPage() {
     name: 'John Smith',
     email: 'john@business.com',
     businessName: 'Smith Consulting LLC',
-    accountManager: 'Jimmie Williams'
+    accountManager: 'ReconcileBook Team'
   })
 
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
