@@ -10,6 +10,7 @@ import PDFUpload from '@/components/PDFUpload'
 import AutomatedReports from '@/components/AutomatedReports'
 import AutomatedReminders from '@/components/AutomatedReminders'
 import CommunicationDashboard from '@/components/CommunicationDashboard'
+import ClientDetailsModal from '@/components/ClientDetailsModal'
 import { 
   Users, 
   FileText, 
@@ -50,6 +51,8 @@ export default function BookkeeperDashboard() {
   const [activeTab, setActiveTab] = useState<'overview' | 'bulk-reconcile' | 'upload' | 'reports' | 'reminders' | 'communications'>('overview')
   const [showPDFUpload, setShowPDFUpload] = useState(false)
   const [reconciliationResults, setReconciliationResults] = useState<any>(null)
+  const [selectedClient, setSelectedClient] = useState<any>(null)
+  const [showClientModal, setShowClientModal] = useState(false)
 
   // Load real client data from API
   const loadClients = async () => {
@@ -400,8 +403,8 @@ export default function BookkeeperDashboard() {
                           variant="outline" 
                           size="sm"
                           onClick={() => {
-                            // Navigate to client details or show modal
-                            alert(`Client Details for ${client.name}\n\nStatus: ${client.status}\nTransactions: ${client.totalTransactions || 0}\nLast Upload: ${client.lastUpload || 'Never'}`)
+                            setSelectedClient(client)
+                            setShowClientModal(true)
                           }}
                         >
                           View Details
@@ -520,6 +523,24 @@ export default function BookkeeperDashboard() {
           <CommunicationDashboard />
         )}
       </div>
+
+      {/* Professional Client Details Modal */}
+      <ClientDetailsModal
+        client={selectedClient}
+        isOpen={showClientModal}
+        onClose={() => {
+          setShowClientModal(false)
+          setSelectedClient(null)
+        }}
+        onStartReconciliation={() => {
+          setActiveTab('bulk-reconcile')
+          setShowClientModal(false)
+        }}
+        onGenerateReport={() => {
+          setActiveTab('reports')
+          setShowClientModal(false)
+        }}
+      />
     </div>
   )
 }
