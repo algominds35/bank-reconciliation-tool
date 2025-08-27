@@ -364,10 +364,15 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
             <p className="text-gray-600 mb-4">
               Complete bulk reconciliation first, then return here to generate professional reports
             </p>
-            <Button variant="outline">
-              <Settings className="h-4 w-4 mr-2" />
-              Go to Bulk Reconciliation
-            </Button>
+            <div className="space-y-3">
+              <Button variant="outline">
+                <Settings className="h-4 w-4 mr-2" />
+                Go to Bulk Reconciliation
+              </Button>
+              <div className="text-sm text-gray-500">
+                💡 <strong>Tip:</strong> After running bulk reconciliation, refresh this page or switch tabs to see report data
+              </div>
+            </div>
           </CardContent>
         </Card>
       )}
