@@ -183,16 +183,15 @@ export default function BookkeeperDashboard() {
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Messages
               </Button>
-              <Link href="/client-intake">
-                <Button 
-                  variant="outline"
-                  size="sm"
-                  className="bg-green-50 border-green-200 hover:bg-green-100"
-                >
-                  <Plus className="h-4 w-4 mr-2 text-green-600" />
-                  <span className="text-green-600 font-medium">New Client</span>
-                </Button>
-              </Link>
+              <Button 
+                variant="outline"
+                size="sm"
+                className="bg-green-50 border-green-200 hover:bg-green-100"
+                onClick={() => alert('Add clients by processing their PDF documents in the Upload PDFs tab')}
+              >
+                <Plus className="h-4 w-4 mr-2 text-green-600" />
+                <span className="text-green-600 font-medium">New Client</span>
+              </Button>
             </div>
           </div>
         </div>
