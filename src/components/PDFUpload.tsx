@@ -425,6 +425,63 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
                 </div>
               )}
 
+              {/* Client Info Collection */}
+              {uploadedFiles.some(f => f.status === 'uploading') && (
+                <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <h3 className="text-sm font-medium text-blue-900 mb-3">📋 Client Information Required</h3>
+                  <p className="text-sm text-blue-700 mb-4">Enter client details for report delivery:</p>
+                  
+                  {uploadedFiles.filter(f => f.status === 'uploading').map((file) => (
+                    <div key={file.id} className="bg-white rounded-lg p-3 mb-3 border">
+                      <p className="text-sm font-medium text-gray-900 mb-2">📄 {file.name}</p>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">
+                            Client Name *
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g., ABC Company"
+                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={clientInfoMap[file.id]?.name || ''}
+                            onChange={(e) => {
+                              setClientInfoMap(prev => ({
+                                ...prev,
+                                [file.id]: {
+                                  ...prev[file.id],
+                                  name: e.target.value,
+                                  email: prev[file.id]?.email || ''
+                                }
+                              }))
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">
+                            Client Email *
+                          </label>
+                          <input
+                            type="email"
+                            placeholder="client@company.com"
+                            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={clientInfoMap[file.id]?.email || ''}
+                            onChange={(e) => {
+                              setClientInfoMap(prev => ({
+                                ...prev,
+                                [file.id]: {
+                                  name: prev[file.id]?.name || '',
+                                  email: e.target.value
+                                }
+                              }))
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {/* Professional Success Message */}
               {showSuccessMessage && (
                 <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
