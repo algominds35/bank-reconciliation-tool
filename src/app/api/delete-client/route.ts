@@ -38,7 +38,19 @@ export async function DELETE(request: NextRequest) {
 
     console.log(`📋 Found client to delete: ${existingClient.name}`)
 
-    // Delete the client from the database
+    // First delete any related invoices to avoid foreign key constraint
+    const { error: invoiceDeleteError } = await supabase
+      .from('invoices')
+      .delete()
+      .eq('client_id', clientId)
+
+    if (invoiceDeleteError) {
+      console.log('⚠️ No invoices to delete or error deleting invoices:', invoiceDeleteError.message)
+    } else {
+      console.log('🗑️ Deleted related invoices for client')
+    }
+
+    // Now delete the client from the database
     const { error: deleteError } = await supabase
       .from('clients')
       .delete()
@@ -46,6 +58,18 @@ export async function DELETE(request: NextRequest) {
 
     if (deleteError) {
       console.error('❌ Supabase delete error:', deleteError)
+      
+      // Handle foreign key constraint error specifically
+      if (deleteError.code === '23503') {
+        return NextResponse.json(
+          { 
+            error: 'Cannot delete client - has related records', 
+            details: 'This client has related invoices or other records. Delete those first.' 
+          },
+          { status: 409 }
+        )
+      }
+      
       return NextResponse.json(
         { error: 'Failed to delete client', details: deleteError.message },
         { status: 500 }
