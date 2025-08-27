@@ -337,13 +337,41 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
                     className="w-full bg-blue-600 hover:bg-blue-700"
                     onClick={() => {
                       console.log('BLUE BUTTON CLICKED!', uploadedFiles)
-                      alert('BLUE BUTTON WORKS! Click OK to see file details.')
-                      
                       // Process the uploaded files for reconciliation
                       const completedFilesList = uploadedFiles.filter(f => f.status === 'completed')
                       console.log('Completed files:', completedFilesList)
                       
                       if (completedFilesList.length > 0) {
+                        // CREATE CLIENT RECORDS FOR EACH COMPLETED FILE
+                        completedFilesList.forEach(async (file) => {
+                          try {
+                            const clientName = file.name.replace('.pdf', '').replace(/[^a-zA-Z0-9\s]/g, ' ').trim()
+                            
+                            const response = await fetch('/api/bookkeeper/clients', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                name: clientName,
+                                email: '',
+                                phone: '',
+                                industry: '',
+                                status: 'ready',
+                                total_transactions: file.extractedTransactions || 0,
+                                unmatched_transactions: file.extractedTransactions || 0,
+                                last_upload: new Date().toISOString()
+                              })
+                            })
+                            
+                            if (response.ok) {
+                              console.log(`Client created: ${clientName} with ${file.extractedTransactions} transactions`)
+                            } else {
+                              console.error('Failed to create client:', await response.text())
+                            }
+                          } catch (error) {
+                            console.error('Error creating client:', error)
+                          }
+                        })
+                        
                         // Show success message
                         setShowSuccessMessage(true)
                         
