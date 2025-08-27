@@ -11,6 +11,12 @@ export async function POST(request: NextRequest) {
   try {
     const clientData = await request.json()
     
+    console.log('📋 Client intake received:', {
+      businessName: clientData.businessName,
+      email: clientData.email,
+      servicesNeeded: clientData.servicesNeeded
+    })
+    
     // Store in database
     const { data: client, error } = await supabase
       .from('client_intakes')
@@ -47,8 +53,11 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
+      console.error('❌ Database insert error:', error)
       throw error
     }
+
+    console.log('✅ Client intake stored successfully:', client?.id)
 
     // Send notification emails
     await sendNotificationEmails(clientData)
