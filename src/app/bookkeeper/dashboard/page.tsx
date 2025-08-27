@@ -283,6 +283,36 @@ export default function BookkeeperDashboard() {
                     <Mail className="h-4 w-4 mr-2" />
                     Generate Reports
                   </Button>
+
+                  {/* EMERGENCY DELETE BROKEN CLIENTS BUTTON */}
+                  <Button 
+                    variant="destructive"
+                    onClick={async () => {
+                      if (confirm('🚨 DELETE ALL BROKEN CLIENTS? This will remove clients with 0 transactions!')) {
+                        try {
+                          const brokenClients = clients.filter(c => c.totalTransactions === 0 || !c.totalTransactions)
+                          
+                          for (const client of brokenClients) {
+                            const response = await fetch(`/api/delete-client?id=${client.id}`, {
+                              method: 'DELETE'
+                            })
+                            if (response.ok) {
+                              console.log(`Deleted broken client: ${client.name}`)
+                            }
+                          }
+                          
+                          // Refresh the client list
+                          await loadClients()
+                          alert(`✅ Deleted ${brokenClients.length} broken clients! Now upload your PDFs again.`)
+                        } catch (error) {
+                          console.error('Error deleting clients:', error)
+                          alert('❌ Failed to delete clients')
+                        }
+                      }
+                    }}
+                  >
+                    🗑️ Delete Broken Clients
+                  </Button>
                 </div>
               </CardContent>
             </Card>
