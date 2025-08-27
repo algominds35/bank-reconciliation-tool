@@ -10,27 +10,31 @@ export async function DELETE(request: NextRequest) {
   try {
     const url = new URL(request.url)
     const clientId = url.searchParams.get('id')
-    
+
     if (!clientId) {
       return NextResponse.json(
-        { error: 'Client ID required' },
+        { error: 'Client ID is required' },
         { status: 400 }
       )
     }
 
-    // Delete the client
+    console.log(`🗑️ Deleting client with ID: ${clientId}`)
+
+    // Delete the client from the database
     const { error } = await supabase
       .from('clients')
       .delete()
       .eq('id', clientId)
 
     if (error) {
-      console.error('Delete client error:', error)
+      console.error('❌ Supabase delete error:', error)
       return NextResponse.json(
-        { error: 'Failed to delete client' },
+        { error: 'Failed to delete client', details: error.message },
         { status: 500 }
       )
     }
+
+    console.log(`✅ Successfully deleted client: ${clientId}`)
 
     return NextResponse.json({
       success: true,
@@ -38,10 +42,9 @@ export async function DELETE(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Delete client API error:', error)
+    console.error('❌ Delete client API error:', error)
     return NextResponse.json(
       { 
-        success: false,
         error: 'Failed to delete client',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
