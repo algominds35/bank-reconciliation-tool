@@ -486,6 +486,7 @@ export default function BookkeeperDashboard() {
         {activeTab === 'reports' && (
           <AutomatedReports 
             reconciliationResults={reconciliationResults}
+            clients={clients}
             onReportsGenerated={(reports) => {
               console.log('Reports generated:', reports)
               // In a real app, you might update some state here
