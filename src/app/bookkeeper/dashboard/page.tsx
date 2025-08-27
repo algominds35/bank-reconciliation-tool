@@ -316,7 +316,10 @@ export default function BookkeeperDashboard() {
                             console.log(`Attempting to delete client: ${client.name} (ID: ${client.id})`)
                             
                             const response = await fetch(`/api/delete-client?id=${client.id}`, {
-                              method: 'DELETE'
+                              method: 'DELETE',
+                              headers: {
+                                'user-id': 'demo-user'
+                              }
                             })
                             
                             if (response.ok) {

@@ -21,11 +21,15 @@ export async function DELETE(request: NextRequest) {
 
     console.log(`🗑️ Attempting to delete client with ID: ${clientId}`)
 
-    // First check if client exists
+    // URGENT: Add user filtering for privacy
+    const userId = request.headers.get('user-id') || 'demo-user'
+    
+    // First check if client exists and belongs to user
     const { data: existingClient, error: fetchError } = await supabase
       .from('clients')
       .select('id, name')
       .eq('id', clientId)
+      .eq('user_id', userId)
       .single()
 
     if (fetchError) {
@@ -50,11 +54,12 @@ export async function DELETE(request: NextRequest) {
       console.log('🗑️ Deleted related invoices for client')
     }
 
-    // Now delete the client from the database
+    // Now delete the client from the database (with user check)
     const { error: deleteError } = await supabase
       .from('clients')
       .delete()
       .eq('id', clientId)
+      .eq('user_id', userId)
 
     if (deleteError) {
       console.error('❌ Supabase delete error:', deleteError)
