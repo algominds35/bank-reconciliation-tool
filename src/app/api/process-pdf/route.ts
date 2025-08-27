@@ -49,7 +49,6 @@ export async function POST(request: NextRequest) {
         console.log(`🔄 Creating client: ${clientName} with ${transactionCount} transactions`)
         
         const clientData = {
-          id: clientId || `client-${Date.now()}`,
           name: clientName,
           status: 'ready',
           user_id: request.headers.get('user-id') || 'demo-user',
