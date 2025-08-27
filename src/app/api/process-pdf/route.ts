@@ -46,37 +46,23 @@ export async function POST(request: NextRequest) {
       // CREATE CLIENT WITH REALISTIC DATA
       try {
         const clientName = file.name.replace('.pdf', '').replace(/[^a-zA-Z0-9\s]/g, '')
+        console.log(`🔄 Creating client: ${clientName} with ${transactionCount} transactions`)
+        
+        const clientData = {
+          id: clientId || `client-${Date.now()}`,
+          name: clientName,
+          status: 'ready',
+          user_id: request.headers.get('user-id') || 'demo-user',
+          total_transactions: transactionCount,
+          unmatched_transactions: Math.floor(transactionCount * 0.15),
+          last_upload: new Date().toISOString()
+        }
+        
+        console.log('📋 Client data to insert:', JSON.stringify(clientData, null, 2))
         
         const { data: client, error: clientError } = await supabase
           .from('clients')
-          .upsert({
-            id: clientId || `client-${Date.now()}`,
-            name: clientName,
-            status: 'ready',
-            user_id: request.headers.get('user-id') || 'demo-user',
-            total_transactions: transactionCount,
-            unmatched_transactions: Math.floor(transactionCount * 0.15), // 15% unmatched
-            bank_transactions: Array.from({length: transactionCount}, (_, i) => ({
-              id: `txn-${i+1}`,
-              date: new Date(2025, 0, Math.floor(Math.random() * 28) + 1).toISOString().split('T')[0],
-              description: [
-                'ACH DEPOSIT PAYROLL', 
-                'CHECK #1234', 
-                'DEBIT CARD PURCHASE', 
-                'WIRE TRANSFER IN',
-                'MONTHLY SERVICE FEE',
-                'ATM WITHDRAWAL',
-                'ONLINE TRANSFER',
-                'MERCHANT PAYMENT'
-              ][Math.floor(Math.random() * 8)],
-              amount: (Math.random() * 2000 + 50).toFixed(2),
-              type: Math.random() > 0.3 ? 'debit' : 'credit',
-              confidence: 0.85
-            })),
-            last_upload: new Date().toISOString(),
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          })
+          .upsert(clientData)
           .select()
           .single()
 
