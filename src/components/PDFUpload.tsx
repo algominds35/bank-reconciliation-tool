@@ -361,9 +361,6 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                               name: clientName,
-                              email: '',
-                              phone: '',
-                              industry: '',
                               status: 'ready',
                               total_transactions: transactionCount,
                               unmatched_transactions: transactionCount,
