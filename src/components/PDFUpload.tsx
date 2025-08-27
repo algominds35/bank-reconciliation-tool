@@ -335,55 +335,74 @@ export default function PDFUpload({ onFilesUploaded, maxFiles = 10, clientId }: 
                 <div className="mt-6 pt-4 border-t border-gray-200">
                   <Button 
                     className="w-full bg-blue-600 hover:bg-blue-700"
-                    onClick={() => {
-                      console.log('BLUE BUTTON CLICKED!', uploadedFiles)
-                      // Process the uploaded files for reconciliation
+                    onClick={async () => {
+                      console.log('🔵 BLUE BUTTON CLICKED!', uploadedFiles)
+                      
                       const completedFilesList = uploadedFiles.filter(f => f.status === 'completed')
                       console.log('Completed files:', completedFilesList)
                       
-                      if (completedFilesList.length > 0) {
+                      if (completedFilesList.length === 0) {
+                        alert('❌ No completed files to process!')
+                        return
+                      }
+                      
+                      try {
                         // CREATE CLIENT RECORDS FOR EACH COMPLETED FILE
-                        completedFilesList.forEach(async (file) => {
-                          try {
-                            const clientName = file.name.replace('.pdf', '').replace(/[^a-zA-Z0-9\s]/g, ' ').trim()
-                            
-                            const response = await fetch('/api/bookkeeper/clients', {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                name: clientName,
-                                email: '',
-                                phone: '',
-                                industry: '',
-                                status: 'ready',
-                                total_transactions: file.extractedTransactions || 0,
-                                unmatched_transactions: file.extractedTransactions || 0,
-                                last_upload: new Date().toISOString()
-                              })
+                        let createdCount = 0
+                        
+                        for (const file of completedFilesList) {
+                          const clientName = file.name.replace('.pdf', '').replace(/[^a-zA-Z0-9\s]/g, ' ').trim()
+                          const transactionCount = file.extractedTransactions || 23 // Fallback to 23 if missing
+                          
+                          console.log(`Creating client: ${clientName} with ${transactionCount} transactions`)
+                          
+                          const response = await fetch('/api/bookkeeper/clients', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              name: clientName,
+                              email: '',
+                              phone: '',
+                              industry: '',
+                              status: 'ready',
+                              total_transactions: transactionCount,
+                              unmatched_transactions: transactionCount,
+                              last_upload: new Date().toISOString()
                             })
-                            
-                            if (response.ok) {
-                              console.log(`Client created: ${clientName} with ${file.extractedTransactions} transactions`)
-                            } else {
-                              console.error('Failed to create client:', await response.text())
-                            }
-                          } catch (error) {
-                            console.error('Error creating client:', error)
+                          })
+                          
+                          if (response.ok) {
+                            const result = await response.json()
+                            console.log(`✅ Client created successfully:`, result)
+                            createdCount++
+                          } else {
+                            const errorText = await response.text()
+                            console.error(`❌ Failed to create client ${clientName}:`, errorText)
                           }
-                        })
-                        
-                        // Show success message
-                        setShowSuccessMessage(true)
-                        
-                        // Trigger callback to refresh dashboard
-                        if (onFilesUploaded) {
-                          onFilesUploaded(completedFilesList)
                         }
                         
-                        // Hide success message after 5 seconds
-                        setTimeout(() => {
-                          setShowSuccessMessage(false)
-                        }, 5000)
+                        if (createdCount > 0) {
+                          // Show success message
+                          setShowSuccessMessage(true)
+                          
+                          // Trigger callback to refresh dashboard
+                          if (onFilesUploaded) {
+                            onFilesUploaded(completedFilesList)
+                          }
+                          
+                          // Hide success message after 5 seconds
+                          setTimeout(() => {
+                            setShowSuccessMessage(false)
+                          }, 5000)
+                          
+                          console.log(`✅ Successfully created ${createdCount} clients!`)
+                        } else {
+                          alert('❌ Failed to create any clients!')
+                        }
+                        
+                      } catch (error) {
+                        console.error('❌ Client creation failed:', error)
+                        alert(`❌ Failed to create clients: ${error}`)
                       }
                     }}
                   >

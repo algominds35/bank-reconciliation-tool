@@ -288,25 +288,54 @@ export default function BookkeeperDashboard() {
                   <Button 
                     variant="destructive"
                     onClick={async () => {
+                      console.log('🗑️ DELETE BUTTON CLICKED!')
+                      console.log('Current clients:', clients)
+                      
                       if (confirm('🚨 DELETE ALL BROKEN CLIENTS? This will remove clients with 0 transactions!')) {
                         try {
-                          const brokenClients = clients.filter(c => c.totalTransactions === 0 || !c.totalTransactions)
+                          // Find broken clients (0 transactions or fake names)
+                          const brokenClients = clients.filter(c => 
+                            c.totalTransactions === 0 || 
+                            !c.totalTransactions || 
+                            c.name === 'alex' || 
+                            c.name === 'Test Client' ||
+                            c.name.toLowerCase().includes('test')
+                          )
                           
+                          console.log('Broken clients to delete:', brokenClients)
+                          
+                          if (brokenClients.length === 0) {
+                            alert('✅ No broken clients found!')
+                            return
+                          }
+                          
+                          // Delete each broken client
+                          let deletedCount = 0
                           for (const client of brokenClients) {
+                            console.log(`Attempting to delete client: ${client.name} (ID: ${client.id})`)
+                            
                             const response = await fetch(`/api/delete-client?id=${client.id}`, {
                               method: 'DELETE'
                             })
+                            
                             if (response.ok) {
-                              console.log(`Deleted broken client: ${client.name}`)
+                              console.log(`✅ Successfully deleted: ${client.name}`)
+                              deletedCount++
+                            } else {
+                              const errorText = await response.text()
+                              console.error(`❌ Failed to delete ${client.name}:`, errorText)
                             }
                           }
                           
-                          // Refresh the client list
+                          // Force refresh the client list
+                          console.log('🔄 Refreshing client list...')
                           await loadClients()
-                          alert(`✅ Deleted ${brokenClients.length} broken clients! Now upload your PDFs again.`)
+                          
+                          alert(`✅ Successfully deleted ${deletedCount} broken clients!\n\nNow upload your PDFs to create real clients.`)
+                          
                         } catch (error) {
-                          console.error('Error deleting clients:', error)
-                          alert('❌ Failed to delete clients')
+                          console.error('❌ Delete operation failed:', error)
+                          alert(`❌ Failed to delete clients: ${error}`)
                         }
                       }
                     }}

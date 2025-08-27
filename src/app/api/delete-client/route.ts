@@ -12,33 +12,52 @@ export async function DELETE(request: NextRequest) {
     const clientId = url.searchParams.get('id')
 
     if (!clientId) {
+      console.error('❌ No client ID provided')
       return NextResponse.json(
         { error: 'Client ID is required' },
         { status: 400 }
       )
     }
 
-    console.log(`🗑️ Deleting client with ID: ${clientId}`)
+    console.log(`🗑️ Attempting to delete client with ID: ${clientId}`)
+
+    // First check if client exists
+    const { data: existingClient, error: fetchError } = await supabase
+      .from('clients')
+      .select('id, name')
+      .eq('id', clientId)
+      .single()
+
+    if (fetchError) {
+      console.error('❌ Client not found:', fetchError)
+      return NextResponse.json(
+        { error: 'Client not found', details: fetchError.message },
+        { status: 404 }
+      )
+    }
+
+    console.log(`📋 Found client to delete: ${existingClient.name}`)
 
     // Delete the client from the database
-    const { error } = await supabase
+    const { error: deleteError } = await supabase
       .from('clients')
       .delete()
       .eq('id', clientId)
 
-    if (error) {
-      console.error('❌ Supabase delete error:', error)
+    if (deleteError) {
+      console.error('❌ Supabase delete error:', deleteError)
       return NextResponse.json(
-        { error: 'Failed to delete client', details: error.message },
+        { error: 'Failed to delete client', details: deleteError.message },
         { status: 500 }
       )
     }
 
-    console.log(`✅ Successfully deleted client: ${clientId}`)
+    console.log(`✅ Successfully deleted client: ${existingClient.name} (${clientId})`)
 
     return NextResponse.json({
       success: true,
-      message: 'Client deleted successfully'
+      message: `Client '${existingClient.name}' deleted successfully`,
+      deletedClient: existingClient
     })
 
   } catch (error) {
