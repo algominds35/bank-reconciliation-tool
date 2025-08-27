@@ -36,59 +36,6 @@ export async function POST(request: NextRequest) {
       // Use mock result instead
       throw new Error('Skipping real PDF processing - using mock data')
       
-      console.log(`PDF processing complete: ${result.totalTransactions} transactions found`)
-      
-      // CREATE OR UPDATE CLIENT IN DATABASE
-      try {
-        // Extract client name from PDF or use filename
-        const clientName = result.bankName ? 
-          `${result.bankName} Client` : 
-          file.name.replace('.pdf', '').replace(/[^a-zA-Z0-9\s]/g, '')
-        
-        // Create/update client record
-        const { data: client, error: clientError } = await supabase
-          .from('clients')
-          .upsert({
-            id: clientId || `client-${Date.now()}`,
-            name: clientName,
-            email: '', // Will be filled later
-            phone: '',
-            industry: '',
-            status: 'ready', // Ready for reconciliation
-            total_transactions: result.totalTransactions,
-            unmatched_transactions: result.totalTransactions, // All unmatched initially
-            bank_transactions: result.transactions,
-            last_upload: new Date().toISOString(),
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          })
-          .select()
-          .single()
-
-        if (clientError) {
-          console.error('Error creating/updating client:', clientError)
-        } else {
-          console.log(`Client created/updated: ${client.name} with ${result.totalTransactions} transactions`)
-        }
-
-      } catch (clientUpdateError) {
-        console.error('Client update failed:', clientUpdateError)
-      }
-      
-      return NextResponse.json({
-        success: true,
-        result: {
-          fileName: result.fileName,
-          bankName: result.bankName || 'Unknown Bank',
-          accountNumber: result.accountNumber || '****0000',
-          statementPeriod: result.statementPeriod || 'Unknown Period',
-          transactions: result.transactions,
-          totalTransactions: result.totalTransactions,
-          errors: result.errors,
-          clientId
-        }
-      })
-      
     } catch (error) {
       console.error('Real PDF processing failed, falling back to mock:', error)
       
