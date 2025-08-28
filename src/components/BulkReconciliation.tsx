@@ -41,8 +41,28 @@ export default function BulkReconciliation({ clients, onReconciliationComplete, 
   const [processedClients, setProcessedClients] = useState<Client[]>([])
   const [results, setResults] = useState<any>(null)
 
-  const readyClients = clients.filter(c => c.bankTransactions && c.bankTransactions.length > 0)
-  const totalTransactions = readyClients.reduce((sum, c) => sum + (c.bankTransactions?.length || 0), 0)
+  // Filter clients that have transactions (either bankTransactions array or totalTransactions count)
+  const readyClients = clients.filter(c => 
+    (c.bankTransactions && c.bankTransactions.length > 0) || 
+    (c.totalTransactions && c.totalTransactions > 0)
+  )
+  const totalTransactions = readyClients.reduce((sum, c) => 
+    sum + (c.bankTransactions?.length || c.totalTransactions || 0), 0
+  )
+
+  // DEBUG: Log client data to console
+  console.log('🔍 BulkReconciliation - Debug Info:', {
+    allClientsCount: clients.length,
+    readyClientsCount: readyClients.length,
+    totalTransactions,
+    clientDetails: clients.map(c => ({
+      id: c.id,
+      name: c.name,
+      bankTransactions: c.bankTransactions?.length || 0,
+      totalTransactions: c.totalTransactions || 0,
+      status: c.status
+    }))
+  })
 
   const handleBulkReconciliation = async () => {
     if (readyClients.length === 0) return
@@ -227,7 +247,7 @@ export default function BulkReconciliation({ clients, onReconciliationComplete, 
                         {client.name}
                       </p>
                       <p className="text-xs text-gray-500">
-                        {client.bankTransactions?.length || 0} bank transactions
+                        {client.bankTransactions?.length || client.totalTransactions || 0} transactions
                       </p>
                     </div>
                   </div>
