@@ -89,10 +89,13 @@ export class MultiChannelDeliveryService {
       const success = await sendGrid.sendPaymentReminder({
         clientEmail: data.clientEmail,
         clientName: data.clientName,
-        invoiceId: data.invoiceId,
-        amount: data.amount,
+        invoiceNumber: data.invoiceId,
+        invoiceAmount: data.amount.toString(),
+        projectName: `Invoice ${data.invoiceId}`,
         dueDate: data.dueDate,
-        paymentLink: data.paymentLink
+        paymentLink: data.paymentLink,
+        companyName: 'ReconcileBook Pro',
+        companyEmail: process.env.SENDGRID_FROM_EMAIL || 'noreply@reconcilebook.com'
       }, data.phase)
       
       if (success) {
