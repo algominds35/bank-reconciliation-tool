@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import BulkReconciliation from '@/components/BulkReconciliation'
+// Removed BulkReconciliation - not needed for simple client management
 import PDFUpload from '@/components/PDFUpload'
-import AutomatedReports from '@/components/AutomatedReports'
+
 import AutomatedReminders from '@/components/AutomatedReminders'
 import CommunicationDashboard from '@/components/CommunicationDashboard'
 import ClientDetailsModal from '@/components/ClientDetailsModal'
@@ -48,7 +48,7 @@ export default function BookkeeperDashboard() {
     completedToday: 0,
     totalTransactions: 0
   })
-  const [activeTab, setActiveTab] = useState<'overview' | 'bulk-reconcile' | 'upload' | 'reports' | 'reminders' | 'communications'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'upload' | 'reminders' | 'communications'>('overview')
   const [showPDFUpload, setShowPDFUpload] = useState(false)
   const [reconciliationResults, setReconciliationResults] = useState<any>(null)
   const [selectedClient, setSelectedClient] = useState<any>(null)
@@ -172,14 +172,7 @@ export default function BookkeeperDashboard() {
                 <Upload className="h-4 w-4 mr-2" />
                 Upload PDFs
               </Button>
-              <Button 
-                variant={activeTab === 'reports' ? 'default' : 'outline'} 
-                size="sm"
-                onClick={() => setActiveTab('reports')}
-              >
-                <Mail className="h-4 w-4 mr-2" />
-                Client Reports
-              </Button>
+              
               <Button 
                 variant={activeTab === 'reminders' ? 'default' : 'outline'} 
                 size="sm"
@@ -286,13 +279,7 @@ export default function BookkeeperDashboard() {
                     <Upload className="h-4 w-4 mr-2" />
                     Upload More PDFs
                   </Button>
-                  <Button 
-                    variant="outline"
-                    onClick={() => setActiveTab('reports')}
-                  >
-                    <Mail className="h-4 w-4 mr-2" />
-                    Generate Reports
-                  </Button>
+                  
 
                   {/* EMERGENCY DELETE BROKEN CLIENTS BUTTON */}
                   <Button
@@ -486,16 +473,7 @@ export default function BookkeeperDashboard() {
           </Card>
         )}
 
-        {activeTab === 'reports' && (
-          <AutomatedReports 
-            reconciliationResults={reconciliationResults}
-            clients={clients}
-            onReportsGenerated={(reports) => {
-              console.log('Reports generated:', reports)
-              // In a real app, you might update some state here
-            }}
-          />
-        )}
+        
 
         {activeTab === 'reminders' && (
           <AutomatedReminders />
@@ -514,10 +492,10 @@ export default function BookkeeperDashboard() {
           setShowClientModal(false)
           setSelectedClient(null)
         }}
-        onStartReconciliation={() => {
-          setActiveTab('bulk-reconcile')
-          setShowClientModal(false)
-        }}
+                 onStartReconciliation={() => {
+           setActiveTab('upload')
+           setShowClientModal(false)
+         }}
         onGenerateReport={() => {
           setActiveTab('reports')
           setShowClientModal(false)
