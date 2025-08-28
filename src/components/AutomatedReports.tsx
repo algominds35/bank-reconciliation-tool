@@ -44,9 +44,9 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
   const [autoDeliver, setAutoDeliver] = useState(true)
 
   const templates = [
-    { id: 'summary', name: 'Summary Report', description: 'High-level overview with key metrics' },
-    { id: 'detailed', name: 'Detailed Report', description: 'Complete transaction breakdown' },
-    { id: 'exceptions', name: 'Exception Report', description: 'Focus on unmatched transactions' }
+    { id: 'summary', name: 'Client Summary', description: 'Client overview and document status' },
+    { id: 'documents', name: 'Document Report', description: 'List of uploaded documents and status' },
+    { id: 'reminders', name: 'Reminder Report', description: 'Reminder schedule and follow-ups' }
   ]
 
   const handleGenerateReports = async () => {
@@ -54,16 +54,15 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
     
     setIsGenerating(true)
     try {
-      // Simulate report generation
+      // Generate simple client management reports
       const mockReports = clients.map(client => ({
         clientId: client.id || 'unknown',
         clientName: client.name || 'Unknown Client',
         summary: {
-          totalTransactions: client.totalTransactions || 0,
-          matchedTransactions: Math.floor((client.totalTransactions || 0) * 0.85),
-          unmatchedTransactions: Math.ceil((client.totalTransactions || 0) * 0.15),
-          matchAccuracy: 85,
-          totalAmount: (client.totalTransactions || 0) * 1250.50
+          documentsUploaded: client.totalTransactions || 0,
+          lastUpload: client.lastUpload || 'Never',
+          status: client.status || 'pending',
+          remindersSent: Math.floor(Math.random() * 5) + 1
         },
         status: 'generated' as const,
         generatedAt: new Date().toISOString()
@@ -106,13 +105,13 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
       {/* Header */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <FileText className="h-5 w-5" />
-            <span>Automated Report Generation</span>
-          </CardTitle>
-          <CardDescription>
-            Generate and deliver professional reconciliation reports to clients
-          </CardDescription>
+                  <CardTitle className="flex items-center space-x-2">
+          <FileText className="h-5 w-5" />
+          <span>Client Management & Reports</span>
+        </CardTitle>
+        <CardDescription>
+          Manage client documents and generate simple status reports
+        </CardDescription>
         </CardHeader>
       </Card>
 
@@ -152,9 +151,9 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
             </label>
           </div>
 
-          <p className="text-sm text-gray-600 mb-4">
-            Run bulk reconciliation first to generate reports
-          </p>
+                     <p className="text-sm text-gray-600 mb-4">
+             Generate client management reports and send status updates
+           </p>
 
           <Button 
             onClick={handleGenerateReports}
@@ -255,9 +254,9 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
                 <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                   <div>
                     <h4 className="font-medium">{report.clientName}</h4>
-                    <p className="text-sm text-gray-600">
-                      {report.summary.totalTransactions} transactions • {report.summary.matchAccuracy}% match rate
-                    </p>
+                                         <p className="text-sm text-gray-600">
+                       {report.summary.documentsUploaded} documents • Last upload: {report.summary.lastUpload}
+                     </p>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Badge variant="default">

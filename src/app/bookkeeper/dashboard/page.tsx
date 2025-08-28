@@ -163,14 +163,7 @@ export default function BookkeeperDashboard() {
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Overview
               </Button>
-              <Button 
-                variant={activeTab === 'bulk-reconcile' ? 'default' : 'outline'} 
-                size="sm"
-                onClick={() => setActiveTab('bulk-reconcile')}
-              >
-                <Zap className="h-4 w-4 mr-2" />
-                Bulk Reconcile
-              </Button>
+              {/* Removed Bulk Reconcile - not what Jimmie needs */}
               <Button 
                 variant={activeTab === 'upload' ? 'default' : 'outline'} 
                 size="sm"
@@ -185,7 +178,7 @@ export default function BookkeeperDashboard() {
                 onClick={() => setActiveTab('reports')}
               >
                 <Mail className="h-4 w-4 mr-2" />
-                Reports
+                Client Reports
               </Button>
               <Button 
                 variant={activeTab === 'reminders' ? 'default' : 'outline'} 
@@ -279,13 +272,13 @@ export default function BookkeeperDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-4">
-                  <Button 
-                    className="bg-blue-600 hover:bg-blue-700"
-                    onClick={() => setActiveTab('bulk-reconcile')}
-                  >
-                    <Zap className="h-4 w-4 mr-2" />
-                    Start Bulk Reconciliation
-                  </Button>
+                                     <Button 
+                     className="bg-blue-600 hover:bg-blue-700"
+                     onClick={() => setActiveTab('upload')}
+                   >
+                     <Upload className="h-4 w-4 mr-2" />
+                     Upload Client Documents
+                   </Button>
                   <Button 
                     variant="outline"
                     onClick={() => setActiveTab('upload')}
@@ -431,31 +424,7 @@ export default function BookkeeperDashboard() {
           </>
         )}
 
-        {activeTab === 'bulk-reconcile' && (
-          <BulkReconciliation 
-            clients={clients}
-            onReconciliationComplete={(results) => {
-              console.log('Bulk reconciliation completed:', results)
-              setReconciliationResults(results)
-              // Update client statuses based on results
-              setClients(prev => prev.map(client => {
-                const result = results.jobs.find((job: any) => job.clientId === client.id)
-                if (result) {
-                  return {
-                    ...client,
-                    status: result.status,
-                    matches: result.matches.filter((m: any) => m.matchType !== 'unmatched').length,
-                    unmatchedTransactions: result.unmatchedBank.length + result.unmatchedBook.length
-                  }
-                }
-                return client
-              }))
-              // Auto-switch to reports tab
-              setActiveTab('reports')
-            }}
-            onNavigateToUpload={() => setActiveTab('upload')}
-          />
-        )}
+        {/* Removed complex reconciliation - focusing on simple client management */}
 
         {activeTab === 'upload' && (
           <Card>
@@ -507,10 +476,10 @@ export default function BookkeeperDashboard() {
               <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                 <h4 className="font-medium text-blue-900 mb-2">How It Works:</h4>
                 <ul className="text-sm text-blue-800 space-y-1">
-                  <li>• Upload multiple PDFs at once - the system handles them in parallel</li>
-                  <li>• AI extracts transactions with 95% accuracy</li>
-                  <li>• Each PDF gets processed and ready for bulk reconciliation</li>
-                  <li>• You can review any low-confidence matches before finalizing</li>
+                                   <li>• Upload multiple PDFs at once - the system handles them in parallel</li>
+                 <li>• Automatically creates client profiles from documents</li>
+                 <li>• Organizes files by client and date</li>
+                 <li>• Sets up automated reminders for missing documents</li>
                 </ul>
               </div>
             </CardContent>
