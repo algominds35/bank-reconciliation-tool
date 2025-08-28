@@ -703,18 +703,7 @@ export default function Dashboard() {
                 loading={loading}
               />
               
-              <Link href="/bookkeeper/dashboard">
-                <Button variant="outline" size="sm" className="flex items-center space-x-2 bg-blue-50 border-blue-200 hover:bg-blue-100">
-                  <Users className="h-4 w-4 text-blue-600" />
-                  <span className="text-blue-600 font-medium">Bookkeeper Pro</span>
-                </Button>
-              </Link>
-              <Link href="/client-portal">
-                <Button variant="outline" size="sm" className="flex items-center space-x-2 bg-green-50 border-green-200 hover:bg-green-100">
-                  <Shield className="h-4 w-4 text-green-600" />
-                  <span className="text-green-600 font-medium">Client Portal</span>
-                </Button>
-              </Link>
+
               
               <Link href="/team">
                 <Button variant="outline" size="sm" className="flex items-center space-x-2">
