@@ -88,6 +88,19 @@ export default function AutomatedReports({ reconciliationResults, onReportsGener
   const hasClients = clientCount > 0
   const hasReports = reports.length > 0
 
+  // DEBUG: Log client data to console
+  console.log('🔍 AutomatedReports - Debug Info:', {
+    clientsReceived: !!clients,
+    clientCount,
+    totalTransactions,
+    clients: clients?.map(c => ({
+      id: c.id,
+      name: c.name,
+      totalTransactions: c.totalTransactions,
+      status: c.status
+    }))
+  })
+
   return (
     <div className="space-y-6">
       {/* Header */}

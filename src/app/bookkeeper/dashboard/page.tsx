@@ -83,6 +83,19 @@ export default function BookkeeperDashboard() {
           completedToday: realClients.filter((c: any) => c.status === 'completed').length,
           totalTransactions: realClients.reduce((sum: number, c: any) => sum + c.totalTransactions, 0)
         })
+
+        // DEBUG: Log loaded client data
+        console.log('🔍 Dashboard loadClients - Debug Info:', {
+          rawClientsFromAPI: data.clients?.length || 0,
+          transformedClients: realClients.length,
+          totalTransactionsCalculated: realClients.reduce((sum: number, c: any) => sum + c.totalTransactions, 0),
+          clientDetails: realClients.map((c: any) => ({
+            id: c.id,
+            name: c.name,
+            totalTransactions: c.totalTransactions,
+            status: c.status
+          }))
+        })
       } else {
         // If no real clients exist, show empty state but keep functionality working
         setClients([])
