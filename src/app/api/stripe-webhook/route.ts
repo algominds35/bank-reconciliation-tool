@@ -123,6 +123,14 @@ export async function POST(request: NextRequest) {
         // User exists - upgrade their account immediately
         console.log('✅ Found existing user:', customerEmail, 'ID:', existingUser.id)
 
+        if (!supabase) {
+          console.error('❌ Supabase client not available')
+          return NextResponse.json({ 
+            error: 'Server configuration error',
+            details: 'Supabase client not available'
+          }, { status: 500 })
+        }
+
         const { error: profileError } = await supabase
           .from('user_profiles')
           .upsert({
@@ -192,6 +200,14 @@ export async function POST(request: NextRequest) {
           console.log('✅ New user account created:', newUser.user.id)
 
           // Create user profile with active subscription
+          if (!supabase) {
+            console.error('❌ Supabase client not available')
+            return NextResponse.json({ 
+              error: 'Server configuration error',
+              details: 'Supabase client not available'
+            }, { status: 500 })
+          }
+
           const { error: profileError } = await supabase
             .from('user_profiles')
             .insert({
@@ -254,6 +270,11 @@ export async function POST(request: NextRequest) {
 // Helper function to store pending payment
 async function storePendingPayment(email: string, plan: string, session: Stripe.Checkout.Session, amount: number) {
   try {
+    if (!supabase) {
+      console.error('❌ Supabase client not available for storing pending payment')
+      return
+    }
+
     const { error: pendingError } = await supabase
       .from('pending_payments')
       .insert({
