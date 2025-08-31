@@ -1357,6 +1357,42 @@ export default function Dashboard() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
+                {/* Client Selection for Reports */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <ClientSelector
+                      clients={clients}
+                      selectedClientId={selectedClientId}
+                      onClientChange={(clientId) => {
+                        console.log('Client changed to:', clientId)
+                        setSelectedClientId(clientId)
+                      }}
+                      loading={loading}
+                    />
+                    
+                    <Button
+                      onClick={() => {
+                        const businessName = prompt('Enter business name:')
+                        const contactName = prompt('Enter contact name:')
+                        const email = prompt('Enter email (optional):')
+                        
+                        if (businessName && contactName) {
+                          handleAddClient({
+                            business_name: businessName,
+                            name: contactName,
+                            email: email || ''
+                          })
+                        }
+                      }}
+                      variant="outline"
+                      className="flex items-center space-x-2"
+                    >
+                      <Plus className="h-4 w-4" />
+                      <span>Add Client</span>
+                    </Button>
+                  </div>
+                </div>
+                
                 {/* Report Type Selection */}
                 <div className="space-y-4">
                   <div>
