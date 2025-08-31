@@ -839,10 +839,9 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="transactions">All Transactions</TabsTrigger>
             <TabsTrigger value="matching">Smart Matching</TabsTrigger>
-            <TabsTrigger value="collections">Invoice Collections</TabsTrigger>
           </TabsList>
 
           <TabsContent value="transactions" className="space-y-6">
@@ -1182,144 +1181,6 @@ export default function Dashboard() {
               onMatch={handleMatch}
               loading={false}
             />
-          </TabsContent>
-
-          <TabsContent value="collections" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <DollarSign className="h-5 w-5 text-green-600" />
-                  <span>Invoice Collections</span>
-                </CardTitle>
-                <CardDescription>
-                  Automatically manage overdue invoices and send professional payment reminders
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Quick Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <div className="text-2xl font-bold text-blue-600">{invoiceStats.total}</div>
-                    <div className="text-sm text-blue-600">Total Invoices</div>
-                  </div>
-                  <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                    <div className="text-2xl font-bold text-yellow-600">{invoiceStats.pending}</div>
-                    <div className="text-sm text-yellow-600">Pending</div>
-                  </div>
-                  <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-                    <div className="text-2xl font-bold text-red-600">{invoiceStats.overdue}</div>
-                    <div className="text-sm text-red-600">Overdue</div>
-                  </div>
-                  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                    <div className="text-2xl font-bold text-green-600">{invoiceStats.paid}</div>
-                    <div className="text-sm text-green-600">Paid</div>
-                  </div>
-                </div>
-
-                {/* Amount Summary */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                    <div className="text-2xl font-bold text-slate-600">
-                      ${invoiceStats.totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </div>
-                    <div className="text-sm text-slate-600">Total Invoice Value</div>
-                  </div>
-                  <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-                    <div className="text-2xl font-bold text-red-600">
-                      ${invoiceStats.overdueAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </div>
-                    <div className="text-sm text-red-600">Overdue Amount</div>
-                  </div>
-                </div>
-
-                {/* Standalone Invoice Management */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
-                        Invoice Management
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Create invoices manually or import from CSV/Excel files. No QuickBooks required.
-                      </p>
-                    </div>
-                    <div className="flex gap-3">
-                      <Link href="/invoices">
-                        <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                          Manage Invoices
-                        </Button>
-                      </Link>
-                      <Button 
-                        variant="outline"
-                        onClick={() => {
-                          // Create a hidden file input for CSV upload
-                          const input = document.createElement('input')
-                          input.type = 'file'
-                          input.accept = '.csv,.xlsx,.xls'
-                          input.onchange = async (e) => {
-                            const file = (e.target as HTMLInputElement).files?.[0]
-                            if (file) {
-                              const formData = new FormData()
-                              formData.append('file', file)
-                              try {
-                                const response = await fetch('/api/invoices/import', {
-                                  method: 'POST',
-                                  body: formData
-                                })
-                                const result = await response.json()
-                                if (result.success) {
-                                  alert(`Successfully imported ${result.imported} invoices!`)
-                                } else {
-                                  alert(`Import failed: ${result.error}`)
-                                }
-                              } catch (error) {
-                                alert('Import failed. Please try again.')
-                              }
-                            }
-                          }
-                          input.click()
-                        }}
-                      >
-                        Import CSV
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  {/* Features */}
-                  <div className="bg-gray-50 rounded-lg p-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-sm text-gray-700">Manual Invoice Creation</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span className="text-sm text-gray-700">CSV/Excel Import</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                        <span className="text-sm text-gray-700">Automated Collections</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Invoice List Placeholder */}
-                <div className="border rounded-lg">
-                  <div className="p-4 border-b bg-gray-50">
-                    <h3 className="font-medium">Recent Invoices</h3>
-                  </div>
-                  <div className="p-8 text-center text-gray-500">
-                    <p>No invoices yet. Create your first invoice or import from CSV to get started.</p>
-                    <Link href="/invoices">
-                      <Button className="mt-4" variant="outline">
-                        Get Started
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </TabsContent>
         </Tabs>
       </div>
