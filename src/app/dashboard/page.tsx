@@ -425,9 +425,22 @@ export default function Dashboard() {
             console.log('Processing transaction:', transaction)
 
             try {
+              // Insert into the correct table based on transaction type
+              const tableName = transactionType === 'bank' ? 'bank_transactions' : 'book_transactions'
+              
               const { error } = await supabase
-                .from('transactions')
-                .insert(transaction)
+                .from(tableName)
+                .insert({
+                  client_id: selectedClientId,
+                  date: String(date),
+                  description: String(description),
+                  amount: amount,
+                  type: amount >= 0 ? 'credit' : 'debit',
+                  category: row.category || row.Category || null,
+                  account: row.account || row.Account || null,
+                  reference: row.reference || row.Reference || null,
+                  is_reconciled: false
+                })
 
               if (error) {
                 console.error('Supabase insert error:', error)
