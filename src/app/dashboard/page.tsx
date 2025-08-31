@@ -509,6 +509,9 @@ export default function Dashboard() {
   }
 
   const generateExcelReport = async () => {
+    console.log('Current selectedClientId:', selectedClientId)
+    console.log('Available clients:', clients)
+    
     if (!selectedClientId) {
       alert('Please select a client first')
       return
@@ -1031,7 +1034,10 @@ export default function Dashboard() {
                     <ClientSelector
                       clients={clients}
                       selectedClientId={selectedClientId}
-                      onClientChange={setSelectedClientId}
+                      onClientChange={(clientId) => {
+                        console.log('Client changed to:', clientId)
+                        setSelectedClientId(clientId)
+                      }}
                       loading={loading}
                     />
                     
