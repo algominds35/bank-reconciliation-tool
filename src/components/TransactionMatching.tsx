@@ -36,6 +36,7 @@ interface TransactionMatch {
   confidence: number
   difference?: number
   notes?: string
+  status?: 'pending' | 'approved' | 'rejected'
 }
 
 export default function TransactionMatching() {

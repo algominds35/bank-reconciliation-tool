@@ -2,8 +2,8 @@
 
 -- Bank transactions table
 CREATE TABLE IF NOT EXISTS public.bank_transactions (
-    id TEXT PRIMARY KEY,
-    client_id TEXT NOT NULL REFERENCES public.clients(id) ON DELETE CASCADE,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    client_id UUID NOT NULL REFERENCES public.clients(id) ON DELETE CASCADE,
     date DATE NOT NULL,
     description TEXT NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS public.bank_transactions (
 
 -- QuickBooks transactions table
 CREATE TABLE IF NOT EXISTS public.book_transactions (
-    id TEXT PRIMARY KEY,
-    client_id TEXT NOT NULL REFERENCES public.clients(id) ON DELETE CASCADE,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    client_id UUID NOT NULL REFERENCES public.clients(id) ON DELETE CASCADE,
     date DATE NOT NULL,
     description TEXT NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
@@ -34,10 +34,10 @@ CREATE TABLE IF NOT EXISTS public.book_transactions (
 
 -- Transaction matches table
 CREATE TABLE IF NOT EXISTS public.transaction_matches (
-    id TEXT PRIMARY KEY,
-    client_id TEXT NOT NULL REFERENCES public.clients(id) ON DELETE CASCADE,
-    bank_transaction_id TEXT NOT NULL REFERENCES public.bank_transactions(id) ON DELETE CASCADE,
-    book_transaction_id TEXT REFERENCES public.book_transactions(id) ON DELETE CASCADE,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    client_id UUID NOT NULL REFERENCES public.clients(id) ON DELETE CASCADE,
+    bank_transaction_id UUID NOT NULL REFERENCES public.bank_transactions(id) ON DELETE CASCADE,
+    book_transaction_id UUID REFERENCES public.book_transactions(id) ON DELETE CASCADE,
     match_type TEXT CHECK (match_type IN ('exact', 'fuzzy', 'manual', 'unmatched')) NOT NULL,
     confidence DECIMAL(3,2) NOT NULL CHECK (confidence >= 0 AND confidence <= 1),
     difference DECIMAL(10,2),
