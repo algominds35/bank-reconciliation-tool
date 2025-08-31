@@ -965,6 +965,14 @@ export default function Dashboard() {
               <CardContent className="p-6">
           <div className="flex flex-wrap gap-4 items-center justify-between">
                   <div className="flex gap-4 items-center flex-wrap">
+                    {/* Client Selector */}
+                    <ClientSelector
+                      clients={clients}
+                      selectedClientId={selectedClientId}
+                      onClientChange={setSelectedClientId}
+                      loading={loading}
+                    />
+                    
                     {/* Upload Buttons */}
                     <div className="flex gap-2">
               <div>
