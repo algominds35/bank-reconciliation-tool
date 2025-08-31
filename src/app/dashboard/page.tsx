@@ -33,7 +33,8 @@ import {
   LogOut,
   Settings,
   Trash2,
-  RefreshCw
+  RefreshCw,
+  Plus
 } from 'lucide-react'
 
 export default function Dashboard() {
@@ -272,6 +273,67 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.error('Failed to fetch invoice stats:', error)
+    }
+  }
+
+  const handleAddClient = async (clientData: any) => {
+    try {
+      const { data, error } = await supabase
+        .from('clients')
+        .insert([{
+          ...clientData,
+          user_id: user.id,
+          status: 'pending'
+        }])
+        .select()
+        .single()
+
+      if (error) throw error
+
+      setClients([...clients, data])
+      alert('Client created successfully!')
+    } catch (error) {
+      console.error('Error creating client:', error)
+      alert('Failed to create client. Please try again.')
+    }
+  }
+
+  const handleUpdateClient = async (clientId: string, updates: any) => {
+    try {
+      const { error } = await supabase
+        .from('clients')
+        .update(updates)
+        .eq('id', clientId)
+        .eq('user_id', user.id)
+
+      if (error) throw error
+
+      setClients(clients.map(c => c.id === clientId ? { ...c, ...updates } : c))
+      alert('Client updated successfully!')
+    } catch (error) {
+      console.error('Error updating client:', error)
+      alert('Failed to update client. Please try again.')
+    }
+  }
+
+  const handleDeleteClient = async (clientId: string) => {
+    try {
+      const { error } = await supabase
+        .from('clients')
+        .delete()
+        .eq('id', clientId)
+        .eq('user_id', user.id)
+
+      if (error) throw error
+
+      setClients(clients.filter(c => c.id !== clientId))
+      if (selectedClientId === clientId) {
+        setSelectedClientId(null)
+      }
+      alert('Client deleted successfully!')
+    } catch (error) {
+      console.error('Error deleting client:', error)
+      alert('Failed to delete client. Please try again.')
     }
   }
 
@@ -972,6 +1034,28 @@ export default function Dashboard() {
                       onClientChange={setSelectedClientId}
                       loading={loading}
                     />
+                    
+                    {/* Add Client Button */}
+                    <Button
+                      onClick={() => {
+                        const businessName = prompt('Enter business name:')
+                        const contactName = prompt('Enter contact name:')
+                        const email = prompt('Enter email (optional):')
+                        
+                        if (businessName && contactName) {
+                          handleAddClient({
+                            business_name: businessName,
+                            name: contactName,
+                            email: email || ''
+                          })
+                        }
+                      }}
+                      variant="outline"
+                      className="flex items-center space-x-2"
+                    >
+                      <Plus className="h-4 w-4" />
+                      <span>Add Client</span>
+                    </Button>
                     
                     {/* Upload Buttons */}
                     <div className="flex gap-2">
