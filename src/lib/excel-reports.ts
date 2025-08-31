@@ -234,7 +234,7 @@ export async function generatePLStatement(data: ReportData): Promise<ExcelJS.Buf
     }, {} as Record<string, number>)
   
   Object.entries(expenseCategories).forEach(([category, amount]) => {
-    worksheet.addRow([category, amount.toFixed(2), ''])
+    worksheet.addRow([category, (amount as number).toFixed(2), ''])
   })
   
   worksheet.addRow(['Total Expenses', expenses.toFixed(2), ''])
