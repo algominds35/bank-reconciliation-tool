@@ -233,49 +233,6 @@ class BulkReconciliationEngine {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
   }
 
-  // Generate realistic book transactions for testing (simulates QuickBooks data)
-  generateMockBookTransactions(bankTransactions: Transaction[]): Transaction[] {
-    const mockTransactions: Transaction[] = []
-
-    bankTransactions.forEach((bankTxn, index) => {
-      // 85% chance of having a matching book transaction (realistic match rate)
-      if (Math.random() < 0.85) {
-        const bookTxn: Transaction = {
-          id: `book-${bankTxn.id}`,
-          date: this.adjustDate(bankTxn.date, Math.floor(Math.random() * 3) - 1), // ±1 day variation
-          description: this.varyDescription(bankTxn.description),
-          amount: bankTxn.amount + (Math.random() < 0.15 ? (Math.random() - 0.5) * 0.05 : 0), // Small amount variations (15% chance)
-          type: bankTxn.type,
-          confidence: 0.9
-        }
-        mockTransactions.push(bookTxn)
-      }
-
-      // Add some extra book transactions (manual entries, accruals, etc.)
-      if (Math.random() < 0.25) {
-        const descriptions = [
-          'Manual Journal Entry',
-          'Accrual Adjustment', 
-          'Depreciation Expense',
-          'Prepaid Adjustment',
-          'Reclassification Entry',
-          'Month End Adjustment'
-        ]
-        
-        mockTransactions.push({
-          id: `book-extra-${index}`,
-          date: bankTxn.date,
-          description: descriptions[Math.floor(Math.random() * descriptions.length)],
-          amount: Math.random() * 500 + 25,
-          type: Math.random() < 0.5 ? 'debit' : 'credit',
-          confidence: 0.9
-        })
-      }
-    })
-
-    return mockTransactions
-  }
-
   // Enhanced matching algorithm with better logic
   private findExactMatches(bankTransactions: Transaction[], bookTransactions: Transaction[]): ReconciliationMatch[] {
     const matches: ReconciliationMatch[] = []

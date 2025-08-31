@@ -820,10 +820,10 @@ export default function HomePage() {
                 <p className="text-slate-700 mb-6 italic">
                   "QuickBooks kept matching my $4 coffee purchases to my $2,000 rent payment. I was spending 8 hours every month fixing these ridiculous mistakes. ReconcileBook's AI actually understands transactions - coffee stays coffee, rent stays rent. Saved me 20+ hours monthly!"
                 </p>
-                                <div className="flex items-center">
+            <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4">
                     <span className="text-white font-bold text-lg">SC</span>
-              </div>
+            </div>
                   <div>
                     <div className="font-semibold text-slate-900">Sarah Chen</div>
                     <div className="text-slate-600 text-sm">CPA, TechFlow Solutions</div>
@@ -844,10 +844,10 @@ export default function HomePage() {
                 <p className="text-slate-700 mb-6 italic">
                   "I was working every weekend chasing unpaid invoices because XERO's reminders kept hitting spam folders. ReconcileBook's professional emails get delivered and my clients actually respond. Got paid 60% faster and my Sundays are finally free!"
                 </p>
-                <div className="flex items-center">
+            <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-full flex items-center justify-center mr-4">
                     <span className="text-white font-bold text-lg">MR</span>
-          </div>
+            </div>
                   <div>
                     <div className="font-semibold text-slate-900">Mike Rodriguez</div>
                     <div className="text-slate-600 text-sm">Founder, Digital Marketing Pro</div>
@@ -868,10 +868,10 @@ export default function HomePage() {
                 <p className="text-slate-700 mb-6 italic">
                   "We were paying a bookkeeper $500/month just to fix QuickBooks' matching errors. ReconcileBook does it perfectly for $79/month. ROI was immediate - saved us $421 monthly plus eliminated all the frustration!"
                 </p>
-                <div className="flex items-center">
+            <div className="flex items-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mr-4">
                     <span className="text-white font-bold text-lg">AT</span>
-              </div>
+            </div>
                   <div>
                     <div className="font-semibold text-slate-900">Amanda Thompson</div>
                     <div className="text-slate-600 text-sm">Small Business Owner</div>
@@ -879,8 +879,8 @@ export default function HomePage() {
                 </div>
               </CardContent>
             </Card>
-                </div>
-              </div>
+          </div>
+        </div>
       </section>
 
       {/* About Us Section */}
@@ -888,7 +888,7 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-8">
             Built by Frustrated Business Owners
-          </h2>
+            </h2>
           <p className="text-xl text-slate-600 mb-12 leading-relaxed">
             We created ReconcileBook after spending countless hours fixing QuickBooks' ridiculous matching errors and watching our invoice reminders disappear into spam folders. There had to be a better way.
           </p>
@@ -898,16 +898,16 @@ export default function HomePage() {
               <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h3>
               <p className="text-slate-600 leading-relaxed">
                 To eliminate the frustration of financial management for small businesses. No more weekend work fixing software mistakes. No more chasing payments because reminders hit spam. Just accurate, reliable tools that work.
-              </p>
-              </div>
-
+            </p>
+          </div>
+          
               <div>
               <h3 className="text-2xl font-bold text-slate-900 mb-4">Why We're Different</h3>
               <p className="text-slate-600 leading-relaxed">
                 We focus on solving real problems, not adding features. Our AI understands context, our emails get delivered, and our support team actually helps. We're business owners serving business owners.
               </p>
               </div>
-          </div>
+            </div>
                 </div>
       </section>
 
@@ -921,7 +921,7 @@ export default function HomePage() {
             <p className="text-xl text-slate-600">
               Tips, guides, and insights for better financial management
             </p>
-            </div>
+              </div>
           
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300">
@@ -935,7 +935,7 @@ export default function HomePage() {
                     Discover the technical reasons behind QuickBooks' notorious matching errors and learn how modern AI solves these problems.
                   </p>
                   <div className="text-blue-600 font-medium">Read More →</div>
-        </div>
+            </div>
               </CardContent>
             </Card>
 
@@ -950,7 +950,7 @@ export default function HomePage() {
                     Learn how to automate invoice collections without spam folders, improving cash flow by 60% while reclaiming your weekends.
                   </p>
                   <div className="text-blue-600 font-medium">Read More →</div>
-          </div>
+              </div>
               </CardContent>
             </Card>
 
@@ -965,10 +965,10 @@ export default function HomePage() {
                     82% of small businesses fail due to cash flow problems. Here's how to avoid becoming a statistic with better financial management.
                   </p>
                   <div className="text-blue-600 font-medium">Read More →</div>
-        </div>
+              </div>
               </CardContent>
             </Card>
-    </div>
+          </div>
         </div>
       </section>
 
@@ -1005,17 +1005,17 @@ export default function HomePage() {
             <div className="flex items-center space-x-2">
               <Shield className="h-5 w-5" />
               <span>No Credit Card Required</span>
-            </div>
+          </div>
             <div className="flex items-center space-x-2">
               <Zap className="h-5 w-5" />
               <span>Setup in 2 Minutes</span>
-        </div>
+                </div>
             <div className="flex items-center space-x-2">
               <Users className="h-5 w-5" />
               <span>24/7 Support</span>
-          </div>
-        </div>
-    </div>
+                </div>
+              </div>
+              </div>
       </section>
 
       {/* Footer */}
@@ -1034,10 +1034,10 @@ export default function HomePage() {
                   📧 alex@usealgomind.com
                 </a>
               </div>
-            </div>
+              </div>
 
             {/* Quick Links */}
-            <div>
+              <div>
               <h4 className="text-lg font-semibold text-white mb-4">Quick Links</h4>
               <ul className="space-y-2">
                 <li><a href="#features" className="text-slate-300 hover:text-white transition-colors">Features</a></li>
@@ -1046,7 +1046,7 @@ export default function HomePage() {
                 <li><Link href="/blog" className="text-slate-300 hover:text-white transition-colors">Blog</Link></li>
                 <li><Link href="/auth/login" className="text-slate-300 hover:text-white transition-colors">Login</Link></li>
               </ul>
-            </div>
+              </div>
 
             {/* Legal & Support */}
             <div>
@@ -1058,8 +1058,8 @@ export default function HomePage() {
                 <li><Link href="/contact" className="text-slate-300 hover:text-white transition-colors">Contact Us</Link></li>
               </ul>
             </div>
-          </div>
-
+        </div>
+          
           {/* Bottom Bar */}
           <div className="border-t border-slate-800 mt-12 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
@@ -1078,4 +1078,4 @@ export default function HomePage() {
     </div>
     </>
   )
-}
+} 
