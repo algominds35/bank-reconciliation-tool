@@ -200,7 +200,7 @@ export default function HomePage() {
           <div className="relative group">
             <div className="aspect-video bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl overflow-hidden shadow-2xl group-hover:shadow-3xl transition-all duration-500 transform group-hover:scale-[1.02]">
               <iframe
-                src="https://www.youtube.com/embed/_K9NET1njog"
+                src="https://www.youtube.com/embed/_K9NET1njog?cc_load_policy=1&cc_lang_pref=en&rel=0"
                 title="ReconcileBook Demo - AI Bank Reconciliation in Action"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
