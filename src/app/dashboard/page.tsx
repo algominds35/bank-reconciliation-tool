@@ -425,13 +425,40 @@ export default function Dashboard() {
             console.log('Processing transaction:', transaction)
 
             try {
+              // Create a default client if none selected
+              let clientId = selectedClientId
+              if (!clientId) {
+                const { data: defaultClient, error: clientError } = await supabase
+                  .from('clients')
+                  .insert({
+                    name: `Client from ${file.name}`,
+                    email: `client-${Date.now()}@example.com`,
+                    user_id: user?.id || 'demo-user',
+                    status: 'ready',
+                    total_transactions: 0,
+                    unmatched_transactions: 0,
+                    created_at: new Date().toISOString()
+                  })
+                  .select('id')
+                  .single()
+
+                if (clientError) {
+                  console.error('Error creating default client:', clientError)
+                  throw new Error(`Failed to create client: ${clientError.message}`)
+                }
+
+                clientId = defaultClient.id
+                setSelectedClientId(clientId)
+                console.log('Created default client:', clientId)
+              }
+
               // Insert into the correct table based on transaction type
               const tableName = transactionType === 'bank' ? 'bank_transactions' : 'book_transactions'
               
               const { error } = await supabase
                 .from(tableName)
                 .insert({
-                  client_id: selectedClientId,
+                  client_id: clientId,
                   date: String(date),
                   description: String(description),
                   amount: amount,

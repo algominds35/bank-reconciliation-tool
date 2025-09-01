@@ -2,6 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom pointing cursor animation */
+@keyframes cursorMove {
+  0% { transform: translate(10%, 20%); }
+  25% { transform: translate(60%, 40%); }
+  50% { transform: translate(80%, 60%); }
+  75% { transform: translate(30%, 80%); }
+  100% { transform: translate(10%, 20%); }
+}
+
+@keyframes cursorClick {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.8); }
+  100% { transform: scale(1); }
+}
+
+.cursor-animation {
+  animation: cursorMove 8s infinite ease-in-out;
+  z-index: 10;
+}
+
+.cursor-click {
+  animation: cursorClick 0.3s ease-in-out;
+}
+
+/* Professional pointing cursor */
+.pointing-cursor {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.pointing-cursor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 2px solid #F45B49;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.pointing-cursor::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 8px;
+  height: 8px;
+  background: #F45B49;
+  border-radius: 50%;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
