@@ -421,40 +421,13 @@ export default function Dashboard() {
             console.log('Processing transaction:', transaction)
 
             try {
-              // Create a default client if none selected
-              let clientId = selectedClientId
-              if (!clientId) {
-                const { data: defaultClient, error: clientError } = await supabase
-                  .from('clients')
-                  .insert({
-                    name: `Client from ${file.name}`,
-                    email: `client-${Date.now()}@example.com`,
-                    user_id: user?.id || 'demo-user',
-                    status: 'ready',
-                    total_transactions: 0,
-                    unmatched_transactions: 0,
-                    created_at: new Date().toISOString()
-                  })
-                  .select('id')
-                  .single()
-
-                if (clientError) {
-                  console.error('Error creating default client:', clientError)
-                  throw new Error(`Failed to create client: ${clientError.message}`)
-                }
-
-                clientId = defaultClient.id
-                setSelectedClientId(clientId)
-                console.log('Created default client:', clientId)
-              }
-
-              // Insert into the correct table based on transaction type
+              // Insert directly without client requirement - like it was working before
               const tableName = transactionType === 'bank' ? 'bank_transactions' : 'book_transactions'
               
               const { error } = await supabase
                 .from(tableName)
                 .insert({
-                  client_id: clientId,
+                  client_id: null, // Allow null client_id like before
                   date: String(date),
                   description: String(description),
                   amount: amount,
@@ -1009,37 +982,23 @@ export default function Dashboard() {
               <CardContent className="p-6">
           <div className="flex flex-wrap gap-4 items-center justify-between">
                   <div className="flex gap-4 items-center flex-wrap">
-                    {/* Client Selector */}
-                    <ClientSelector
-                      clients={clients}
-                      selectedClientId={selectedClientId}
-                      onClientChange={(clientId) => {
-                        console.log('Client changed to:', clientId)
-                        setSelectedClientId(clientId)
-                      }}
-                      loading={loading}
-                    />
-                    
-                    {/* Add Client Button */}
+                    {/* Upload buttons - no client requirement */}
                     <Button
-                      onClick={() => {
-                        const businessName = prompt('Enter business name:')
-                        const contactName = prompt('Enter contact name:')
-                        const email = prompt('Enter email (optional):')
-                        
-                        if (businessName && contactName) {
-                          handleAddClient({
-                            business_name: businessName,
-                            name: contactName,
-                            email: email || ''
-                          })
-                        }
-                      }}
-                      variant="outline"
-                      className="flex items-center space-x-2"
+                      onClick={() => document.getElementById('bank-upload')?.click()}
+                      disabled={uploading}
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
                     >
-                      <Plus className="h-4 w-4" />
-                      <span>Add Client</span>
+                      {uploading ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 animate-spin mr-2" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="h-4 w-4 mr-2" />
+                          Upload Bank CSV
+                        </>
+                      )}
                     </Button>
                     
                     {/* Upload Buttons */}
