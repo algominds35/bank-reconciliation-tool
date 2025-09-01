@@ -73,11 +73,7 @@ export default function Dashboard() {
   const [lastSyncTime, setLastSyncTime] = useState<string | null>(null)
   const [nextSyncTime, setNextSyncTime] = useState<string | null>(null)
   
-  // Excel Reports state
-  const [reportType, setReportType] = useState<'balance-sheet' | 'cash-flow' | 'pl-statement' | 'reconciliation'>('balance-sheet')
-  const [reportStartDate, setReportStartDate] = useState('')
-  const [reportEndDate, setReportEndDate] = useState('')
-  const [generatingReport, setGeneratingReport] = useState(false)
+
   
   const router = useRouter()
 
