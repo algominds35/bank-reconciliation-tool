@@ -135,25 +135,49 @@ export default function Dashboard() {
 
   const fetchTransactions = async () => {
     try {
-      let query = supabase
-        .from('transactions')
-        .select('*')
-        .eq('user_id', user.id)
+      // Fetch from both bank_transactions and book_transactions tables
+      const [bankResult, bookResult] = await Promise.all([
+        supabase.from('bank_transactions').select('*'),
+        supabase.from('book_transactions').select('*')
+      ])
 
-      if (selectedClientId) {
-        query = query.eq('client_id', selectedClientId)
+      let allTransactions: Transaction[] = []
+
+      // Process bank transactions
+      if (bankResult.data) {
+        allTransactions.push(...bankResult.data.map(t => ({
+          id: t.id,
+          user_id: user?.id || 'demo-user',
+          client_id: t.client_id,
+          date: t.date,
+          description: t.description,
+          amount: t.amount,
+          transaction_type: 'bank' as const,
+          category: t.category,
+          notes: t.reference,
+          is_reconciled: t.is_reconciled || false,
+          reconciliation_group: null
+        })))
       }
 
-      const { data, error } = await query.order('date', { ascending: false })
-
-      if (error) {
-        if (error.code === 'PGRST116' || error.message.includes('does not exist')) {
-          console.warn('Database tables not found')
-          return
-        }
-        throw error
+      // Process book transactions
+      if (bookResult.data) {
+        allTransactions.push(...bookResult.data.map(t => ({
+          id: t.id,
+          user_id: user?.id || 'demo-user',
+          client_id: t.client_id,
+          date: t.date,
+          description: t.description,
+          amount: t.amount,
+          transaction_type: 'bookkeeping' as const,
+          category: t.category,
+          notes: t.reference,
+          is_reconciled: t.is_reconciled || false,
+          reconciliation_group: null
+        })))
       }
-      setTransactions(data || [])
+
+      setTransactions(allTransactions)
     } catch (error) {
       console.warn('Error fetching transactions:', error)
       setTransactions([])
@@ -458,6 +482,7 @@ export default function Dashboard() {
 
           // Refresh the transactions list
           await fetchTransactions()
+          await fetchClients()
 
           // Success message
           alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!`)
