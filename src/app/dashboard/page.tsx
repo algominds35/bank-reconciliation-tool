@@ -544,63 +544,7 @@ export default function Dashboard() {
     }
   }
 
-  const generateExcelReport = async () => {
-    console.log('Current selectedClientId:', selectedClientId)
-    console.log('Available clients:', clients)
-    
-    if (!selectedClientId) {
-      alert('Please select a client first')
-      return
-    }
-
-    if (!reportType || !reportStartDate || !reportEndDate) {
-      alert('Please fill in all report fields')
-      return
-    }
-
-    setGeneratingReport(true)
-    
-    try {
-      const response = await fetch('/api/generate-excel-reports', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          clientId: selectedClientId,
-          startDate: reportStartDate,
-          endDate: reportEndDate,
-          reportType: reportType
-        })
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to generate report')
-      }
-
-      // Get the Excel file as blob
-      const blob = await response.blob()
-      
-      // Create download link
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${reportType}-${reportStartDate}-to-${reportEndDate}.xlsx`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
-
-      alert('Excel report generated successfully!')
-      
-    } catch (error) {
-      console.error('Error generating Excel report:', error)
-      alert(`Error generating report: ${error instanceof Error ? error.message : 'Unknown error'}`)
-    } finally {
-      setGeneratingReport(false)
-    }
-  }
+  // Excel report function removed - was causing issues
 
   const syncInvoices = async () => {
     if (!qboStatus.connected) {
@@ -1003,10 +947,9 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="transactions">All Transactions</TabsTrigger>
             <TabsTrigger value="matching">Smart Matching</TabsTrigger>
-            <TabsTrigger value="reports">Excel Reports</TabsTrigger>
           </TabsList>
 
           <TabsContent value="transactions" className="space-y-6">
@@ -1379,143 +1322,6 @@ export default function Dashboard() {
               onMatch={handleMatch}
               loading={false}
             />
-          </TabsContent>
-
-          <TabsContent value="reports" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <FileText className="h-5 w-5 text-blue-600" />
-                  <span>Excel Reports</span>
-                </CardTitle>
-                <CardDescription>
-                  Generate professional Excel reports from your transaction data
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Client Selection for Reports */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <ClientSelector
-                      clients={clients}
-                      selectedClientId={selectedClientId}
-                      onClientChange={(clientId) => {
-                        console.log('Client changed to:', clientId)
-                        setSelectedClientId(clientId)
-                      }}
-                      loading={loading}
-                    />
-                    
-                    <Button
-                      onClick={() => {
-                        const businessName = prompt('Enter business name:')
-                        const contactName = prompt('Enter contact name:')
-                        const email = prompt('Enter email (optional):')
-                        
-                        if (businessName && contactName) {
-                          handleAddClient({
-                            business_name: businessName,
-                            name: contactName,
-                            email: email || ''
-                          })
-                        }
-                      }}
-                      variant="outline"
-                      className="flex items-center space-x-2"
-                    >
-                      <Plus className="h-4 w-4" />
-                      <span>Add Client</span>
-                    </Button>
-                  </div>
-                </div>
-                
-                {/* Report Type Selection */}
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Report Type
-                    </label>
-                    <Select value={reportType} onValueChange={(value) => setReportType(value as any)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select report type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="balance-sheet">Balance Sheet</SelectItem>
-                        <SelectItem value="cash-flow">Cash Flow Statement</SelectItem>
-                        <SelectItem value="pl-statement">Profit & Loss Statement</SelectItem>
-                        <SelectItem value="reconciliation">Monthly Reconciliation</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Date Range Selection */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Start Date
-                      </label>
-                      <input
-                        type="date"
-                        value={reportStartDate}
-                        onChange={(e) => setReportStartDate(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        End Date
-                      </label>
-                      <input
-                        type="date"
-                        value={reportEndDate}
-                        onChange={(e) => setReportEndDate(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Generate Report Button */}
-                  <div className="flex gap-4">
-                    <Button 
-                      onClick={generateExcelReport}
-                      disabled={!reportType || !reportStartDate || !reportEndDate || generatingReport}
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                    >
-                      {generatingReport ? (
-                        <>
-                          <RefreshCw className="h-4 w-4 animate-spin mr-2" />
-                          Generating...
-                        </>
-                      ) : (
-                        <>
-                          <Download className="h-4 w-4 mr-2" />
-                          Generate Excel Report
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Report Information */}
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-2">Available Reports</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-                    <div>
-                      <strong>Balance Sheet:</strong> Assets, liabilities, and equity as of a specific date
-                    </div>
-                    <div>
-                      <strong>Cash Flow Statement:</strong> Operating, investing, and financing cash flows
-                    </div>
-                    <div>
-                      <strong>Profit & Loss:</strong> Revenue, expenses, and net income for a period
-                    </div>
-                    <div>
-                      <strong>Monthly Reconciliation:</strong> Detailed transaction reconciliation report
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </TabsContent>
         </Tabs>
       </div>
