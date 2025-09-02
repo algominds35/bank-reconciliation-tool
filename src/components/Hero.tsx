@@ -104,26 +104,18 @@ export default function Hero() {
                                                                       {/* Video Container */}
                 <div className="relative aspect-video bg-gradient-to-br from-slate-100 to-slate-200">
                                      {/* YouTube Video Embed */}
-                   <iframe
-                     className="absolute inset-0 w-full h-full rounded-t-2xl"
-                     src="https://www.youtube.com/embed/_K9NET1njog?autoplay=0&modestbranding=1&rel=0&showinfo=0&controls=1"
-                     title="AI-Powered Bank Reconciliation Demo"
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                     allowFullScreen
-                   ></iframe>
+                                                           <iframe
+                      className="absolute inset-0 w-full h-full rounded-t-2xl"
+                      src="https://www.youtube.com/embed/_K9NET1njog?autoplay=0&modestbranding=1&rel=0&showinfo=0&controls=1"
+                      title="AI-Powered Bank Reconciliation Demo"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
                   
-                  {/* Play Button Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/5 transition-colors cursor-pointer group opacity-0 hover:opacity-100">
-                    <div className="w-20 h-20 bg-[#F45B49] rounded-full flex items-center justify-center group-hover:bg-[#E24C3A] transition-colors group-hover:scale-110">
-                      <Play className="h-8 w-8 text-white ml-1" />
-                    </div>
-                  </div>
+                  {/* Play Button Overlay - Removed since YouTube controls are enabled */}
                   
-                  {/* Duration Badge */}
-                  <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded text-sm">
-                    0:30
-                  </div>
+                  {/* Duration Badge - Removed to show real YouTube duration */}
                 </div>
                 
                 {/* Video Info */}
