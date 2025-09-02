@@ -75,7 +75,7 @@ export default function DemoScreenshots() {
               
               {/* Auto-Match Screenshot */}
               <img 
-                src="/images/smart-matching-screenshot.png" 
+                src="/images/smart-matching-screenshot - Copy.png" 
                 alt="AI Auto-Match Engine - Transaction Matching"
                 className="w-full h-auto object-contain"
               />
