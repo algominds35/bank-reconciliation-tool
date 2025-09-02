@@ -86,7 +86,7 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right Column - Dual Screenshots */}
+          {/* Right Column - Video Player */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -94,104 +94,42 @@ export default function Hero() {
             className="relative"
           >
             <div className="relative z-10">
-              {/* Main Dashboard Screenshot */}
+              {/* Video Player Card */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.6 }}
-                className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] overflow-hidden mb-4"
-              >
-                {/* Dashboard Preview */}
-                <div className="relative aspect-video bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    </div>
-                    <div className="text-sm text-slate-500">ReconcileBook Pro Dashboard</div>
-                  </div>
-                  
-                  {/* Dashboard Content */}
-                  <div className="space-y-4">
-                    <div className="flex gap-4">
-                      <div className="flex-1 bg-white rounded-lg p-4 border border-slate-200">
-                        <div className="text-2xl font-bold text-slate-900">12</div>
-                        <div className="text-sm text-slate-500">Total Clients</div>
-                      </div>
-                      <div className="flex-1 bg-white rounded-lg p-4 border border-slate-200">
-                        <div className="text-2xl font-bold text-green-600">8</div>
-                        <div className="text-sm text-slate-500">Active</div>
-                      </div>
-                      <div className="flex-1 bg-white rounded-lg p-4 border border-slate-200">
-                        <div className="text-2xl font-bold text-yellow-600">3</div>
-                        <div className="text-sm text-slate-500">Pending</div>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white rounded-lg p-4 border border-slate-200">
-                      <div className="font-semibold text-slate-900 mb-2">Recent Activity</div>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-slate-600">John's Bakery LLC</span>
-                          <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">Pending</span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-slate-600">TechStart Ventures</span>
-                          <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Active</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Auto-Match Transactions Screenshot */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.6 }}
                 className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] overflow-hidden"
               >
-                {/* Auto-Match Preview */}
-                <div className="relative aspect-video bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+                {/* Video Container */}
+                <div className="relative aspect-video bg-gradient-to-br from-slate-100 to-slate-200">
+                  {/* YouTube Video Embed */}
+                  <iframe
+                    className="absolute inset-0 w-full h-full rounded-t-2xl"
+                    src="https://www.youtube.com/embed/_K9NET1njog?autoplay=0&modestbranding=1&rel=0&showinfo=0&controls=1"
+                    title="AI-Powered Bank Reconciliation Demo"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                
+                {/* Video Info */}
+                <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    </div>
-                    <div className="text-sm text-slate-500">AI Auto-Match Engine</div>
+                    <h3 className="font-semibold text-slate-900">AI-Powered Reconciliation Demo</h3>
+                    <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
+                      Live Demo
+                    </span>
                   </div>
-                  
-                  {/* Auto-Match Content */}
-                  <div className="space-y-4">
-                    <div className="bg-white rounded-lg p-4 border border-slate-200">
-                      <div className="font-semibold text-slate-900 mb-3">Transaction Matching</div>
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between p-2 bg-green-50 rounded">
-                          <span className="text-sm text-slate-600">Starbucks Coffee</span>
-                          <span className="text-sm font-medium text-green-600">✓ Matched</span>
-                        </div>
-                        <div className="flex items-center justify-between p-2 bg-green-50 rounded">
-                          <span className="text-sm text-slate-600">Office Supplies Co</span>
-                          <span className="text-sm font-medium text-green-600">✓ Matched</span>
-                        </div>
-                        <div className="flex items-center justify-between p-2 bg-yellow-50 rounded">
-                          <span className="text-sm text-slate-600">Unknown Transaction</span>
-                          <span className="text-sm font-medium text-yellow-600">Review Needed</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white rounded-lg p-4 border border-slate-200">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-slate-700">Match Rate</span>
-                        <span className="text-lg font-bold text-green-600">94%</span>
-                      </div>
-                      <div className="w-full bg-slate-200 rounded-full h-2">
-                        <div className="bg-green-500 h-2 rounded-full" style={{width: '94%'}}></div>
-                      </div>
+                  <p className="text-slate-600 text-sm mb-4">
+                    See how our AI matches transactions in real-time and generates professional reports automatically.
+                  </p>
+                  <div className="flex items-center justify-between text-sm text-slate-500">
+                    <span>2:08 min demo</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-[#F45B49] rounded-full"></div>
+                      <span>Updated Today</span>
                     </div>
                   </div>
                 </div>
