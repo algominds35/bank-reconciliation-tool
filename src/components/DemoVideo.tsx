@@ -134,14 +134,7 @@ const DemoVideo = () => {
         >
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden max-w-4xl mx-auto">
             <div className="relative aspect-video bg-gradient-to-br from-gray-100 to-gray-200">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 bg-[#F45B49] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#E24C3A] transition-colors group">
-                  <Play className="h-8 w-8 text-white ml-1 group-hover:scale-110 transition-transform" />
-                </div>
-              </div>
-              <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded text-sm">
-                0:30
-              </div>
+              {/* Removed placeholder play button overlay */}
             </div>
             <div className="p-6">
               <h3 className="font-semibold text-gray-900 mb-2">Watch How It Works</h3>
