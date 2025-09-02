@@ -7,7 +7,7 @@ const Pricing = () => {
   const plans = [
     {
       name: 'Starter',
-      price: '$99',
+      price: '$29',
       period: '/month',
       description: 'Perfect for small bookkeeping firms',
       features: [
