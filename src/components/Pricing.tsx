@@ -22,7 +22,7 @@ const Pricing = () => {
     },
     {
       name: 'Professional',
-      price: '$199',
+      price: '$79',
       period: '/month',
       description: 'Ideal for growing bookkeeping businesses',
       features: [
@@ -39,7 +39,7 @@ const Pricing = () => {
     },
     {
       name: 'Enterprise',
-      price: '$399',
+      price: '$199',
       period: '/month',
       description: 'For large bookkeeping firms',
       features: [
