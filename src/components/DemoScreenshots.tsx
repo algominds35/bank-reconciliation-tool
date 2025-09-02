@@ -35,8 +35,9 @@ export default function DemoScreenshots() {
             transition={{ duration: 0.6 }}
             className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] overflow-hidden"
           >
-            <div className="relative aspect-video bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-              <div className="flex items-center justify-between mb-4">
+            <div className="relative">
+              {/* Browser Window Header */}
+              <div className="flex items-center justify-between p-3 bg-slate-100 border-b border-slate-200">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                   <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
@@ -45,37 +46,12 @@ export default function DemoScreenshots() {
                 <div className="text-sm text-slate-500">ReconcileBook Pro Dashboard</div>
               </div>
               
-              {/* Dashboard Content */}
-              <div className="space-y-4">
-                <div className="flex gap-4">
-                  <div className="flex-1 bg-white rounded-lg p-4 border border-slate-200">
-                    <div className="text-2xl font-bold text-slate-900">12</div>
-                    <div className="text-sm text-slate-500">Total Clients</div>
-                  </div>
-                  <div className="flex-1 bg-white rounded-lg p-4 border border-slate-200">
-                    <div className="text-2xl font-bold text-green-600">8</div>
-                    <div className="text-sm text-slate-500">Active</div>
-                  </div>
-                  <div className="flex-1 bg-white rounded-lg p-4 border border-slate-200">
-                    <div className="text-2xl font-bold text-yellow-600">3</div>
-                    <div className="text-sm text-slate-500">Pending</div>
-                  </div>
-                </div>
-                
-                <div className="bg-white rounded-lg p-4 border border-slate-200">
-                  <div className="font-semibold text-slate-900 mb-2">Recent Activity</div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-600">John's Bakery LLC</span>
-                      <span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">Pending</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-600">TechStart Ventures</span>
-                      <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Active</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Dashboard Screenshot */}
+              <img 
+                src="/images/dashboard-screenshot.png" 
+                alt="ReconcileBook Pro Dashboard - Client Management"
+                className="w-full h-auto object-contain"
+              />
             </div>
           </motion.div>
 
@@ -86,8 +62,9 @@ export default function DemoScreenshots() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] overflow-hidden"
           >
-            <div className="relative aspect-video bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-              <div className="flex items-center justify-between mb-4">
+            <div className="relative">
+              {/* Browser Window Header */}
+              <div className="flex items-center justify-between p-3 bg-slate-100 border-b border-slate-200">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                   <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
@@ -96,36 +73,12 @@ export default function DemoScreenshots() {
                 <div className="text-sm text-slate-500">AI Auto-Match Engine</div>
               </div>
               
-              {/* Auto-Match Content */}
-              <div className="space-y-4">
-                <div className="bg-white rounded-lg p-4 border border-slate-200">
-                  <div className="font-semibold text-slate-900 mb-3">Transaction Matching</div>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between p-2 bg-green-50 rounded">
-                      <span className="text-sm text-slate-600">Starbucks Coffee</span>
-                      <span className="text-sm font-medium text-green-600">✓ Matched</span>
-                    </div>
-                    <div className="flex items-center justify-between p-2 bg-green-50 rounded">
-                      <span className="text-sm text-slate-600">Office Supplies Co</span>
-                      <span className="text-sm font-medium text-green-600">✓ Matched</span>
-                    </div>
-                    <div className="flex items-center justify-between p-2 bg-yellow-50 rounded">
-                      <span className="text-sm text-slate-600">Unknown Transaction</span>
-                      <span className="text-sm font-medium text-yellow-600">Review Needed</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-white rounded-lg p-4 border border-slate-200">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-slate-700">Match Rate</span>
-                    <span className="text-lg font-bold text-green-600">94%</span>
-                  </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div className="bg-green-500 h-2 rounded-full" style={{width: '94%'}}></div>
-                  </div>
-                </div>
-              </div>
+              {/* Auto-Match Screenshot */}
+              <img 
+                src="/images/auto-match-screenshot.png" 
+                alt="AI Auto-Match Engine - Transaction Matching"
+                className="w-full h-auto object-contain"
+              />
             </div>
           </motion.div>
         </div>
