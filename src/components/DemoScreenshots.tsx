@@ -48,7 +48,7 @@ export default function DemoScreenshots() {
               
               {/* Dashboard Screenshot */}
               <img 
-                src="/images/qb-integration-screenshot.png" 
+                src="/images/dashboard-screenshot.png" 
                 alt="ReconcileBook Pro Dashboard - Client Management"
                 className="w-full h-auto object-contain"
               />
