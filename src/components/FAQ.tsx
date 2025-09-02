@@ -94,7 +94,7 @@ const FAQ = () => {
         <div className="text-center mt-12">
           <p className="text-gray-600 mb-4">Still have questions?</p>
           <a
-            href="mailto:support@reconcilebookpro.com"
+                            href="mailto:alex@usealgomind.com"
             className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
           >
             Contact Support
