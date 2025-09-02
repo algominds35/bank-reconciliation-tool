@@ -102,53 +102,29 @@ export default function Hero() {
                 className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] overflow-hidden"
               >
                                                                       {/* Video Container */}
-                   <div className="relative aspect-video bg-gradient-to-br from-slate-100 to-slate-200">
-                     {/* Demo Video Placeholder with Cursor Effect */}
-                     <div className="absolute inset-0 bg-white rounded-t-2xl overflow-hidden">
-                       {/* Dashboard Mockup */}
-                       <div className="p-6">
-                         <div className="flex items-center justify-between mb-4">
-                           <h3 className="font-semibold text-gray-900">Transaction Matching</h3>
-                           <span className="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full">98% Accurate</span>
-                         </div>
-                         
-                         {/* Cursor Animation */}
-                         <div className="relative">
-                           <div className="space-y-3">
-                             <div className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
-                               <span className="text-sm text-gray-600">Client Payment - ABC Corp</span>
-                               <span className="font-semibold text-green-600">+$2,500</span>
-                             </div>
-                             <div className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
-                               <span className="text-sm text-gray-600">Office Rent Payment</span>
-                               <span className="font-semibold text-red-600">-$1,200</span>
-                             </div>
-                             <div className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
-                               <span className="text-sm text-gray-600">Software Subscription</span>
-                               <span className="font-semibold text-red-600">-$99</span>
-                             </div>
-                           </div>
-                           
-                           {/* Animated Cursor */}
-                           <div className="absolute top-2 left-4 w-4 h-4 bg-black rounded-full shadow-lg animate-pulse">
-                             <div className="absolute -top-1 -left-1 w-6 h-6 bg-orange-500 rounded-full opacity-20 animate-ping"></div>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-                     
-                     {/* Play Button Overlay */}
-                     <div className="absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/5 transition-colors cursor-pointer group opacity-0 hover:opacity-100">
-                       <div className="w-20 h-20 bg-[#F45B49] rounded-full flex items-center justify-center group-hover:bg-[#E24C3A] transition-colors group-hover:scale-110">
+                <div className="relative aspect-video bg-gradient-to-br from-slate-100 to-slate-200">
+                                     {/* Video Placeholder */}
+                   <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 rounded-t-2xl flex items-center justify-center">
+                     <div className="text-center">
+                       <div className="w-20 h-20 bg-[#F45B49] rounded-full flex items-center justify-center mx-auto mb-4">
                          <Play className="h-8 w-8 text-white ml-1" />
                        </div>
-                     </div>
-                     
-                     {/* Duration Badge */}
-                     <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded text-sm">
-                       0:30
+                       <p className="text-slate-600 font-medium">Demo Video Coming Soon</p>
                      </div>
                    </div>
+                  
+                  {/* Play Button Overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/5 transition-colors cursor-pointer group opacity-0 hover:opacity-100">
+                    <div className="w-20 h-20 bg-[#F45B49] rounded-full flex items-center justify-center group-hover:bg-[#E24C3A] transition-colors group-hover:scale-110">
+                      <Play className="h-8 w-8 text-white ml-1" />
+                    </div>
+                  </div>
+                  
+                  {/* Duration Badge */}
+                  <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded text-sm">
+                    0:30
+                  </div>
+                </div>
                 
                 {/* Video Info */}
                 <div className="p-6">
