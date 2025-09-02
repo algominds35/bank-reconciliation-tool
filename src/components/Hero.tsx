@@ -147,8 +147,8 @@ export default function Hero() {
                   transition={{ delay: 0.7, duration: 0.6 }}
                   className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-4"
                 >
-                                     <div className="text-2xl font-bold text-slate-900">2,847</div>
-                   <div className="text-sm text-slate-500">Transactions Processed</div>
+                                     <div className="text-2xl font-bold text-slate-900">12.5 hrs</div>
+                   <div className="text-sm text-slate-500">Time Saved Per Month</div>
                    <div className="mt-2 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
                      <div className="w-4/5 h-full bg-green-500 rounded-full"></div>
                    </div>
@@ -160,10 +160,10 @@ export default function Hero() {
                   transition={{ delay: 0.8, duration: 0.6 }}
                   className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-4"
                 >
-                                     <div className="text-2xl font-bold text-slate-900">99.2%</div>
-                   <div className="text-sm text-slate-500">Auto-Match Rate</div>
+                                     <div className="text-2xl font-bold text-slate-900">94%</div>
+                   <div className="text-sm text-slate-500">Error Reduction</div>
                    <div className="mt-2 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
-                     <div className="w-[99.2%] h-full bg-[#F45B49] rounded-full"></div>
+                     <div className="w-[94%] h-full bg-blue-600 rounded-full"></div>
                    </div>
                 </motion.div>
               </div>
@@ -176,12 +176,12 @@ export default function Hero() {
                 className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-4 mt-4"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#F45B49] rounded-full flex items-center justify-center text-white font-semibold">
-                    SC
-                  </div>
-                                     <div className="flex-1">
-                     <div className="font-semibold text-slate-900">Sarah's Coffee Shop</div>
-                     <div className="text-sm text-slate-500">Q4 reconciliation completed</div>
+                                     <div className="w-10 h-10 bg-[#F45B49] rounded-full flex items-center justify-center text-white font-semibold">
+                     MA
+                   </div>
+                   <div className="flex-1">
+                     <div className="font-semibold text-slate-900">Miller & Associates CPA</div>
+                     <div className="text-sm text-slate-500">Monthly reconciliation automated</div>
                    </div>
                   <div className="flex items-center gap-1">
                     <div className="w-8 h-8 bg-slate-100 rounded-full"></div>
