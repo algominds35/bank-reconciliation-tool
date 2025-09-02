@@ -5,6 +5,7 @@ import Hero from '@/components/Hero'
 import Benefits from '@/components/Benefits'
 import Testimonials from '@/components/Testimonials'
 import Logos from '@/components/Logos'
+import DemoScreenshots from '@/components/DemoScreenshots'
 import DemoVideo from '@/components/DemoVideo'
 import Pricing from '@/components/Pricing'
 import FAQ from '@/components/FAQ'
@@ -17,6 +18,7 @@ export default function Home() {
       <Header />
       <Hero />
       <Benefits />
+      <DemoScreenshots />
       <Testimonials />
       <Logos />
       <DemoVideo />
