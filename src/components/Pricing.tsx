@@ -9,13 +9,14 @@ const Pricing = () => {
       name: 'Starter',
       price: '$29',
       period: '/month',
-      description: 'Perfect for small bookkeeping firms',
+      description: 'Essential reconciliation for small bookkeeping practices',
       features: [
-        'Up to 10 clients',
-        'Basic reconciliation tools',
-        'Monthly reports',
-        'Email support',
-        'Bank statement processing'
+        'Up to 10 client accounts',
+        'Automated bank reconciliation',
+        'Monthly financial reports',
+        'Email support (24/7)',
+        'Bank statement processing',
+        'Transaction matching engine'
       ],
       stripeLink: 'https://buy.stripe.com/3cI9AVe6i0ALcrfaee0Fi0a',
       popular: false
@@ -24,15 +25,16 @@ const Pricing = () => {
       name: 'Professional',
       price: '$79',
       period: '/month',
-      description: 'Ideal for growing bookkeeping businesses',
+      description: 'Advanced automation for growing bookkeeping businesses',
       features: [
-        'Up to 25 clients',
-        'Advanced reconciliation',
-        'Custom reports',
-        'Priority support',
-        'Client portal access',
-        'Automated reminders',
-        'Multi-bank integration'
+        'Up to 25 client accounts',
+        'Intelligent reconciliation AI',
+        'Custom financial reports',
+        'Priority support (4-hour response)',
+        'Client portal & collaboration',
+        'Automated payment reminders',
+        'Multi-bank integration',
+        'Real-time sync with QuickBooks'
       ],
       stripeLink: 'https://buy.stripe.com/bJe5kF7HUfvF62Raee0Fi0b',
       popular: true
@@ -41,15 +43,16 @@ const Pricing = () => {
       name: 'Enterprise',
       price: '$199',
       period: '/month',
-      description: 'For large bookkeeping firms',
+      description: 'Complete automation suite for large bookkeeping firms',
       features: [
-        'Unlimited clients',
-        'Full automation suite',
-        'Custom integrations',
-        'Dedicated support',
-        'Advanced analytics',
-        'White-label options',
-        'API access'
+        'Unlimited client accounts',
+        'Enterprise-grade automation',
+        'Custom integrations & API',
+        'Dedicated account manager',
+        'Advanced analytics & insights',
+        'White-label branding options',
+        'Full API access',
+        'Custom workflow automation'
       ],
       stripeLink: 'https://buy.stripe.com/28E4gBd2eerBdvjaee0Fi0c',
       popular: false
