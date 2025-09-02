@@ -48,7 +48,7 @@ export default function DemoScreenshots() {
               
               {/* Dashboard Screenshot */}
               <img 
-                src="/images/dashboard-screenshot.png" 
+                src="/images/qb-integration-screenshot.png" 
                 alt="ReconcileBook Pro Dashboard - Client Management"
                 className="w-full h-auto object-contain"
               />
@@ -75,7 +75,7 @@ export default function DemoScreenshots() {
               
               {/* Auto-Match Screenshot */}
               <img 
-                src="/images/auto-match-screenshot.png" 
+                src="/images/smart-matching-screenshot.png" 
                 alt="AI Auto-Match Engine - Transaction Matching"
                 className="w-full h-auto object-contain"
               />
