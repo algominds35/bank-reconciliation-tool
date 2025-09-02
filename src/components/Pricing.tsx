@@ -26,9 +26,9 @@ const Pricing = () => {
       price: '$79',
       period: '/month',
       description: 'Advanced automation for growing bookkeeping businesses',
-      features: [
-        'Up to 25 client accounts',
-        'Intelligent reconciliation AI',
+             features: [
+         'Up to 250 client accounts',
+         'Intelligent reconciliation AI',
         'Custom financial reports',
         'Priority support (4-hour response)',
         'Client portal & collaboration',
