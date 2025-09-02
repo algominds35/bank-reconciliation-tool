@@ -6,7 +6,6 @@ import Benefits from '@/components/Benefits'
 import Testimonials from '@/components/Testimonials'
 import Logos from '@/components/Logos'
 import DemoScreenshots from '@/components/DemoScreenshots'
-import DemoVideo from '@/components/DemoVideo'
 import Pricing from '@/components/Pricing'
 import FAQ from '@/components/FAQ'
 import CTA from '@/components/CTA'
@@ -21,7 +20,6 @@ export default function Home() {
       <DemoScreenshots />
       <Testimonials />
       <Logos />
-      <DemoVideo />
       <Pricing />
       <FAQ />
       <CTA />
