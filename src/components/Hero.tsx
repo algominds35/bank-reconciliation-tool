@@ -120,22 +120,22 @@ export default function Hero() {
                 
                 {/* Video Info */}
                 <div className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-slate-900">AI-Powered Reconciliation Demo</h3>
-                    <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
-                      HD Quality
-                    </span>
-                  </div>
-                  <p className="text-slate-600 text-sm mb-4">
-                    Watch our AI match transactions in real-time and generate professional reports automatically.
-                  </p>
-                  <div className="flex items-center justify-between text-sm text-slate-500">
-                    <span>26 transactions processed</span>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-[#F45B49] rounded-full"></div>
-                      <span>Live Demo</span>
-                    </div>
-                  </div>
+                                     <div className="flex items-center justify-between mb-4">
+                     <h3 className="font-semibold text-slate-900">AI-Powered Reconciliation Demo</h3>
+                     <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
+                       Live Demo
+                     </span>
+                   </div>
+                   <p className="text-slate-600 text-sm mb-4">
+                     See how our AI matches transactions in real-time and generates professional reports automatically.
+                   </p>
+                   <div className="flex items-center justify-between text-sm text-slate-500">
+                     <span>2:08 min demo</span>
+                     <div className="flex items-center space-x-2">
+                       <div className="w-2 h-2 bg-[#F45B49] rounded-full"></div>
+                       <span>Updated Today</span>
+                     </div>
+                   </div>
                 </div>
               </motion.div>
 
@@ -147,11 +147,11 @@ export default function Hero() {
                   transition={{ delay: 0.7, duration: 0.6 }}
                   className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-4"
                 >
-                  <div className="text-2xl font-bold text-slate-900">1,234</div>
-                  <div className="text-sm text-slate-500">Transactions</div>
-                  <div className="mt-2 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
-                    <div className="w-3/4 h-full bg-green-500 rounded-full"></div>
-                  </div>
+                                     <div className="text-2xl font-bold text-slate-900">2,847</div>
+                   <div className="text-sm text-slate-500">Transactions Processed</div>
+                   <div className="mt-2 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
+                     <div className="w-4/5 h-full bg-green-500 rounded-full"></div>
+                   </div>
                 </motion.div>
 
                 <motion.div
@@ -160,11 +160,11 @@ export default function Hero() {
                   transition={{ delay: 0.8, duration: 0.6 }}
                   className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-4"
                 >
-                  <div className="text-2xl font-bold text-slate-900">98%</div>
-                  <div className="text-sm text-slate-500">Match Rate</div>
-                  <div className="mt-2 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
-                    <div className="w-full h-full bg-[#F45B49] rounded-full"></div>
-                  </div>
+                                     <div className="text-2xl font-bold text-slate-900">99.2%</div>
+                   <div className="text-sm text-slate-500">Auto-Match Rate</div>
+                   <div className="mt-2 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
+                     <div className="w-[99.2%] h-full bg-[#F45B49] rounded-full"></div>
+                   </div>
                 </motion.div>
               </div>
 
@@ -177,12 +177,12 @@ export default function Hero() {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#F45B49] rounded-full flex items-center justify-center text-white font-semibold">
-                    JD
+                    SC
                   </div>
-                  <div className="flex-1">
-                    <div className="font-semibold text-slate-900">John's Bakery LLC</div>
-                    <div className="text-sm text-slate-500">Monthly reconciliation ready</div>
-                  </div>
+                                     <div className="flex-1">
+                     <div className="font-semibold text-slate-900">Sarah's Coffee Shop</div>
+                     <div className="text-sm text-slate-500">Q4 reconciliation completed</div>
+                   </div>
                   <div className="flex items-center gap-1">
                     <div className="w-8 h-8 bg-slate-100 rounded-full"></div>
                     <div className="w-8 h-8 bg-slate-100 rounded-full -ml-2"></div>
