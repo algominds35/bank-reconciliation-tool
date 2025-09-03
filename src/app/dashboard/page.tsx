@@ -155,7 +155,7 @@ export default function Dashboard() {
           amount: t.amount,
           transaction_type: 'bank' as const,
           category: t.category,
-          notes: t.reference,
+          notes: t.notes || t.reference || null,
           is_reconciled: t.is_reconciled || false,
           reconciliation_group: t.reconciliation_group
         })))
@@ -172,7 +172,7 @@ export default function Dashboard() {
           amount: t.amount,
           transaction_type: 'bookkeeping' as const,
           category: t.category,
-          notes: t.reference,
+          notes: t.notes || t.reference || null,
           is_reconciled: t.is_reconciled || false,
           reconciliation_group: t.reconciliation_group
         })))
