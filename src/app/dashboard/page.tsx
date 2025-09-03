@@ -783,10 +783,10 @@ export default function Dashboard() {
   }
 
   const exportReconciledPDF = async () => {
-    const allTransactions = transactions // Export all transactions, not just reconciled
+    const reconciledTransactions = transactions.filter(t => t.is_reconciled)
     
-    if (allTransactions.length === 0) {
-      alert('No transactions to export')
+    if (reconciledTransactions.length === 0) {
+      alert('No reconciled transactions to export')
       return
     }
 
@@ -795,7 +795,7 @@ export default function Dashboard() {
       
       doc.setFontSize(20)
       doc.setFont('helvetica', 'bold')
-      doc.text('Transaction Report', 20, 25)
+      doc.text('Bank Reconciliation Report', 20, 25)
       
       doc.setFontSize(12)
       doc.setFont('helvetica', 'normal')
@@ -810,11 +810,9 @@ export default function Dashboard() {
         }
       }
       
-      doc.text(`Total Transactions: ${allTransactions.length}`, 20, 65)
-      doc.text(`Reconciled: ${allTransactions.filter(t => t.is_reconciled).length}`, 20, 75)
-      doc.text(`Unreconciled: ${allTransactions.filter(t => !t.is_reconciled).length}`, 20, 85)
+      doc.text(`Total Reconciled Transactions: ${reconciledTransactions.length}`, 20, 65)
       
-      let currentY = 100
+      let currentY = 80
       doc.setFontSize(10)
       doc.setFont('helvetica', 'bold')
       
@@ -825,7 +823,7 @@ export default function Dashboard() {
       doc.text('Description', 50, currentY + 2)
       doc.text('Amount', 120, currentY + 2)
       doc.text('Type', 140, currentY + 2)
-      doc.text('Status', 160, currentY + 2)
+      doc.text('Group', 160, currentY + 2)
       
       currentY += 15
       
@@ -833,7 +831,7 @@ export default function Dashboard() {
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(9)
       
-      allTransactions.forEach((transaction, index) => {
+      reconciledTransactions.forEach((transaction, index) => {
         if (index % 2 === 0) {
           doc.setFillColor(248, 249, 250)
           doc.rect(20, currentY - 3, 170, 10, 'F')
@@ -845,13 +843,13 @@ export default function Dashboard() {
           : transaction.description
         const amount = `$${transaction.amount.toFixed(2)}`
         const type = transaction.transaction_type === 'bank' ? 'Bank' : 'Books'
-        const status = transaction.is_reconciled ? 'Reconciled' : 'Unreconciled'
+        const groupId = transaction.reconciliation_group?.substring(0, 6) || 'N/A'
         
         doc.text(date, 25, currentY)
         doc.text(description, 50, currentY)
         doc.text(amount, 120, currentY)
         doc.text(type, 140, currentY)
-        doc.text(status, 160, currentY)
+        doc.text(groupId, 160, currentY)
         
         currentY += 10
         
@@ -861,7 +859,7 @@ export default function Dashboard() {
         }
       })
       
-      const totalAmount = allTransactions.reduce((sum, t) => sum + t.amount, 0)
+      const totalAmount = reconciledTransactions.reduce((sum, t) => sum + t.amount, 0)
       doc.setFontSize(12)
       doc.setFont('helvetica', 'bold')
       doc.text(`Total Amount: $${totalAmount.toFixed(2)}`, 20, currentY + 15)
@@ -870,7 +868,7 @@ export default function Dashboard() {
       const url = window.URL.createObjectURL(pdfBlob)
       const link = document.createElement('a')
       link.href = url
-      link.download = `transaction-report-${exportDate.replace(/\//g, '-')}.pdf`
+      link.download = `reconciliation-report-${exportDate.replace(/\//g, '-')}.pdf`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
