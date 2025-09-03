@@ -1219,7 +1219,7 @@ export default function Dashboard() {
                     <Button
                 onClick={reconcileSelected}
                 disabled={selectedTransactions.length < 2}
-                      className="flex items-center space-x-2"
+                      className={`flex items-center space-x-2 ${selectedTransactions.length < 2 ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                       <CheckCircle className="h-4 w-4" />
                       <span>Reconcile Selected ({selectedTransactions.length})</span>
