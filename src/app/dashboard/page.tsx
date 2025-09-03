@@ -667,18 +667,28 @@ export default function Dashboard() {
     }
 
     try {
-      const { error } = await supabase
-        .from('transactions')
+      // Clear bank transactions
+      const { error: bankError } = await supabase
+        .from('bank_transactions')
         .delete()
-        .eq('user_id', user.id)
+        .neq('id', '00000000-0000-0000-0000-000000000000') // Delete all
 
-      if (error) {
-        console.error('Error clearing transactions:', error)
-        return
+      if (bankError) {
+        console.error('Error clearing bank transactions:', bankError)
       }
 
-      setTransactions([])
-      setFilteredTransactions([])
+      // Clear book transactions
+      const { error: bookError } = await supabase
+        .from('book_transactions')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000') // Delete all
+
+      if (bookError) {
+        console.error('Error clearing book transactions:', bookError)
+      }
+
+      // Refresh transactions
+      await fetchTransactions()
       setSelectedTransactions([])
       calculateSummary()
     } catch (error) {
