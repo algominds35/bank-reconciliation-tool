@@ -658,7 +658,8 @@ export default function Dashboard() {
       alert(`Successfully reconciled ${bankIds.length + bookIds.length} transactions!`)
     } catch (error) {
       console.error('Error reconciling transactions:', error)
-      alert(`Error reconciling transactions: ${error.message}`)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      alert(`Error reconciling transactions: ${errorMessage}`)
     }
   }
 
