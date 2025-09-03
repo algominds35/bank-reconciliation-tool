@@ -157,7 +157,7 @@ export default function Dashboard() {
           category: t.category,
           notes: t.reference,
           is_reconciled: t.is_reconciled || false,
-          reconciliation_group: null
+          reconciliation_group: t.reconciliation_group
         })))
       }
 
@@ -174,7 +174,7 @@ export default function Dashboard() {
           category: t.category,
           notes: t.reference,
           is_reconciled: t.is_reconciled || false,
-          reconciliation_group: null
+          reconciliation_group: t.reconciliation_group
         })))
       }
 
@@ -600,6 +600,8 @@ export default function Dashboard() {
     const reconciliationGroup = crypto.randomUUID()
     
     try {
+      console.log('Starting reconciliation for:', selectedTransactions.length, 'transactions')
+      
       // Separate bank and book transactions
       const bankIds = selectedTransactions.filter(id => {
         const transaction = transactions.find(t => t.id === id)
@@ -611,8 +613,12 @@ export default function Dashboard() {
         return transaction?.transaction_type === 'bookkeeping'
       })
 
+      console.log('Bank IDs to reconcile:', bankIds.length)
+      console.log('Book IDs to reconcile:', bookIds.length)
+
       // Update bank transactions
       if (bankIds.length > 0) {
+        console.log('Updating bank transactions...')
         const { error: bankError } = await supabase
           .from('bank_transactions')
           .update({ 
@@ -621,11 +627,16 @@ export default function Dashboard() {
           })
           .in('id', bankIds)
 
-        if (bankError) throw bankError
+        if (bankError) {
+          console.error('Bank update error:', bankError)
+          throw bankError
+        }
+        console.log('Bank transactions updated successfully')
       }
 
       // Update book transactions
       if (bookIds.length > 0) {
+        console.log('Updating book transactions...')
         const { error: bookError } = await supabase
           .from('book_transactions')
           .update({ 
@@ -634,13 +645,20 @@ export default function Dashboard() {
           })
           .in('id', bookIds)
 
-        if (bookError) throw bookError
+        if (bookError) {
+          console.error('Book update error:', bookError)
+          throw bookError
+        }
+        console.log('Book transactions updated successfully')
       }
 
-      fetchTransactions()
+      console.log('Reconciliation completed successfully')
+      await fetchTransactions()
       setSelectedTransactions([])
+      alert(`Successfully reconciled ${bankIds.length + bookIds.length} transactions!`)
     } catch (error) {
       console.error('Error reconciling transactions:', error)
+      alert(`Error reconciling transactions: ${error.message}`)
     }
   }
 
@@ -712,13 +730,19 @@ export default function Dashboard() {
   const exportReconciled = async () => {
     const reconciledTransactions = transactions.filter(t => t.is_reconciled)
     
+    if (reconciledTransactions.length === 0) {
+      alert('No reconciled transactions to export')
+      return
+    }
+    
     const csvData = reconciledTransactions.map(t => ({
       Date: t.date,
       Description: t.description,
       Amount: t.amount,
       Type: t.transaction_type,
       Category: t.category || '',
-      'Reconciliation Group': t.reconciliation_group,
+      Status: 'Reconciled',
+      'Reconciliation Group': t.reconciliation_group || '',
       Notes: t.notes || ''
     }))
 
@@ -735,10 +759,10 @@ export default function Dashboard() {
   }
 
   const exportReconciledPDF = async () => {
-    const reconciledTransactions = transactions.filter(t => t.is_reconciled)
+    const allTransactions = transactions // Export all transactions, not just reconciled
     
-    if (reconciledTransactions.length === 0) {
-      alert('No reconciled transactions to export')
+    if (allTransactions.length === 0) {
+      alert('No transactions to export')
       return
     }
 
@@ -747,7 +771,7 @@ export default function Dashboard() {
       
       doc.setFontSize(20)
       doc.setFont('helvetica', 'bold')
-      doc.text('Bank Reconciliation Report', 20, 25)
+      doc.text('Transaction Report', 20, 25)
       
       doc.setFontSize(12)
       doc.setFont('helvetica', 'normal')
@@ -762,9 +786,11 @@ export default function Dashboard() {
         }
       }
       
-      doc.text(`Total Reconciled Transactions: ${reconciledTransactions.length}`, 20, 65)
+      doc.text(`Total Transactions: ${allTransactions.length}`, 20, 65)
+      doc.text(`Reconciled: ${allTransactions.filter(t => t.is_reconciled).length}`, 20, 75)
+      doc.text(`Unreconciled: ${allTransactions.filter(t => !t.is_reconciled).length}`, 20, 85)
       
-      let currentY = 80
+      let currentY = 100
       doc.setFontSize(10)
       doc.setFont('helvetica', 'bold')
       
@@ -775,7 +801,7 @@ export default function Dashboard() {
       doc.text('Description', 50, currentY + 2)
       doc.text('Amount', 120, currentY + 2)
       doc.text('Type', 140, currentY + 2)
-      doc.text('Group', 160, currentY + 2)
+      doc.text('Status', 160, currentY + 2)
       
       currentY += 15
       
@@ -783,7 +809,7 @@ export default function Dashboard() {
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(9)
       
-      reconciledTransactions.forEach((transaction, index) => {
+      allTransactions.forEach((transaction, index) => {
         if (index % 2 === 0) {
           doc.setFillColor(248, 249, 250)
           doc.rect(20, currentY - 3, 170, 10, 'F')
@@ -795,13 +821,13 @@ export default function Dashboard() {
           : transaction.description
         const amount = `$${transaction.amount.toFixed(2)}`
         const type = transaction.transaction_type === 'bank' ? 'Bank' : 'Books'
-        const groupId = transaction.reconciliation_group?.substring(0, 6) || 'N/A'
+        const status = transaction.is_reconciled ? 'Reconciled' : 'Unreconciled'
         
         doc.text(date, 25, currentY)
         doc.text(description, 50, currentY)
         doc.text(amount, 120, currentY)
         doc.text(type, 140, currentY)
-        doc.text(groupId, 160, currentY)
+        doc.text(status, 160, currentY)
         
         currentY += 10
         
@@ -811,7 +837,7 @@ export default function Dashboard() {
         }
       })
       
-      const totalAmount = reconciledTransactions.reduce((sum, t) => sum + t.amount, 0)
+      const totalAmount = allTransactions.reduce((sum, t) => sum + t.amount, 0)
       doc.setFontSize(12)
       doc.setFont('helvetica', 'bold')
       doc.text(`Total Amount: $${totalAmount.toFixed(2)}`, 20, currentY + 15)
@@ -820,7 +846,7 @@ export default function Dashboard() {
       const url = window.URL.createObjectURL(pdfBlob)
       const link = document.createElement('a')
       link.href = url
-      link.download = `reconciliation-report-${exportDate.replace(/\//g, '-')}.pdf`
+      link.download = `transaction-report-${exportDate.replace(/\//g, '-')}.pdf`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -1178,7 +1204,7 @@ export default function Dashboard() {
                     <Button
                       variant="outline"
                 onClick={exportReconciled}
-                disabled={summary.reconciled === 0}
+                disabled={transactions.length === 0}
                       className="flex items-center space-x-2"
               >
                       <Download className="h-4 w-4" />
@@ -1188,7 +1214,7 @@ export default function Dashboard() {
                     <Button
                       variant="outline"
                 onClick={exportReconciledPDF}
-                disabled={summary.reconciled === 0}
+                disabled={transactions.length === 0}
                       className="flex items-center space-x-2"
               >
                       <FileText className="h-4 w-4" />
