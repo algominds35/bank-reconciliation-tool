@@ -11,6 +11,9 @@ import FAQ from '@/components/FAQ'
 import CTA from '@/components/CTA'
 import Footer from '@/components/Footer'
 
+// Force environment variable refresh
+const FORCE_ENV_REFRESH = Date.now()
+
 export default function Home() {
   return (
     <main className="min-h-screen">
