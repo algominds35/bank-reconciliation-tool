@@ -646,15 +646,28 @@ export default function Dashboard() {
 
   const unreconcileGroup = async (reconciliationGroup: string) => {
     try {
-      const { error } = await supabase
-        .from('transactions')
+      // Update bank transactions
+      const { error: bankError } = await supabase
+        .from('bank_transactions')
         .update({ 
           is_reconciled: false, 
           reconciliation_group: null 
         })
         .eq('reconciliation_group', reconciliationGroup)
 
-      if (error) throw error
+      if (bankError) throw bankError
+
+      // Update book transactions
+      const { error: bookError } = await supabase
+        .from('book_transactions')
+        .update({ 
+          is_reconciled: false, 
+          reconciliation_group: null 
+        })
+        .eq('reconciliation_group', reconciliationGroup)
+
+      if (bookError) throw bookError
+
       fetchTransactions()
     } catch (error) {
       console.error('Error unreconciling transactions:', error)
