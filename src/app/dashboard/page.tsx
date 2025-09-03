@@ -528,15 +528,29 @@ export default function Dashboard() {
     const reconciliationGroup = crypto.randomUUID()
     
     try {
-      const { error } = await supabase
-        .from('transactions')
+      // Update bank transaction
+      const { error: bankError } = await supabase
+        .from('bank_transactions')
         .update({ 
           is_reconciled: true, 
           reconciliation_group: reconciliationGroup 
         })
-        .in('id', [bankId, bookkeepingId])
+        .eq('id', bankId)
 
-      if (error) throw error
+      if (bankError) throw bankError
+
+      // Update book transaction
+      const { error: bookError } = await supabase
+        .from('book_transactions')
+        .update({ 
+          is_reconciled: true, 
+          reconciliation_group: reconciliationGroup 
+        })
+        .eq('id', bookkeepingId)
+
+      if (bookError) throw bookError
+
+      // Refresh transactions
       fetchTransactions()
     } catch (error) {
       console.error('Error matching transactions:', error)
