@@ -72,6 +72,7 @@ export default function Dashboard() {
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'error'>('idle')
   const [lastSyncTime, setLastSyncTime] = useState<string | null>(null)
   const [nextSyncTime, setNextSyncTime] = useState<string | null>(null)
+  const [clearingDemoData, setClearingDemoData] = useState(false)
   
 
   
