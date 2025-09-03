@@ -600,15 +600,43 @@ export default function Dashboard() {
     const reconciliationGroup = crypto.randomUUID()
     
     try {
-      const { error } = await supabase
-        .from('transactions')
-        .update({ 
-          is_reconciled: true, 
-          reconciliation_group: reconciliationGroup 
-        })
-        .in('id', selectedTransactions)
+      // Separate bank and book transactions
+      const bankIds = selectedTransactions.filter(id => {
+        const transaction = transactions.find(t => t.id === id)
+        return transaction?.transaction_type === 'bank'
+      })
+      
+      const bookIds = selectedTransactions.filter(id => {
+        const transaction = transactions.find(t => t.id === id)
+        return transaction?.transaction_type === 'bookkeeping'
+      })
 
-      if (error) throw error
+      // Update bank transactions
+      if (bankIds.length > 0) {
+        const { error: bankError } = await supabase
+          .from('bank_transactions')
+          .update({ 
+            is_reconciled: true, 
+            reconciliation_group: reconciliationGroup 
+          })
+          .in('id', bankIds)
+
+        if (bankError) throw bankError
+      }
+
+      // Update book transactions
+      if (bookIds.length > 0) {
+        const { error: bookError } = await supabase
+          .from('book_transactions')
+          .update({ 
+            is_reconciled: true, 
+            reconciliation_group: reconciliationGroup 
+          })
+          .in('id', bookIds)
+
+        if (bookError) throw bookError
+      }
+
       fetchTransactions()
       setSelectedTransactions([])
     } catch (error) {
