@@ -601,6 +601,7 @@ export default function Dashboard() {
     
     try {
       console.log('Starting reconciliation for:', selectedTransactions.length, 'transactions')
+      console.log('Selected transaction IDs:', selectedTransactions)
       
       // Separate bank and book transactions
       const bankIds = selectedTransactions.filter(id => {
@@ -613,43 +614,45 @@ export default function Dashboard() {
         return transaction?.transaction_type === 'bookkeeping'
       })
 
-      console.log('Bank IDs to reconcile:', bankIds.length)
-      console.log('Book IDs to reconcile:', bookIds.length)
+      console.log('Bank IDs to reconcile:', bankIds)
+      console.log('Book IDs to reconcile:', bookIds)
 
       // Update bank transactions
       if (bankIds.length > 0) {
         console.log('Updating bank transactions...')
-        const { error: bankError } = await supabase
+        const { data: bankData, error: bankError } = await supabase
           .from('bank_transactions')
           .update({ 
             is_reconciled: true, 
             reconciliation_group: reconciliationGroup 
           })
           .in('id', bankIds)
+          .select()
 
         if (bankError) {
           console.error('Bank update error:', bankError)
           throw bankError
         }
-        console.log('Bank transactions updated successfully')
+        console.log('Bank transactions updated successfully:', bankData)
       }
 
       // Update book transactions
       if (bookIds.length > 0) {
         console.log('Updating book transactions...')
-        const { error: bookError } = await supabase
+        const { data: bookData, error: bookError } = await supabase
           .from('book_transactions')
           .update({ 
             is_reconciled: true, 
             reconciliation_group: reconciliationGroup 
           })
           .in('id', bookIds)
+          .select()
 
         if (bookError) {
           console.error('Book update error:', bookError)
           throw bookError
         }
-        console.log('Book transactions updated successfully')
+        console.log('Book transactions updated successfully:', bookData)
       }
 
       console.log('Reconciliation completed successfully')
