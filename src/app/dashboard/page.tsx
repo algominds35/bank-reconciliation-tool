@@ -620,6 +620,24 @@ export default function Dashboard() {
       // Update bank transactions
       if (bankIds.length > 0) {
         console.log('Updating bank transactions...')
+        console.log('Bank IDs being sent to database:', bankIds)
+        
+        // First, let's verify these IDs exist in the database
+        const { data: existingBank, error: checkError } = await supabase
+          .from('bank_transactions')
+          .select('id')
+          .in('id', bankIds)
+        
+        console.log('Existing bank transactions:', existingBank)
+        if (checkError) {
+          console.error('Error checking bank transactions:', checkError)
+          throw checkError
+        }
+        
+        if (!existingBank || existingBank.length === 0) {
+          throw new Error('No bank transactions found with the provided IDs')
+        }
+        
         const { data: bankData, error: bankError } = await supabase
           .from('bank_transactions')
           .update({ 
@@ -629,8 +647,10 @@ export default function Dashboard() {
           .in('id', bankIds)
           .select()
 
+        console.log('Bank update result:', { data: bankData, error: bankError })
+
         if (bankError) {
-          console.error('Bank update error:', bankError)
+          console.error('Bank update error details:', bankError)
           throw bankError
         }
         console.log('Bank transactions updated successfully:', bankData)
