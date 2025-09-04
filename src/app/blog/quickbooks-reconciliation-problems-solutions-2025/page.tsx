@@ -225,9 +225,9 @@ export default function QuickBooksReconciliationProblemsPage() {
           <h3 className="text-lg font-semibold text-green-800 mb-3">✅ Solution Steps</h3>
           <ol className="list-decimal list-inside text-green-700 space-y-2">
             <li><strong>Update QuickBooks</strong> - Install latest version and updates</li>
-            <li><strong>Rebuild data</strong> - Use File > Utilities > Rebuild Data</li>
+            <li><strong>Rebuild data</strong> - Use File &gt; Utilities &gt; Rebuild Data</li>
             <li><strong>Check file size</strong> - Large files may cause report issues</li>
-            <li><strong>Run verify data</strong> - File > Utilities > Verify Data</li>
+            <li><strong>Run verify data</strong> - File &gt; Utilities &gt; Verify Data</li>
             <li><strong>Export and reimport</strong> - Create new file if necessary</li>
             <li><strong>Contact QuickBooks support</strong> - For persistent report issues</li>
           </ol>
