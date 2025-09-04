@@ -331,7 +331,7 @@ export default function QuickBooksReconciliationProblemsPage() {
             <li><strong>Save file frequently</strong> - Save before starting reconciliation</li>
             <li><strong>Check disk space</strong> - Ensure sufficient storage space</li>
             <li><strong>Close other programs</strong> - Free up system resources</li>
-            <li><strong>Verify data integrity</strong> - Run File > Utilities > Verify Data</li>
+            <li><strong>Verify data integrity</strong> - Run File &gt; Utilities &gt; Verify Data</li>
             <li><strong>Create backup</strong> - Backup file before major changes</li>
             <li><strong>Contact support</strong> - If file corruption suspected</li>
           </ol>
@@ -433,8 +433,8 @@ export default function QuickBooksReconciliationProblemsPage() {
           <h3 className="text-lg font-semibold text-green-800 mb-3">✅ Solution Steps</h3>
           <ol className="list-decimal list-inside text-green-700 space-y-2">
             <li><strong>Create backup immediately</strong> - Save current state before attempting fixes</li>
-            <li><strong>Run verify data</strong> - File > Utilities > Verify Data</li>
-            <li><strong>Rebuild data</strong> - File > Utilities > Rebuild Data</li>
+            <li><strong>Run verify data</strong> - File &gt; Utilities &gt; Verify Data</li>
+            <li><strong>Rebuild data</strong> - File &gt; Utilities &gt; Rebuild Data</li>
             <li><strong>Restore from backup</strong> - Use recent backup if available</li>
             <li><strong>Contact QuickBooks support</strong> - For advanced data recovery</li>
             <li><strong>Create new file</strong> - As last resort, start fresh</li>
