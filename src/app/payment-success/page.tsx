@@ -1,10 +1,36 @@
-import React from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CheckCircle, ArrowRight, TrendingUp } from 'lucide-react'
 
 export default function PaymentSuccessPage() {
+  const [countdown, setCountdown] = useState(5)
+  const [redirecting, setRedirecting] = useState(false)
+
+  useEffect(() => {
+    // Start countdown and redirect
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          setRedirecting(true)
+          // Redirect to dashboard
+          window.location.href = '/dashboard'
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [])
+
+  const handleManualRedirect = () => {
+    setRedirecting(true)
+    window.location.href = '/dashboard'
+  }
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -36,9 +62,24 @@ export default function PaymentSuccessPage() {
             Payment Successful!
           </h1>
           
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-4">
             Welcome to ReconcileBook! Your subscription is now active and you have full access to professional bank reconciliation tools.
           </p>
+
+          {redirecting ? (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
+              <div className="flex items-center justify-center space-x-2">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+                <span className="text-blue-700 font-medium">Redirecting to dashboard...</span>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 max-w-md mx-auto">
+              <p className="text-green-700 font-medium">
+                Redirecting to dashboard in <span className="font-bold text-lg">{countdown}</span> seconds...
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -89,12 +130,15 @@ export default function PaymentSuccessPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <Link href="/auth/login">
-                  <Button className="w-full" size="lg">
-                    Access Dashboard
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
+                <Button 
+                  onClick={handleManualRedirect}
+                  className="w-full" 
+                  size="lg"
+                  disabled={redirecting}
+                >
+                  {redirecting ? 'Redirecting...' : 'Go to Dashboard Now'}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
                 
                 <Link href="/">
                   <Button variant="outline" className="w-full" size="lg">
