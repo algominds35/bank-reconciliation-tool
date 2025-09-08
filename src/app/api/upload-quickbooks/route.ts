@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { getAuthenticatedUser, createUnauthorizedResponse } from '@/lib/auth'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -8,6 +9,12 @@ const supabase = createClient(
 
 export async function POST(request: NextRequest) {
   try {
+    // SECURITY: Verify user authentication
+    const user = await getAuthenticatedUser(request)
+    if (!user) {
+      return createUnauthorizedResponse()
+    }
+
     const formData = await request.formData()
     const file = formData.get('file') as File
     const clientId = formData.get('clientId') as string
@@ -26,7 +33,23 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    console.log(`Received QuickBooks file: ${file.name} for client: ${clientId}`)
+    // SECURITY: Verify client belongs to authenticated user
+    const { data: client, error: clientError } = await supabase
+      .from('clients')
+      .select('id, name')
+      .eq('id', clientId)
+      .eq('user_id', user.id) // SECURE: Ensure client belongs to user
+      .single()
+
+    if (clientError || !client) {
+      console.error('❌ Client not found or access denied:', clientError)
+      return NextResponse.json(
+        { error: 'Client not found or access denied' },
+        { status: 404 }
+      )
+    }
+    
+    console.log(`Received QuickBooks file: ${file.name} for client: ${client.name}`)
     
     // Process CSV file
     let transactions: any[] = []

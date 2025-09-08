@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { getAuthenticatedUser, createUnauthorizedResponse } from '@/lib/auth'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -8,13 +9,16 @@ const supabase = createClient(
 
 export async function GET(request: NextRequest) {
   try {
-    // URGENT: Add user filtering for privacy
-    const userId = request.headers.get('user-id') || 'demo-user'
+    // SECURITY: Verify user authentication
+    const user = await getAuthenticatedUser(request)
+    if (!user) {
+      return createUnauthorizedResponse()
+    }
     
     const { data: clients, error } = await supabase
       .from('clients')
       .select('*')
-      .eq('user_id', userId)
+      .eq('user_id', user.id) // SECURE: Use authenticated user ID
       .order('created_at', { ascending: false })
 
     if (error) {
@@ -47,12 +51,19 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    // SECURITY: Verify user authentication
+    const user = await getAuthenticatedUser(request)
+    if (!user) {
+      return createUnauthorizedResponse()
+    }
+
     const clientData = await request.json()
     
     const { data: client, error } = await supabase
       .from('clients')
       .insert([{
         name: clientData.name,
+        user_id: user.id, // SECURE: Use authenticated user ID
         status: clientData.status || 'active',
         last_upload: clientData.last_upload || null,
         total_transactions: clientData.total_transactions || 0,

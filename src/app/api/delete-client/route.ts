@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { getAuthenticatedUser, createUnauthorizedResponse } from '@/lib/auth'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -8,6 +9,12 @@ const supabase = createClient(
 
 export async function DELETE(request: NextRequest) {
   try {
+    // SECURITY: Verify user authentication
+    const user = await getAuthenticatedUser(request)
+    if (!user) {
+      return createUnauthorizedResponse()
+    }
+
     const url = new URL(request.url)
     const clientId = url.searchParams.get('id')
 
@@ -21,15 +28,12 @@ export async function DELETE(request: NextRequest) {
 
     console.log(`🗑️ Attempting to delete client with ID: ${clientId}`)
 
-    // URGENT: Add user filtering for privacy
-    const userId = request.headers.get('user-id') || 'demo-user'
-    
-    // First check if client exists and belongs to user
+    // SECURITY: First check if client exists and belongs to authenticated user
     const { data: existingClient, error: fetchError } = await supabase
       .from('clients')
       .select('id, name')
       .eq('id', clientId)
-      .eq('user_id', userId)
+      .eq('user_id', user.id) // SECURE: Use authenticated user ID
       .single()
 
     if (fetchError) {
@@ -59,7 +63,7 @@ export async function DELETE(request: NextRequest) {
       .from('clients')
       .delete()
       .eq('id', clientId)
-      .eq('user_id', userId)
+      .eq('user_id', user.id) // SECURE: Double-check user ownership
 
     if (deleteError) {
       console.error('❌ Supabase delete error:', deleteError)

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { getAuthenticatedUser, createUnauthorizedResponse } from '@/lib/auth'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -8,6 +9,12 @@ const supabase = createClient(
 
 export async function POST(request: NextRequest) {
   try {
+    // SECURITY: Verify user authentication
+    const user = await getAuthenticatedUser(request)
+    if (!user) {
+      return createUnauthorizedResponse()
+    }
+
     const formData = await request.formData()
     const file = formData.get('file') as File
     const clientId = formData.get('clientId') as string
@@ -99,7 +106,7 @@ export async function POST(request: NextRequest) {
         name: finalClientName,
         email: finalClientEmail,
         status: 'ready',
-        user_id: request.headers.get('user-id') || 'demo-user',
+        user_id: user.id, // SECURE: Use authenticated user ID
         total_transactions: transactions.length,
         unmatched_transactions: Math.floor(transactions.length * 0.15), // Estimate 15% unmatched
         last_upload: new Date().toISOString()
