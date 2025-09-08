@@ -15,6 +15,7 @@ export function AccessGuard({ children }: AccessGuardProps) {
   const [hasAccess, setHasAccess] = useState<boolean | null>(null)
   const [subscription, setSubscription] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [gracePeriodDays, setGracePeriodDays] = useState<number | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -61,11 +62,13 @@ export function AccessGuard({ children }: AccessGuardProps) {
           reason = access ? '' : 'Trial expired'
           break
         case 'cancelled':
-          // Check if within grace period (30 days from cancellation)
+          // Check if within grace period (14 days from cancellation)
           const cancelledDate = new Date(profile.updated_at)
-          const gracePeriodEnd = new Date(cancelledDate.getTime() + (30 * 24 * 60 * 60 * 1000))
+          const gracePeriodEnd = new Date(cancelledDate.getTime() + (14 * 24 * 60 * 60 * 1000))
           access = gracePeriodEnd > now
-          reason = access ? 'Grace period active' : 'Grace period expired'
+          const daysLeft = Math.ceil((gracePeriodEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+          setGracePeriodDays(daysLeft > 0 ? daysLeft : null)
+          reason = access ? `Grace period: ${daysLeft} days left` : 'Grace period expired'
           break
         case 'expired':
           access = false
@@ -133,7 +136,7 @@ export function AccessGuard({ children }: AccessGuardProps) {
                     <span className="font-medium text-blue-900">Grace Period</span>
                   </div>
                   <p className="text-blue-700 text-sm">
-                    You have 30 days from cancellation to export your data and reactivate your account.
+                    You have 14 days from cancellation to export your data and reactivate your account.
                   </p>
                 </div>
               )}
@@ -155,6 +158,32 @@ export function AccessGuard({ children }: AccessGuardProps) {
             </CardContent>
           </Card>
         </div>
+      </div>
+    )
+  }
+
+  // Show grace period warning if in grace period
+  if (subscription?.subscription_status === 'cancelled' && gracePeriodDays && gracePeriodDays <= 7) {
+    return (
+      <div>
+        {/* Grace Period Warning */}
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+          <div className="flex items-center">
+            <AlertTriangle className="h-5 w-5 text-yellow-400 mr-2" />
+            <div>
+              <h3 className="text-sm font-medium text-yellow-800">
+                Grace Period Ending Soon
+              </h3>
+              <p className="text-sm text-yellow-700">
+                Your subscription was cancelled. You have {gracePeriodDays} day{gracePeriodDays !== 1 ? 's' : ''} left in your grace period.
+                <a href="/auth/signup" className="font-medium underline ml-1">Reactivate now</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Main Content */}
+        {children}
       </div>
     )
   }
