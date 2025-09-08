@@ -1,36 +1,10 @@
-'use client'
-
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { CheckCircle, ArrowRight, TrendingUp } from 'lucide-react'
+import { CheckCircle, ArrowRight, TrendingUp, UserPlus, LogIn } from 'lucide-react'
 
 export default function PaymentSuccessPage() {
-  const [countdown, setCountdown] = useState(5)
-  const [redirecting, setRedirecting] = useState(false)
-
-  useEffect(() => {
-    // Start countdown and redirect
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          setRedirecting(true)
-          // Redirect to dashboard
-          window.location.href = '/dashboard'
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [])
-
-  const handleManualRedirect = () => {
-    setRedirecting(true)
-    window.location.href = '/dashboard'
-  }
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -62,24 +36,18 @@ export default function PaymentSuccessPage() {
             Payment Successful!
           </h1>
           
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-4">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-6">
             Welcome to ReconcileBook! Your subscription is now active and you have full access to professional bank reconciliation tools.
           </p>
 
-          {redirecting ? (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
-              <div className="flex items-center justify-center space-x-2">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-                <span className="text-blue-700 font-medium">Redirecting to dashboard...</span>
-              </div>
-            </div>
-          ) : (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 max-w-md mx-auto">
-              <p className="text-green-700 font-medium">
-                Redirecting to dashboard in <span className="font-bold text-lg">{countdown}</span> seconds...
-              </p>
-            </div>
-          )}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 max-w-2xl mx-auto">
+            <h3 className="text-lg font-semibold text-blue-900 mb-4 text-center">
+              Next Step: Access Your Account
+            </h3>
+            <p className="text-blue-800 text-center mb-4">
+              To start using ReconcileBook, you need to create an account or log in to access your dashboard.
+            </p>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -130,18 +98,22 @@ export default function PaymentSuccessPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <Button 
-                  onClick={handleManualRedirect}
-                  className="w-full" 
-                  size="lg"
-                  disabled={redirecting}
-                >
-                  {redirecting ? 'Redirecting...' : 'Go to Dashboard Now'}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Link href="/auth/signup">
+                  <Button className="w-full" size="lg">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Create Account
+                  </Button>
+                </Link>
+                
+                <Link href="/auth/login">
+                  <Button variant="outline" className="w-full" size="lg">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Log In (Existing User)
+                  </Button>
+                </Link>
                 
                 <Link href="/">
-                  <Button variant="outline" className="w-full" size="lg">
+                  <Button variant="ghost" className="w-full" size="lg">
                     View Features
                   </Button>
                 </Link>
