@@ -135,10 +135,10 @@ export async function POST(request: NextRequest) {
           .from('user_profiles')
           .upsert({
             id: existingUser.id,
-            subscription_status: 'active',
+            subscription_status: 'trial',
             subscription_plan: subscriptionPlan,
             stripe_customer_id: session.customer as string,
-            trial_end_date: '2030-12-31',
+            trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
             updated_at: new Date().toISOString()
           })
 
@@ -150,14 +150,14 @@ export async function POST(request: NextRequest) {
           }, { status: 500 })
         }
 
-        console.log('✅ EXISTING USER UPGRADED to:', subscriptionPlan.toUpperCase())
+        console.log('✅ EXISTING USER STARTED TRIAL for:', subscriptionPlan.toUpperCase())
         
         return NextResponse.json({ 
           success: true, 
           email: customerEmail,
           plan: subscriptionPlan,
           amount: amountPaid,
-          message: 'Existing user upgraded'
+            message: 'Existing user started trial'
         })
       } else {
         // User doesn't exist - CREATE ACCOUNT AUTOMATICALLY
@@ -212,10 +212,10 @@ export async function POST(request: NextRequest) {
             .from('user_profiles')
             .insert({
               id: newUser.user.id,
-              subscription_status: 'active',
+              subscription_status: 'trial',
               subscription_plan: subscriptionPlan,
               stripe_customer_id: session.customer as string,
-              trial_end_date: '2030-12-31',
+              trial_end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString()
             })
@@ -228,7 +228,7 @@ export async function POST(request: NextRequest) {
             }, { status: 500 })
           }
 
-          console.log('✅ NEW USER ACCOUNT CREATED AND ACTIVATED for:', subscriptionPlan.toUpperCase())
+          console.log('✅ NEW USER ACCOUNT CREATED WITH TRIAL for:', subscriptionPlan.toUpperCase())
           
           return NextResponse.json({ 
             success: true, 
@@ -236,7 +236,7 @@ export async function POST(request: NextRequest) {
             plan: subscriptionPlan,
             amount: amountPaid,
             user_id: newUser.user.id,
-            message: 'New account created and activated'
+            message: 'New account created with trial'
           })
 
         } catch (error) {
@@ -251,6 +251,137 @@ export async function POST(request: NextRequest) {
             message: 'Payment processed - account creation needed'
           })
         }
+      }
+    }
+
+    // Handle subscription updates (trial to active)
+    if (event.type === 'customer.subscription.updated') {
+      const subscription = event.data.object as Stripe.Subscription
+      const customerEmail = subscription.metadata?.email || subscription.customer_details?.email
+      
+      if (!customerEmail) {
+        console.error('❌ No customer email found in subscription update')
+        return NextResponse.json({ error: 'No customer email' }, { status: 400 })
+      }
+
+      console.log('🔄 Subscription updated for:', customerEmail, 'Status:', subscription.status)
+
+      // If subscription becomes active (trial ended, now charging)
+      if (subscription.status === 'active') {
+        console.log('✅ Trial ended - upgrading to active subscription')
+
+        // Find user and upgrade to active
+        if (!supabaseAdmin) {
+          console.error('❌ Supabase admin client not configured')
+          return NextResponse.json({ 
+            error: 'Server configuration error',
+            details: 'Supabase admin client not available'
+          }, { status: 500 })
+        }
+
+        const { data: users, error: userError } = await supabaseAdmin.auth.admin.listUsers()
+        
+        if (userError) {
+          console.error('❌ Admin lookup failed:', userError)
+          return NextResponse.json({ 
+            error: 'Admin user lookup failed', 
+            details: userError.message 
+          }, { status: 500 })
+        }
+
+        const existingUser = users.users.find(u => u.email === customerEmail)
+
+        if (existingUser) {
+          // Upgrade to active
+          if (!supabase) {
+            console.error('❌ Supabase client not available')
+            return NextResponse.json({ 
+              error: 'Server configuration error',
+              details: 'Supabase client not available'
+            }, { status: 500 })
+          }
+
+          const { error: profileError } = await supabase
+            .from('user_profiles')
+            .update({
+              subscription_status: 'active',
+              trial_end_date: '2030-12-31', // Set far in future since they're now paying
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', existingUser.id)
+
+          if (profileError) {
+            console.error('❌ Profile upgrade failed:', profileError)
+            return NextResponse.json({ 
+              error: 'Profile upgrade failed', 
+              details: profileError.message 
+            }, { status: 500 })
+          }
+
+          console.log('✅ USER UPGRADED TO ACTIVE SUBSCRIPTION:', customerEmail)
+        }
+      }
+    }
+
+    // Handle subscription cancellations
+    if (event.type === 'customer.subscription.deleted') {
+      const subscription = event.data.object as Stripe.Subscription
+      const customerEmail = subscription.metadata?.email || subscription.customer_details?.email
+      
+      if (!customerEmail) {
+        console.error('❌ No customer email found in subscription cancellation')
+        return NextResponse.json({ error: 'No customer email' }, { status: 400 })
+      }
+
+      console.log('❌ Subscription cancelled for:', customerEmail)
+
+      // Mark as cancelled (grace period will be handled by AccessGuard)
+      if (!supabaseAdmin) {
+        console.error('❌ Supabase admin client not configured')
+        return NextResponse.json({ 
+          error: 'Server configuration error',
+          details: 'Supabase admin client not available'
+        }, { status: 500 })
+      }
+
+      const { data: users, error: userError } = await supabaseAdmin.auth.admin.listUsers()
+      
+      if (userError) {
+        console.error('❌ Admin lookup failed:', userError)
+        return NextResponse.json({ 
+          error: 'Admin user lookup failed', 
+          details: userError.message 
+        }, { status: 500 })
+      }
+
+      const existingUser = users.users.find(u => u.email === customerEmail)
+
+      if (existingUser) {
+        if (!supabase) {
+          console.error('❌ Supabase client not available')
+          return NextResponse.json({ 
+            error: 'Server configuration error',
+            details: 'Supabase client not available'
+          }, { status: 500 })
+        }
+
+        const { error: profileError } = await supabase
+          .from('user_profiles')
+          .update({
+            subscription_status: 'cancelled',
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingUser.id)
+
+        if (profileError) {
+          console.error('❌ Profile cancellation failed:', profileError)
+          return NextResponse.json({ 
+            error: 'Profile cancellation failed', 
+            details: profileError.message 
+          }, { status: 500 })
+        }
+
+        console.log('✅ USER SUBSCRIPTION CANCELLED:', customerEmail, '- Grace period started')
       }
     }
 
