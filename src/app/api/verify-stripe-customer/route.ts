@@ -27,26 +27,43 @@ export async function POST(request: NextRequest) {
 
     const customer = customers.data[0]
 
-    // Check if customer has any active subscriptions
+    // Check for ANY payments (not just active subscriptions)
+    // This includes: active, cancelled, trial, past_due, etc.
     const subscriptions = await stripe.subscriptions.list({
       customer: customer.id,
-      status: 'active',
-      limit: 1
+      limit: 10 // Get more subscriptions to check
     })
 
-    if (subscriptions.data.length === 0) {
+    // Also check for any payment intents or charges
+    const charges = await stripe.charges.list({
+      customer: customer.id,
+      limit: 5
+    })
+
+    // If they have ANY subscription OR payment, they're verified
+    const hasAnySubscription = subscriptions.data.length > 0
+    const hasAnyPayment = charges.data.length > 0
+
+    if (!hasAnySubscription && !hasAnyPayment) {
       return NextResponse.json(
-        { error: 'No active subscription found for this email. Please ensure you have completed payment.' },
+        { error: 'No payment found for this email. Please ensure you have completed payment.' },
         { status: 404 }
       )
     }
+
+    // Find the most recent subscription (regardless of status)
+    const latestSubscription = subscriptions.data.length > 0 
+      ? subscriptions.data[0] 
+      : null
 
     return NextResponse.json({
       success: true,
       customer: {
         id: customer.id,
         email: customer.email,
-        subscription: subscriptions.data[0].id
+        subscription: latestSubscription?.id || null,
+        subscriptionStatus: latestSubscription?.status || 'no_subscription',
+        hasPayment: hasAnyPayment
       }
     })
 
