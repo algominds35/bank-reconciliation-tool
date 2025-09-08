@@ -13,27 +13,43 @@ export interface AuthenticatedUser {
 
 export async function getAuthenticatedUser(request: NextRequest): Promise<AuthenticatedUser | null> {
   try {
-    // Get the authorization header
+    // Method 1: Try to get user from Supabase session (for direct client calls)
+    const { data: { session } } = await supabase.auth.getSession()
+    if (session?.user) {
+      return {
+        id: session.user.id,
+        email: session.user.email || ''
+      }
+    }
+
+    // Method 2: Try to get user from authorization header (for HTTP requests)
     const authHeader = request.headers.get('authorization')
     
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return null
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7) // Remove 'Bearer ' prefix
+
+      // Verify the JWT token with Supabase
+      const { data: { user }, error } = await supabase.auth.getUser(token)
+
+      if (!error && user) {
+        return {
+          id: user.id,
+          email: user.email || ''
+        }
+      }
     }
 
-    const token = authHeader.substring(7) // Remove 'Bearer ' prefix
-
-    // Verify the JWT token with Supabase
-    const { data: { user }, error } = await supabase.auth.getUser(token)
-
-    if (error || !user) {
-      console.error('Authentication error:', error)
-      return null
+    // Method 3: Fallback for development/demo (TEMPORARY - REMOVE IN PRODUCTION)
+    const userId = request.headers.get('user-id')
+    if (userId && userId !== 'demo-user') {
+      console.warn('⚠️ Using fallback user ID - this should be removed in production')
+      return {
+        id: userId,
+        email: `${userId}@example.com`
+      }
     }
 
-    return {
-      id: user.id,
-      email: user.email || ''
-    }
+    return null
   } catch (error) {
     console.error('Authentication check failed:', error)
     return null
