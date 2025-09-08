@@ -257,7 +257,19 @@ export async function POST(request: NextRequest) {
     // Handle subscription updates (trial to active)
     if (event.type === 'customer.subscription.updated') {
       const subscription = event.data.object as Stripe.Subscription
-      const customerEmail = subscription.metadata?.email || subscription.customer_details?.email
+      
+      // Get customer email from customer object
+      let customerEmail = subscription.metadata?.email
+      if (!customerEmail) {
+        try {
+          const customer = await stripe.customers.retrieve(subscription.customer as string)
+          if (customer && !customer.deleted) {
+            customerEmail = customer.email
+          }
+        } catch (error) {
+          console.error('❌ Failed to retrieve customer:', error)
+        }
+      }
       
       if (!customerEmail) {
         console.error('❌ No customer email found in subscription update')
@@ -326,7 +338,19 @@ export async function POST(request: NextRequest) {
     // Handle subscription cancellations
     if (event.type === 'customer.subscription.deleted') {
       const subscription = event.data.object as Stripe.Subscription
-      const customerEmail = subscription.metadata?.email || subscription.customer_details?.email
+      
+      // Get customer email from customer object
+      let customerEmail = subscription.metadata?.email
+      if (!customerEmail) {
+        try {
+          const customer = await stripe.customers.retrieve(subscription.customer as string)
+          if (customer && !customer.deleted) {
+            customerEmail = customer.email
+          }
+        } catch (error) {
+          console.error('❌ Failed to retrieve customer:', error)
+        }
+      }
       
       if (!customerEmail) {
         console.error('❌ No customer email found in subscription cancellation')
