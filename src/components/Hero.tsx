@@ -143,7 +143,7 @@ export default function Hero() {
                   transition={{ delay: 0.7, duration: 0.6 }}
                   className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-4"
                 >
-                                     <div className="text-2xl font-bold text-slate-900">12.5 hrs</div>
+                                     <div className="text-2xl font-bold text-slate-900">8 hrs</div>
                    <div className="text-sm text-slate-500">Time Saved Per Month</div>
                    <div className="mt-2 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
                      <div className="w-4/5 h-full bg-green-500 rounded-full"></div>
@@ -164,25 +164,34 @@ export default function Hero() {
                 </motion.div>
               </div>
 
-              {/* Client Profile Card */}
+              {/* Client Testimonial Card */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.9, duration: 0.6 }}
-                className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-4 mt-4"
+                className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-6 mt-4"
               >
-                <div className="flex items-center gap-3">
-                                     <div className="w-10 h-10 bg-[#F45B49] rounded-full flex items-center justify-center text-white font-semibold">
-                     MA
-                   </div>
-                   <div className="flex-1">
-                     <div className="font-semibold text-slate-900">Miller & Associates CPA</div>
-                     <div className="text-sm text-slate-500">Monthly reconciliation automated</div>
-                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-8 h-8 bg-slate-100 rounded-full"></div>
-                    <div className="w-8 h-8 bg-slate-100 rounded-full -ml-2"></div>
-                    <span className="text-xs text-slate-500 ml-1">+3</span>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-[#F45B49] rounded-full flex items-center justify-center text-white font-semibold flex-shrink-0">
+                    MA
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="font-semibold text-slate-900">Miller & Associates CPA</div>
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 fill-[#F45B49] text-[#F45B49]" />
+                        <Star className="h-4 w-4 fill-[#F45B49] text-[#F45B49]" />
+                        <Star className="h-4 w-4 fill-[#F45B49] text-[#F45B49]" />
+                        <Star className="h-4 w-4 fill-[#F45B49] text-[#F45B49]" />
+                        <Star className="h-4 w-4 fill-[#F45B49] text-[#F45B49]" />
+                      </div>
+                    </div>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-3">
+                      "Finally, a reconciliation tool that actually works! QuickBooks kept auto-matching wrong transactions and creating reconciliation nightmares. This platform catches every discrepancy."
+                    </p>
+                    <div className="text-xs text-slate-500">
+                      Senior Accountant • 50+ clients managed
+                    </div>
                   </div>
                 </div>
               </motion.div>
