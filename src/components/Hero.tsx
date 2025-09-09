@@ -187,7 +187,7 @@ export default function Hero() {
                       </div>
                     </div>
                     <p className="text-slate-600 text-sm leading-relaxed mb-3">
-                      "Finally, a reconciliation tool that actually works! QuickBooks kept auto-matching wrong transactions and creating reconciliation nightmares. This platform catches every discrepancy."
+                      "The reconciliation was killing me every month - probably 3-4 hours of pure frustration. This tool isn't perfect but it catches like 95% of the matches automatically. Saves me most of my weekend."
                     </p>
                     <div className="text-xs text-slate-500">
                       Senior Accountant • 50+ clients managed
