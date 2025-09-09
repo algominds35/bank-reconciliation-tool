@@ -7,8 +7,8 @@ export default function Benefits() {
   const features = [
     {
       icon: Calculator,
-      title: 'Smart Reconciliation',
-      description: 'AI-powered transaction matching with 99% accuracy'
+      title: 'Automated CSV Matching',
+      description: 'Smart transaction matching with 99% accuracy'
     },
     {
       icon: FileText,
@@ -52,7 +52,7 @@ export default function Benefits() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <p className="text-lg text-slate-600 leading-relaxed">
-              Transform hours of manual work into minutes with our AI-powered reconciliation platform. 
+              Transform hours of manual work into minutes with our automated reconciliation platform. 
               Built specifically for bookkeepers and accounting professionals who demand accuracy and efficiency.
             </p>
           </motion.div>

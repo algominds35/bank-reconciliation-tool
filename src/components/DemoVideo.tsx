@@ -22,7 +22,7 @@ const DemoVideo = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl text-gray-600 max-w-2xl mx-auto"
           >
-            See ReconcileBook Pro in action. Watch our AI-powered reconciliation transform your bookkeeping workflow.
+            See ReconcileBook Pro in action. Watch our automated reconciliation transform your bookkeeping workflow.
           </motion.p>
         </div>
 
@@ -38,9 +38,9 @@ const DemoVideo = () => {
             <div>
               <div className="flex items-center space-x-2 mb-2">
                 <h3 className="text-2xl font-bold text-gray-900">ReconcileBook Pro</h3>
-                <span className="px-2 py-1 bg-[#F45B49] text-white text-xs rounded">AI</span>
+                <span className="px-2 py-1 bg-[#F45B49] text-white text-xs rounded">AUTO</span>
               </div>
-              <p className="text-gray-600 text-sm">Reconcile and manage your client accounts with AI assistance</p>
+              <p className="text-gray-600 text-sm">Reconcile and manage your client accounts with automated assistance</p>
             </div>
             <button className="px-4 py-2 bg-[#F45B49] text-white rounded-lg hover:bg-[#E24C3A] transition-colors flex items-center space-x-2">
               <Plus className="h-4 w-4" />
@@ -118,7 +118,7 @@ const DemoVideo = () => {
                   <h4 className="font-semibold text-gray-900">ABC Manufacturing</h4>
                   <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">DRAFT</span>
                 </div>
-                <p className="text-gray-600 text-sm">Bank statement uploaded. AI processing transactions for matching.</p>
+                <p className="text-gray-600 text-sm">Bank statement uploaded. Automated system processing transactions for matching.</p>
               </div>
               <div className="text-gray-500 text-sm">Jul 25, 2025</div>
             </div>
@@ -138,7 +138,7 @@ const DemoVideo = () => {
             </div>
             <div className="p-6">
               <h3 className="font-semibold text-gray-900 mb-2">Watch How It Works</h3>
-              <p className="text-gray-600 text-sm">See our AI reconciliation tool process transactions in real-time</p>
+              <p className="text-gray-600 text-sm">See our automated reconciliation tool process transactions in real-time</p>
             </div>
           </div>
         </motion.div>

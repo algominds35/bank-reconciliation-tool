@@ -181,7 +181,7 @@ export default function TransactionMatching() {
             <span>Transaction Matching</span>
           </CardTitle>
           <CardDescription>
-            Upload bank statements and QuickBooks data for AI-powered transaction matching
+            Upload bank statements and QuickBooks data for automated transaction matching
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -272,7 +272,7 @@ export default function TransactionMatching() {
                   <CardHeader>
                     <CardTitle>Process Matches for {selectedClient.name}</CardTitle>
                     <CardDescription>
-                      AI will match bank transactions to QuickBooks data
+                      Automated system will match bank transactions to QuickBooks data
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -290,7 +290,7 @@ export default function TransactionMatching() {
                         size="lg"
                       >
                         <Zap className="h-4 w-4 mr-2" />
-                        Start AI Matching
+                        Start Automated Matching
                       </Button>
                     )}
                   </CardContent>
@@ -313,7 +313,7 @@ export default function TransactionMatching() {
                         <div>
                           <CardTitle>Matching Results</CardTitle>
                           <CardDescription>
-                            Review and approve AI-generated matches
+                            Review and approve automated matches
                           </CardDescription>
                         </div>
                         <Button onClick={exportResults}>

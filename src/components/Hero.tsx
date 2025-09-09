@@ -34,8 +34,8 @@ export default function Hero() {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="text-5xl lg:text-6xl font-bold leading-tight mb-6"
             >
-              AI-Powered{' '}
-              <span className="text-[#F45B49]">Bank Reconciliation</span>
+              Automated{' '}
+              <span className="text-[#F45B49]">CSV Matching</span>
             </motion.h1>
 
             {/* Description */}
@@ -45,7 +45,7 @@ export default function Hero() {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="text-xl text-slate-600 mb-8 leading-relaxed"
             >
-              Stop wasting hours on manual reconciliation. Our AI matches transactions instantly, 
+              Stop wasting hours on manual reconciliation. Our automated system matches transactions instantly, 
               generates professional reports, and handles your entire bookkeeping workflow automatically.
             </motion.p>
 
@@ -107,7 +107,7 @@ export default function Hero() {
                   <iframe
                     className="absolute inset-0 w-full h-full rounded-t-2xl"
                     src="https://www.youtube.com/embed/_K9NET1njog?autoplay=0&modestbranding=1&rel=0&showinfo=0&controls=1"
-                    title="AI-Powered Bank Reconciliation Demo"
+                    title="Automated CSV Matching Demo"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -117,13 +117,13 @@ export default function Hero() {
                 {/* Video Info */}
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-slate-900">AI-Powered Reconciliation Demo</h3>
+                    <h3 className="font-semibold text-slate-900">Automated Reconciliation Demo</h3>
                     <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">
                       Live Demo
                     </span>
                   </div>
                   <p className="text-slate-600 text-sm mb-4">
-                    See how our AI matches transactions in real-time and generates professional reports automatically.
+                    See how our automated system matches transactions in real-time and generates professional reports automatically.
                   </p>
                   <div className="flex items-center justify-between text-sm text-slate-500">
                     <span>2:08 min demo</span>

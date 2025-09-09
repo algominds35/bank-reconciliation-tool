@@ -103,7 +103,7 @@ const Logos = () => {
             Finally, a Reconciliation Tool That Actually Works
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Join hundreds of accountants who have solved QuickBooks reconciliation problems with our AI-powered platform that catches what QuickBooks misses.
+            Join hundreds of accountants who have solved QuickBooks reconciliation problems with our automated platform that catches what QuickBooks misses.
           </p>
         </motion.div>
         

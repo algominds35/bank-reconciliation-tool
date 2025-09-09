@@ -22,7 +22,7 @@ export default function DemoScreenshots() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl text-gray-600 max-w-2xl mx-auto"
           >
-            See ReconcileBook Pro in action. Watch our AI-powered reconciliation transform your bookkeeping workflow.
+            See ReconcileBook Pro in action. Watch our automated reconciliation transform your bookkeeping workflow.
           </motion.p>
         </div>
 
@@ -70,13 +70,13 @@ export default function DemoScreenshots() {
                   <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                 </div>
-                <div className="text-sm text-slate-500">AI Auto-Match Engine</div>
+                <div className="text-sm text-slate-500">Automated Matching Engine</div>
               </div>
               
               {/* Auto-Match Screenshot */}
               <img 
                 src="/images/smart-matching-screenshot - Copy.png" 
-                alt="AI Auto-Match Engine - Transaction Matching"
+                alt="Automated Matching Engine - Transaction Matching"
                 className="w-full h-auto object-contain"
               />
             </div>
