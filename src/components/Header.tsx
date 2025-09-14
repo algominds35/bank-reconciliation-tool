@@ -44,7 +44,9 @@ export default function Header() {
             <Link href="/blog">
               <span className="text-slate-700 hover:text-slate-900 font-medium transition-colors">Blog</span>
             </Link>
-            <a href="mailto:alex@usealgomind.com" className="text-slate-700 hover:text-slate-900 font-medium transition-colors">Contact</a>
+            <Link href="/contact">
+              <span className="text-slate-700 hover:text-slate-900 font-medium transition-colors">Contact</span>
+            </Link>
           </nav>
           
           <div className="flex items-center space-x-4">
