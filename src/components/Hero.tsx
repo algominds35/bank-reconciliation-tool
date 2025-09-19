@@ -34,8 +34,8 @@ export default function Hero() {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="text-5xl lg:text-6xl font-bold leading-tight mb-6"
             >
-              Stop Wasting Hours{' '}
-              <span className="text-[#F45B49]">Fixing Transactions</span>
+              Stop wasting hours on{' '}
+              <span className="text-[#F45B49]">manual reconciliation</span>
             </motion.h1>
 
             {/* Description */}
