@@ -34,8 +34,8 @@ export default function Hero() {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="text-5xl lg:text-6xl font-bold leading-tight mb-6"
             >
-              Automated{' '}
-              <span className="text-[#F45B49]">CSV Matching</span>
+              Stop Wasting Hours{' '}
+              <span className="text-[#F45B49]">Fixing Transactions</span>
             </motion.h1>
 
             {/* Description */}
@@ -45,8 +45,7 @@ export default function Hero() {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="text-xl text-slate-600 mb-8 leading-relaxed"
             >
-              Stop wasting hours on manual reconciliation. Our automated system matches transactions instantly, 
-              generates professional reports, and handles your entire bookkeeping workflow automatically.
+              Our system matches transactions, removes duplicates, and generates clean reports — in seconds, not hours.
             </motion.p>
 
             {/* CTAs */}
