@@ -3,6 +3,7 @@
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
 import Benefits from '@/components/Benefits'
+import QuickBooksVsReconcileBook from '@/components/QuickBooksVsReconcileBook'
 import Testimonials from '@/components/Testimonials'
 import Logos from '@/components/Logos'
 import DemoScreenshots from '@/components/DemoScreenshots'
@@ -20,6 +21,7 @@ export default function Home() {
       <Header />
       <Hero />
       <Benefits />
+      <QuickBooksVsReconcileBook />
       <DemoScreenshots />
       <Testimonials />
       <Logos />
