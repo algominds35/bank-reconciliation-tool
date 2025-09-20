@@ -93,9 +93,9 @@ export async function GET(request: NextRequest) {
     const { error: updateError } = await supabase
       .from('financial_connections_sessions')
       .update({
-        status: session.status === 'succeeded' ? 'completed' : 'pending',
-        accounts_linked: session.accounts || [],
-        completed_at: session.status === 'succeeded' ? new Date().toISOString() : null
+        status: (session as any).status === 'succeeded' ? 'completed' : 'pending',
+        accounts_linked: (session as any).accounts || [],
+        completed_at: (session as any).status === 'succeeded' ? new Date().toISOString() : null
       })
       .eq('session_id', sessionId)
       .eq('user_id', user.id)
@@ -108,8 +108,8 @@ export async function GET(request: NextRequest) {
       success: true,
       session: {
         id: session.id,
-        status: session.status,
-        accounts: session.accounts || []
+        status: (session as any).status,
+        accounts: (session as any).accounts || []
       }
     })
 
