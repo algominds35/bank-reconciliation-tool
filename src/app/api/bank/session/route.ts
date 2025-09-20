@@ -31,20 +31,19 @@ export async function POST(request: NextRequest) {
     let session
     try {
       session = await stripe.financialConnections.sessions.create({
-        permissions: ['transactions', 'balances'], // Request transaction and balance data
+        permissions: ['transactions'], // Request transaction data only
         filters: { 
           countries: ['US'] // US banks only for now
-        },
-        account_holder: {
-          type: 'individual' as any
         }
-      } as any)
+      })
     } catch (stripeError: any) {
       console.error('❌ Stripe API error:', stripeError)
       return NextResponse.json(
         { 
           error: 'Stripe API error', 
-          details: stripeError.message || 'Unknown Stripe error' 
+          details: stripeError.message || 'Unknown Stripe error',
+          type: stripeError.type,
+          code: stripeError.code
         },
         { status: 500 }
       )
