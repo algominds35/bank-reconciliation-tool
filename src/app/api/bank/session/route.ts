@@ -25,9 +25,9 @@ export async function POST(request: NextRequest) {
         countries: ['US'] // US banks only for now
       },
       account_holder: {
-        type: 'individual'
+        type: 'individual' as any
       }
-    })
+    } as any)
 
     console.log(`✅ Created FC session: ${session.id}`)
 
