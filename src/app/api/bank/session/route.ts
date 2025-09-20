@@ -27,16 +27,16 @@ export async function POST(request: NextRequest) {
 
     console.log(`Creating Financial Connections session for user: ${user.id}`)
 
-    // Create Stripe Financial Connections session
-    let session
-    try {
-      session = await stripe.financialConnections.sessions.create({
-        permissions: ['transactions', 'balances'],
-        account_holder: {
-          type: 'business'
-        }
-      })
-    } catch (stripeError: any) {
+        // Create Stripe Financial Connections session
+        let session
+        try {
+          session = await stripe.financialConnections.sessions.create({
+            permissions: ['transactions', 'balances'],
+            account_holder: {
+              type: 'business' as any
+            }
+          } as any)
+        } catch (stripeError: any) {
       console.error('❌ Stripe API error:', stripeError)
       return NextResponse.json(
         { 
