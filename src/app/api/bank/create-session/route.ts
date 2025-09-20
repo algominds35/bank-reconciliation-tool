@@ -37,12 +37,12 @@ export async function POST(request: NextRequest) {
       session = await stripe.financialConnections.sessions.create({
         permissions: ['transactions', 'balances'],
         account_holder: {
-          type: 'business'
+          type: 'business' as any
         },
         filters: {
           countries: ['US']
         }
-      })
+      } as any)
       console.log(`✅ CREATE SESSION: Session created: ${session.id}`)
     } catch (stripeError: any) {
       console.error('❌ CREATE SESSION: Stripe API error:', stripeError)
