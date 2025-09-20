@@ -17,6 +17,7 @@ import {
   DollarSign
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
+import { supabase } from '@/lib/supabase'
 
 interface BankAccount {
   id: string
@@ -38,7 +39,32 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
   const [connectedAccounts, setConnectedAccounts] = useState<BankAccount[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSyncing, setIsSyncing] = useState<string | null>(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const { toast } = useToast()
+
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setIsAuthenticated(!!session)
+      if (session) {
+        await loadConnectedAccounts()
+      } else {
+        setIsLoading(false)
+      }
+    }
+    checkAuth()
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session)
+      if (session) {
+        loadConnectedAccounts()
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   // Load Stripe.js
   useEffect(() => {
@@ -53,15 +79,19 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
     loadStripe()
   }, [])
 
-  // Load connected accounts on component mount
-  useEffect(() => {
-    loadConnectedAccounts()
-  }, [])
 
   const loadConnectedAccounts = async () => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/bank/store-accounts')
+      
+      // Get the current session token
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      const response = await fetch('/api/bank/store-accounts', {
+        headers: {
+          'Authorization': `Bearer ${session?.access_token || ''}`
+        }
+      })
       const data = await response.json()
       
       if (data.success) {
@@ -84,11 +114,19 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
     try {
       setIsConnecting(true)
 
+      // Get the current session token
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (!session) {
+        throw new Error('Please log in to connect your bank account')
+      }
+
       // Create Financial Connections session
       const sessionResponse = await fetch('/api/bank/session', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
         }
       })
 
@@ -127,7 +165,11 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
       }
 
       // Check session status after modal closes
-      const statusResponse = await fetch(`/api/bank/session?session_id=${sessionData.session_id}`)
+      const statusResponse = await fetch(`/api/bank/session?session_id=${sessionData.session_id}`, {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      })
       const statusData = await statusResponse.json()
 
       if (statusData.success && statusData.session.accounts.length > 0) {
@@ -135,7 +177,8 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
         const storeResponse = await fetch('/api/bank/store-accounts', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`
           },
           body: JSON.stringify({
             accounts: statusData.session.accounts
@@ -170,10 +213,14 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
     try {
       setIsSyncing(accountId)
       
+      // Get the current session token
+      const { data: { session } } = await supabase.auth.getSession()
+      
       const response = await fetch('/api/bank/transactions', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token || ''}`
         },
         body: JSON.stringify({
           account_id: accountId,
@@ -358,8 +405,29 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
           </motion.div>
         )}
 
+        {/* Not Authenticated */}
+        {!isAuthenticated && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+            className="text-center py-8"
+          >
+            <AlertCircle className="h-12 w-12 text-orange-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Please Log In
+            </h3>
+            <p className="text-gray-600 mb-4">
+              You need to be logged in to connect your bank accounts.
+            </p>
+            <Button asChild>
+              <a href="/auth/login">Log In</a>
+            </Button>
+          </motion.div>
+        )}
+
         {/* No Accounts Connected */}
-        {connectedAccounts.length === 0 && (
+        {isAuthenticated && connectedAccounts.length === 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

@@ -13,7 +13,7 @@ export interface AuthenticatedUser {
 
 export async function getAuthenticatedUser(request: NextRequest): Promise<AuthenticatedUser | null> {
   try {
-    // Method 1: Try to get user from authorization header (for HTTP requests)
+    // Method 1: Try to get user from authorization header (for API requests)
     const authHeader = request.headers.get('authorization')
     
     if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -23,6 +23,7 @@ export async function getAuthenticatedUser(request: NextRequest): Promise<Authen
       const { data: { user }, error } = await supabase.auth.getUser(token)
 
       if (!error && user) {
+        console.log('✅ Authenticated user via Bearer token:', user.id)
         return {
           id: user.id,
           email: user.email || ''
@@ -30,32 +31,35 @@ export async function getAuthenticatedUser(request: NextRequest): Promise<Authen
       }
     }
 
-    // Method 2: Try to get user from Supabase session (for direct client calls)
-    const { data: { session } } = await supabase.auth.getSession()
-    if (session?.user) {
-      return {
-        id: session.user.id,
-        email: session.user.email || ''
+    // Method 2: Try to get user from cookies (for browser requests)
+    const cookies = request.headers.get('cookie')
+    if (cookies) {
+      // Extract the session from cookies
+      const sessionMatch = cookies.match(/sb-[^=]+-auth-token=([^;]+)/)
+      if (sessionMatch) {
+        try {
+          const sessionData = JSON.parse(decodeURIComponent(sessionMatch[1]))
+          if (sessionData?.access_token) {
+            const { data: { user }, error } = await supabase.auth.getUser(sessionData.access_token)
+            if (!error && user) {
+              console.log('✅ Authenticated user via cookie session:', user.id)
+              return {
+                id: user.id,
+                email: user.email || ''
+              }
+            }
+          }
+        } catch (e) {
+          console.log('Failed to parse session cookie')
+        }
       }
     }
 
-    // Method 3: TEMPORARY - For testing bank connections without full auth setup
-    // This creates a demo user for testing purposes
-    console.warn('⚠️ Using demo user for bank connection testing')
-    return {
-      id: 'demo-user-' + Date.now(),
-      email: 'demo@example.com'
-    }
-
+    console.log('❌ No valid authentication found')
     return null
   } catch (error) {
     console.error('Authentication check failed:', error)
-    // TEMPORARY - Return demo user for testing
-    console.warn('⚠️ Auth failed, using demo user for testing')
-    return {
-      id: 'demo-user-' + Date.now(),
-      email: 'demo@example.com'
-    }
+    return null
   }
 }
 
