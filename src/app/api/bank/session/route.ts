@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         countries: ['US'] // US banks only for now
       },
       account_holder: { 
-        type: 'individual' // Can be 'individual' or 'company' based on your needs
+        type: 'individual' as const // Can be 'individual' or 'company' based on your needs
       },
       // Optional: Customize the UI
       custom_text: {
