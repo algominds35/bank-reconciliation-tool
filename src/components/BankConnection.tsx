@@ -122,7 +122,7 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
       }
 
       // Create Financial Connections session
-      const sessionResponse = await fetch('/api/bank/session', {
+      const sessionResponse = await fetch('/api/bank/create-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
