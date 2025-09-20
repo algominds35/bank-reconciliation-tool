@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch transactions from Stripe Financial Connections
-    const transactions = await stripe.financialConnections.accounts.listTransactions(accountId, {
+    const transactions = await (stripe.financialConnections.accounts as any).listTransactions(accountId, {
       from: fromTimestamp,
       to: toTimestamp,
       limit: 100 // Adjust as needed
@@ -242,7 +242,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Fetch transactions from Stripe
-    const transactions = await stripe.financialConnections.accounts.listTransactions(account_id, {
+    const transactions = await (stripe.financialConnections.accounts as any).listTransactions(account_id, {
       from: fromTimestamp,
       to: toTimestamp,
       limit: 100
