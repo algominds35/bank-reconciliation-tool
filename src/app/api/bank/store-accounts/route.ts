@@ -35,17 +35,17 @@ export async function POST(request: NextRequest) {
         // Retrieve account details from Stripe
         const account = await stripe.financialConnections.accounts.retrieve(accountId)
         
-        console.log(`Processing account: ${accountId}, type: ${account.type}`)
+        console.log(`Processing account: ${accountId}, type: ${(account as any).type}`)
 
         // Extract account information
         const accountData = {
           user_id: user.id,
           provider: 'stripe_fc',
           account_id: accountId,
-          bank_name: account.institution?.name || 'Unknown Bank',
-          account_type: account.type || 'unknown',
-          last_four: account.last_four || '****',
-          status: account.status === 'active' ? 'active' : 'inactive',
+          bank_name: (account as any).institution?.name || 'Unknown Bank',
+          account_type: (account as any).type || 'unknown',
+          last_four: (account as any).last_four || '****',
+          status: (account as any).status === 'active' ? 'active' : 'inactive',
           connected_at: new Date().toISOString()
         }
 
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
         }
 
         bankAccounts.push(storedAccount)
-        console.log(`✅ Stored account: ${account.bank_name} ${account.last_four}`)
+        console.log(`✅ Stored account: ${(account as any).bank_name} ${(account as any).last_four}`)
 
       } catch (accountError) {
         console.error(`❌ Error processing account ${accountId}:`, accountError)
