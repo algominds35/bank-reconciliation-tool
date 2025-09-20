@@ -31,14 +31,11 @@ export async function POST(request: NextRequest) {
     let session
     try {
       session = await stripe.financialConnections.sessions.create({
-        permissions: ['transactions'], // Request transaction data only
-        filters: { 
-          countries: ['US'] // US banks only for now
-        },
+        permissions: ['transactions', 'balances'],
         account_holder: {
-          type: 'individual' as any
+          type: 'business'
         }
-      } as any)
+      })
     } catch (stripeError: any) {
       console.error('❌ Stripe API error:', stripeError)
       return NextResponse.json(

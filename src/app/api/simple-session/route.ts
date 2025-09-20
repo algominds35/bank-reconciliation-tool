@@ -22,7 +22,10 @@ export async function POST(request: NextRequest) {
     
     // Create Financial Connections session with absolute minimal config
     const session = await stripe.financialConnections.sessions.create({
-      permissions: ['transactions']
+      permissions: ['transactions'],
+      account_holder: {
+        type: 'business'
+      }
     })
     
     console.log('✅ Stripe session created:', session.id)
