@@ -34,8 +34,11 @@ export async function POST(request: NextRequest) {
         permissions: ['transactions'], // Request transaction data only
         filters: { 
           countries: ['US'] // US banks only for now
+        },
+        account_holder: {
+          type: 'individual' as any
         }
-      })
+      } as any)
     } catch (stripeError: any) {
       console.error('❌ Stripe API error:', stripeError)
       return NextResponse.json(
