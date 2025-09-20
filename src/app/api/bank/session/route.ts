@@ -10,6 +10,15 @@ const supabase = createClient(
 
 export async function POST(request: NextRequest) {
   try {
+    // Check environment variables
+    if (!process.env.STRIPE_SECRET_KEY) {
+      console.error('❌ STRIPE_SECRET_KEY is not set')
+      return NextResponse.json(
+        { error: 'Stripe configuration error' },
+        { status: 500 }
+      )
+    }
+
     // SECURITY: Verify user authentication
     const user = await getAuthenticatedUser(request)
     if (!user) {
@@ -19,15 +28,27 @@ export async function POST(request: NextRequest) {
     console.log(`Creating Financial Connections session for user: ${user.id}`)
 
     // Create Stripe Financial Connections session
-    const session = await stripe.financialConnections.sessions.create({
-      permissions: ['transactions', 'balances'], // Request transaction and balance data
-      filters: { 
-        countries: ['US'] // US banks only for now
-      },
-      account_holder: {
-        type: 'individual' as any
-      }
-    } as any)
+    let session
+    try {
+      session = await stripe.financialConnections.sessions.create({
+        permissions: ['transactions', 'balances'], // Request transaction and balance data
+        filters: { 
+          countries: ['US'] // US banks only for now
+        },
+        account_holder: {
+          type: 'individual' as any
+        }
+      } as any)
+    } catch (stripeError: any) {
+      console.error('❌ Stripe API error:', stripeError)
+      return NextResponse.json(
+        { 
+          error: 'Stripe API error', 
+          details: stripeError.message || 'Unknown Stripe error' 
+        },
+        { status: 500 }
+      )
+    }
 
     console.log(`✅ Created FC session: ${session.id}`)
 
