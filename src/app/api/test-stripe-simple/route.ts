@@ -31,15 +31,15 @@ export async function GET(request: NextRequest) {
       const account = await stripe.accounts.retrieve()
       console.log('✅ SIMPLE TEST: Basic Stripe API call successful')
       
-      return NextResponse.json({
-        success: true,
-        message: 'All basic tests passed',
-        envCheck,
-        account: {
-          id: account.id,
-          country: account.country
-        }
-      })
+    return NextResponse.json({
+      success: true,
+      message: 'All basic tests passed - FORCED REDEPLOY',
+      envCheck,
+      account: {
+        id: account.id,
+        country: account.country
+      }
+    })
     } catch (apiError: any) {
       console.error('❌ SIMPLE TEST: Stripe API call failed:', apiError)
       return NextResponse.json({
