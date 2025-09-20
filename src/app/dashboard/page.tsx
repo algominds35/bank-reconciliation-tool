@@ -34,7 +34,9 @@ import {
   Settings,
   Trash2,
   RefreshCw,
-  Plus
+  Plus,
+  Building2,
+  CreditCard
 } from 'lucide-react'
 
 export default function Dashboard() {
@@ -948,6 +950,13 @@ export default function Dashboard() {
                       ✓
                     </Badge>
                   )}
+                </Button>
+              </Link>
+              
+              <Link href="/bank-connections">
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                  <CreditCard className="h-4 w-4" />
+                  <span>Bank Connections</span>
                 </Button>
               </Link>
               
