@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
     console.log(`✅ Retrieved ${transactions.data.length} transactions from Stripe`)
 
     // Process and normalize transactions
-    const normalizedTransactions = transactions.data.map(transaction => ({
+    const normalizedTransactions = transactions.data.map((transaction: any) => ({
       user_id: user.id,
       bank_account_id: bankAccount.id,
       stripe_transaction_id: transaction.id,
@@ -251,7 +251,7 @@ export async function POST(request: NextRequest) {
     console.log(`✅ Retrieved ${transactions.data.length} transactions from Stripe`)
 
     // Process transactions
-    const normalizedTransactions = transactions.data.map(transaction => ({
+    const normalizedTransactions = transactions.data.map((transaction: any) => ({
       user_id: user.id,
       bank_account_id: bankAccount.id,
       stripe_transaction_id: transaction.id,
