@@ -23,13 +23,10 @@ export async function POST(request: NextRequest) {
       permissions: ['transactions', 'balances'], // Request transaction and balance data
       filters: { 
         countries: ['US'] // US banks only for now
+      },
+      account_holder: {
+        type: 'individual'
       }
-      // Optional: Customize the UI
-      // custom_text: {
-      //   submit: {
-      //     message: 'Connect your bank account to automatically sync transactions with ReconcileBook Pro'
-      //   }
-      // }
     })
 
     console.log(`✅ Created FC session: ${session.id}`)
