@@ -30,6 +30,28 @@ export async function POST(request: NextRequest) {
 
     console.log(`🔍 CREATE SESSION: Creating session for user: ${user.id}`)
 
+    // Create or get Stripe customer first
+    let customer
+    try {
+      console.log('🔍 CREATE SESSION: Creating/getting Stripe customer')
+      customer = await stripe.customers.create({
+        email: user.email,
+        metadata: {
+          user_id: user.id
+        }
+      })
+      console.log(`✅ CREATE SESSION: Customer created: ${customer.id}`)
+    } catch (customerError: any) {
+      console.error('❌ CREATE SESSION: Customer creation error:', customerError)
+      return NextResponse.json(
+        { 
+          error: 'Failed to create customer', 
+          details: customerError.message || 'Unknown customer error'
+        },
+        { status: 500 }
+      )
+    }
+
     // Create Stripe Financial Connections session
     let session
     try {
@@ -37,7 +59,8 @@ export async function POST(request: NextRequest) {
       session = await stripe.financialConnections.sessions.create({
         permissions: ['transactions', 'balances'],
         account_holder: {
-          type: 'customer'
+          type: 'customer',
+          customer: customer.id
         },
         filters: {
           countries: ['US']
