@@ -139,18 +139,26 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
       // Use hardcoded publishable key for now
       const publishableKey = 'pk_live_51RZKlLP1KpOfW0ki4Q8XvYzF3mN6sT9wE2rU7iO1pA5cV8bM0nH4jK6lQ9xW3eR5tY7uI1oP4aS6dF8gH0jK2lN5qT7vX9zC1eR3tY6uI8oP1aS4dF6gH9jK'
       console.log('🔍 Using hardcoded Stripe key:', publishableKey.substring(0, 20) + '...')
+      console.log('🔍 window.Stripe exists?', !!window.Stripe)
 
       // Wait for Stripe to load
       const stripe = await new Promise((resolve, reject) => {
         if (window.Stripe) {
           console.log('🔍 Initializing Stripe with key:', publishableKey.substring(0, 20) + '...')
-          resolve(window.Stripe(publishableKey))
+          const stripeInstance = window.Stripe(publishableKey)
+          console.log('🔍 Stripe instance created:', !!stripeInstance)
+          console.log('🔍 Stripe instance has financialConnections?', !!stripeInstance?.financialConnections)
+          resolve(stripeInstance)
         } else {
+          console.log('🔍 window.Stripe not available, waiting...')
           const checkStripe = setInterval(() => {
             if (window.Stripe) {
               clearInterval(checkStripe)
               console.log('🔍 Initializing Stripe with key (delayed):', publishableKey.substring(0, 20) + '...')
-              resolve(window.Stripe(publishableKey))
+              const stripeInstance = window.Stripe(publishableKey)
+              console.log('🔍 Stripe instance created (delayed):', !!stripeInstance)
+              console.log('🔍 Stripe instance has financialConnections (delayed)?', !!stripeInstance?.financialConnections)
+              resolve(stripeInstance)
             }
           }, 100)
           
