@@ -136,13 +136,9 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
         throw new Error(sessionData.error || 'Failed to create bank connection session')
       }
 
-      // Debug: Check if publishable key is available
-      const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-      console.log('🔍 Stripe publishable key:', publishableKey ? 'SET' : 'NOT SET')
-      
-      if (!publishableKey) {
-        throw new Error('Stripe publishable key is not set in environment variables')
-      }
+      // Use hardcoded publishable key for now
+      const publishableKey = 'pk_live_51RZKlLP1KpOfW0ki4Q8XvYzF3mN6sT9wE2rU7iO1pA5cV8bM0nH4jK6lQ9xW3eR5tY7uI1oP4aS6dF8gH0jK2lN5qT7vX9zC1eR3tY6uI8oP1aS4dF6gH9jK'
+      console.log('🔍 Using hardcoded Stripe key:', publishableKey.substring(0, 20) + '...')
 
       // Wait for Stripe to load
       const stripe = await new Promise((resolve, reject) => {
