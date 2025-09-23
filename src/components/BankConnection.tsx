@@ -147,7 +147,7 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
           console.log('🔍 Initializing Stripe with key:', publishableKey.substring(0, 20) + '...')
           const stripeInstance = window.Stripe(publishableKey)
           console.log('🔍 Stripe instance created:', !!stripeInstance)
-          console.log('🔍 Stripe instance has financialConnections?', !!stripeInstance?.financialConnections)
+          console.log('🔍 Stripe instance has financialConnections?', !!(stripeInstance as any)?.financialConnections)
           resolve(stripeInstance)
         } else {
           console.log('🔍 window.Stripe not available, waiting...')
@@ -157,7 +157,7 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
               console.log('🔍 Initializing Stripe with key (delayed):', publishableKey.substring(0, 20) + '...')
               const stripeInstance = window.Stripe(publishableKey)
               console.log('🔍 Stripe instance created (delayed):', !!stripeInstance)
-              console.log('🔍 Stripe instance has financialConnections (delayed)?', !!stripeInstance?.financialConnections)
+              console.log('🔍 Stripe instance has financialConnections (delayed)?', !!(stripeInstance as any)?.financialConnections)
               resolve(stripeInstance)
             }
           }, 100)
