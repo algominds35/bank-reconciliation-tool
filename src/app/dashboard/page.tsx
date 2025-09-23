@@ -941,24 +941,6 @@ export default function Dashboard() {
                 </Button>
               </Link>
               
-              <Link href="/settings/qbo">
-                <Button variant="outline" size="sm" className="flex items-center space-x-2">
-                  <div className={`w-3 h-3 rounded-full ${qboStatus.connected ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-                  <span>QuickBooks</span>
-                  {qboStatus.connected && (
-                    <Badge variant="secondary" className="ml-1 text-xs bg-green-100 text-green-800">
-                      ✓
-                    </Badge>
-                  )}
-                </Button>
-              </Link>
-              
-              <Link href="/bank-connections">
-                <Button variant="outline" size="sm" className="flex items-center space-x-2">
-                  <CreditCard className="h-4 w-4" />
-                  <span>Bank Connections</span>
-                </Button>
-              </Link>
               
               <Link href="/settings/security">
                 <Button variant="outline" size="sm" className="flex items-center space-x-2">
