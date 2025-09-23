@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
+import Script from 'next/script'
 import './globals.css'
 
 const inter = Inter({ 
@@ -27,10 +28,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <script src="https://js.stripe.com/v3/"></script>
-      </head>
       <body className={`${inter.className} antialiased`}>
+        <Script
+          src="https://js.stripe.com/v3/"
+          strategy="beforeInteractive"
+        />
         {children}
         <Analytics />
       </body>
