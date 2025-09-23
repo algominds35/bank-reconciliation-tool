@@ -34,10 +34,14 @@ export async function POST(request: NextRequest) {
     let session
     try {
       console.log('🔍 CREATE SESSION: Calling Stripe API')
+      // Get your Stripe account ID first
+      const account = await stripe.accounts.retrieve()
+      
       session = await stripe.financialConnections.sessions.create({
         permissions: ['transactions', 'balances'],
         account_holder: {
-          type: 'account'
+          type: 'account',
+          account: account.id
         },
         filters: {
           countries: ['US']
