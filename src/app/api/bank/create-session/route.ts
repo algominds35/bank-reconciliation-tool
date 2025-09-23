@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       const account = await stripe.accounts.retrieve()
       
       session = await stripe.financialConnections.sessions.create({
-        permissions: ['transactions', 'balances'],
+        permissions: ['transactions', 'balances', 'payment_method'],
         account_holder: {
           type: 'account',
           account: account.id
