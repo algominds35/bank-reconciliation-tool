@@ -77,6 +77,7 @@ const checkForDuplicatesInFile = async (csvData: any[], transactionType: 'bank' 
   
   transactions.forEach(transaction => {
     const key = `${transaction.amount}_${transaction.description.toLowerCase().trim()}_${transaction.date}`
+    console.log('Processing transaction:', transaction.description, transaction.amount, transaction.date, 'Key:', key)
     
     if (!seen.has(key)) {
       seen.set(key, [])
@@ -86,13 +87,15 @@ const checkForDuplicatesInFile = async (csvData: any[], transactionType: 'bank' 
   })
   
   // Count groups with more than one transaction (duplicates)
-  seen.forEach(group => {
+  seen.forEach((group, key) => {
     if (group.length > 1) {
+      console.log(`Found duplicate group for key: ${key}`, group)
       duplicateCount += group.length - 1 // All but the first are duplicates
     }
   })
   
   console.log(`Found ${duplicateCount} duplicates in ${transactionType} CSV`)
+  console.log('All transaction keys:', Array.from(seen.keys()))
   return duplicateCount
 }
 
@@ -540,15 +543,29 @@ export default function Dashboard() {
             throw new Error('No valid transactions found in CSV file')
           }
 
-          // Check for duplicates in the uploaded file
+          // Check for duplicates in the uploaded file and store them for Smart Matching
           const duplicateCount = await checkForDuplicatesInFile(results.data, transactionType)
+          
+          // Store duplicates in localStorage for Smart Matching interface
+          if (duplicateCount > 0) {
+            const duplicates = await getDuplicatesForSmartMatching(results.data, transactionType)
+            localStorage.setItem('pendingDuplicates', JSON.stringify({
+              duplicates,
+              transactionType,
+              uploadedAt: new Date().toISOString()
+            }))
+          }
           
           // Refresh the transactions list
           await fetchTransactions()
           await fetchClients()
 
           // Success message
-          alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!`)
+          if (duplicateCount > 0) {
+            alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!\n\n🚨 Found ${duplicateCount} duplicates! Go to Smart Matching tab to review them.`)
+          } else {
+            alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!`)
+          }
           
         } catch (error) {
           console.error('Upload error details:', error)
