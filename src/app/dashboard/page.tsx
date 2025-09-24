@@ -547,12 +547,8 @@ export default function Dashboard() {
           await fetchTransactions()
           await fetchClients()
 
-          // Success message with duplicate info
-          if (duplicateCount > 0) {
-            alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!\n\n🚨 Found ${duplicateCount} potential duplicates that need review!`)
-          } else {
-            alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!\n\n✅ No duplicates found - your data looks clean!`)
-          }
+          // Success message
+          alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!`)
           
         } catch (error) {
           console.error('Upload error details:', error)
