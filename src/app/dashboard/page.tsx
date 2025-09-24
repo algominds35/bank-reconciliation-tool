@@ -8,6 +8,7 @@ import { Transaction, ReconciliationSummary, Client } from '@/types'
 import { ClientSelector } from '@/components/client-selector'
 import { TransactionTable } from '@/components/transaction-table'
 import { MatchingInterface } from '@/components/matching-interface'
+import BankConnection from '@/components/BankConnection'
 import { TrialGuard } from '@/components/trial-guard'
 import { AccessGuard } from '@/components/access-guard'
 import { AccessWarning } from '@/components/access-warning'
@@ -75,12 +76,18 @@ const checkForDuplicatesInFile = async (csvData: any[], transactionType: 'bank' 
   const seen = new Map<string, any[]>()
   let duplicateCount = 0
   
-  transactions.forEach(transaction => {
+  console.log('=== DUPLICATE DETECTION DEBUG ===')
+  console.log('Total transactions to process:', transactions.length)
+  
+  transactions.forEach((transaction, index) => {
     const key = `${transaction.amount}_${transaction.description.toLowerCase().trim()}_${transaction.date}`
-    console.log('Processing transaction:', transaction.description, transaction.amount, transaction.date, 'Key:', key)
+    console.log(`[${index}] Processing: "${transaction.description}" | $${transaction.amount} | ${transaction.date} | Key: "${key}"`)
     
     if (!seen.has(key)) {
       seen.set(key, [])
+      console.log(`  → New group created for key: "${key}"`)
+    } else {
+      console.log(`  → DUPLICATE FOUND! Adding to existing group: "${key}"`)
     }
     
     seen.get(key)!.push(transaction)
@@ -147,10 +154,14 @@ const getDuplicatesForSmartMatching = async (csvData: any[], transactionType: 'b
     seen.get(key)!.push(transaction)
   })
   
+  console.log('=== FORMATTING DUPLICATES FOR SMART MATCHING ===')
+  console.log('Total transaction groups:', seen.size)
+  
   // Find groups with more than one transaction (duplicates)
-  seen.forEach(group => {
+  seen.forEach((group, key) => {
     if (group.length > 1) {
-      duplicateGroups.push({
+      console.log(`Creating duplicate group for key: "${key}" with ${group.length} transactions`)
+      const duplicateGroup = {
         id: crypto.randomUUID(),
         duplicateGroup: group,
         original: group[0], // First one is the "original"
@@ -158,10 +169,13 @@ const getDuplicatesForSmartMatching = async (csvData: any[], transactionType: 'b
         confidence: 95, // High confidence for exact matches
         matchType: 'duplicate',
         reason: `Found ${group.length} identical transactions: ${group[0].description} - $${group[0].amount}`
-      })
+      }
+      console.log('Duplicate group created:', duplicateGroup)
+      duplicateGroups.push(duplicateGroup)
     }
   })
   
+  console.log(`=== TOTAL DUPLICATE GROUPS CREATED: ${duplicateGroups.length} ===`)
   return duplicateGroups
 }
 
@@ -610,16 +624,34 @@ export default function Dashboard() {
           }
 
           // Check for duplicates in the uploaded file and store them for Smart Matching
+          console.log('=== STARTING DUPLICATE DETECTION ===')
+          console.log('CSV data rows:', results.data.length)
+          console.log('First few rows:', results.data.slice(0, 3))
           const duplicateCount = await checkForDuplicatesInFile(results.data, transactionType)
+          console.log('=== DUPLICATE DETECTION COMPLETE ===')
+          console.log('Total duplicates found:', duplicateCount)
           
           // Store duplicates in localStorage for Smart Matching interface
           if (duplicateCount > 0) {
+            console.log('=== STORING DUPLICATES IN LOCALSTORAGE ===')
             const duplicates = await getDuplicatesForSmartMatching(results.data, transactionType)
-            localStorage.setItem('pendingDuplicates', JSON.stringify({
+            console.log('Duplicates to store:', duplicates)
+            
+            const storageData = {
               duplicates,
               transactionType,
               uploadedAt: new Date().toISOString()
-            }))
+            }
+            console.log('Storage data:', storageData)
+            
+            localStorage.setItem('pendingDuplicates', JSON.stringify(storageData))
+            console.log('✅ Duplicates stored in localStorage')
+            
+            // Verify storage
+            const stored = localStorage.getItem('pendingDuplicates')
+            console.log('✅ Verification - stored data:', stored)
+          } else {
+            console.log('❌ No duplicates found, not storing anything')
           }
           
           // Refresh the transactions list
@@ -1313,6 +1345,14 @@ export default function Dashboard() {
                           disabled={uploading}
                         />
                       </div>
+                    </div>
+
+                    {/* Bank Connection Component */}
+                    <div className="mt-4">
+                      <BankConnection onAccountsConnected={() => {
+                        // Refresh transactions when new accounts are connected
+                        fetchTransactions()
+                      }} />
                     </div>
 
                     {/* Filters */}

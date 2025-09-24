@@ -41,20 +41,54 @@ export function MatchingInterface({
     const checkPendingDuplicates = () => {
       try {
         const stored = localStorage.getItem('pendingDuplicates')
+        console.log('=== CHECKING LOCALSTORAGE FOR DUPLICATES ===')
+        console.log('Stored data:', stored)
+        
+        if (stored) {
+          const data = JSON.parse(stored)
+          console.log('Parsed data:', data)
+          console.log('Duplicates found:', data.duplicates?.length || 0)
+          
+          if (data.duplicates && data.duplicates.length > 0) {
+            console.log('✅ Setting duplicate matches:', data.duplicates)
+            setDuplicateMatches(data.duplicates)
+            setHasDuplicates(true)
+            setShowAutoMatches(true)
+            console.log('✅ Duplicates loaded successfully!')
+          } else {
+            console.log('❌ No duplicates in stored data')
+          }
+        } else {
+          console.log('❌ No data found in localStorage')
+        }
+      } catch (error) {
+        console.error('❌ Error loading pending duplicates:', error)
+      }
+    }
+
+    checkPendingDuplicates()
+  }, [])
+
+  // Also check when component becomes visible (tab switching)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        console.log('=== TAB BECAME VISIBLE - RE-CHECKING DUPLICATES ===')
+        const stored = localStorage.getItem('pendingDuplicates')
         if (stored) {
           const data = JSON.parse(stored)
           if (data.duplicates && data.duplicates.length > 0) {
+            console.log('✅ Re-loading duplicates on tab switch:', data.duplicates.length)
             setDuplicateMatches(data.duplicates)
             setHasDuplicates(true)
             setShowAutoMatches(true)
           }
         }
-      } catch (error) {
-        console.error('Error loading pending duplicates:', error)
       }
     }
-    
-    checkPendingDuplicates()
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
   }, [])
 
   const formatAmount = (amount: number) => {
@@ -297,6 +331,13 @@ export function MatchingInterface({
             Review and accept/reject each suggestion individually.
           </p>
           
+          {/* DEBUG: Show what we have */}
+          <div className="bg-blue-50 border border-blue-200 rounded p-4 mb-4">
+            <h4 className="font-semibold text-blue-800">Duplicate Detection Status:</h4>
+            <p className="text-sm">Duplicates Found: {duplicateMatches.length}</p>
+            <p className="text-sm">Status: {hasDuplicates ? 'Active' : 'Inactive'}</p>
+          </div>
+
           {/* Show duplicates if they exist */}
           {hasDuplicates && duplicateMatches.length > 0 && (
             <div className="space-y-4">
