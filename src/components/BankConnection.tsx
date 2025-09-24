@@ -178,21 +178,9 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
       // Open Financial Connections modal using the correct API - fixed
       console.log('🔍 Opening Financial Connections modal with client_secret:', sessionData.client_secret)
       
-      const { error } = await (stripe as any).collectBankAccountToken({
-        clientSecret: sessionData.client_secret,
-        onSuccess: async (result: any) => {
-          console.log('✅ Bank connection successful:', result)
-          toast({
-            title: 'Success!',
-            description: 'Bank account connected successfully'
-          })
-          
-          setIsConnecting(false)
-        },
-        onCancel: () => {
-          console.log('❌ Bank connection cancelled by user')
-          setIsConnecting(false)
-        }
+      // Use the correct Financial Connections API - redirect to Stripe
+      const { error } = await (stripe as any).redirectToFinancialConnections({
+        clientSecret: sessionData.client_secret
       })
 
       if (error) {
