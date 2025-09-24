@@ -5,6 +5,7 @@ interface TemporaryResult {
   transactions: any[];
   duplicates: any[];
   unmatched: any[];
+  timeSaved: number;
   processedAt: string;
   expiresAt: number;
 }

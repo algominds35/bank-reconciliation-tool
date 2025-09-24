@@ -135,6 +135,7 @@ export async function POST(request: NextRequest) {
       transactions,
       duplicates,
       unmatched,
+      timeSaved,
       processedAt: new Date().toISOString(),
     };
     
