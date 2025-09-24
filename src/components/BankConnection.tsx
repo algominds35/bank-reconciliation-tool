@@ -175,7 +175,7 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
         }
       })
 
-      // Open Financial Connections modal using the correct API
+      // Open Financial Connections modal using the correct API - fixed
       console.log('🔍 Opening Financial Connections modal with client_secret:', sessionData.client_secret)
       
       const { error } = await (stripe as any).collectBankAccountToken({
