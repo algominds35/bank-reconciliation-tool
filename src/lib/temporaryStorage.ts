@@ -11,12 +11,30 @@ interface TemporaryResult {
 }
 
 const temporaryResults = new Map<string, TemporaryResult>();
+const usedIPs = new Set<string>(); // Track IPs that have used the free trial
 
 export function storeTemporaryResults(sessionId: string, results: Omit<TemporaryResult, 'expiresAt'>) {
   temporaryResults.set(sessionId, {
     ...results,
     expiresAt: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
   });
+}
+
+export function checkIPUsage(ip: string): boolean {
+  return usedIPs.has(ip);
+}
+
+export function markIPAsUsed(ip: string) {
+  usedIPs.add(ip);
+}
+
+export function cleanupExpiredIPs() {
+  // Clean up IPs after 24 hours to allow retry
+  // In production, you'd want to use a more sophisticated approach
+  const now = Date.now();
+  if (now % (24 * 60 * 60 * 1000) < 1000) { // Reset once per day
+    usedIPs.clear();
+  }
 }
 
 export function getTemporaryResults(sessionId: string): TemporaryResult | null {

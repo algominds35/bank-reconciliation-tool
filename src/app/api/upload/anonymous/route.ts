@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { storeTemporaryResults, cleanupExpiredResults } from '@/lib/temporaryStorage';
+import { storeTemporaryResults, cleanupExpiredResults, checkIPUsage, markIPAsUsed, cleanupExpiredIPs } from '@/lib/temporaryStorage';
 
 // Initialize Supabase client
 const supabase = createClient(

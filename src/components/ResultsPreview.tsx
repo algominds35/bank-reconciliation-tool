@@ -215,10 +215,10 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
         className="bg-gradient-to-r from-[#F45B49] to-[#E24C3A] rounded-xl p-6 text-white text-center"
       >
         <h4 className="text-xl font-bold mb-2">
-          Want to save these results and get the full report?
+          Ready to get the full reconciliation experience?
         </h4>
         <p className="text-red-100 mb-6">
-          Create a free account to export your reconciliation report, save your work, and upload multiple CSV files.
+          Start your free trial to export professional reports, save your work, and process unlimited CSV files.
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -238,11 +238,11 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
         
         <div className="flex flex-col sm:flex-row gap-4">
           <button
-            onClick={onSignup}
+            onClick={() => window.location.href = '/#pricing'}
             className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#F45B49] font-semibold rounded-full hover:bg-gray-50 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
           >
             <FileText className="h-4 w-4" />
-            Create Free Account
+            Start Free Trial
             <ArrowRight className="h-4 w-4" />
           </button>
           
@@ -256,7 +256,7 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
         </div>
         
         <p className="text-xs text-red-100 mt-4">
-          No credit card required • Your work will be saved automatically
+          No credit card required • 14-day free trial • Cancel anytime
         </p>
       </motion.div>
 

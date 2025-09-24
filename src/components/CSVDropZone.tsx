@@ -4,7 +4,6 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import ResultsPreview from './ResultsPreview';
-import SignupModal from './SignupModal';
 import { useToast } from '@/hooks/use-toast';
 
 interface CSVResult {
@@ -33,7 +32,6 @@ export default function CSVDropZone() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [results, setResults] = useState<CSVResult | null>(null);
-  const [showSignupModal, setShowSignupModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -106,28 +104,11 @@ export default function CSVDropZone() {
     }
   }, []);
 
-  const handleSignup = () => {
-    setShowSignupModal(true);
-  };
-
-  const handleCloseSignup = () => {
-    setShowSignupModal(false);
-  };
 
   // Show results if we have them
   if (results) {
     return (
-      <>
-        <ResultsPreview results={results} onSignup={handleSignup} />
-        <AnimatePresence>
-          {showSignupModal && (
-            <SignupModal 
-              sessionId={results.sessionId} 
-              onClose={handleCloseSignup} 
-            />
-          )}
-        </AnimatePresence>
-      </>
+      <ResultsPreview results={results} onSignup={() => {}} />
     );
   }
 
