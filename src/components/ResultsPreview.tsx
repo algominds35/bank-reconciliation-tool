@@ -170,9 +170,9 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
         </div>
         
         <div className="space-y-3">
-          {results.transactions.slice(0, 8).map((transaction, index) => (
+          {(results.transactions || []).slice(0, 8).map((transaction: any, index: number) => (
             <motion.div
-              key={transaction.id}
+              key={transaction.id || index}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.8 + index * 0.05 }}
@@ -184,18 +184,24 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
                 </div>
                 <div>
                   <div className="font-medium text-slate-900">
-                    {formatCurrency(transaction.amount)}
+                    {formatCurrency(transaction.amount || 0)}
                   </div>
                   <div className="text-sm text-slate-600 truncate max-w-xs">
-                    {transaction.description}
+                    {transaction.description || 'Unknown Transaction'}
                   </div>
                 </div>
               </div>
               <div className="text-sm text-slate-500">
-                {new Date(transaction.date).toLocaleDateString()}
+                {transaction.date ? new Date(transaction.date).toLocaleDateString() : 'N/A'}
               </div>
             </motion.div>
           ))}
+          
+          {(!results.transactions || results.transactions.length === 0) && (
+            <div className="text-sm text-slate-500 text-center py-4">
+              No transaction details available in preview
+            </div>
+          )}
           
           {results.summary.totalTransactions > 8 && (
             <div className="text-sm text-slate-500 text-center pt-2">
@@ -206,56 +212,60 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
       </motion.div>
 
       {/* Duplicates Preview */}
-      {results.duplicates.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="bg-white border border-slate-200 rounded-xl p-6"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <AlertTriangle className="h-5 w-5 text-red-500" />
-            <h4 className="font-semibold text-slate-900">
-              Duplicates Detected ({results.duplicates.length})
-            </h4>
-          </div>
-          
-          <div className="space-y-3">
-            {results.duplicates.slice(0, 5).map((duplicate, index) => (
-              <motion.div
-                key={duplicate.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.9 + index * 0.1 }}
-                className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-semibold text-red-600">D</span>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+        className="bg-white border border-slate-200 rounded-xl p-6"
+      >
+        <div className="flex items-center gap-2 mb-4">
+          <AlertTriangle className="h-5 w-5 text-red-500" />
+          <h4 className="font-semibold text-slate-900">
+            Duplicates Detected ({results.duplicates.length})
+          </h4>
+        </div>
+        
+        <div className="space-y-3">
+          {(results.duplicates || []).slice(0, 5).map((duplicate: any, index: number) => (
+            <motion.div
+              key={duplicate.id || index}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.9 + index * 0.1 }}
+              className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                  <span className="text-sm font-semibold text-red-600">D</span>
+                </div>
+                <div>
+                  <div className="font-medium text-slate-900">
+                    {formatCurrency(duplicate.amount || 0)}
                   </div>
-                  <div>
-                    <div className="font-medium text-slate-900">
-                      {formatCurrency(duplicate.amount)}
-                    </div>
-                    <div className="text-sm text-slate-600 truncate max-w-xs">
-                      {duplicate.description}
-                    </div>
+                  <div className="text-sm text-slate-600 truncate max-w-xs">
+                    {duplicate.description || 'Unknown Transaction'}
                   </div>
                 </div>
-                <div className="text-sm text-slate-500">
-                  {new Date(duplicate.date).toLocaleDateString()}
-                </div>
-              </motion.div>
-            ))}
-            
-            {results.duplicates.length > 5 && (
-              <div className="text-sm text-slate-500 text-center pt-2">
-                +{results.duplicates.length - 5} more duplicates found
               </div>
-            )}
-          </div>
-        </motion.div>
-      )}
+              <div className="text-sm text-slate-500">
+                {duplicate.date ? new Date(duplicate.date).toLocaleDateString() : 'N/A'}
+              </div>
+            </motion.div>
+          ))}
+          
+          {(!results.duplicates || results.duplicates.length === 0) && (
+            <div className="text-sm text-green-600 text-center py-4">
+              ✅ No duplicates found - your data looks clean!
+            </div>
+          )}
+          
+          {results.duplicates.length > 5 && (
+            <div className="text-sm text-slate-500 text-center pt-2">
+              +{results.duplicates.length - 5} more duplicates found
+            </div>
+          )}
+        </div>
+      </motion.div>
 
       {/* Conversion CTA */}
       <motion.div
