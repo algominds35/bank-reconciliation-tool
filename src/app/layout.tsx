@@ -33,6 +33,10 @@ export default function RootLayout({
           src="https://js.stripe.com/v3/"
           strategy="beforeInteractive"
         />
+        <Script
+          src="https://js.stripe.com/v3/financial-connections.js"
+          strategy="beforeInteractive"
+        />
         {children}
         <Analytics />
       </body>
