@@ -178,14 +178,13 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
       // Open Financial Connections modal using the correct API - fixed
       console.log('🔍 Opening Financial Connections modal with client_secret:', sessionData.client_secret)
       
-      // Use the correct Financial Connections API - redirect to Stripe
-      const { error } = await (stripe as any).redirectToFinancialConnections({
-        clientSecret: sessionData.client_secret
-      })
-
-      if (error) {
-        throw new Error(error.message || 'Failed to open bank connection')
-      }
+      // Use the correct Financial Connections API - redirect to Stripe session
+      // Based on Stripe docs, we need to redirect to the session URL
+      const sessionUrl = `https://connect.stripe.com/financial_connections/session/${sessionData.session_id}`
+      console.log('🔍 Redirecting to Financial Connections session:', sessionUrl)
+      
+      // Redirect to Stripe Financial Connections
+      window.location.href = sessionUrl
 
       // Check session status after modal closes
       const statusResponse = await fetch(`/api/bank/session?session_id=${sessionData.session_id}`, {
