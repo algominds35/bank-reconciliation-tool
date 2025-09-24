@@ -201,12 +201,20 @@ export async function POST(request: NextRequest) {
     const sessionId = crypto.randomUUID();
     
     // Store results temporarily (24 hours)
+    const summary = {
+      totalTransactions: transactions.length,
+      duplicatesFound: duplicates.length,
+      unmatchedCount: unmatched.length,
+      timeSaved,
+    };
+    
     const results = {
       transactions,
       duplicates,
       unmatched,
       timeSaved,
       processedAt: new Date().toISOString(),
+      summary,
     };
     
     storeTemporaryResults(sessionId, results);
@@ -216,12 +224,7 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json({
       sessionId,
-      summary: {
-        totalTransactions: transactions.length,
-        duplicatesFound: duplicates.length,
-        unmatchedCount: unmatched.length,
-        timeSaved,
-      },
+      summary,
       transactions: transactions.slice(0, 10), // Return first 10 transactions for preview
       duplicates: duplicates.slice(0, 10), // Return first 10 for preview
       unmatched: unmatched.slice(0, 10), // Return first 10 for preview

@@ -8,6 +8,12 @@ interface TemporaryResult {
   timeSaved: number;
   processedAt: string;
   expiresAt: number;
+  summary: {
+    totalTransactions: number;
+    duplicatesFound: number;
+    unmatchedCount: number;
+    timeSaved: number;
+  };
 }
 
 const temporaryResults = new Map<string, TemporaryResult>();
