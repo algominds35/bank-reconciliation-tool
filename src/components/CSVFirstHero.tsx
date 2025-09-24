@@ -86,6 +86,42 @@ export default function CSVFirstHero() {
               </div>
               <span>stars from 500+ bookkeepers</span>
             </motion.div>
+
+            {/* Demo Video Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+              className="mt-8"
+            >
+              <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4 text-center">
+                  See ReconcileBook in Action
+                </h3>
+                <div className="relative w-full h-64 bg-slate-900 rounded-lg overflow-hidden">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                      </div>
+                      <p className="text-white font-medium">Watch Demo Video</p>
+                      <p className="text-white/70 text-sm mt-1">See how ReconcileBook finds duplicates and matches transactions</p>
+                    </div>
+                  </div>
+                  {/* You can replace this with an actual video element or embed */}
+                  <video 
+                    className="w-full h-full object-cover"
+                    poster="/images/demo-video-thumbnail.jpg"
+                    controls
+                  >
+                    <source src="/videos/reconcilebook-demo.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
 
           {/* Right Column - CSV Upload */}
