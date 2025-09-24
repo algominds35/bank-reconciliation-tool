@@ -243,11 +243,11 @@ export default function CSVDropZone() {
         </div>
         <div className="flex items-center gap-1">
           <CheckCircle className="h-3 w-3 text-green-500" />
-          <span>Private</span>
+          <span>One-Time Only</span>
         </div>
         <div className="flex items-center gap-1">
           <CheckCircle className="h-3 w-3 text-green-500" />
-          <span>Fast</span>
+          <span>Professional</span>
         </div>
       </div>
 

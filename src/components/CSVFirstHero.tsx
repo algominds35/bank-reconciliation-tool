@@ -24,7 +24,7 @@ export default function CSVFirstHero() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-[#F45B49]/10 border border-[#F45B49]/20 rounded-full text-sm font-medium text-[#F45B49] mb-6"
             >
               <Upload className="h-4 w-4" />
-              Try It Free • No Signup Required
+              One-Time Free Trial • Professional Results
             </motion.div>
 
             {/* Headline */}
@@ -34,8 +34,11 @@ export default function CSVFirstHero() {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="text-5xl lg:text-6xl font-bold leading-tight mb-6"
             >
-              Upload YOUR CSV — See{' '}
-              <span className="text-[#F45B49]">reconciliation in 30 seconds</span>
+              Professional{' '}
+              <span className="text-[#F45B49]">Bank Reconciliation</span>
+              <br />
+              Try once for{' '}
+              <span className="text-[#F45B49]">free</span>
             </motion.h1>
 
             {/* Description */}
@@ -45,7 +48,8 @@ export default function CSVFirstHero() {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="text-xl text-slate-600 mb-8 leading-relaxed"
             >
-              No signup required. Just drag & drop your bank statement CSV and see instant results. Find duplicates, match transactions, and save hours of work.
+              Upload your bank statement CSV and see professional-grade reconciliation results instantly. 
+              Find duplicates, match transactions, and discover what you've been missing. <strong>One free analysis per email.</strong>
             </motion.p>
 
             {/* Value Props */}
