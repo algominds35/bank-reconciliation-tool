@@ -30,11 +30,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
         <Script
-          src="https://js.stripe.com/v3/"
+          src="https://js.stripe.com/v3/financial-connections.js"
           strategy="beforeInteractive"
         />
         <Script
-          src="https://js.stripe.com/v3/financial-connections.js"
+          src="https://js.stripe.com/v3/"
           strategy="beforeInteractive"
         />
         {children}
