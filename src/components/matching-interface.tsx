@@ -33,6 +33,29 @@ export function MatchingInterface({
   const [autoMatches, setAutoMatches] = useState<AutoMatch[]>([])
   const [showAutoMatches, setShowAutoMatches] = useState(false)
   const [processingAutoMatch, setProcessingAutoMatch] = useState(false)
+  const [duplicateMatches, setDuplicateMatches] = useState<any[]>([])
+  const [hasDuplicates, setHasDuplicates] = useState(false)
+
+  // Check for pending duplicates from localStorage
+  useEffect(() => {
+    const checkPendingDuplicates = () => {
+      try {
+        const stored = localStorage.getItem('pendingDuplicates')
+        if (stored) {
+          const data = JSON.parse(stored)
+          if (data.duplicates && data.duplicates.length > 0) {
+            setDuplicateMatches(data.duplicates)
+            setHasDuplicates(true)
+            setShowAutoMatches(true)
+          }
+        }
+      } catch (error) {
+        console.error('Error loading pending duplicates:', error)
+      }
+    }
+    
+    checkPendingDuplicates()
+  }, [])
 
   const formatAmount = (amount: number) => {
     const formatted = Math.abs(amount).toFixed(2)
@@ -147,6 +170,30 @@ export function MatchingInterface({
     setAutoMatches([])
   }
 
+  const clearDuplicates = () => {
+    setDuplicateMatches([])
+    setHasDuplicates(false)
+    localStorage.removeItem('pendingDuplicates')
+  }
+
+  const removeDuplicate = (groupIndex: number, duplicateIndex: number) => {
+    const newDuplicates = [...duplicateMatches]
+    newDuplicates[groupIndex].duplicates.splice(duplicateIndex, 1)
+    
+    // If no more duplicates in this group, remove the whole group
+    if (newDuplicates[groupIndex].duplicates.length === 0) {
+      newDuplicates.splice(groupIndex, 1)
+    }
+    
+    setDuplicateMatches(newDuplicates)
+    
+    // If no more duplicate groups, clear everything
+    if (newDuplicates.length === 0) {
+      setHasDuplicates(false)
+      localStorage.removeItem('pendingDuplicates')
+    }
+  }
+
   useEffect(() => {
     // Auto-run matching when transactions change
     if (bankTransactions.length > 0 && bookkeepingTransactions.length > 0) {
@@ -250,7 +297,81 @@ export function MatchingInterface({
             Review and accept/reject each suggestion individually.
           </p>
           
-          {autoMatches.length > 0 && (
+          {/* Show duplicates if they exist */}
+          {hasDuplicates && duplicateMatches.length > 0 && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-orange-600">
+                  Found {duplicateMatches.length} duplicate groups in your CSV
+                </h3>
+                <Button 
+                  onClick={clearDuplicates}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center space-x-2"
+                >
+                  <X className="h-4 w-4" />
+                  <span>Clear All</span>
+                </Button>
+              </div>
+              
+              {duplicateMatches.map((duplicateGroup, index) => (
+                <div key={index} className="border border-orange-200 rounded-lg p-4 bg-orange-50">
+                  <div className="flex items-center justify-between mb-3">
+                    <Badge variant="secondary" className="bg-orange-100 text-orange-800">
+                      95% confidence
+                    </Badge>
+                    <span className="text-sm text-orange-700 font-medium">
+                      {duplicateGroup.reason}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-white rounded-lg p-3 border border-orange-200">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-sm font-medium text-green-700">Keep This One</span>
+                      </div>
+                      <div className="text-sm font-medium">{duplicateGroup.original.description}</div>
+                      <div className="text-lg font-bold text-green-600">
+                        {formatAmount(duplicateGroup.original.amount)}
+                      </div>
+                      <div className="text-xs text-gray-500">{duplicateGroup.original.date}</div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      {duplicateGroup.duplicates.map((duplicate: any, dupIndex: number) => (
+                        <div key={dupIndex} className="bg-white rounded-lg p-3 border border-red-200">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                              <span className="text-sm font-medium text-red-700">Duplicate</span>
+                            </div>
+                            <Button
+                              onClick={() => removeDuplicate(index, dupIndex)}
+                              size="sm"
+                              variant="outline"
+                              className="text-red-600 border-red-300 hover:bg-red-50"
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </div>
+                          <div className="text-sm font-medium">{duplicate.description}</div>
+                          <div className="text-lg font-bold text-red-600">
+                            {formatAmount(duplicate.amount)}
+                          </div>
+                          <div className="text-xs text-gray-500">{duplicate.date}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Show regular matches if they exist */}
+          {!hasDuplicates && autoMatches.length > 0 && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">
@@ -331,7 +452,7 @@ export function MatchingInterface({
             </div>
           )}
           
-          {autoMatches.length === 0 && !processingAutoMatch && (
+          {autoMatches.length === 0 && !hasDuplicates && !processingAutoMatch && (
             <div className="text-center py-8 text-gray-500">
               <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-gray-400" />
               <p>No automatic matches found. Try manual matching below.</p>
