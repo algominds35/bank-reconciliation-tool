@@ -1,0 +1,11 @@
+Date,Amount,Description,Type,Reference
+2024-01-15,-150.00,Office Supplies,Expense,INV-001
+2024-01-16,2500.00,Client Payment,Income,PAY-001
+2024-01-17,-75.50,Gas Station,Expense,GS-001
+2024-01-18,1200.00,Consulting Fee,Income,CON-001
+2024-01-19,-150.00,Office Supplies,Expense,INV-002
+2024-01-20,-45.00,Coffee Shop,Expense,CS-001
+2024-01-21,800.00,Project Payment,Income,PROJ-001
+2024-01-22,-150.00,Office Supplies,Expense,INV-003
+2024-01-23,-89.99,Software Subscription,Expense,SUB-001
+2024-01-24,1500.00,Retainer Payment,Income,RET-001
