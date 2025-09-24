@@ -113,14 +113,17 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
   const handleConnectBank = async () => {
     try {
       setIsConnecting(true)
+      console.log('🔍 Starting bank connection process...')
 
       // Get the current session token
       const { data: { session } } = await supabase.auth.getSession()
+      console.log('🔍 Auth session:', session ? 'Found' : 'Not found')
       
       if (!session) {
         throw new Error('Please log in to connect your bank account')
       }
 
+      console.log('🔍 Creating Financial Connections session...')
       // Create Financial Connections session
       const sessionResponse = await fetch('/api/bank/create-session', {
         method: 'POST',
@@ -130,9 +133,12 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
         }
       })
 
+      console.log('🔍 Session response status:', sessionResponse.status)
       const sessionData = await sessionResponse.json()
+      console.log('🔍 Session response data:', sessionData)
 
       if (!sessionData.success) {
+        console.error('❌ Session creation failed:', sessionData)
         throw new Error(sessionData.error || 'Failed to create bank connection session')
       }
 
