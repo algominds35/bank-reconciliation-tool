@@ -187,11 +187,6 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
             description: 'Bank account connected successfully'
           })
           
-          // Store connected accounts
-          if (result.accounts && result.accounts.length > 0) {
-            await storeConnectedAccounts(result.accounts)
-          }
-          
           setIsConnecting(false)
         },
         onCancel: () => {
