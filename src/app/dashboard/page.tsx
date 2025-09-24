@@ -99,6 +99,72 @@ const checkForDuplicatesInFile = async (csvData: any[], transactionType: 'bank' 
   return duplicateCount
 }
 
+// Function to get duplicates formatted for Smart Matching interface
+const getDuplicatesForSmartMatching = async (csvData: any[], transactionType: 'bank' | 'bookkeeping'): Promise<any[]> => {
+  const transactions: any[] = []
+  
+  // Parse the CSV data into transaction objects
+  for (const row of csvData) {
+    if (!row || typeof row !== 'object') continue
+    
+    const date = row.date || row.Date || row.DATE
+    const description = row.description || row.Description || row.DESCRIPTION
+    const amountStr = row.amount || row.Amount || row.AMOUNT
+    
+    if (!date || !description || !amountStr) continue
+    
+    // Parse amount
+    let amount: number
+    try {
+      const cleanAmount = String(amountStr).replace(/[$,\s]/g, '')
+      amount = parseFloat(cleanAmount)
+      if (isNaN(amount)) continue
+    } catch (e) {
+      continue
+    }
+    
+    transactions.push({
+      id: crypto.randomUUID(),
+      date: String(date),
+      description: String(description),
+      amount: amount,
+      type: transactionType,
+      category: row.category || row.Category || 'Unknown'
+    })
+  }
+  
+  // Group duplicates
+  const duplicateGroups: any[] = []
+  const seen = new Map<string, any[]>()
+  
+  transactions.forEach(transaction => {
+    const key = `${transaction.amount}_${transaction.description.toLowerCase().trim()}_${transaction.date}`
+    
+    if (!seen.has(key)) {
+      seen.set(key, [])
+    }
+    
+    seen.get(key)!.push(transaction)
+  })
+  
+  // Find groups with more than one transaction (duplicates)
+  seen.forEach(group => {
+    if (group.length > 1) {
+      duplicateGroups.push({
+        id: crypto.randomUUID(),
+        duplicateGroup: group,
+        original: group[0], // First one is the "original"
+        duplicates: group.slice(1), // Rest are duplicates
+        confidence: 95, // High confidence for exact matches
+        matchType: 'duplicate',
+        reason: `Found ${group.length} identical transactions: ${group[0].description} - $${group[0].amount}`
+      })
+    }
+  })
+  
+  return duplicateGroups
+}
+
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null)
   const [clients, setClients] = useState<Client[]>([])
