@@ -21,76 +21,73 @@ function parseCSV(csvContent: string): Transaction[] {
   const lines = csvContent.split('\n');
   const transactions: Transaction[] = [];
   
-  // Try to detect header row
+  console.log('CSV lines:', lines.length);
+  console.log('First few lines:', lines.slice(0, 3));
+  
+  // Try to detect header row and column mapping
   let startRow = 1;
+  let dateIndex = -1;
+  let amountIndex = -1;
+  let descriptionIndex = -1;
+  
   const firstLine = lines[0]?.toLowerCase() || '';
+  console.log('First line:', firstLine);
+  
   if (firstLine.includes('date') || firstLine.includes('amount') || firstLine.includes('description')) {
     startRow = 1; // Skip header
+    
+    // Map column positions
+    const headerFields = parseCSVLine(lines[0]);
+    console.log('Header fields:', headerFields);
+    
+    headerFields.forEach((field, index) => {
+      const lowerField = field.toLowerCase();
+      if (lowerField.includes('date')) dateIndex = index;
+      if (lowerField.includes('amount') || lowerField.includes('value') || lowerField.includes('total')) amountIndex = index;
+      if (lowerField.includes('description') || lowerField.includes('memo') || lowerField.includes('note')) descriptionIndex = index;
+    });
+    
+    console.log('Column mapping - Date:', dateIndex, 'Amount:', amountIndex, 'Description:', descriptionIndex);
   } else {
-    startRow = 0; // No header, start from first row
+    startRow = 0; // No header, use default positions
+    dateIndex = 0;
+    amountIndex = 1;
+    descriptionIndex = 2;
   }
   
   for (let i = startRow; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line) continue;
     
-    // More robust CSV parsing
     const fields = parseCSVLine(line);
+    console.log(`Line ${i}:`, fields);
     
     if (fields.length >= 2) {
-      // Try different field orders - date, amount, description
-      let amount = 0;
-      let date = '';
-      let description = 'Unknown Transaction';
-      let type = 'Unknown';
-      let reference = '';
+      // Extract data using column mapping
+      const date = dateIndex >= 0 ? fields[dateIndex] || '' : '';
+      const amountStr = amountIndex >= 0 ? fields[amountIndex] || '' : '';
+      const description = descriptionIndex >= 0 ? fields[descriptionIndex] || 'Unknown Transaction' : 'Unknown Transaction';
       
-      // Find amount (look for numeric values)
-      for (let j = 0; j < fields.length; j++) {
-        const field = fields[j];
-        const numValue = parseFloat(field.replace(/[^-\d.]/g, ''));
-        if (!isNaN(numValue) && numValue !== 0) {
-          amount = numValue;
-          break;
-        }
-      }
-      
-      // Find date (look for date-like patterns)
-      for (let j = 0; j < fields.length; j++) {
-        const field = fields[j];
-        if (field.match(/\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}/) || field.match(/\d{4}-\d{2}-\d{2}/)) {
-          date = field;
-          break;
-        }
-      }
-      
-      // Use first field as date if no date found
-      if (!date && fields[0]) {
-        date = fields[0];
-      }
-      
-      // Find description (longest text field)
-      for (let j = 0; j < fields.length; j++) {
-        const field = fields[j];
-        if (field.length > description.length && !field.match(/^\d+$/)) {
-          description = field;
-        }
-      }
+      // Parse amount
+      const amount = parseFloat(amountStr.replace(/[^-\d.]/g, ''));
+      console.log(`Parsed amount: ${amount} from "${amountStr}"`);
       
       // Add transaction if we have valid amount
       if (!isNaN(amount) && amount !== 0) {
         transactions.push({
           id: `txn_${i}_${Date.now()}`,
           amount,
-          description: description.substring(0, 100), // Limit description length
+          description: description.substring(0, 100),
           date: date || new Date().toISOString().split('T')[0],
-          type,
-          reference,
+          type: 'Unknown',
+          reference: '',
         });
+        console.log(`Added transaction: $${amount} - ${description}`);
       }
     }
   }
   
+  console.log(`Total transactions parsed: ${transactions.length}`);
   return transactions;
 }
 

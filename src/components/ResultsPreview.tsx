@@ -38,6 +38,40 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
     }).format(amount);
   };
 
+  const exportResults = (results: CSVResult) => {
+    // Create CSV content for download
+    const csvContent = [
+      ['Transaction ID', 'Date', 'Amount', 'Description', 'Type', 'Status'],
+      ...results.duplicates.map(dup => [
+        dup.id,
+        dup.date,
+        dup.amount.toString(),
+        dup.description,
+        'Duplicate',
+        'Needs Review'
+      ]),
+      ...results.unmatched.map(unm => [
+        unm.id,
+        unm.date,
+        unm.amount.toString(),
+        unm.description,
+        'Unmatched',
+        'Needs Review'
+      ])
+    ].map(row => row.map(field => `"${field}"`).join(',')).join('\n');
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `reconciliation-preview-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+
   const formatTime = (hours: number) => {
     if (hours < 1) {
       return `${Math.round(hours * 60)} minutes`;
@@ -202,14 +236,24 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
           </div>
         </div>
         
-        <button
-          onClick={onSignup}
-          className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#F45B49] font-semibold rounded-full hover:bg-gray-50 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
-        >
-          <FileText className="h-4 w-4" />
-          Create Free Account
-          <ArrowRight className="h-4 w-4" />
-        </button>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <button
+            onClick={onSignup}
+            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#F45B49] font-semibold rounded-full hover:bg-gray-50 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <FileText className="h-4 w-4" />
+            Create Free Account
+            <ArrowRight className="h-4 w-4" />
+          </button>
+          
+          <button
+            onClick={() => exportResults(results)}
+            className="inline-flex items-center gap-2 px-6 py-4 bg-white/20 text-white font-semibold rounded-full hover:bg-white/30 transition-all duration-200 border border-white/30"
+          >
+            <Download className="h-4 w-4" />
+            Download Preview
+          </button>
+        </div>
         
         <p className="text-xs text-red-100 mt-4">
           No credit card required • Your work will be saved automatically
