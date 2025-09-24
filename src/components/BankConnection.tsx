@@ -175,16 +175,32 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
         }
       })
 
-      // Open Financial Connections modal using the correct API - fixed
-      console.log('🔍 Opening Financial Connections modal with client_secret:', sessionData.client_secret)
-      
-      // Use the correct Financial Connections API - redirect to Stripe session
-      // Based on Stripe docs, we need to redirect to the session URL
-      const sessionUrl = `https://connect.stripe.com/financial_connections/session/${sessionData.session_id}`
-      console.log('🔍 Redirecting to Financial Connections session:', sessionUrl)
-      
-      // Redirect to Stripe Financial Connections
-      window.location.href = sessionUrl
+             // Use Stripe's Financial Connections API correctly
+             console.log('🔍 Opening Financial Connections with client_secret:', sessionData.client_secret)
+             
+             // Use the correct Financial Connections API method
+             const result = await (stripe as any).collectBankAccountToken({
+               client_secret: sessionData.client_secret,
+               onSuccess: (result: any) => {
+                 console.log('✅ Bank account token collected:', result)
+                 // Handle success
+                 toast({
+                   title: 'Success!',
+                   description: 'Bank account connected successfully!'
+                 })
+                 fetchConnectedAccounts()
+               },
+               onCancel: () => {
+                 console.log('❌ User cancelled bank connection')
+                 toast({
+                   title: 'Cancelled',
+                   description: 'Bank connection was cancelled.',
+                   variant: 'destructive'
+                 })
+               }
+             })
+             
+             console.log('🔍 Financial Connections result:', result)
 
       // Check session status after modal closes
       const statusResponse = await fetch(`/api/bank/session?session_id=${sessionData.session_id}`, {
