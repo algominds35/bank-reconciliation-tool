@@ -175,9 +175,29 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
         }
       })
 
-      // Open Financial Connections modal
-      const { error } = await (stripe as any).financialConnections.open({
-        clientSecret: sessionData.client_secret
+      // Open Financial Connections modal using the correct API
+      console.log('🔍 Opening Financial Connections modal with client_secret:', sessionData.client_secret)
+      
+      const { error } = await (stripe as any).collectBankAccountToken({
+        clientSecret: sessionData.client_secret,
+        onSuccess: async (result: any) => {
+          console.log('✅ Bank connection successful:', result)
+          toast({
+            title: 'Success!',
+            description: 'Bank account connected successfully'
+          })
+          
+          // Store connected accounts
+          if (result.accounts && result.accounts.length > 0) {
+            await storeConnectedAccounts(result.accounts)
+          }
+          
+          setIsConnecting(false)
+        },
+        onCancel: () => {
+          console.log('❌ Bank connection cancelled by user')
+          setIsConnecting(false)
+        }
       })
 
       if (error) {
