@@ -8,7 +8,7 @@ import { Transaction, ReconciliationSummary, Client } from '@/types'
 import { ClientSelector } from '@/components/client-selector'
 import { TransactionTable } from '@/components/transaction-table'
 import { MatchingInterface } from '@/components/matching-interface'
-import BankConnection from '@/components/BankConnection'
+// BankConnection removed - focusing on core CSV functionality
 import { TrialGuard } from '@/components/trial-guard'
 import { AccessGuard } from '@/components/access-guard'
 import { AccessWarning } from '@/components/access-warning'
@@ -1365,13 +1365,7 @@ export default function Dashboard() {
                       </div>
                     </div>
 
-                    {/* Bank Connection Component */}
-                    <div className="mt-4">
-                      <BankConnection onAccountsConnected={() => {
-                        // Refresh transactions when new accounts are connected
-                        fetchTransactions()
-                      }} />
-                    </div>
+                    {/* Bank Connection removed - focusing on core CSV functionality */}
 
                     {/* Filters */}
                     <Select

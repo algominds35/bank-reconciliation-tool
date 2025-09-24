@@ -29,14 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <Script
-          src="https://js.stripe.com/v3/financial-connections.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="https://js.stripe.com/v3/"
-          strategy="beforeInteractive"
-        />
+        {/* Stripe scripts removed - focusing on core CSV functionality */}
         {children}
         <Analytics />
       </body>
