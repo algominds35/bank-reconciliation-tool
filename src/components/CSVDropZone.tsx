@@ -1,0 +1,241 @@
+'use client';
+
+import { useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Upload, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import ResultsPreview from './ResultsPreview';
+import SignupModal from './SignupModal';
+import { useToast } from '@/hooks/use-toast';
+
+interface CSVResult {
+  sessionId: string;
+  summary: {
+    totalTransactions: number;
+    duplicatesFound: number;
+    unmatchedCount: number;
+    timeSaved: number;
+  };
+  duplicates: Array<{
+    id: string;
+    amount: number;
+    description: string;
+    date: string;
+  }>;
+  unmatched: Array<{
+    id: string;
+    amount: number;
+    description: string;
+    date: string;
+  }>;
+}
+
+export default function CSVDropZone() {
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [results, setResults] = useState<CSVResult | null>(null);
+  const [showSignupModal, setShowSignupModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  }, []);
+
+  const processFile = async (file: File) => {
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+      setError('Please upload a CSV file');
+      return;
+    }
+
+    setIsProcessing(true);
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append('csv', file);
+
+      const response = await fetch('/api/upload/anonymous', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to process CSV file');
+      }
+
+      const data = await response.json();
+      setResults(data);
+      
+      toast({
+        title: "CSV Processed Successfully!",
+        description: `Found ${data.summary.duplicatesFound} duplicates and processed ${data.summary.totalTransactions} transactions.`,
+      });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to process CSV';
+      setError(errorMessage);
+      toast({
+        title: "Processing Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      await processFile(files[0]);
+    }
+  }, []);
+
+  const handleFileSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      await processFile(files[0]);
+    }
+  }, []);
+
+  const handleSignup = () => {
+    setShowSignupModal(true);
+  };
+
+  const handleCloseSignup = () => {
+    setShowSignupModal(false);
+  };
+
+  // Show results if we have them
+  if (results) {
+    return (
+      <>
+        <ResultsPreview results={results} onSignup={handleSignup} />
+        <AnimatePresence>
+          {showSignupModal && (
+            <SignupModal 
+              sessionId={results.sessionId} 
+              onClose={handleCloseSignup} 
+            />
+          )}
+        </AnimatePresence>
+      </>
+    );
+  }
+
+  return (
+    <div className="w-full">
+      {/* Drop Zone */}
+      <div
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`
+          relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200
+          ${isDragOver 
+            ? 'border-[#F45B49] bg-[#F45B49]/5' 
+            : 'border-slate-300 hover:border-slate-400'
+          }
+          ${isProcessing ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+        `}
+        onClick={() => document.getElementById('csv-upload')?.click()}
+      >
+        <input
+          id="csv-upload"
+          type="file"
+          accept=".csv"
+          onChange={handleFileSelect}
+          className="hidden"
+          disabled={isProcessing}
+        />
+
+        <AnimatePresence mode="wait">
+          {isProcessing ? (
+            <motion.div
+              key="processing"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center gap-4"
+            >
+              <Loader2 className="h-12 w-12 text-[#F45B49] animate-spin" />
+              <div>
+                <h4 className="font-semibold text-slate-900 mb-1">Processing Your CSV...</h4>
+                <p className="text-sm text-slate-600">Finding duplicates and matching transactions</p>
+              </div>
+            </motion.div>
+          ) : error ? (
+            <motion.div
+              key="error"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center gap-4"
+            >
+              <AlertCircle className="h-12 w-12 text-red-500" />
+              <div>
+                <h4 className="font-semibold text-red-600 mb-1">Upload Failed</h4>
+                <p className="text-sm text-red-500">{error}</p>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setError(null);
+                  }}
+                  className="mt-2 text-sm text-[#F45B49] hover:underline"
+                >
+                  Try again
+                </button>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="upload"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center gap-4"
+            >
+              <Upload className="h-12 w-12 text-slate-400" />
+              <div>
+                <h4 className="font-semibold text-slate-900 mb-1">
+                  {isDragOver ? 'Drop your CSV file here' : 'Drag & drop your CSV file'}
+                </h4>
+                <p className="text-sm text-slate-600 mb-2">
+                  or click to browse your files
+                </p>
+                <div className="flex items-center justify-center gap-2 text-xs text-slate-500">
+                  <FileText className="h-3 w-3" />
+                  <span>CSV files only</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Trust Indicators */}
+      <div className="mt-4 grid grid-cols-3 gap-2 text-xs text-slate-500">
+        <div className="flex items-center gap-1">
+          <CheckCircle className="h-3 w-3 text-green-500" />
+          <span>Secure</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <CheckCircle className="h-3 w-3 text-green-500" />
+          <span>Private</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <CheckCircle className="h-3 w-3 text-green-500" />
+          <span>Fast</span>
+        </div>
+      </div>
+    </div>
+  );
+}

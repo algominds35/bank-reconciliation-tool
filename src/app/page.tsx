@@ -1,7 +1,7 @@
 'use client'
 
 import Header from '@/components/Header'
-import Hero from '@/components/Hero'
+import CSVFirstHero from '@/components/CSVFirstHero'
 import Benefits from '@/components/Benefits'
 import QuickBooksVsReconcileBook from '@/components/QuickBooksVsReconcileBook'
 import Testimonials from '@/components/Testimonials'
@@ -19,7 +19,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <Header />
-      <Hero />
+      <CSVFirstHero />
       <Benefits />
       <QuickBooksVsReconcileBook />
       <DemoScreenshots />
