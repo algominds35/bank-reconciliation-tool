@@ -39,6 +39,63 @@ import {
   CreditCard
 } from 'lucide-react'
 
+// Function to check for duplicates within a single CSV file
+const checkForDuplicatesInFile = async (csvData: any[], transactionType: 'bank' | 'bookkeeping'): Promise<number> => {
+  const transactions: any[] = []
+  
+  // Parse the CSV data into transaction objects
+  for (const row of csvData) {
+    if (!row || typeof row !== 'object') continue
+    
+    const date = row.date || row.Date || row.DATE
+    const description = row.description || row.Description || row.DESCRIPTION
+    const amountStr = row.amount || row.Amount || row.AMOUNT
+    
+    if (!date || !description || !amountStr) continue
+    
+    // Parse amount
+    let amount: number
+    try {
+      const cleanAmount = String(amountStr).replace(/[$,\s]/g, '')
+      amount = parseFloat(cleanAmount)
+      if (isNaN(amount)) continue
+    } catch (e) {
+      continue
+    }
+    
+    transactions.push({
+      date: String(date),
+      description: String(description),
+      amount: amount,
+      type: transactionType
+    })
+  }
+  
+  // Find duplicates using the same logic as the free trial
+  const seen = new Map<string, any[]>()
+  let duplicateCount = 0
+  
+  transactions.forEach(transaction => {
+    const key = `${transaction.amount}_${transaction.description.toLowerCase().trim()}_${transaction.date}`
+    
+    if (!seen.has(key)) {
+      seen.set(key, [])
+    }
+    
+    seen.get(key)!.push(transaction)
+  })
+  
+  // Count groups with more than one transaction (duplicates)
+  seen.forEach(group => {
+    if (group.length > 1) {
+      duplicateCount += group.length - 1 // All but the first are duplicates
+    }
+  })
+  
+  console.log(`Found ${duplicateCount} duplicates in ${transactionType} CSV`)
+  return duplicateCount
+}
+
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null)
   const [clients, setClients] = useState<Client[]>([])
@@ -483,12 +540,19 @@ export default function Dashboard() {
             throw new Error('No valid transactions found in CSV file')
           }
 
+          // Check for duplicates in the uploaded file
+          const duplicateCount = await checkForDuplicatesInFile(results.data, transactionType)
+          
           // Refresh the transactions list
           await fetchTransactions()
           await fetchClients()
 
-          // Success message
-          alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!`)
+          // Success message with duplicate info
+          if (duplicateCount > 0) {
+            alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!\n\n🚨 Found ${duplicateCount} potential duplicates that need review!`)
+          } else {
+            alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!\n\n✅ No duplicates found - your data looks clean!`)
+          }
           
         } catch (error) {
           console.error('Upload error details:', error)
