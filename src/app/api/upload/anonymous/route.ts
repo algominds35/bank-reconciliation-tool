@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { storeTemporaryResults, cleanupExpiredResults } from '@/lib/temporaryStorage';
 
 // Initialize Supabase client
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
-
-// In-memory storage for temporary results (in production, use Redis or database)
-const temporaryResults = new Map<string, any>();
 
 interface Transaction {
   id: string;
@@ -138,18 +136,12 @@ export async function POST(request: NextRequest) {
       duplicates,
       unmatched,
       processedAt: new Date().toISOString(),
-      expiresAt: Date.now() + (24 * 60 * 60 * 1000), // 24 hours
     };
     
-    temporaryResults.set(sessionId, results);
+    storeTemporaryResults(sessionId, results);
     
     // Clean up expired results
-    const now = Date.now();
-    for (const [id, result] of temporaryResults.entries()) {
-      if (result.expiresAt < now) {
-        temporaryResults.delete(id);
-      }
-    }
+    cleanupExpiredResults();
     
     return NextResponse.json({
       sessionId,
@@ -172,5 +164,3 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Export the temporary storage for use in other endpoints
-export { temporaryResults };

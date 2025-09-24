@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { temporaryResults } from '../anonymous/route';
+import { getTemporaryResults, deleteTemporaryResults } from '@/lib/temporaryStorage';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -20,21 +20,12 @@ export async function POST(request: NextRequest) {
     }
     
     // Get temporary results
-    const results = temporaryResults.get(sessionId);
+    const results = getTemporaryResults(sessionId);
     
     if (!results) {
       return NextResponse.json(
         { error: 'Session expired or not found' },
         { status: 404 }
-      );
-    }
-    
-    // Check if results have expired
-    if (results.expiresAt < Date.now()) {
-      temporaryResults.delete(sessionId);
-      return NextResponse.json(
-        { error: 'Session expired' },
-        { status: 410 }
       );
     }
     
@@ -92,7 +83,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Clean up temporary results
-    temporaryResults.delete(sessionId);
+    deleteTemporaryResults(sessionId);
     
     return NextResponse.json({
       success: true,
