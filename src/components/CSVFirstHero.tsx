@@ -86,6 +86,33 @@ export default function CSVFirstHero() {
               </div>
               <span>stars from 500+ bookkeepers</span>
             </motion.div>
+
+            {/* Demo Video Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+              className="mt-8"
+            >
+              <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4 text-center">
+                  See ReconcileBook in Action
+                </h3>
+                <div className="relative w-full rounded-lg overflow-hidden shadow-lg">
+                  <video 
+                    className="w-full h-auto"
+                    controls
+                    preload="metadata"
+                  >
+                    <source src="/videos/screen-recording-2025-09-03-203716.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+                <p className="text-sm text-slate-600 text-center mt-3">
+                  Watch how ReconcileBook finds duplicates and matches transactions in seconds
+                </p>
+              </div>
+            </motion.div>
           </motion.div>
 
           {/* Right Column - CSV Upload */}
