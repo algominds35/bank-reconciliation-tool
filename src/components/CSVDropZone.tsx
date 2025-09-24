@@ -83,11 +83,21 @@ export default function CSVDropZone() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to process CSV';
       setError(errorMessage);
-      toast({
-        title: "Processing Failed",
-        description: errorMessage,
-        variant: "destructive",
-      });
+      
+      // Check if it's the "already used" error
+      if (errorMessage.includes('already used your free CSV upload')) {
+        toast({
+          title: "Free Trial Used",
+          description: "You've already used your free CSV upload. Start your free trial to continue!",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Processing Failed",
+          description: errorMessage,
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsProcessing(false);
     }
@@ -169,17 +179,28 @@ export default function CSVDropZone() {
             >
               <AlertCircle className="h-12 w-12 text-red-500" />
               <div>
-                <h4 className="font-semibold text-red-600 mb-1">Upload Failed</h4>
-                <p className="text-sm text-red-500">{error}</p>
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setError(null);
-                  }}
-                  className="mt-2 text-sm text-[#F45B49] hover:underline"
-                >
-                  Try again
-                </button>
+                <h4 className="font-semibold text-red-600 mb-1">
+                  {error.includes('already used') ? 'Free Trial Used' : 'Upload Failed'}
+                </h4>
+                <p className="text-sm text-red-500 mb-3">{error}</p>
+                {error.includes('already used') ? (
+                  <button 
+                    onClick={() => window.location.href = '/#pricing'}
+                    className="mt-2 px-4 py-2 bg-[#F45B49] text-white text-sm rounded-lg hover:bg-[#E24C3A] transition-colors"
+                  >
+                    Start Free Trial
+                  </button>
+                ) : (
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setError(null);
+                    }}
+                    className="mt-2 text-sm text-[#F45B49] hover:underline"
+                  >
+                    Try again
+                  </button>
+                )}
               </div>
             </motion.div>
           ) : (
