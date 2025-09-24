@@ -155,12 +155,62 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
         </motion.div>
       </div>
 
+      {/* Transactions Preview */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7 }}
+        className="bg-white border border-slate-200 rounded-xl p-6"
+      >
+        <div className="flex items-center gap-2 mb-4">
+          <FileText className="h-5 w-5 text-blue-500" />
+          <h4 className="font-semibold text-slate-900">
+            Processed Transactions ({results.summary.totalTransactions})
+          </h4>
+        </div>
+        
+        <div className="space-y-3">
+          {results.transactions.slice(0, 8).map((transaction, index) => (
+            <motion.div
+              key={transaction.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.8 + index * 0.05 }}
+              className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-lg"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <span className="text-sm font-semibold text-blue-600">T</span>
+                </div>
+                <div>
+                  <div className="font-medium text-slate-900">
+                    {formatCurrency(transaction.amount)}
+                  </div>
+                  <div className="text-sm text-slate-600 truncate max-w-xs">
+                    {transaction.description}
+                  </div>
+                </div>
+              </div>
+              <div className="text-sm text-slate-500">
+                {new Date(transaction.date).toLocaleDateString()}
+              </div>
+            </motion.div>
+          ))}
+          
+          {results.summary.totalTransactions > 8 && (
+            <div className="text-sm text-slate-500 text-center pt-2">
+              +{results.summary.totalTransactions - 8} more transactions processed
+            </div>
+          )}
+        </div>
+      </motion.div>
+
       {/* Duplicates Preview */}
       {results.duplicates.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.8 }}
           className="bg-white border border-slate-200 rounded-xl p-6"
         >
           <div className="flex items-center gap-2 mb-4">
@@ -176,7 +226,7 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
                 key={duplicate.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.8 + index * 0.1 }}
+                transition={{ delay: 0.9 + index * 0.1 }}
                 className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg"
               >
                 <div className="flex items-center gap-3">

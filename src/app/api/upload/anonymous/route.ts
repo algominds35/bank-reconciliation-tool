@@ -222,6 +222,7 @@ export async function POST(request: NextRequest) {
         unmatchedCount: unmatched.length,
         timeSaved,
       },
+      transactions: transactions.slice(0, 10), // Return first 10 transactions for preview
       duplicates: duplicates.slice(0, 10), // Return first 10 for preview
       unmatched: unmatched.slice(0, 10), // Return first 10 for preview
     });
