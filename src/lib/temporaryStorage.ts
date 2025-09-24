@@ -41,9 +41,15 @@ export function deleteTemporaryResults(sessionId: string) {
 
 export function cleanupExpiredResults() {
   const now = Date.now();
-  for (const [id, result] of temporaryResults.entries()) {
+  const expiredIds: string[] = [];
+  
+  temporaryResults.forEach((result, id) => {
     if (result.expiresAt < now) {
-      temporaryResults.delete(id);
+      expiredIds.push(id);
     }
-  }
+  });
+  
+  expiredIds.forEach(id => {
+    temporaryResults.delete(id);
+  });
 }
