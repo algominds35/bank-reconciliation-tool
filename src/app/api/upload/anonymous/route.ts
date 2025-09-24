@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { storeTemporaryResults, cleanupExpiredResults, checkIPUsage, markIPAsUsed, cleanupExpiredIPs } from '@/lib/temporaryStorage';
+import { storeTemporaryResults, cleanupExpiredResults } from '@/lib/temporaryStorage';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -155,22 +155,6 @@ export async function POST(request: NextRequest) {
   try {
     console.log('CSV upload request received');
     
-    // Get client IP to track usage
-    const clientIP = request.headers.get('x-forwarded-for') || 
-                    request.headers.get('x-real-ip') || 
-                    'unknown';
-    
-    console.log('Client IP:', clientIP);
-    
-    // Check if this IP has already used the free trial
-    if (checkIPUsage(clientIP)) {
-      console.log('IP already used free trial:', clientIP);
-      return NextResponse.json(
-        { error: 'You have already used your free CSV upload. Please start your free trial to continue processing CSV files.' },
-        { status: 429 } // Too Many Requests
-      );
-    }
-    
     const formData = await request.formData();
     const file = formData.get('csv') as File;
     
@@ -227,12 +211,8 @@ export async function POST(request: NextRequest) {
     
     storeTemporaryResults(sessionId, results);
     
-    // Mark this IP as having used the free trial
-    markIPAsUsed(clientIP);
-    
     // Clean up expired results
     cleanupExpiredResults();
-    cleanupExpiredIPs();
     
     return NextResponse.json({
       sessionId,

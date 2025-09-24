@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import ResultsPreview from './ResultsPreview';
+import EmailModal from './EmailModal';
 import { useToast } from '@/hooks/use-toast';
 
 interface CSVResult {
@@ -39,6 +40,8 @@ export default function CSVDropZone() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [results, setResults] = useState<CSVResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [uploadedSessionId, setUploadedSessionId] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -74,30 +77,24 @@ export default function CSVDropZone() {
       }
 
       const data = await response.json();
-      setResults(data);
+      
+      // Store session ID and show email modal instead of results
+      setUploadedSessionId(data.sessionId);
+      setShowEmailModal(true);
       
       toast({
         title: "CSV Processed Successfully!",
-        description: `Found ${data.summary.duplicatesFound} duplicates and processed ${data.summary.totalTransactions} transactions.`,
+        description: "Enter your email to view your reconciliation results.",
       });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to process CSV';
       setError(errorMessage);
       
-      // Check if it's the "already used" error
-      if (errorMessage.includes('already used your free CSV upload')) {
-        toast({
-          title: "Free Trial Used",
-          description: "You've already used your free CSV upload. Start your free trial to continue!",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Processing Failed",
-          description: errorMessage,
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Processing Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
     } finally {
       setIsProcessing(false);
     }
@@ -120,6 +117,15 @@ export default function CSVDropZone() {
     }
   }, []);
 
+  const handleEmailSuccess = (results: CSVResult) => {
+    setResults(results);
+    setShowEmailModal(false);
+  };
+
+  const handleEmailModalClose = () => {
+    setShowEmailModal(false);
+    setUploadedSessionId(null);
+  };
 
   // Show results if we have them
   if (results) {
@@ -244,6 +250,16 @@ export default function CSVDropZone() {
           <span>Fast</span>
         </div>
       </div>
+
+      {/* Email Modal */}
+      {uploadedSessionId && (
+        <EmailModal
+          isOpen={showEmailModal}
+          onClose={handleEmailModalClose}
+          sessionId={uploadedSessionId}
+          onSuccess={handleEmailSuccess}
+        />
+      )}
     </div>
   );
 }

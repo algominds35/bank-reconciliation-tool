@@ -11,7 +11,7 @@ interface TemporaryResult {
 }
 
 const temporaryResults = new Map<string, TemporaryResult>();
-const usedIPs = new Set<string>(); // Track IPs that have used the free trial
+const usedEmails = new Set<string>(); // Track emails that have used the free trial
 
 export function storeTemporaryResults(sessionId: string, results: Omit<TemporaryResult, 'expiresAt'>) {
   temporaryResults.set(sessionId, {
@@ -20,21 +20,18 @@ export function storeTemporaryResults(sessionId: string, results: Omit<Temporary
   });
 }
 
-export function checkIPUsage(ip: string): boolean {
-  return usedIPs.has(ip);
+export function checkEmailUsage(email: string): boolean {
+  return usedEmails.has(email.toLowerCase().trim());
 }
 
-export function markIPAsUsed(ip: string) {
-  usedIPs.add(ip);
+export function markEmailAsUsed(email: string) {
+  usedEmails.add(email.toLowerCase().trim());
 }
 
-export function cleanupExpiredIPs() {
-  // Clean up IPs after 24 hours to allow retry
-  // In production, you'd want to use a more sophisticated approach
-  const now = Date.now();
-  if (now % (24 * 60 * 60 * 1000) < 1000) { // Reset once per day
-    usedIPs.clear();
-  }
+export function cleanupExpiredEmails() {
+  // In production, you'd want to use a database with expiration dates
+  // For now, we'll keep emails permanently to prevent abuse
+  // You could implement a 30-day expiration if needed
 }
 
 export function getTemporaryResults(sessionId: string): TemporaryResult | null {
