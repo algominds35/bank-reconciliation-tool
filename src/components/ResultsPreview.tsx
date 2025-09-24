@@ -11,6 +11,12 @@ interface CSVResult {
     unmatchedCount: number;
     timeSaved: number;
   };
+  transactions: Array<{
+    id: string;
+    amount: number;
+    description: string;
+    date: string;
+  }>;
   duplicates: Array<{
     id: string;
     amount: number;
