@@ -188,7 +188,10 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
                    title: 'Success!',
                    description: 'Bank account connected successfully!'
                  })
-                 fetchConnectedAccounts()
+                 // Refresh accounts after successful connection
+                 setTimeout(() => {
+                   fetchConnectedAccounts()
+                 }, 1000)
                },
                onCancel: () => {
                  console.log('❌ User cancelled bank connection')
