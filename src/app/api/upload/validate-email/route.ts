@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getTemporaryResults, checkEmailUsage, markEmailAsUsed } from '@/lib/temporaryStorage';
+import { validateEmailForCSVUpload } from '@/lib/emailVerification';
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,11 +13,11 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Validate email with robust verification
+    const emailValidation = validateEmailForCSVUpload(email);
+    if (!emailValidation.valid) {
       return NextResponse.json(
-        { error: 'Please enter a valid email address' },
+        { error: emailValidation.error },
         { status: 400 }
       );
     }
