@@ -72,34 +72,37 @@ const checkForDuplicatesInFile = async (csvData: any[], transactionType: 'bank' 
     })
   }
   
-  // Find duplicates using the same logic as the free trial
-  const seen = new Map<string, any[]>()
-  let duplicateCount = 0
-  
-  console.log('=== DUPLICATE DETECTION DEBUG ===')
-  console.log('Total transactions to process:', transactions.length)
-  
-  transactions.forEach((transaction, index) => {
-    const key = `${transaction.amount}_${transaction.description.toLowerCase().trim()}_${transaction.date}`
-    console.log(`[${index}] Processing: "${transaction.description}" | $${transaction.amount} | ${transaction.date} | Key: "${key}"`)
-    
-    if (!seen.has(key)) {
-      seen.set(key, [])
-      console.log(`  → New group created for key: "${key}"`)
-    } else {
-      console.log(`  → DUPLICATE FOUND! Adding to existing group: "${key}"`)
-    }
-    
-    seen.get(key)!.push(transaction)
-  })
-  
-  // Count groups with more than one transaction (duplicates)
-  seen.forEach((group, key) => {
-    if (group.length > 1) {
-      console.log(`Found duplicate group for key: ${key}`, group)
-      duplicateCount += group.length - 1 // All but the first are duplicates
-    }
-  })
+         // Find duplicates using SMART logic - same amount + description (ignoring date)
+         const seen = new Map<string, any[]>()
+         let duplicateCount = 0
+         
+         console.log('=== SMART DUPLICATE DETECTION DEBUG ===')
+         console.log('Total transactions to process:', transactions.length)
+         
+         transactions.forEach((transaction, index) => {
+           // SMART KEY: amount + description (normalized) - IGNORE DATE
+           const normalizedDescription = transaction.description.toLowerCase().trim().replace(/[^\w\s]/g, '')
+           const key = `${transaction.amount}_${normalizedDescription}`
+           
+           console.log(`[${index}] Processing: "${transaction.description}" | $${transaction.amount} | ${transaction.date} | Key: "${key}"`)
+           
+           if (!seen.has(key)) {
+             seen.set(key, [])
+             console.log(`  → New group created for key: "${key}"`)
+           } else {
+             console.log(`  → DUPLICATE FOUND! Adding to existing group: "${key}"`)
+           }
+           
+           seen.get(key)!.push(transaction)
+         })
+         
+         // Count groups with more than one transaction (duplicates)
+         seen.forEach((group, key) => {
+           if (group.length > 1) {
+             console.log(`Found duplicate group for key: ${key}`, group)
+             duplicateCount += group.length - 1 // All but the first are duplicates
+           }
+         })
   
   console.log(`Found ${duplicateCount} duplicates in ${transactionType} CSV`)
   console.log('All transaction keys:', Array.from(seen.keys()))
@@ -140,19 +143,21 @@ const getDuplicatesForSmartMatching = async (csvData: any[], transactionType: 'b
     })
   }
   
-  // Group duplicates
-  const duplicateGroups: any[] = []
-  const seen = new Map<string, any[]>()
-  
-  transactions.forEach(transaction => {
-    const key = `${transaction.amount}_${transaction.description.toLowerCase().trim()}_${transaction.date}`
-    
-    if (!seen.has(key)) {
-      seen.set(key, [])
-    }
-    
-    seen.get(key)!.push(transaction)
-  })
+         // Group duplicates using SMART logic - same amount + description (ignoring date)
+         const duplicateGroups: any[] = []
+         const seen = new Map<string, any[]>()
+         
+         transactions.forEach(transaction => {
+           // SMART KEY: amount + description (normalized) - IGNORE DATE
+           const normalizedDescription = transaction.description.toLowerCase().trim().replace(/[^\w\s]/g, '')
+           const key = `${transaction.amount}_${normalizedDescription}`
+           
+           if (!seen.has(key)) {
+             seen.set(key, [])
+           }
+           
+           seen.get(key)!.push(transaction)
+         })
   
   console.log('=== FORMATTING DUPLICATES FOR SMART MATCHING ===')
   console.log('Total transaction groups:', seen.size)
