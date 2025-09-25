@@ -122,16 +122,16 @@ export default function CSVFirstHero() {
             className="relative"
           >
             <div className="relative z-10">
-              {/* Arrow pointing to CSV tool */}
+              {/* Arrow pointing down to CSV tool */}
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
-                className="flex items-center justify-center gap-3 text-[#F45B49] font-semibold mb-4"
+                className="flex flex-col items-center justify-center gap-2 text-[#F45B49] font-semibold mb-4"
               >
                 <span className="text-lg">Try 1 time sample for free</span>
-                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
               </motion.div>
 
