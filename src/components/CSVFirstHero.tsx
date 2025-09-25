@@ -141,8 +141,8 @@ export default function CSVFirstHero() {
                   transition={{ delay: 0.7, duration: 0.6 }}
                   className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-4"
                 >
-                  <div className="text-2xl font-bold text-slate-900">30 sec</div>
-                  <div className="text-sm text-slate-500">Average Processing Time</div>
+                  <div className="text-2xl font-bold text-slate-900">8 hours</div>
+                  <div className="text-sm text-slate-500">Saved a month</div>
                   <div className="mt-2 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
                     <div className="w-4/5 h-full bg-green-500 rounded-full"></div>
                   </div>
@@ -154,8 +154,8 @@ export default function CSVFirstHero() {
                   transition={{ delay: 0.8, duration: 0.6 }}
                   className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] p-4"
                 >
-                  <div className="text-2xl font-bold text-slate-900">99%</div>
-                  <div className="text-sm text-slate-500">Accuracy Rate</div>
+                  <div className="text-2xl font-bold text-slate-900">Years</div>
+                  <div className="text-sm text-slate-500">Reconcile years of transactions</div>
                   <div className="mt-2 w-full h-1 bg-slate-200 rounded-full overflow-hidden">
                     <div className="w-[99%] h-full bg-blue-600 rounded-full"></div>
                   </div>
