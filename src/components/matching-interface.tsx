@@ -6,7 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { ArrowLeftRight, Link, Calendar, DollarSign, Zap, CheckCircle, X, AlertTriangle } from 'lucide-react'
+import { ArrowLeftRight, Link, Calendar, DollarSign, Zap, CheckCircle, X, AlertTriangle, Settings } from 'lucide-react'
+import { DuplicateDetectionV2 } from '@/components/DuplicateDetectionV2'
+import { Txn } from '@/lib/duplicateDetection'
 
 interface MatchingInterfaceProps {
   bankTransactions: Transaction[]
@@ -35,6 +37,46 @@ export function MatchingInterface({
   const [processingAutoMatch, setProcessingAutoMatch] = useState(false)
   const [duplicateMatches, setDuplicateMatches] = useState<any[]>([])
   const [hasDuplicates, setHasDuplicates] = useState(false)
+  const [showDuplicateDetectionV2, setShowDuplicateDetectionV2] = useState(false)
+  const [allTransactions, setAllTransactions] = useState<Txn[]>([])
+
+  // Convert transactions to new format for Duplicate Detection v2
+  useEffect(() => {
+    const convertTransactions = () => {
+      const allTxns: Txn[] = []
+      
+      // Convert bank transactions
+      bankTransactions.forEach(txn => {
+        allTxns.push({
+          id: `bank_${txn.id}`,
+          date: txn.date,
+          amount: parseFloat(txn.amount.toString()),
+          type: parseFloat(txn.amount.toString()) > 0 ? 'income' : 'expense',
+          description: txn.description,
+          category: txn.category,
+          bank_reference_id: txn.id,
+          created_at: new Date().toISOString()
+        })
+      })
+      
+      // Convert bookkeeping transactions
+      bookkeepingTransactions.forEach(txn => {
+        allTxns.push({
+          id: `book_${txn.id}`,
+          date: txn.date,
+          amount: parseFloat(txn.amount.toString()),
+          type: parseFloat(txn.amount.toString()) > 0 ? 'income' : 'expense',
+          description: txn.description,
+          category: txn.category,
+          created_at: new Date().toISOString()
+        })
+      })
+      
+      setAllTransactions(allTxns)
+    }
+    
+    convertTransactions()
+  }, [bankTransactions, bookkeepingTransactions])
 
   // Check for pending duplicates from localStorage
   useEffect(() => {
@@ -570,6 +612,38 @@ export function MatchingInterface({
           </div>
         </CardContent>
       </Card>
+
+      {/* Duplicate Detection v2 */}
+      {allTransactions.length > 0 && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Settings className="h-5 w-5 text-purple-500" />
+                <CardTitle>Professional Duplicate Detection</CardTitle>
+              </div>
+              <Button 
+                onClick={() => setShowDuplicateDetectionV2(!showDuplicateDetectionV2)}
+                variant="outline"
+                size="sm"
+              >
+                {showDuplicateDetectionV2 ? 'Hide' : 'Show'} Advanced
+              </Button>
+            </div>
+          </CardHeader>
+          {showDuplicateDetectionV2 && (
+            <CardContent>
+              <DuplicateDetectionV2 
+                transactions={allTransactions}
+                onExport={(data, filename) => {
+                  console.log('Export requested:', filename, data);
+                  // Handle export here
+                }}
+              />
+            </CardContent>
+          )}
+        </Card>
+      )}
     </div>
   )
 } 
