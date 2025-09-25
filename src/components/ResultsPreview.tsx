@@ -148,17 +148,6 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
           <div className="text-sm text-yellow-600">Need Review</div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="bg-green-50 border border-green-200 rounded-xl p-4 text-center"
-        >
-          <div className="text-2xl font-bold text-green-600">
-            {formatTime(results.summary.timeSaved)}
-          </div>
-          <div className="text-sm text-green-600">Time Saved</div>
-        </motion.div>
       </div>
 
       {/* Transactions Preview */}
@@ -323,23 +312,6 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
         
       </motion.div>
 
-      {/* Time Saved Highlight */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1.0, type: "spring", stiffness: 200 }}
-        className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center"
-      >
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <Clock className="h-5 w-5 text-blue-600" />
-          <span className="font-semibold text-blue-900">Time Saved</span>
-        </div>
-        <p className="text-blue-700">
-          This reconciliation would have taken you approximately{' '}
-          <span className="font-bold">{formatTime(results.summary.timeSaved)}</span>{' '}
-          of manual work. Our tool did it in seconds!
-        </p>
-      </motion.div>
     </motion.div>
   );
 }
