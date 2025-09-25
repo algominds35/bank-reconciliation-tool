@@ -109,7 +109,7 @@ export default function CSVFirstHero() {
                       See How It Works
                     </h3>
                     <p className="text-slate-600 text-sm">
-                      Watch our AI match transactions and find duplicates in real-time
+                      Watch how transactions are matched and duplicates are flagged in real time.
                     </p>
                   </div>
                   
