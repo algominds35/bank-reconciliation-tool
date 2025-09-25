@@ -72,17 +72,16 @@ const checkForDuplicatesInFile = async (csvData: any[], transactionType: 'bank' 
     })
   }
   
-         // Find duplicates using SMART logic - same amount + description (ignoring date)
+         // Find duplicates using EXACT matching - same date + amount + description
          const seen = new Map<string, any[]>()
          let duplicateCount = 0
          
-         console.log('=== SMART DUPLICATE DETECTION DEBUG ===')
+         console.log('=== EXACT DUPLICATE DETECTION DEBUG ===')
          console.log('Total transactions to process:', transactions.length)
          
          transactions.forEach((transaction, index) => {
-           // SMART KEY: amount + description (normalized) - but also check for date proximity
-           const normalizedDescription = transaction.description.toLowerCase().trim().replace(/[^\w\s]/g, '')
-           const key = `${transaction.amount}_${normalizedDescription}`
+           // EXACT KEY: date + amount + description (exact match)
+           const key = `${transaction.date}_${transaction.amount}_${transaction.description.toLowerCase().trim()}`
            
            console.log(`[${index}] Processing: "${transaction.description}" | $${transaction.amount} | ${transaction.date} | Key: "${key}"`)
            
@@ -90,20 +89,7 @@ const checkForDuplicatesInFile = async (csvData: any[], transactionType: 'bank' 
              seen.set(key, [])
              console.log(`  → New group created for key: "${key}"`)
            } else {
-             // Check if this is a real duplicate (same amount + description)
-             // But also consider if dates are close (within 30 days) - could be duplicate entry
-             const existingGroup = seen.get(key)!
-             const isDuplicate = existingGroup.some(existing => {
-               const dateDiff = Math.abs(new Date(transaction.date).getTime() - new Date(existing.date).getTime())
-               const daysDiff = dateDiff / (1000 * 60 * 60 * 24)
-               return daysDiff <= 30 // Within 30 days = likely duplicate
-             })
-             
-             if (isDuplicate) {
-               console.log(`  → DUPLICATE FOUND! Adding to existing group: "${key}"`)
-             } else {
-               console.log(`  → Separate transaction (different date range): "${key}"`)
-             }
+             console.log(`  → EXACT DUPLICATE FOUND! Adding to existing group: "${key}"`)
            }
            
            seen.get(key)!.push(transaction)
@@ -112,7 +98,7 @@ const checkForDuplicatesInFile = async (csvData: any[], transactionType: 'bank' 
          // Count groups with more than one transaction (duplicates)
          seen.forEach((group, key) => {
            if (group.length > 1) {
-             console.log(`Found duplicate group for key: ${key}`, group)
+             console.log(`Found exact duplicate group for key: ${key}`, group)
              duplicateCount += group.length - 1 // All but the first are duplicates
            }
          })
@@ -156,14 +142,13 @@ const getDuplicatesForSmartMatching = async (csvData: any[], transactionType: 'b
     })
   }
   
-         // Group duplicates using SMART logic - same amount + description (ignoring date)
+         // Group duplicates using EXACT logic - same date + amount + description
          const duplicateGroups: any[] = []
          const seen = new Map<string, any[]>()
          
          transactions.forEach(transaction => {
-           // SMART KEY: amount + description (normalized) - IGNORE DATE
-           const normalizedDescription = transaction.description.toLowerCase().trim().replace(/[^\w\s]/g, '')
-           const key = `${transaction.amount}_${normalizedDescription}`
+           // EXACT KEY: date + amount + description (exact match)
+           const key = `${transaction.date}_${transaction.amount}_${transaction.description.toLowerCase().trim()}`
            
            if (!seen.has(key)) {
              seen.set(key, [])
