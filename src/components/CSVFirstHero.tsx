@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { TrendingUp, Star, Upload, FileText, Clock, CheckCircle } from 'lucide-react';
-import CSVDropZone from './CSVDropZone';
 
 export default function CSVFirstHero() {
   return (
@@ -122,42 +121,38 @@ export default function CSVFirstHero() {
             className="relative"
           >
             <div className="relative z-10">
-              {/* Arrow pointing down to CSV tool */}
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.6 }}
-                className="flex flex-col items-center justify-center gap-2 text-[#F45B49] font-semibold mb-4"
-              >
-                <span className="text-lg">Try 1 time sample for free</span>
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </motion.div>
-
-              {/* CSV Upload Card */}
+              {/* YouTube Demo Video */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.6 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
                 className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] overflow-hidden"
               >
                 <div className="p-6">
                   <div className="text-center mb-6">
                     <h3 className="text-xl font-semibold text-slate-900 mb-2">
-                      Upload Your Bank Statement CSV
+                      See How It Works
                     </h3>
                     <p className="text-slate-600 text-sm">
-                      Drag & drop your CSV file to see instant reconciliation results
+                      Watch our AI match transactions and find duplicates in real-time
                     </p>
                   </div>
                   
-                  {/* CSV Drop Zone */}
-                  <CSVDropZone />
+                  {/* YouTube Video Embed */}
+                  <div className="relative w-full h-64 bg-slate-100 rounded-xl overflow-hidden">
+                    <iframe
+                      className="w-full h-full"
+                      src="https://www.youtube.com/embed/_K9NET1njog?si=sFnbEtzYkWTur2G5"
+                      title="ReconcileBook Demo"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
                   
                   <div className="mt-4 text-center">
                     <p className="text-xs text-slate-500">
-                      Supports CSV files from most banks and accounting software
+                      2:08 min demo • Updated Today
                     </p>
                   </div>
                 </div>
