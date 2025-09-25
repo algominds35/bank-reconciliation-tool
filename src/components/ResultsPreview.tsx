@@ -321,9 +321,6 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
           </button>
         </div>
         
-        <p className="text-xs text-red-100 mt-4">
-          No credit card required • 14-day free trial • Cancel anytime
-        </p>
       </motion.div>
 
       {/* Time Saved Highlight */}
