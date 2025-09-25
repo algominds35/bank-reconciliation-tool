@@ -34,11 +34,11 @@ export default function CSVFirstHero() {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="text-5xl lg:text-6xl font-bold leading-tight mb-6"
             >
-              Professional{' '}
-              <span className="text-[#F45B49]">Bank Reconciliation</span>
+              Turn hours of{' '}
+              <span className="text-[#F45B49]">reconciliation</span>
               <br />
-              Try once for{' '}
-              <span className="text-[#F45B49]">free</span>
+              into{' '}
+              <span className="text-[#F45B49]">seconds</span>
             </motion.h1>
 
             {/* Description */}
