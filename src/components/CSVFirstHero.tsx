@@ -77,26 +77,13 @@ export default function CSVFirstHero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.6 }}
-              className="flex items-center gap-2 text-sm text-slate-600 mb-6"
+              className="flex items-center gap-2 text-sm text-slate-600"
             >
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 fill-[#F45B49] text-[#F45B49]" />
                 <span className="font-semibold text-slate-900">4.9/5</span>
               </div>
               <span>stars from 500+ bookkeepers</span>
-            </motion.div>
-
-            {/* Arrow pointing to CSV tool */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.7, duration: 0.6 }}
-              className="flex items-center gap-3 text-[#F45B49] font-semibold"
-            >
-              <span className="text-lg">Try 1 time sample for free</span>
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
             </motion.div>
 
                    {/* Demo Video Section */}
@@ -135,6 +122,19 @@ export default function CSVFirstHero() {
             className="relative"
           >
             <div className="relative z-10">
+              {/* Arrow pointing to CSV tool */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="flex items-center justify-center gap-3 text-[#F45B49] font-semibold mb-4"
+              >
+                <span className="text-lg">Try 1 time sample for free</span>
+                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </motion.div>
+
               {/* CSV Upload Card */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
