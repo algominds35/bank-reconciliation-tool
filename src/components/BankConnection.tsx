@@ -190,7 +190,8 @@ export default function BankConnection({ onAccountsConnected }: BankConnectionPr
                  })
                  // Refresh accounts after successful connection
                  setTimeout(() => {
-                   fetchConnectedAccounts()
+                   // Bank connection completed successfully
+                   console.log('✅ Bank connection flow completed')
                  }, 1000)
                },
                onCancel: () => {
