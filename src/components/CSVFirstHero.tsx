@@ -24,7 +24,7 @@ export default function CSVFirstHero() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-[#F45B49]/10 border border-[#F45B49]/20 rounded-full text-sm font-medium text-[#F45B49] mb-6"
             >
               <Upload className="h-4 w-4" />
-              Try Sample
+              Instant Reconciliation
             </motion.div>
 
             {/* Headline */}
