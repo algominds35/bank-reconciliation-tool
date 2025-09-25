@@ -297,7 +297,7 @@ export default function ResultsPreview({ results, onSignup }: ResultsPreviewProp
             className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#F45B49] font-semibold rounded-full hover:bg-gray-50 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
           >
             <FileText className="h-4 w-4" />
-            Start Free Trial
+            See How the Full Version Works
             <ArrowRight className="h-4 w-4" />
           </button>
           
