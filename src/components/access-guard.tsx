@@ -31,52 +31,70 @@ export function AccessGuard({ children }: AccessGuardProps) {
         return
       }
 
-      // Get user profile
-      const { data: profile, error } = await supabase
-        .from('user_profiles')
+      // Get user subscription from user_subscriptions table
+      const { data: subscription, error } = await supabase
+        .from('user_subscriptions')
         .select('*')
-        .eq('id', session.user.id)
+        .eq('user_id', session.user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
         .single()
 
-      if (error) {
-        console.error('Error fetching profile:', error)
+      // If no subscription found, check if they have a trial
+      if (error && error.code === 'PGRST116') {
+        // Check user_profiles for trial status
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single()
+
+        if (profile) {
+          const now = new Date()
+          const trialEnd = new Date(profile.trial_end_date)
+          const hasTrialAccess = trialEnd > now
+          
+          setHasAccess(hasTrialAccess)
+          setSubscription(profile)
+          return
+        }
+      }
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching subscription:', error)
         setHasAccess(false)
         return
       }
 
-      setSubscription(profile)
+      setSubscription(subscription)
 
       // Check access based on subscription status
       const now = new Date()
-      const trialEnd = new Date(profile.trial_end_date)
       
       let access = false
       let reason = ''
 
-      switch (profile.subscription_status) {
+      switch (subscription?.status) {
         case 'active':
           access = true
           break
-        case 'trial':
-          access = trialEnd > now
-          reason = access ? '' : 'Trial expired'
-          break
         case 'cancelled':
           // Check if within grace period (14 days from cancellation)
-          const cancelledDate = new Date(profile.updated_at)
+          const cancelledDate = new Date(subscription.cancelled_at || subscription.updated_at)
           const gracePeriodEnd = new Date(cancelledDate.getTime() + (14 * 24 * 60 * 60 * 1000))
           access = gracePeriodEnd > now
           const daysLeft = Math.ceil((gracePeriodEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
           setGracePeriodDays(daysLeft > 0 ? daysLeft : null)
           reason = access ? `Grace period: ${daysLeft} days left` : 'Grace period expired'
           break
-        case 'expired':
+        case 'past_due':
+        case 'unpaid':
           access = false
-          reason = 'Subscription expired'
+          reason = 'Payment failed'
           break
         default:
           access = false
-          reason = 'Invalid subscription status'
+          reason = 'No active subscription'
       }
 
       setHasAccess(access)
@@ -120,16 +138,16 @@ export function AccessGuard({ children }: AccessGuardProps) {
                 Access Restricted
               </CardTitle>
               <p className="text-gray-600 mt-2">
-                {subscription?.subscription_status === 'cancelled' 
+                {subscription?.status === 'cancelled' 
                   ? 'Your subscription has been cancelled'
-                  : subscription?.subscription_status === 'expired'
-                  ? 'Your subscription has expired'
-                  : 'Your trial has expired'
+                  : subscription?.status === 'past_due'
+                  ? 'Your payment failed'
+                  : 'Your access has expired'
                 }
               </p>
             </CardHeader>
             <CardContent className="space-y-6">
-              {subscription?.subscription_status === 'cancelled' && (
+              {subscription?.status === 'cancelled' && (
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                   <div className="flex items-center space-x-2 mb-2">
                     <Calendar className="h-4 w-4 text-blue-600" />
@@ -163,7 +181,7 @@ export function AccessGuard({ children }: AccessGuardProps) {
   }
 
   // Show grace period warning if in grace period
-  if (subscription?.subscription_status === 'cancelled' && gracePeriodDays && gracePeriodDays <= 7) {
+  if (subscription?.status === 'cancelled' && gracePeriodDays && gracePeriodDays <= 7) {
     return (
       <div>
         {/* Grace Period Warning */}
