@@ -89,7 +89,7 @@ export default function ContactPage() {
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 mb-6">Send us a Message</h2>
             
-            <ContactForm />
+                   <ContactForm />
           </div>
         </div>
 

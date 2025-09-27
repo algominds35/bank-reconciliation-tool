@@ -197,46 +197,6 @@ export default function BillingSettingsPage() {
                 </Button>
               </Link>
               <h1 className="text-2xl font-bold text-gray-900">Billing & Subscription</h1>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={fetchSubscription}
-                className="ml-4"
-              >
-                Refresh Subscription
-              </Button>
-              <Button 
-                variant="destructive" 
-                size="sm"
-                onClick={async () => {
-                  if (!confirm('Force sync will check Stripe directly and overwrite any existing subscription data. Continue?')) return
-                  
-                  try {
-                    const response = await fetch('/api/stripe/force-sync-subscription', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        userId: user.id,
-                        email: user.email
-                      })
-                    })
-                    
-                    if (response.ok) {
-                      const result = await response.json()
-                      alert(`Success! Found subscription: ${result.subscription.plan_name} - $${result.subscription.amount / 100}/month`)
-                      await fetchSubscription()
-                    } else {
-                      const error = await response.json()
-                      alert(`Error: ${error.error}`)
-                    }
-                  } catch (error) {
-                    alert('Failed to force sync subscription')
-                  }
-                }}
-                className="ml-2"
-              >
-                Force Sync from Stripe
-              </Button>
             </div>
             <Badge variant="outline" className="text-xs">
               {user?.email}
@@ -359,17 +319,17 @@ export default function BillingSettingsPage() {
                     <div className="flex items-center justify-between p-4 border border-red-200 rounded-lg bg-red-50">
                       <div>
                         <h4 className="font-medium text-red-800">Cancel Subscription</h4>
-                        <p className="text-sm text-red-600">Cancel your subscription and lose access to premium features</p>
+                        <p className="text-sm text-red-600">To cancel your subscription, please contact our support team</p>
                       </div>
-                      <Button 
-                        variant="destructive" 
-                        onClick={handleCancelSubscription}
-                        disabled={cancelling}
-                        className="flex items-center space-x-2"
-                      >
-                        <X className="h-4 w-4" />
-                        <span>{cancelling ? 'Cancelling...' : 'Cancel Subscription'}</span>
-                      </Button>
+                      <Link href="/contact">
+                        <Button 
+                          variant="destructive" 
+                          className="flex items-center space-x-2"
+                        >
+                          <X className="h-4 w-4" />
+                          <span>Contact Support</span>
+                        </Button>
+                      </Link>
                     </div>
                   )}
                 </div>
