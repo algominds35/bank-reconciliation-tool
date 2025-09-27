@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       // Send email to support
       emailResponse = await resend.emails.send({
         from: 'ReconcileBook Support <support@reconcilebookapp.com>',
-        to: ['alex@usealgomind.com'],
+        to: ['alex@reconcilebookapp.com'],
         subject: `[${subject}] Contact Form - ${name}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
               <p style="white-space: pre-wrap; line-height: 1.6;">${message}</p>
             </div>
             
-            <p>If you have any urgent questions, please don't hesitate to reach out to us directly at <a href="mailto:alex@usealgomind.com" style="color: #F45B49;">alex@usealgomind.com</a></p>
+            <p>If you have any urgent questions, please don't hesitate to reach out to us directly at <a href="mailto:alex@reconcilebookapp.com" style="color: #F45B49;">alex@reconcilebookapp.com</a></p>
             
             <p>Best regards,<br>
             The ReconcileBook Team</p>
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
       })
       
       // Also send a simple email using mailto fallback
-      const mailtoUrl = `mailto:alex@usealgomind.com?subject=${encodeURIComponent(`[${subject}] Contact Form - ${name}`)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\nCompany: ${company || 'Not provided'}\nSubject: ${subject}\n\nMessage:\n${message}`)}`
+      const mailtoUrl = `mailto:alex@reconcilebookapp.com?subject=${encodeURIComponent(`[${subject}] Contact Form - ${name}`)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\nCompany: ${company || 'Not provided'}\nSubject: ${subject}\n\nMessage:\n${message}`)}`
       
       // Note: This is just for logging, actual email sending would need proper setup
     }
