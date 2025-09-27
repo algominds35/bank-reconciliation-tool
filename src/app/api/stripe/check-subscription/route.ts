@@ -58,8 +58,8 @@ export async function POST(request: NextRequest) {
             status: stripeSubscription.status,
             plan_name: 'Pro Plan', // Default plan name
             amount: stripeSubscription.items.data[0]?.price?.unit_amount || 4900,
-            current_period_start: new Date(stripeSubscription.current_period_start * 1000).toISOString(),
-            current_period_end: new Date(stripeSubscription.current_period_end * 1000).toISOString(),
+            current_period_start: new Date((stripeSubscription as any).current_period_start * 1000).toISOString(),
+            current_period_end: new Date((stripeSubscription as any).current_period_end * 1000).toISOString(),
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           }
