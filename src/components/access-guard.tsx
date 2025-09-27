@@ -31,40 +31,89 @@ export function AccessGuard({ children }: AccessGuardProps) {
         return
       }
 
-      // ALWAYS ALLOW ACCESS BY DEFAULT - Only restrict specific cancelled users
-      // This allows free trials, new signups, and active users through
-      setHasAccess(true)
-      setSubscription({ status: 'trial', trial: true })
-
-      // Check if user has a cancelled subscription that should be blocked
+      // Check ALL subscriptions for this user (not just cancelled ones)
       const { data: subscription, error } = await supabase
         .from('user_subscriptions')
         .select('*')
         .eq('user_id', session.user.id)
-        .eq('status', 'cancelled') // Only check for cancelled subscriptions
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
 
-      // If they have a cancelled subscription, check grace period
-      if (subscription && subscription.status === 'cancelled') {
+      // If user has ANY subscription record, check their status
+      if (subscription) {
         const now = new Date()
-        const cancelledDate = new Date(subscription.cancelled_at || subscription.updated_at)
-        const gracePeriodEnd = new Date(cancelledDate.getTime() + (14 * 24 * 60 * 60 * 1000))
-        const isInGracePeriod = gracePeriodEnd > now
         
-        if (!isInGracePeriod) {
-          // Only block if grace period has expired
+        switch (subscription.status) {
+          case 'active':
+            // Active subscription - allow access
+            setHasAccess(true)
+            setSubscription(subscription)
+            return
+            
+          case 'cancelled':
+            // Check grace period for cancelled subscriptions
+            const cancelledDate = new Date(subscription.cancelled_at || subscription.updated_at)
+            const gracePeriodEnd = new Date(cancelledDate.getTime() + (14 * 24 * 60 * 60 * 1000))
+            const isInGracePeriod = gracePeriodEnd > now
+            
+            if (isInGracePeriod) {
+              // Still in grace period - allow access
+              setHasAccess(true)
+              setSubscription(subscription)
+              const daysLeft = Math.ceil((gracePeriodEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+              setGracePeriodDays(daysLeft)
+              return
+            } else {
+              // Grace period expired - BLOCK ACCESS
+              setHasAccess(false)
+              setSubscription(subscription)
+              return
+            }
+            
+          case 'past_due':
+          case 'unpaid':
+            // Payment failed - BLOCK ACCESS
+            setHasAccess(false)
+            setSubscription(subscription)
+            return
+            
+          default:
+            // Unknown status - BLOCK ACCESS for security
+            setHasAccess(false)
+            setSubscription(subscription)
+            return
+        }
+      }
+
+      // NO subscription record found - check if they have a trial
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('id', session.user.id)
+        .single()
+
+      if (profile) {
+        const now = new Date()
+        const trialEnd = new Date(profile.trial_end_date)
+        const hasTrialAccess = trialEnd > now
+        
+        if (hasTrialAccess) {
+          // Valid trial - allow access
+          setHasAccess(true)
+          setSubscription({ status: 'trial', trial: true, trial_end_date: profile.trial_end_date })
+          return
+        } else {
+          // Trial expired - BLOCK ACCESS
           setHasAccess(false)
-          setSubscription(subscription)
-          const daysLeft = Math.ceil((gracePeriodEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-          setGracePeriodDays(daysLeft > 0 ? daysLeft : null)
+          setSubscription({ status: 'trial_expired', trial: true })
           return
         }
       }
 
-      // Everyone else gets access (free trials, active users, new signups, etc.)
-      setHasAccess(true)
+      // No subscription AND no trial profile - BLOCK ACCESS
+      setHasAccess(false)
+      setSubscription({ status: 'no_access' })
     } catch (error) {
       console.error('Error checking access:', error)
       // Don't block on errors - allow access for testing
