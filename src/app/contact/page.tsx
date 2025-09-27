@@ -2,7 +2,8 @@
 import React from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Mail, MessageSquare, Phone } from 'lucide-react'
+import ContactForm from '@/components/ContactForm'
+import { ArrowLeft, Mail, MessageSquare } from 'lucide-react'
 
 export default function ContactPage() {
   return (
@@ -65,12 +66,12 @@ export default function ContactPage() {
 
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Phone className="h-6 w-6 text-purple-600" />
+                  <MessageSquare className="h-6 w-6 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-1">Phone Support</h3>
-                  <p className="text-slate-600 mb-2">Speak directly with our team</p>
-                  <p className="text-slate-500 text-sm">Available for Enterprise customers</p>
+                  <h3 className="font-semibold text-slate-900 mb-1">Priority Support</h3>
+                  <p className="text-slate-600 mb-2">Get faster response times for urgent issues</p>
+                  <p className="text-slate-500 text-sm">Email support available 24/7</p>
                 </div>
               </div>
             </div>
@@ -88,92 +89,7 @@ export default function ContactPage() {
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 mb-6">Send us a Message</h2>
             
-            <form className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Your full name"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="your.email@company.com"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="company" className="block text-sm font-medium text-slate-700 mb-2">
-                  Company
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Your company name"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-slate-700 mb-2">
-                  Subject *
-                </label>
-                <select
-                  id="subject"
-                  name="subject"
-                  required
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select a subject</option>
-                  <option value="general">General Inquiry</option>
-                  <option value="technical">Technical Support</option>
-                  <option value="billing">Billing Question</option>
-                  <option value="feature">Feature Request</option>
-                  <option value="partnership">Partnership Opportunity</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-2">
-                  Message *
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  required
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Tell us how we can help you..."
-                ></textarea>
-              </div>
-
-              <Button 
-                type="submit" 
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg"
-                onClick={(e) => {
-                  e.preventDefault()
-                  window.location.href = 'mailto:alex@usealgomind.com?subject=ReconcileBook%20Contact%20Form&body=Hi%20Alex,%0D%0A%0D%0AI%20would%20like%20to%20contact%20you%20about%20ReconcileBook.%0D%0A%0D%0APlease%20respond%20to%20this%20email.'
-                }}
-              >
-                Send Message
-              </Button>
-            </form>
+            <ContactForm />
           </div>
         </div>
 
