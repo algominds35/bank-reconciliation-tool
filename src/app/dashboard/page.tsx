@@ -1137,12 +1137,6 @@ export default function Dashboard() {
                 </Button>
               </Link>
 
-              <Link href="/settings/billing">
-                <Button variant="outline" size="sm" className="flex items-center space-x-2">
-                  <CreditCard className="h-4 w-4" />
-                  <span>Billing</span>
-                </Button>
-              </Link>
               
               <Button
                 variant="outline"
