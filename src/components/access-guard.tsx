@@ -31,92 +31,40 @@ export function AccessGuard({ children }: AccessGuardProps) {
         return
       }
 
-      // DEVELOPER BYPASS - Allow specific developer emails to always have access
-      const developerEmails = ['alex@usealgomind.com', 'mrjoj@example.com']
-      if (developerEmails.includes(session.user.email || '')) {
-        console.log('Developer access granted for:', session.user.email)
-        setHasAccess(true)
-        setSubscription({ status: 'active', developer: true })
-        setLoading(false)
-        return
-      }
+      // ALWAYS ALLOW ACCESS BY DEFAULT - Only restrict specific cancelled users
+      // This allows free trials, new signups, and active users through
+      setHasAccess(true)
+      setSubscription({ status: 'trial', trial: true })
 
-      // Get user subscription from user_subscriptions table
+      // Check if user has a cancelled subscription that should be blocked
       const { data: subscription, error } = await supabase
         .from('user_subscriptions')
         .select('*')
         .eq('user_id', session.user.id)
+        .eq('status', 'cancelled') // Only check for cancelled subscriptions
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
 
-      // If no subscription found, check if they have a trial OR give them trial access
-      if (error && error.code === 'PGRST116') {
-        // Check user_profiles for trial status
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single()
-
-        if (profile) {
-          const now = new Date()
-          const trialEnd = new Date(profile.trial_end_date)
-          const hasTrialAccess = trialEnd > now
-          
-          setHasAccess(hasTrialAccess)
-          setSubscription(profile)
-          return
-        } else {
-          // No profile found - give them trial access for testing
-          console.log('No subscription or trial found, granting trial access for testing')
-          setHasAccess(true)
-          setSubscription({ status: 'trial', trial: true })
+      // If they have a cancelled subscription, check grace period
+      if (subscription && subscription.status === 'cancelled') {
+        const now = new Date()
+        const cancelledDate = new Date(subscription.cancelled_at || subscription.updated_at)
+        const gracePeriodEnd = new Date(cancelledDate.getTime() + (14 * 24 * 60 * 60 * 1000))
+        const isInGracePeriod = gracePeriodEnd > now
+        
+        if (!isInGracePeriod) {
+          // Only block if grace period has expired
+          setHasAccess(false)
+          setSubscription(subscription)
+          const daysLeft = Math.ceil((gracePeriodEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+          setGracePeriodDays(daysLeft > 0 ? daysLeft : null)
           return
         }
       }
 
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error fetching subscription:', error)
-        // Don't block access on errors - allow through for testing
-        setHasAccess(true)
-        setSubscription({ status: 'error', error: true })
-        return
-      }
-
-      setSubscription(subscription)
-
-      // Check access based on subscription status
-      const now = new Date()
-      
-      let access = false
-      let reason = ''
-
-      switch (subscription?.status) {
-        case 'active':
-          access = true
-          break
-        case 'cancelled':
-          // Check if within grace period (14 days from cancellation)
-          const cancelledDate = new Date(subscription.cancelled_at || subscription.updated_at)
-          const gracePeriodEnd = new Date(cancelledDate.getTime() + (14 * 24 * 60 * 60 * 1000))
-          access = gracePeriodEnd > now
-          const daysLeft = Math.ceil((gracePeriodEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-          setGracePeriodDays(daysLeft > 0 ? daysLeft : null)
-          reason = access ? `Grace period: ${daysLeft} days left` : 'Grace period expired'
-          break
-        case 'past_due':
-        case 'unpaid':
-          access = false
-          reason = 'Payment failed'
-          break
-        default:
-          // Be more lenient - allow access for testing
-          access = true
-          reason = 'Development/testing mode'
-      }
-
-      setHasAccess(access)
+      // Everyone else gets access (free trials, active users, new signups, etc.)
+      setHasAccess(true)
     } catch (error) {
       console.error('Error checking access:', error)
       // Don't block on errors - allow access for testing
