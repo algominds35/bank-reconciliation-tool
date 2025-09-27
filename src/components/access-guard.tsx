@@ -31,6 +31,16 @@ export function AccessGuard({ children }: AccessGuardProps) {
         return
       }
 
+      // DEVELOPER BYPASS - Allow specific developer emails to always have access
+      const developerEmails = ['alex@usealgomind.com', 'mrjoj@example.com']
+      if (developerEmails.includes(session.user.email || '')) {
+        console.log('Developer access granted for:', session.user.email)
+        setHasAccess(true)
+        setSubscription({ status: 'active', developer: true })
+        setLoading(false)
+        return
+      }
+
       // Get user subscription from user_subscriptions table
       const { data: subscription, error } = await supabase
         .from('user_subscriptions')
@@ -40,7 +50,7 @@ export function AccessGuard({ children }: AccessGuardProps) {
         .limit(1)
         .single()
 
-      // If no subscription found, check if they have a trial
+      // If no subscription found, check if they have a trial OR give them trial access
       if (error && error.code === 'PGRST116') {
         // Check user_profiles for trial status
         const { data: profile } = await supabase
@@ -57,12 +67,20 @@ export function AccessGuard({ children }: AccessGuardProps) {
           setHasAccess(hasTrialAccess)
           setSubscription(profile)
           return
+        } else {
+          // No profile found - give them trial access for testing
+          console.log('No subscription or trial found, granting trial access for testing')
+          setHasAccess(true)
+          setSubscription({ status: 'trial', trial: true })
+          return
         }
       }
 
       if (error && error.code !== 'PGRST116') {
         console.error('Error fetching subscription:', error)
-        setHasAccess(false)
+        // Don't block access on errors - allow through for testing
+        setHasAccess(true)
+        setSubscription({ status: 'error', error: true })
         return
       }
 
@@ -93,14 +111,17 @@ export function AccessGuard({ children }: AccessGuardProps) {
           reason = 'Payment failed'
           break
         default:
-          access = false
-          reason = 'No active subscription'
+          // Be more lenient - allow access for testing
+          access = true
+          reason = 'Development/testing mode'
       }
 
       setHasAccess(access)
     } catch (error) {
       console.error('Error checking access:', error)
-      setHasAccess(false)
+      // Don't block on errors - allow access for testing
+      setHasAccess(true)
+      setSubscription({ status: 'error', error: true })
     } finally {
       setLoading(false)
     }
