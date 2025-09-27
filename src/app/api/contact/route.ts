@@ -75,6 +75,11 @@ export async function POST(request: NextRequest) {
         name, email, company, subject, message,
         timestamp: new Date().toISOString()
       })
+      
+      // Also send a simple email using mailto fallback
+      const mailtoUrl = `mailto:alex@usealgomind.com?subject=${encodeURIComponent(`[${subject}] Contact Form - ${name}`)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\nCompany: ${company || 'Not provided'}\nSubject: ${subject}\n\nMessage:\n${message}`)}`
+      
+      // Note: This is just for logging, actual email sending would need proper setup
     }
 
     return NextResponse.json({ 

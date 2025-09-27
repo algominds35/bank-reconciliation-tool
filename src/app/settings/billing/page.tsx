@@ -205,6 +205,38 @@ export default function BillingSettingsPage() {
               >
                 Refresh Subscription
               </Button>
+              <Button 
+                variant="destructive" 
+                size="sm"
+                onClick={async () => {
+                  if (!confirm('Force sync will check Stripe directly and overwrite any existing subscription data. Continue?')) return
+                  
+                  try {
+                    const response = await fetch('/api/stripe/force-sync-subscription', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        userId: user.id,
+                        email: user.email
+                      })
+                    })
+                    
+                    if (response.ok) {
+                      const result = await response.json()
+                      alert(`Success! Found subscription: ${result.subscription.plan_name} - $${result.subscription.amount / 100}/month`)
+                      await fetchSubscription()
+                    } else {
+                      const error = await response.json()
+                      alert(`Error: ${error.error}`)
+                    }
+                  } catch (error) {
+                    alert('Failed to force sync subscription')
+                  }
+                }}
+                className="ml-2"
+              >
+                Force Sync from Stripe
+              </Button>
             </div>
             <Badge variant="outline" className="text-xs">
               {user?.email}
