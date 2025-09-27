@@ -111,9 +111,11 @@ export function AccessGuard({ children }: AccessGuardProps) {
         }
       }
 
-      // No subscription AND no trial profile - BLOCK ACCESS
-      setHasAccess(false)
-      setSubscription({ status: 'no_access' })
+      // No subscription AND no trial profile - Allow access for new users
+      // This handles edge cases where user_profiles haven't been created yet
+      console.log('No subscription or trial profile found - allowing access for new user')
+      setHasAccess(true)
+      setSubscription({ status: 'new_user', trial: true })
     } catch (error) {
       console.error('Error checking access:', error)
       // Don't block on errors - allow access for testing

@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     if (resend) {
       // Send email to support
       emailResponse = await resend.emails.send({
-        from: 'ReconcileBook Support <support@reconcilebook.com>',
+        from: 'ReconcileBook Support <support@reconcilebookapp.com>',
         to: ['alex@usealgomind.com'],
         subject: `[${subject}] Contact Form - ${name}`,
         html: `
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
       // Send confirmation email to user
       await resend.emails.send({
-        from: 'ReconcileBook Support <support@reconcilebook.com>',
+        from: 'ReconcileBook Support <support@reconcilebookapp.com>',
         to: [email],
         subject: 'We received your message - ReconcileBook Support',
         html: `
