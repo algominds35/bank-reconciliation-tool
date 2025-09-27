@@ -67,6 +67,7 @@ export default function BillingSettingsPage() {
 
   const fetchSubscription = async () => {
     try {
+      // First try database
       const { data, error } = await supabase
         .from('user_subscriptions')
         .select('*')
@@ -75,10 +76,32 @@ export default function BillingSettingsPage() {
         .limit(1)
         .single()
 
+      if (data) {
+        setSubscription(data)
+        return
+      }
+
+      // If not found in database, check Stripe directly
+      console.log('Subscription not found in database, checking Stripe...')
+      const response = await fetch('/api/stripe/check-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          email: user.email
+        })
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        if (result.subscription) {
+          setSubscription(result.subscription)
+          console.log('Found subscription in Stripe:', result.subscription)
+        }
+      }
+
       if (error && error.code !== 'PGRST116') {
         console.error('Error fetching subscription:', error)
-      } else {
-        setSubscription(data)
       }
     } catch (error) {
       console.error('Error fetching subscription:', error)
@@ -174,6 +197,14 @@ export default function BillingSettingsPage() {
                 </Button>
               </Link>
               <h1 className="text-2xl font-bold text-gray-900">Billing & Subscription</h1>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={fetchSubscription}
+                className="ml-4"
+              >
+                Refresh Subscription
+              </Button>
             </div>
             <Badge variant="outline" className="text-xs">
               {user?.email}
