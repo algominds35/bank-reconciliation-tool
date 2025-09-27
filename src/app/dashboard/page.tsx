@@ -281,10 +281,16 @@ export default function Dashboard() {
 
   const fetchTransactions = async () => {
     try {
-      // Fetch from both bank_transactions and book_transactions tables
+      if (!user?.id) {
+        console.error('No user ID available for fetching transactions')
+        setTransactions([])
+        return
+      }
+
+      // Fetch from both bank_transactions and book_transactions tables - FILTERED BY USER ID
       const [bankResult, bookResult] = await Promise.all([
-        supabase.from('bank_transactions').select('*'),
-        supabase.from('book_transactions').select('*')
+        supabase.from('bank_transactions').select('*').eq('user_id', user.id),
+        supabase.from('book_transactions').select('*').eq('user_id', user.id)
       ])
 
       let allTransactions: Transaction[] = []
@@ -597,6 +603,7 @@ export default function Dashboard() {
               const { error } = await supabase
                 .from(tableName)
                 .insert({
+                  user_id: user.id, // CRITICAL: Store the user_id to isolate data
                   client_id: null, // Allow null client_id like before
                   date: String(date),
                   description: String(description),
@@ -802,11 +809,12 @@ export default function Dashboard() {
         console.log('Updating bank transactions...')
         console.log('Bank IDs being sent to database:', bankIds)
         
-        // First, let's verify these IDs exist in the database
+        // First, let's verify these IDs exist in the database and belong to this user
         const { data: existingBank, error: checkError } = await supabase
           .from('bank_transactions')
           .select('id')
           .in('id', bankIds)
+          .eq('user_id', user.id) // CRITICAL: Only check transactions belonging to this user
         
         console.log('Existing bank transactions:', existingBank)
         if (checkError) {
@@ -825,6 +833,7 @@ export default function Dashboard() {
             reconciliation_group: reconciliationGroup 
           })
           .in('id', bankIds)
+          .eq('user_id', user.id) // CRITICAL: Only update transactions belonging to this user
           .select()
 
         console.log('Bank update result:', { data: bankData, error: bankError })
@@ -846,6 +855,7 @@ export default function Dashboard() {
             reconciliation_group: reconciliationGroup 
           })
           .in('id', bookIds)
+          .eq('user_id', user.id) // CRITICAL: Only update transactions belonging to this user
           .select()
 
         if (bookError) {
@@ -902,21 +912,21 @@ export default function Dashboard() {
     }
 
     try {
-      // Clear bank transactions
+      // Clear bank transactions - ONLY FOR THIS USER
       const { error: bankError } = await supabase
         .from('bank_transactions')
         .delete()
-        .neq('id', '00000000-0000-0000-0000-000000000000') // Delete all
+        .eq('user_id', user.id) // CRITICAL: Only delete transactions belonging to this user
 
       if (bankError) {
         console.error('Error clearing bank transactions:', bankError)
       }
 
-      // Clear book transactions
+      // Clear book transactions - ONLY FOR THIS USER
       const { error: bookError } = await supabase
         .from('book_transactions')
         .delete()
-        .neq('id', '00000000-0000-0000-0000-000000000000') // Delete all
+        .eq('user_id', user.id) // CRITICAL: Only delete transactions belonging to this user
 
       if (bookError) {
         console.error('Error clearing book transactions:', bookError)
