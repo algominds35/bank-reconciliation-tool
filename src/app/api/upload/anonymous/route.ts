@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { storeTemporaryResults, cleanupExpiredResults } from '@/lib/temporaryStorage';
+import Papa from 'papaparse';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -18,100 +19,127 @@ interface Transaction {
 }
 
 function parseCSV(csvContent: string): Transaction[] {
-  const lines = csvContent.split('\n');
+  console.log('Starting CSV parsing with Papa Parse...');
+  
   const transactions: Transaction[] = [];
   
-  console.log('CSV lines:', lines.length);
-  console.log('First few lines:', lines.slice(0, 3));
-  
-  // Try to detect header row and column mapping
-  let startRow = 1;
-  let dateIndex = -1;
-  let amountIndex = -1;
-  let descriptionIndex = -1;
-  
-  const firstLine = lines[0]?.toLowerCase() || '';
-  console.log('First line:', firstLine);
-  
-  if (firstLine.includes('date') || firstLine.includes('amount') || firstLine.includes('description')) {
-    startRow = 1; // Skip header
-    
-    // Map column positions
-    const headerFields = parseCSVLine(lines[0]);
-    console.log('Header fields:', headerFields);
-    
-    headerFields.forEach((field, index) => {
-      const lowerField = field.toLowerCase();
-      if (lowerField.includes('date')) dateIndex = index;
-      if (lowerField.includes('amount') || lowerField.includes('value') || lowerField.includes('total')) amountIndex = index;
-      if (lowerField.includes('description') || lowerField.includes('memo') || lowerField.includes('note')) descriptionIndex = index;
+  try {
+    // Use Papa Parse for robust CSV parsing
+    const results = Papa.parse(csvContent, {
+      header: true,
+      skipEmptyLines: true,
+      dynamicTyping: false,
+      transform: (value: string) => value?.trim() || '',
     });
     
-    console.log('Column mapping - Date:', dateIndex, 'Amount:', amountIndex, 'Description:', descriptionIndex);
-  } else {
-    startRow = 0; // No header, use default positions
-    dateIndex = 0;
-    amountIndex = 1;
-    descriptionIndex = 2;
-  }
-  
-  for (let i = startRow; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
+    console.log('Papa Parse results:', {
+      data: results.data.length,
+      errors: results.errors.length,
+      meta: results.meta
+    });
     
-    const fields = parseCSVLine(line);
-    console.log(`Line ${i}:`, fields);
+    if (results.errors.length > 0) {
+      console.warn('Papa Parse errors:', results.errors);
+    }
     
-    if (fields.length >= 2) {
-      // Extract data using column mapping
-      const date = dateIndex >= 0 ? fields[dateIndex] || '' : '';
-      const amountStr = amountIndex >= 0 ? fields[amountIndex] || '' : '';
-      const description = descriptionIndex >= 0 ? fields[descriptionIndex] || 'Unknown Transaction' : 'Unknown Transaction';
-      
-      // Parse amount
-      const amount = parseFloat(amountStr.replace(/[^-\d.]/g, ''));
-      console.log(`Parsed amount: ${amount} from "${amountStr}"`);
-      
-      // Add transaction if we have valid amount
-      if (!isNaN(amount) && amount !== 0) {
+    // Auto-detect column mapping
+    const columns = results.meta.fields || [];
+    console.log('Detected columns:', columns);
+    
+    let dateField = '';
+    let amountField = '';
+    let descriptionField = '';
+    
+    // Smart column detection
+    columns.forEach(col => {
+      const lowerCol = col.toLowerCase();
+      if (!dateField && (lowerCol.includes('date') || lowerCol.includes('transaction date'))) {
+        dateField = col;
+      }
+      if (!amountField && (lowerCol.includes('amount') || lowerCol.includes('value') || lowerCol.includes('total') || lowerCol.includes('debit') || lowerCol.includes('credit'))) {
+        amountField = col;
+      }
+      if (!descriptionField && (lowerCol.includes('description') || lowerCol.includes('memo') || lowerCol.includes('note') || lowerCol.includes('details') || lowerCol.includes('reference'))) {
+        descriptionField = col;
+      }
+    });
+    
+    // Fallback to first 3 columns if detection fails
+    if (!dateField && columns.length > 0) dateField = columns[0];
+    if (!amountField && columns.length > 1) amountField = columns[1];
+    if (!descriptionField && columns.length > 2) descriptionField = columns[2];
+    
+    console.log('Column mapping:', { dateField, amountField, descriptionField });
+    
+    // Process each row
+    results.data.forEach((row: any, index: number) => {
+      try {
+        const date = row[dateField] || '';
+        const amountStr = row[amountField] || '';
+        const description = row[descriptionField] || 'Transaction';
+        
+        // Clean and parse amount
+        const cleanAmount = amountStr.toString().replace(/[^-\d.,]/g, '').replace(',', '');
+        const amount = parseFloat(cleanAmount);
+        
+        // Skip if no valid amount
+        if (isNaN(amount) || amount === 0) {
+          return;
+        }
+        
+        // Clean description
+        const cleanDescription = description.toString().substring(0, 200).trim();
+        
+        // Parse date (try multiple formats)
+        let parsedDate = '';
+        if (date) {
+          const dateStr = date.toString();
+          // Try common date formats
+          const formats = [
+            /(\d{4}-\d{2}-\d{2})/, // YYYY-MM-DD
+            /(\d{2}\/\d{2}\/\d{4})/, // MM/DD/YYYY
+            /(\d{2}-\d{2}-\d{4})/, // MM-DD-YYYY
+            /(\d{1,2}\/\d{1,2}\/\d{4})/, // M/D/YYYY
+          ];
+          
+          for (const format of formats) {
+            const match = dateStr.match(format);
+            if (match) {
+              parsedDate = match[1];
+              break;
+            }
+          }
+          
+          if (!parsedDate) {
+            parsedDate = new Date().toISOString().split('T')[0];
+          }
+        } else {
+          parsedDate = new Date().toISOString().split('T')[0];
+        }
+        
         transactions.push({
-          id: `txn_${i}_${Date.now()}`,
+          id: `txn_${index}_${Date.now()}`,
           amount,
-          description: description.substring(0, 100),
-          date: date || new Date().toISOString().split('T')[0],
-          type: 'Unknown',
+          description: cleanDescription,
+          date: parsedDate,
+          type: amount > 0 ? 'Credit' : 'Debit',
           reference: '',
         });
-        console.log(`Added transaction: $${amount} - ${description}`);
+        
+      } catch (rowError) {
+        console.warn(`Error processing row ${index}:`, rowError);
       }
-    }
+    });
+    
+  } catch (error) {
+    console.error('Papa Parse error:', error);
+    throw new Error('Failed to parse CSV file');
   }
   
-  console.log(`Total transactions parsed: ${transactions.length}`);
+  console.log(`Successfully parsed ${transactions.length} transactions`);
   return transactions;
 }
 
-function parseCSVLine(line: string): string[] {
-  const fields: string[] = [];
-  let current = '';
-  let inQuotes = false;
-  
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    
-    if (char === '"') {
-      inQuotes = !inQuotes;
-    } else if (char === ',' && !inQuotes) {
-      fields.push(current.trim());
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-  
-  fields.push(current.trim());
-  return fields;
-}
 
 function findDuplicates(transactions: Transaction[]): Transaction[] {
   const duplicates: Transaction[] = [];
@@ -168,10 +196,31 @@ export async function POST(request: NextRequest) {
     
     console.log('File received:', file.name, file.size, 'bytes');
     
-    if (!file.name.toLowerCase().endsWith('.csv')) {
+    // Check file type (more flexible)
+    const fileName = file.name.toLowerCase();
+    const validExtensions = ['.csv', '.txt'];
+    const isValidFile = validExtensions.some(ext => fileName.endsWith(ext));
+    
+    if (!isValidFile) {
       console.log('Invalid file type:', file.name);
       return NextResponse.json(
-        { error: 'File must be a CSV file' },
+        { error: 'File must be a CSV or TXT file' },
+        { status: 400 }
+      );
+    }
+    
+    // Check file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: 'File too large. Maximum size is 10MB' },
+        { status: 400 }
+      );
+    }
+    
+    // Check if file is empty
+    if (file.size === 0) {
+      return NextResponse.json(
+        { error: 'File is empty' },
         { status: 400 }
       );
     }
@@ -187,7 +236,16 @@ export async function POST(request: NextRequest) {
     if (transactions.length === 0) {
       console.log('No valid transactions found');
       return NextResponse.json(
-        { error: 'No valid transactions found in CSV file. Please check that your CSV has columns for date, amount, and description.' },
+        { 
+          error: 'No valid transactions found in your file. Please ensure your CSV has:',
+          details: [
+            '• Date column (Date, Transaction Date, etc.)',
+            '• Amount column (Amount, Value, Total, Debit, Credit, etc.)',
+            '• Description column (Description, Memo, Details, etc.)',
+            '• Valid numeric amounts (not empty or zero)'
+          ],
+          suggestion: 'Download our sample CSV to see the correct format'
+        },
         { status: 400 }
       );
     }

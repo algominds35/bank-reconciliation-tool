@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertCircle, Loader2, Download } from 'lucide-react';
 import ResultsPreview from './ResultsPreview';
 import EmailModal from './EmailModal';
 import { useToast } from '@/hooks/use-toast';
@@ -154,7 +154,7 @@ export default function CSVDropZone() {
         <input
           id="csv-upload"
           type="file"
-          accept=".csv"
+          accept=".csv,.txt"
           onChange={handleFileSelect}
           className="hidden"
           disabled={isProcessing}
@@ -225,9 +225,20 @@ export default function CSVDropZone() {
                 <p className="text-sm text-slate-600 mb-2">
                   or click to browse your files
                 </p>
-                <div className="flex items-center justify-center gap-2 text-xs text-slate-500">
-                  <FileText className="h-3 w-3" />
-                  <span>CSV files only</span>
+                <div className="flex items-center justify-center gap-4 text-xs text-slate-500">
+                  <div className="flex items-center gap-1">
+                    <FileText className="h-3 w-3" />
+                    <span>CSV files only • Max 10MB</span>
+                  </div>
+                  <a 
+                    href="/sample-bank-transactions.csv" 
+                    download="sample-bank-transactions.csv"
+                    className="flex items-center gap-1 text-[#F45B49] hover:underline"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Download className="h-3 w-3" />
+                    <span>Download sample CSV</span>
+                  </a>
                 </div>
               </div>
             </motion.div>
