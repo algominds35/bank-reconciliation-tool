@@ -21,6 +21,111 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Papa from 'papaparse'
 import jsPDF from 'jspdf'
+
+// Function to detect complex multi-month report format
+function isComplexReportFormat(csvContent: string): boolean {
+  const lines = csvContent.split('\n');
+  
+  // Look for month headers in the first few lines
+  const monthHeaders = ['APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER', 'JANUARY', 'FEBRUARY', 'MARCH'];
+  
+  // Check if we have multiple month headers in the first 5 lines
+  let monthHeaderCount = 0;
+  for (let i = 0; i < Math.min(5, lines.length); i++) {
+    const line = lines[i].toUpperCase();
+    monthHeaders.forEach(month => {
+      if (line.includes(month)) {
+        monthHeaderCount++;
+      }
+    });
+  }
+  
+  // Also check for typical report patterns
+  const hasSummaryRows = csvContent.includes('PUBLIC') || csvContent.includes('PRIVATE') || csvContent.includes('TOTAL');
+  const hasEmployeePattern = /\w+,\s*\w+\s*\d+/.test(csvContent); // Name, Name Number pattern
+  
+  return monthHeaderCount >= 2 || (hasSummaryRows && hasEmployeePattern);
+}
+
+// Function to parse complex multi-month report format
+function parseComplexReportFormat(csvContent: string): any[] {
+  console.log('Parsing complex multi-column report format...');
+  
+  const lines = csvContent.split('\n');
+  const transactions: any[] = [];
+  
+  // Month mapping
+  const monthMap: { [key: string]: number } = {
+    'JANUARY': 1, 'FEBRUARY': 2, 'MARCH': 3, 'APRIL': 4,
+    'MAY': 5, 'JUNE': 6, 'JULY': 7, 'AUGUST': 8,
+    'SEPTEMBER': 9, 'OCTOBER': 10, 'NOVEMBER': 11, 'DECEMBER': 12
+  };
+  
+  const currentYear = new Date().getFullYear();
+  
+  // Skip patterns for summary rows
+  const skipPatterns = ['PUBLIC', 'PRIVATE', 'TOTAL', 'INTERFUND', 'OOP', 'HIGHLIGHTED', 'NOT HIGHLIGHTED', 'OOP RCL'];
+  
+  // Process each line
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+    
+    // Split by tabs to get columns
+    const columns = line.split('\t').map(col => col.trim()).filter(col => col);
+    
+    // Skip lines with too few columns
+    if (columns.length < 3) continue;
+    
+    // Check if this line contains only summary data
+    const lineUpper = line.toUpperCase();
+    if (skipPatterns.some(pattern => lineUpper.includes(pattern))) {
+      continue;
+    }
+    
+    // Process each set of 3 columns (Month, Name, Amount)
+    for (let colIndex = 0; colIndex < columns.length - 2; colIndex += 3) {
+      const month = columns[colIndex];
+      const name = columns[colIndex + 1];
+      const amount = columns[colIndex + 2];
+      
+      // Validate we have all three parts
+      if (!month || !name || !amount) continue;
+      
+      // Check if month is valid
+      const monthUpper = month.toUpperCase();
+      if (!monthMap[monthUpper]) continue;
+      
+      // Check if amount is a valid number
+      const cleanAmount = parseFloat(amount.replace(/[,$]/g, ''));
+      if (isNaN(cleanAmount) || cleanAmount === 0) continue;
+      
+      // Skip if name looks like a summary row
+      const nameUpper = name.toUpperCase();
+      if (skipPatterns.some(pattern => nameUpper.includes(pattern))) continue;
+      
+      // Create date (use first day of month)
+      const monthNum = monthMap[monthUpper];
+      const date = new Date(currentYear, monthNum - 1, 1);
+      const dateStr = date.toISOString().split('T')[0];
+      
+      transactions.push({
+        id: `txn_${transactions.length}_${Date.now()}`,
+        amount: cleanAmount,
+        description: name.trim(),
+        date: dateStr,
+        type: cleanAmount > 0 ? 'Credit' : 'Debit',
+        reference: '',
+        category: '',
+      });
+      
+      console.log(`Extracted transaction: ${dateStr} | ${name} | $${cleanAmount}`);
+    }
+  }
+  
+  console.log(`Successfully parsed ${transactions.length} transactions from complex multi-column report format`);
+  return transactions;
+}
 import { 
   Upload, 
   Download, 
@@ -541,6 +646,12 @@ export default function Dashboard() {
           // Smart column detection for dashboard uploads
           const columns = Object.keys(firstRow);
           console.log('Dashboard CSV columns:', columns);
+          
+          // Check if this is a complex multi-month report format
+          if (isComplexReportFormat(csvContent)) {
+            console.log('Detected complex report format - using custom parser');
+            return parseComplexReportFormat(csvContent);
+          }
           
           let dateField = '';
           let descriptionField = '';
