@@ -40,21 +40,22 @@ function isComplexReportFormat(csvContent: string): boolean {
     });
   }
   
-  // Also check for typical report patterns
-  const hasSummaryRows = csvContent.includes('PUBLIC') || csvContent.includes('PRIVATE') || csvContent.includes('TOTAL');
-  const hasEmployeePattern = /\w+,\s*\w+\s*\d+/.test(csvContent); // Name, Name Number pattern
+  // Check for comma-separated format with quoted names
+  const hasQuotedNames = csvContent.includes('"') && csvContent.includes(',');
+  const hasSummaryRows = csvContent.includes('PUBLIC') || csvContent.includes('PRIVATE') || csvContent.includes('TOTAL ALL') || csvContent.includes('INTERFUND');
+  const hasEmployeePattern = /"[^"]+,\s*[^"]+"/.test(csvContent); // "Name, Name" pattern
   
-  return monthHeaderCount >= 2 || (hasSummaryRows && hasEmployeePattern);
+  return monthHeaderCount >= 2 || (hasSummaryRows && hasEmployeePattern && hasQuotedNames);
 }
 
 // Function to parse complex multi-month report format
 function parseComplexReportFormat(csvContent: string): any[] {
-  console.log('Parsing complex multi-column report format...');
+  console.log('Parsing complex comma-separated multi-month report format...');
   
   const lines = csvContent.split('\n');
   const transactions: any[] = [];
   
-  // Month mapping
+  // Month mapping - added July and August
   const monthMap: { [key: string]: number } = {
     'JANUARY': 1, 'FEBRUARY': 2, 'MARCH': 3, 'APRIL': 4,
     'MAY': 5, 'JUNE': 6, 'JULY': 7, 'AUGUST': 8,
@@ -63,16 +64,20 @@ function parseComplexReportFormat(csvContent: string): any[] {
   
   const currentYear = new Date().getFullYear();
   
-  // Skip patterns for summary rows
-  const skipPatterns = ['PUBLIC', 'PRIVATE', 'TOTAL', 'INTERFUND', 'OOP', 'HIGHLIGHTED', 'NOT HIGHLIGHTED', 'OOP RCL'];
+  // Expanded skip patterns for all summary types
+  const skipPatterns = [
+    'PUBLIC', 'PRIVATE', 'TOTAL', 'INTERFUND', 'OOP', 'HIGHLIGHTED', 
+    'NOT HIGHLIGHTED', 'OOP RCL', 'TOTAL ALL', 'TOTAL GL', 'OOP EXPENSES',
+    'SPIN', 'CONV SUB', 'HIGHLIGHTED = PAID', 'NOT HIGHLIGJTED = ROLL FORWARD'
+  ];
   
   // Process each line
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
-    if (!line) continue;
+    if (!line || line === ',' || line === ',,') continue;
     
-    // Split by tabs to get columns
-    const columns = line.split('\t').map(col => col.trim()).filter(col => col);
+    // Split by commas and clean up
+    const columns = line.split(',').map(col => col.trim().replace(/"/g, '')).filter(col => col);
     
     // Skip lines with too few columns
     if (columns.length < 3) continue;
@@ -96,13 +101,17 @@ function parseComplexReportFormat(csvContent: string): any[] {
       const monthUpper = month.toUpperCase();
       if (!monthMap[monthUpper]) continue;
       
-      // Check if amount is a valid number
-      const cleanAmount = parseFloat(amount.replace(/[,$]/g, ''));
+      // Check if amount is a valid number (handle negative amounts in parentheses)
+      let amountStr = amount.replace(/[,$]/g, '').replace(/\(/g, '-').replace(/\)/g, '');
+      const cleanAmount = parseFloat(amountStr);
       if (isNaN(cleanAmount) || cleanAmount === 0) continue;
       
       // Skip if name looks like a summary row
       const nameUpper = name.toUpperCase();
       if (skipPatterns.some(pattern => nameUpper.includes(pattern))) continue;
+      
+      // Skip if name is empty or just spaces
+      if (!name.trim()) continue;
       
       // Create date (use first day of month)
       const monthNum = monthMap[monthUpper];
@@ -123,7 +132,7 @@ function parseComplexReportFormat(csvContent: string): any[] {
     }
   }
   
-  console.log(`Successfully parsed ${transactions.length} transactions from complex multi-column report format`);
+  console.log(`Successfully parsed ${transactions.length} transactions from complex comma-separated report format`);
   return transactions;
 }
 import { 
