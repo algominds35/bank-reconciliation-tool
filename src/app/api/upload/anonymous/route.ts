@@ -156,47 +156,53 @@ function processParsedResults(results: any): Transaction[] {
   let amountField = '';
   let descriptionField = '';
   
-  // Smart column detection - expanded to handle more formats
-  columns.forEach(col => {
-    const lowerCol = col.toLowerCase();
-    
-    // Date field detection (more variations)
-    if (!dateField && (
-      lowerCol.includes('date') || 
-      lowerCol.includes('posted dt') ||
-      lowerCol.includes('transaction date') ||
-      lowerCol.includes('doc dt') ||
-      lowerCol.includes('effective date')
-    )) {
-      dateField = col;
-    }
-    
-    // Amount field detection (more variations)
-    if (!amountField && (
-      lowerCol.includes('amount') || 
-      lowerCol.includes('txn amt') ||
-      lowerCol.includes('value') || 
-      lowerCol.includes('total') || 
-      lowerCol.includes('debit') || 
-      lowerCol.includes('credit') ||
-      lowerCol.includes('balance')
-    )) {
-      amountField = col;
-    }
-    
-    // Description field detection (more variations)
-    if (!descriptionField && (
-      lowerCol.includes('description') || 
-      lowerCol.includes('memo') || 
-      lowerCol.includes('note') || 
-      lowerCol.includes('details') || 
-      lowerCol.includes('reference') ||
-      lowerCol.includes('doc') ||
-      lowerCol.includes('memo/description')
-    )) {
-      descriptionField = col;
-    }
-  });
+    // Smart column detection - expanded to handle more formats
+    columns.forEach(col => {
+      const lowerCol = col.toLowerCase();
+      
+      // Date field detection (more variations)
+      if (!dateField && (
+        lowerCol.includes('date') || 
+        lowerCol.includes('posted dt') ||
+        lowerCol.includes('transaction date') ||
+        lowerCol.includes('doc dt') ||
+        lowerCol.includes('effective date') ||
+        lowerCol.includes('posted') ||
+        lowerCol === 'dt'
+      )) {
+        dateField = col;
+      }
+      
+      // Amount field detection (more variations)
+      if (!amountField && (
+        lowerCol.includes('amount') || 
+        lowerCol.includes('txn amt') ||
+        lowerCol.includes('value') || 
+        lowerCol.includes('total') || 
+        lowerCol.includes('debit') || 
+        lowerCol.includes('credit') ||
+        lowerCol.includes('balance') ||
+        lowerCol === 'amt' ||
+        lowerCol === 'txn'
+      )) {
+        amountField = col;
+      }
+      
+      // Description field detection (more variations)
+      if (!descriptionField && (
+        lowerCol.includes('description') || 
+        lowerCol.includes('memo') || 
+        lowerCol.includes('note') || 
+        lowerCol.includes('details') || 
+        lowerCol.includes('reference') ||
+        lowerCol.includes('doc') ||
+        lowerCol.includes('memo/description') ||
+        lowerCol.includes('memo/') ||
+        lowerCol === 'memo'
+      )) {
+        descriptionField = col;
+      }
+    });
   
   // Fallback to first 3 columns if detection fails
   if (!dateField && columns.length > 0) dateField = columns[0];
