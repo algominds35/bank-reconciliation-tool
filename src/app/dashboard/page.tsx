@@ -946,7 +946,8 @@ export default function Dashboard() {
             // Fetch the latest transactions and run matching
             setTimeout(async () => {
               await fetchTransactions()
-              const latestTransactions = transactions.filter(t => t.type === 'bank')
+              // Run matching on all transactions since we don't have type filtering
+              const latestTransactions = transactions.filter(t => t.amount && t.description)
               if (latestTransactions.length > 0) {
                 await runSingleFileMatching(latestTransactions)
               }
