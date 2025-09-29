@@ -621,6 +621,9 @@ export default function Dashboard() {
     console.log('Starting file upload:', file.name, 'Type:', transactionType)
     setUploading(true)
     
+    // Read file content for complex format detection
+    const fileContent = await file.text();
+    
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
@@ -628,6 +631,12 @@ export default function Dashboard() {
         console.log('CSV parsing completed:', results)
         
         try {
+          // Check if this is a complex multi-month report format FIRST
+          if (isComplexReportFormat(fileContent)) {
+            console.log('Detected complex report format - using custom parser');
+            return parseComplexReportFormat(fileContent);
+          }
+          
           // Check if CSV has data
           if (!results.data || results.data.length === 0) {
             throw new Error('CSV file is empty or has no valid data')
@@ -646,12 +655,6 @@ export default function Dashboard() {
           // Smart column detection for dashboard uploads
           const columns = Object.keys(firstRow);
           console.log('Dashboard CSV columns:', columns);
-          
-          // Check if this is a complex multi-month report format
-          if (isComplexReportFormat(csvContent)) {
-            console.log('Detected complex report format - using custom parser');
-            return parseComplexReportFormat(csvContent);
-          }
           
           let dateField = '';
           let descriptionField = '';
