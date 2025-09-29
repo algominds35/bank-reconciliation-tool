@@ -48,6 +48,22 @@ function isComplexReportFormat(csvContent: string): boolean {
   return monthHeaderCount >= 2 || (hasSummaryRows && hasEmployeePattern && hasQuotedNames);
 }
 
+// Function to clean messy CSV data with double quotes
+function cleanMessyCSV(csvContent: string): string {
+  console.log('Cleaning messy CSV data...');
+  
+  // Replace double quotes with single quotes
+  let cleaned = csvContent.replace(/""/g, '"');
+  
+  // Fix common CSV issues
+  cleaned = cleaned.replace(/,\s*"/g, ',"'); // Remove spaces before quotes
+  cleaned = cleaned.replace(/"\s*,/g, '",'); // Remove spaces after quotes
+  cleaned = cleaned.replace(/,\s*,/g, ',,'); // Fix empty fields
+  
+  console.log('CSV cleaning completed');
+  return cleaned;
+}
+
 // Function to parse complex multi-month report format
 function parseComplexReportFormat(csvContent: string): any[] {
   console.log('Parsing complex comma-separated multi-month report format...');
@@ -631,7 +647,14 @@ export default function Dashboard() {
     setUploading(true)
     
     // Read file content for complex format detection
-    const fileContent = await file.text();
+    let fileContent = await file.text();
+    
+    // Check if this is messy CSV data that needs cleaning
+    const hasDoubleQuotes = fileContent.includes('""');
+    if (hasDoubleQuotes) {
+      console.log('Detected messy CSV with double quotes - cleaning data');
+      fileContent = cleanMessyCSV(fileContent);
+    }
     
     Papa.parse(file, {
       header: true,
