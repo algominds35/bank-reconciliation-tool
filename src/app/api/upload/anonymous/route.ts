@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { storeTemporaryResults, cleanupExpiredResults } from '@/lib/temporaryStorage';
 import Papa from 'papaparse';
+import * as XLSX from 'xlsx';
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -16,6 +17,27 @@ interface Transaction {
   date: string;
   type?: string;
   reference?: string;
+}
+
+// Function to convert Excel file to CSV string
+async function convertExcelToCSV(file: File): Promise<string> {
+  try {
+    const buffer = await file.arrayBuffer();
+    const workbook = XLSX.read(buffer, { type: 'buffer' });
+    
+    // Get the first worksheet
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+    
+    // Convert to CSV
+    const csvString = XLSX.utils.sheet_to_csv(worksheet);
+    
+    console.log('Excel file converted to CSV:', csvString.length, 'characters');
+    return csvString;
+  } catch (error) {
+    console.error('Error converting Excel to CSV:', error);
+    throw new Error('Failed to convert Excel file to CSV format');
+  }
 }
 
 function parseCSV(csvContent: string): Transaction[] {
@@ -196,15 +218,15 @@ export async function POST(request: NextRequest) {
     
     console.log('File received:', file.name, file.size, 'bytes');
     
-    // Check file type (more flexible)
+    // Check file type (support CSV, TXT, and Excel files)
     const fileName = file.name.toLowerCase();
-    const validExtensions = ['.csv', '.txt'];
+    const validExtensions = ['.csv', '.txt', '.xlsx', '.xls'];
     const isValidFile = validExtensions.some(ext => fileName.endsWith(ext));
     
     if (!isValidFile) {
       console.log('Invalid file type:', file.name);
       return NextResponse.json(
-        { error: 'File must be a CSV or TXT file' },
+        { error: 'File must be a CSV, TXT, or Excel file (.xlsx, .xls)' },
         { status: 400 }
       );
     }
@@ -225,9 +247,18 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Read and parse CSV file
-    const csvContent = await file.text();
-    console.log('CSV content length:', csvContent.length);
+    // Read and parse file (CSV or Excel)
+    let csvContent: string;
+    
+    if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+      console.log('Processing Excel file:', file.name);
+      csvContent = await convertExcelToCSV(file);
+    } else {
+      console.log('Processing CSV/TXT file:', file.name);
+      csvContent = await file.text();
+    }
+    
+    console.log('File content length:', csvContent.length);
     console.log('First 200 chars:', csvContent.substring(0, 200));
     
     const transactions = parseCSV(csvContent);
