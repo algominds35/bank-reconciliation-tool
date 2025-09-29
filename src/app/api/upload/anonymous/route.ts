@@ -22,21 +22,61 @@ interface Transaction {
 // Function to convert Excel file to CSV string
 async function convertExcelToCSV(file: File): Promise<string> {
   try {
+    console.log('Converting Excel file:', file.name, file.size, 'bytes');
+    
     const buffer = await file.arrayBuffer();
-    const workbook = XLSX.read(buffer, { type: 'buffer' });
+    console.log('Buffer size:', buffer.byteLength);
+    
+    if (buffer.byteLength === 0) {
+      throw new Error('Excel file appears to be empty');
+    }
+    
+    // Read Excel file with better error handling
+    const workbook = XLSX.read(buffer, { 
+      type: 'buffer',
+      cellDates: true,
+      cellNF: false,
+      cellText: false
+    });
+    
+    console.log('Workbook sheets:', workbook.SheetNames);
+    
+    if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+      throw new Error('No worksheets found in Excel file');
+    }
     
     // Get the first worksheet
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
     
-    // Convert to CSV
-    const csvString = XLSX.utils.sheet_to_csv(worksheet);
+    if (!worksheet) {
+      throw new Error('First worksheet is empty or corrupted');
+    }
+    
+    console.log('Worksheet range:', worksheet['!ref']);
+    
+    // Convert to CSV with proper options
+    const csvString = XLSX.utils.sheet_to_csv(worksheet, {
+      blankrows: false,
+      skipHidden: true
+    });
     
     console.log('Excel file converted to CSV:', csvString.length, 'characters');
+    console.log('First 200 chars of CSV:', csvString.substring(0, 200));
+    
+    if (csvString.length === 0) {
+      throw new Error('Excel file appears to be empty after conversion');
+    }
+    
+    // Validate that we have actual CSV content, not binary garbage
+    if (csvString.includes('PK=') || csvString.includes('<?xml') || csvString.includes('drawing')) {
+      throw new Error('Excel file appears to be corrupted or contains binary data');
+    }
+    
     return csvString;
   } catch (error) {
     console.error('Error converting Excel to CSV:', error);
-    throw new Error('Failed to convert Excel file to CSV format');
+    throw new Error(`Failed to convert Excel file: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
