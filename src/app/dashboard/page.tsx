@@ -21,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Papa from 'papaparse'
 import jsPDF from 'jspdf'
+import { SingleFileMatcher } from '@/lib/single-file-matcher'
 
 // Function to detect complex multi-month report format
 function isComplexReportFormat(csvContent: string): boolean {
@@ -359,6 +360,8 @@ export default function Dashboard() {
   const [lastSyncTime, setLastSyncTime] = useState<string | null>(null)
   const [nextSyncTime, setNextSyncTime] = useState<string | null>(null)
   const [clearingDemoData, setClearingDemoData] = useState(false)
+  const [singleFileMatches, setSingleFileMatches] = useState<any[]>([])
+  const [showSingleFileMatches, setShowSingleFileMatches] = useState(false)
   
 
   
@@ -650,6 +653,25 @@ export default function Dashboard() {
     }
   }
 
+  // Single-file auto-matching function
+  const runSingleFileMatching = async (transactions: any[]) => {
+    console.log('Running single-file auto-matching...')
+    
+    try {
+      const matcher = new SingleFileMatcher()
+      const matches = matcher.findMatches(transactions)
+      
+      console.log('Single-file matches found:', matches.length)
+      setSingleFileMatches(matches)
+      setShowSingleFileMatches(true)
+      
+      return matches
+    } catch (error) {
+      console.error('Error in single-file matching:', error)
+      return []
+    }
+  }
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>, transactionType: 'bank' | 'bookkeeping') => {
     const file = event.target.files?.[0]
     if (!file) return
@@ -918,6 +940,19 @@ export default function Dashboard() {
           
           alert(`Error uploading transactions: ${errorMessage}`)
         } finally {
+          // Run single-file auto-matching for bank transactions
+          if (transactionType === 'bank' && processedCount > 0) {
+            console.log('Running single-file matching for bank transactions...')
+            // Fetch the latest transactions and run matching
+            setTimeout(async () => {
+              await fetchTransactions()
+              const latestTransactions = transactions.filter(t => t.type === 'bank')
+              if (latestTransactions.length > 0) {
+                await runSingleFileMatching(latestTransactions)
+              }
+            }, 1000)
+          }
+          
           setUploading(false)
           // Reset file input
           event.target.value = ''
@@ -1474,6 +1509,57 @@ export default function Dashboard() {
           </TabsList>
 
           <TabsContent value="transactions" className="space-y-6">
+            {/* Single-File Auto-Matching Results */}
+            {showSingleFileMatches && singleFileMatches.length > 0 && (
+              <Card className="border-blue-200 bg-blue-50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-blue-800">
+                    <Zap className="h-5 w-5" />
+                    Single-File Auto-Matching Results
+                  </CardTitle>
+                  <CardDescription>
+                    Found {singleFileMatches.length} smart matches in your bank statement
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {singleFileMatches.map((match, index) => (
+                    <div key={match.id} className="border rounded-lg p-4 bg-white">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <Badge variant={match.type === 'duplicate' ? 'destructive' : match.type === 'pattern' ? 'default' : 'secondary'}>
+                            {match.type === 'duplicate' ? 'Duplicate' : match.type === 'pattern' ? 'Pattern' : 'Category'}
+                          </Badge>
+                          <Badge variant="outline">
+                            {Math.round(match.confidence * 100)}% confidence
+                          </Badge>
+                        </div>
+                        <Button size="sm" variant="outline">
+                          Apply
+                        </Button>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-2">{match.reason}</p>
+                      {match.suggestion && (
+                        <p className="text-sm font-medium text-blue-700">{match.suggestion}</p>
+                      )}
+                      <div className="mt-2">
+                        <p className="text-xs text-gray-500">
+                          {match.transactions.length} transactions affected
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="flex gap-2">
+                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                      Apply All Suggestions
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={() => setShowSingleFileMatches(false)}>
+                      Dismiss
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Dashboard Overview */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <Card>
