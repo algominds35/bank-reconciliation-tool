@@ -594,10 +594,18 @@ export default function Dashboard() {
             }
           });
           
-          // Fallback to first 3 columns if detection fails
-          if (!dateField && columns.length > 0) dateField = columns[0];
-          if (!descriptionField && columns.length > 2) descriptionField = columns[2];
-          if (!amountField && columns.length > 1) amountField = columns[1];
+          // DIRECT FIX: Handle the client's specific format
+          if (columns.includes('Posted dt.') && columns.includes('Memo/Description') && columns.includes('Txn amt')) {
+            dateField = 'Posted dt.';
+            descriptionField = 'Memo/Description';
+            amountField = 'Txn amt';
+            console.log('DIRECT FIX: Using client format mapping');
+          } else {
+            // Fallback to first 3 columns if detection fails
+            if (!dateField && columns.length > 0) dateField = columns[0];
+            if (!descriptionField && columns.length > 2) descriptionField = columns[2];
+            if (!amountField && columns.length > 1) amountField = columns[1];
+          }
           
           console.log('Dashboard column mapping:', { dateField, descriptionField, amountField });
           console.log('DEBUG: Available columns:', columns);
