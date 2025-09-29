@@ -24,14 +24,16 @@ import jsPDF from 'jspdf'
 
 // Function to detect complex multi-month report format
 function isComplexReportFormat(csvContent: string): boolean {
-  const lines = csvContent.split('\n');
+  console.log('Checking if complex format...');
   
-  // Look for month headers in the first few lines
+  // Look for multiple months in ANY line (not just first 5)
   const monthHeaders = ['APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER', 'JANUARY', 'FEBRUARY', 'MARCH'];
   
-  // Check if we have multiple month headers in the first 5 lines
   let monthHeaderCount = 0;
-  for (let i = 0; i < Math.min(5, lines.length); i++) {
+  const lines = csvContent.split('\n');
+  
+  // Check ALL lines for month headers
+  for (let i = 0; i < lines.length; i++) {
     const line = lines[i].toUpperCase();
     monthHeaders.forEach(month => {
       if (line.includes(month)) {
@@ -40,12 +42,14 @@ function isComplexReportFormat(csvContent: string): boolean {
     });
   }
   
-  // Check for comma-separated format with quoted names
-  const hasQuotedNames = csvContent.includes('"') && csvContent.includes(',');
+  // Check for quoted employee names pattern
+  const hasQuotedNames = /"[^"]+,\s*[^"]+"/.test(csvContent);
   const hasSummaryRows = csvContent.includes('PUBLIC') || csvContent.includes('PRIVATE') || csvContent.includes('TOTAL ALL') || csvContent.includes('INTERFUND');
-  const hasEmployeePattern = /"[^"]+,\s*[^"]+"/.test(csvContent); // "Name, Name" pattern
   
-  return monthHeaderCount >= 2 || (hasSummaryRows && hasEmployeePattern && hasQuotedNames);
+  console.log('Month count:', monthHeaderCount, 'Has quoted names:', hasQuotedNames, 'Has summary rows:', hasSummaryRows);
+  
+  // If we have multiple months OR quoted names with summary rows, it's complex
+  return monthHeaderCount >= 3 || (hasSummaryRows && hasQuotedNames);
 }
 
 // Function to clean messy CSV data with double quotes
