@@ -72,16 +72,44 @@ function parseCSV(csvContent: string): Transaction[] {
     let amountField = '';
     let descriptionField = '';
     
-    // Smart column detection
+    // Smart column detection - expanded to handle more formats
     columns.forEach(col => {
       const lowerCol = col.toLowerCase();
-      if (!dateField && (lowerCol.includes('date') || lowerCol.includes('transaction date'))) {
+      
+      // Date field detection (more variations)
+      if (!dateField && (
+        lowerCol.includes('date') || 
+        lowerCol.includes('posted dt') ||
+        lowerCol.includes('transaction date') ||
+        lowerCol.includes('doc dt') ||
+        lowerCol.includes('effective date')
+      )) {
         dateField = col;
       }
-      if (!amountField && (lowerCol.includes('amount') || lowerCol.includes('value') || lowerCol.includes('total') || lowerCol.includes('debit') || lowerCol.includes('credit'))) {
+      
+      // Amount field detection (more variations)
+      if (!amountField && (
+        lowerCol.includes('amount') || 
+        lowerCol.includes('txn amt') ||
+        lowerCol.includes('value') || 
+        lowerCol.includes('total') || 
+        lowerCol.includes('debit') || 
+        lowerCol.includes('credit') ||
+        lowerCol.includes('balance')
+      )) {
         amountField = col;
       }
-      if (!descriptionField && (lowerCol.includes('description') || lowerCol.includes('memo') || lowerCol.includes('note') || lowerCol.includes('details') || lowerCol.includes('reference'))) {
+      
+      // Description field detection (more variations)
+      if (!descriptionField && (
+        lowerCol.includes('description') || 
+        lowerCol.includes('memo') || 
+        lowerCol.includes('note') || 
+        lowerCol.includes('details') || 
+        lowerCol.includes('reference') ||
+        lowerCol.includes('doc') ||
+        lowerCol.includes('memo/description')
+      )) {
         descriptionField = col;
       }
     });
@@ -270,12 +298,13 @@ export async function POST(request: NextRequest) {
         { 
           error: 'No valid transactions found in your file. Please ensure your CSV has:',
           details: [
-            '• Date column (Date, Transaction Date, etc.)',
-            '• Amount column (Amount, Value, Total, Debit, Credit, etc.)',
-            '• Description column (Description, Memo, Details, etc.)',
+            '• Date column (Date, Posted dt., Doc dt., Transaction Date, etc.)',
+            '• Amount column (Amount, Txn amt, Value, Total, Debit, Credit, Balance, etc.)',
+            '• Description column (Description, Memo/Description, Memo, Details, Doc, etc.)',
             '• Valid numeric amounts (not empty or zero)'
           ],
-          suggestion: 'Download our sample CSV to see the correct format'
+          suggestion: 'Download our sample CSV to see the correct format',
+          detectedColumns: columns || []
         },
         { status: 400 }
       );
