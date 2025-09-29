@@ -941,7 +941,7 @@ export default function Dashboard() {
           alert(`Error uploading transactions: ${errorMessage}`)
         } finally {
           // Run single-file auto-matching for bank transactions
-          if (transactionType === 'bank' && processedCount > 0) {
+          if (transactionType === 'bank') {
             console.log('Running single-file matching for bank transactions...')
             // Fetch the latest transactions and run matching
             setTimeout(async () => {
