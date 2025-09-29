@@ -923,7 +923,7 @@ export default function Dashboard() {
           event.target.value = ''
         }
       },
-      error: (parseError) => {
+      error: (parseError: any) => {
         console.error('CSV parsing error:', parseError)
         alert(`Error reading CSV file: ${parseError.message}. Please check your file format.`)
         setUploading(false)
