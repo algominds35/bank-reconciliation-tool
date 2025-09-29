@@ -86,7 +86,40 @@ function parseCSV(csvContent: string): Transaction[] {
   const transactions: Transaction[] = [];
   
   try {
-    // Use Papa Parse for robust CSV parsing
+    // Check if this is pipe-separated data in a single column
+    const lines = csvContent.split('\n').filter(line => line.trim());
+    const firstLine = lines[0];
+    
+    if (firstLine && firstLine.includes('|') && !firstLine.includes(',')) {
+      console.log('Detected pipe-separated data, converting to CSV format');
+      
+      // Convert pipe-separated to CSV format
+      const csvLines = lines.map(line => {
+        // Remove "Row X: " prefix if present
+        const cleanLine = line.replace(/^Row \d+: /, '');
+        // Replace pipes with commas
+        return cleanLine.replace(/\|/g, ',');
+      });
+      
+      // Add header row
+      csvLines.unshift('date,description,amount,type,category');
+      
+      // Recreate CSV content
+      const newCsvContent = csvLines.join('\n');
+      console.log('Converted pipe-separated data to CSV:', newCsvContent.substring(0, 200));
+      
+      // Parse the converted CSV
+      const results = Papa.parse(newCsvContent, {
+        header: true,
+        skipEmptyLines: true,
+        dynamicTyping: false,
+        transform: (value: string) => value?.trim() || '',
+      });
+      
+      return processParsedResults(results);
+    }
+    
+    // Use Papa Parse for normal CSV parsing
     const results = Papa.parse(csvContent, {
       header: true,
       skipEmptyLines: true,
@@ -94,137 +127,143 @@ function parseCSV(csvContent: string): Transaction[] {
       transform: (value: string) => value?.trim() || '',
     });
     
-    console.log('Papa Parse results:', {
-      data: results.data.length,
-      errors: results.errors.length,
-      meta: results.meta
-    });
-    
-    if (results.errors.length > 0) {
-      console.warn('Papa Parse errors:', results.errors);
-    }
-    
-    // Auto-detect column mapping
-    const columns = results.meta.fields || [];
-    console.log('Detected columns:', columns);
-    
-    let dateField = '';
-    let amountField = '';
-    let descriptionField = '';
-    
-    // Smart column detection - expanded to handle more formats
-    columns.forEach(col => {
-      const lowerCol = col.toLowerCase();
-      
-      // Date field detection (more variations)
-      if (!dateField && (
-        lowerCol.includes('date') || 
-        lowerCol.includes('posted dt') ||
-        lowerCol.includes('transaction date') ||
-        lowerCol.includes('doc dt') ||
-        lowerCol.includes('effective date')
-      )) {
-        dateField = col;
-      }
-      
-      // Amount field detection (more variations)
-      if (!amountField && (
-        lowerCol.includes('amount') || 
-        lowerCol.includes('txn amt') ||
-        lowerCol.includes('value') || 
-        lowerCol.includes('total') || 
-        lowerCol.includes('debit') || 
-        lowerCol.includes('credit') ||
-        lowerCol.includes('balance')
-      )) {
-        amountField = col;
-      }
-      
-      // Description field detection (more variations)
-      if (!descriptionField && (
-        lowerCol.includes('description') || 
-        lowerCol.includes('memo') || 
-        lowerCol.includes('note') || 
-        lowerCol.includes('details') || 
-        lowerCol.includes('reference') ||
-        lowerCol.includes('doc') ||
-        lowerCol.includes('memo/description')
-      )) {
-        descriptionField = col;
-      }
-    });
-    
-    // Fallback to first 3 columns if detection fails
-    if (!dateField && columns.length > 0) dateField = columns[0];
-    if (!amountField && columns.length > 1) amountField = columns[1];
-    if (!descriptionField && columns.length > 2) descriptionField = columns[2];
-    
-    console.log('Column mapping:', { dateField, amountField, descriptionField });
-    
-    // Process each row
-    results.data.forEach((row: any, index: number) => {
-      try {
-        const date = row[dateField] || '';
-        const amountStr = row[amountField] || '';
-        const description = row[descriptionField] || 'Transaction';
-        
-        // Clean and parse amount
-        const cleanAmount = amountStr.toString().replace(/[^-\d.,]/g, '').replace(',', '');
-        const amount = parseFloat(cleanAmount);
-        
-        // Skip if no valid amount
-        if (isNaN(amount) || amount === 0) {
-          return;
-        }
-        
-        // Clean description
-        const cleanDescription = description.toString().substring(0, 200).trim();
-        
-        // Parse date (try multiple formats)
-        let parsedDate = '';
-        if (date) {
-          const dateStr = date.toString();
-          // Try common date formats
-          const formats = [
-            /(\d{4}-\d{2}-\d{2})/, // YYYY-MM-DD
-            /(\d{2}\/\d{2}\/\d{4})/, // MM/DD/YYYY
-            /(\d{2}-\d{2}-\d{4})/, // MM-DD-YYYY
-            /(\d{1,2}\/\d{1,2}\/\d{4})/, // M/D/YYYY
-          ];
-          
-          for (const format of formats) {
-            const match = dateStr.match(format);
-            if (match) {
-              parsedDate = match[1];
-              break;
-            }
-          }
-          
-          if (!parsedDate) {
-            parsedDate = new Date().toISOString().split('T')[0];
-          }
-        } else {
-          parsedDate = new Date().toISOString().split('T')[0];
-        }
-        
-        transactions.push({
-          id: `txn_${index}_${Date.now()}`,
-          amount,
-          description: cleanDescription,
-          date: parsedDate,
-          type: amount > 0 ? 'Credit' : 'Debit',
-          reference: '',
-        });
-        
-      } catch (rowError) {
-        console.warn(`Error processing row ${index}:`, rowError);
-      }
-    });
+    return processParsedResults(results);
     
   } catch (error) {
-    console.error('Papa Parse error:', error);
+    console.error('CSV parsing error:', error);
     throw new Error('Failed to parse CSV file');
   }
+}
+
+function processParsedResults(results: any): Transaction[] {
+  const transactions: Transaction[] = [];
+  
+  console.log('Papa Parse results:', {
+    data: results.data.length,
+    errors: results.errors.length,
+    meta: results.meta
+  });
+  
+  if (results.errors.length > 0) {
+    console.warn('Papa Parse errors:', results.errors);
+  }
+  
+  // Auto-detect column mapping
+  const columns = results.meta.fields || [];
+  console.log('Detected columns:', columns);
+  
+  let dateField = '';
+  let amountField = '';
+  let descriptionField = '';
+  
+  // Smart column detection - expanded to handle more formats
+  columns.forEach(col => {
+    const lowerCol = col.toLowerCase();
+    
+    // Date field detection (more variations)
+    if (!dateField && (
+      lowerCol.includes('date') || 
+      lowerCol.includes('posted dt') ||
+      lowerCol.includes('transaction date') ||
+      lowerCol.includes('doc dt') ||
+      lowerCol.includes('effective date')
+    )) {
+      dateField = col;
+    }
+    
+    // Amount field detection (more variations)
+    if (!amountField && (
+      lowerCol.includes('amount') || 
+      lowerCol.includes('txn amt') ||
+      lowerCol.includes('value') || 
+      lowerCol.includes('total') || 
+      lowerCol.includes('debit') || 
+      lowerCol.includes('credit') ||
+      lowerCol.includes('balance')
+    )) {
+      amountField = col;
+    }
+    
+    // Description field detection (more variations)
+    if (!descriptionField && (
+      lowerCol.includes('description') || 
+      lowerCol.includes('memo') || 
+      lowerCol.includes('note') || 
+      lowerCol.includes('details') || 
+      lowerCol.includes('reference') ||
+      lowerCol.includes('doc') ||
+      lowerCol.includes('memo/description')
+    )) {
+      descriptionField = col;
+    }
+  });
+  
+  // Fallback to first 3 columns if detection fails
+  if (!dateField && columns.length > 0) dateField = columns[0];
+  if (!amountField && columns.length > 1) amountField = columns[1];
+  if (!descriptionField && columns.length > 2) descriptionField = columns[2];
+  
+  console.log('Column mapping:', { dateField, amountField, descriptionField });
+  
+  // Process each row
+  results.data.forEach((row: any, index: number) => {
+    try {
+      const date = row[dateField] || '';
+      const amountStr = row[amountField] || '';
+      const description = row[descriptionField] || 'Transaction';
+      
+      // Clean and parse amount
+      const cleanAmount = amountStr.toString().replace(/[^-\d.,]/g, '').replace(',', '');
+      const amount = parseFloat(cleanAmount);
+      
+      // Skip if no valid amount
+      if (isNaN(amount) || amount === 0) {
+        return;
+      }
+      
+      // Clean description
+      const cleanDescription = description.toString().substring(0, 200).trim();
+      
+      // Parse date (try multiple formats)
+      let parsedDate = '';
+      if (date) {
+        const dateStr = date.toString();
+        // Try common date formats
+        const formats = [
+          /(\d{4}-\d{2}-\d{2})/, // YYYY-MM-DD
+          /(\d{2}\/\d{2}\/\d{4})/, // MM/DD/YYYY
+          /(\d{2}-\d{2}-\d{4})/, // MM-DD-YYYY
+          /(\d{1,2}\/\d{1,2}\/\d{4})/, // M/D/YYYY
+        ];
+        
+        for (const format of formats) {
+          const match = dateStr.match(format);
+          if (match) {
+            parsedDate = match[1];
+            break;
+          }
+        }
+        
+        if (!parsedDate) {
+          parsedDate = new Date().toISOString().split('T')[0];
+        }
+      } else {
+        parsedDate = new Date().toISOString().split('T')[0];
+      }
+      
+      transactions.push({
+        id: `txn_${index}_${Date.now()}`,
+        amount,
+        description: cleanDescription,
+        date: parsedDate,
+        type: amount > 0 ? 'Credit' : 'Debit',
+        reference: '',
+      });
+      
+    } catch (rowError) {
+      console.warn(`Error processing row ${index}:`, rowError);
+    }
+  });
   
   console.log(`Successfully parsed ${transactions.length} transactions`);
   return transactions;
