@@ -60,6 +60,13 @@ function cleanMessyCSV(csvContent: string): string {
   cleaned = cleaned.replace(/"\s*,/g, '",'); // Remove spaces after quotes
   cleaned = cleaned.replace(/,\s*,/g, ',,'); // Fix empty fields
   
+  // Fix header typo (common in bank exports)
+  cleaned = cleaned.replace(/^"ate,/, '"Date,');
+  
+  // Remove trailing commas and quotes at end of lines
+  cleaned = cleaned.replace(/,\s*$/gm, '');
+  cleaned = cleaned.replace(/"\s*$/gm, '');
+  
   console.log('CSV cleaning completed');
   return cleaned;
 }
@@ -653,10 +660,13 @@ export default function Dashboard() {
     const hasDoubleQuotes = fileContent.includes('""');
     if (hasDoubleQuotes) {
       console.log('Detected messy CSV with double quotes - cleaning data');
+      console.log('Original content sample:', fileContent.substring(0, 200));
       fileContent = cleanMessyCSV(fileContent);
+      console.log('Cleaned content sample:', fileContent.substring(0, 200));
     }
     
-    Papa.parse(file, {
+    // Parse the cleaned content directly
+    Papa.parse(fileContent, {
       header: true,
       skipEmptyLines: true,
       complete: async (results) => {
