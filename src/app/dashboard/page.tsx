@@ -538,12 +538,71 @@ export default function Dashboard() {
             throw new Error('Invalid CSV format - no valid data rows found')
           }
 
-          const hasDate = firstRow.date || firstRow.Date || firstRow.DATE
-          const hasDescription = firstRow.description || firstRow.Description || firstRow.DESCRIPTION
-          const hasAmount = firstRow.amount || firstRow.Amount || firstRow.AMOUNT
+          // Smart column detection for dashboard uploads
+          const columns = Object.keys(firstRow);
+          console.log('Dashboard CSV columns:', columns);
+          
+          let dateField = '';
+          let descriptionField = '';
+          let amountField = '';
+          
+          // Enhanced column detection
+          columns.forEach((col: string) => {
+            const lowerCol = col.toLowerCase();
+            
+            // Date field detection
+            if (!dateField && (
+              lowerCol.includes('date') || 
+              lowerCol.includes('posted dt') ||
+              lowerCol.includes('transaction date') ||
+              lowerCol.includes('doc dt') ||
+              lowerCol.includes('effective date') ||
+              lowerCol.includes('posted') ||
+              lowerCol === 'dt'
+            )) {
+              dateField = col;
+            }
+            
+            // Amount field detection
+            if (!amountField && (
+              lowerCol.includes('amount') || 
+              lowerCol.includes('txn amt') ||
+              lowerCol.includes('value') || 
+              lowerCol.includes('total') || 
+              lowerCol.includes('debit') || 
+              lowerCol.includes('credit') ||
+              lowerCol.includes('balance') ||
+              lowerCol === 'amt' ||
+              lowerCol === 'txn'
+            )) {
+              amountField = col;
+            }
+            
+            // Description field detection
+            if (!descriptionField && (
+              lowerCol.includes('description') || 
+              lowerCol.includes('memo') || 
+              lowerCol.includes('note') || 
+              lowerCol.includes('details') || 
+              lowerCol.includes('reference') ||
+              lowerCol.includes('doc') ||
+              lowerCol.includes('memo/description') ||
+              lowerCol.includes('memo/') ||
+              lowerCol === 'memo'
+            )) {
+              descriptionField = col;
+            }
+          });
+          
+          // Fallback to first 3 columns if detection fails
+          if (!dateField && columns.length > 0) dateField = columns[0];
+          if (!amountField && columns.length > 1) amountField = columns[1];
+          if (!descriptionField && columns.length > 2) descriptionField = columns[2];
+          
+          console.log('Dashboard column mapping:', { dateField, descriptionField, amountField });
 
-          if (!hasDate || !hasDescription || !hasAmount) {
-            throw new Error(`CSV must have columns: date, description, amount. Found columns: ${Object.keys(firstRow).join(', ')}`)
+          if (!dateField || !descriptionField || !amountField) {
+            throw new Error(`CSV must have columns: date, description, amount. Found columns: ${columns.join(', ')}`)
           }
 
           console.log('CSV validation passed, processing rows...')
@@ -556,10 +615,10 @@ export default function Dashboard() {
               continue
             }
 
-            // Get values from row (case insensitive)
-            const date = row.date || row.Date || row.DATE
-            const description = row.description || row.Description || row.DESCRIPTION
-            const amountStr = row.amount || row.Amount || row.AMOUNT
+            // Get values from row using detected column names
+            const date = row[dateField]
+            const description = row[descriptionField]
+            const amountStr = row[amountField]
 
             if (!date || !description || !amountStr) {
               console.warn('Skipping incomplete row:', row)
@@ -663,7 +722,7 @@ export default function Dashboard() {
           } else {
             console.log('❌ No duplicates found, not storing anything')
           }
-          
+
           // Refresh the transactions list
           await fetchTransactions()
           await fetchClients()
@@ -672,7 +731,7 @@ export default function Dashboard() {
           if (duplicateCount > 0) {
             alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!\n\n🚨 Found ${duplicateCount} duplicates! Go to Smart Matching tab to review them.`)
           } else {
-            alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!`)
+          alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!`)
           }
           
         } catch (error) {

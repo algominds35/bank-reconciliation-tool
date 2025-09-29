@@ -148,9 +148,10 @@ function processParsedResults(results: any): Transaction[] {
     console.warn('Papa Parse errors:', results.errors);
   }
   
-  // Auto-detect column mapping
-  const columns = results.meta.fields || [];
-  console.log('Detected columns:', columns);
+    // Auto-detect column mapping
+    const columns = results.meta.fields || [];
+    console.log('Detected columns:', columns);
+    console.log('DEBUG: Looking for date field in columns:', columns);
   
   let dateField = '';
   let amountField = '';
