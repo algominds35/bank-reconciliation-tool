@@ -578,15 +578,15 @@ export default function Dashboard() {
               amountField = col;
             }
             
-            // Description field detection
+            // Description field detection - prioritize Memo/Description
             if (!descriptionField && (
-              lowerCol.includes('description') || 
+              lowerCol.includes('memo/description') ||  // Highest priority
               lowerCol.includes('memo') || 
+              lowerCol.includes('description') || 
               lowerCol.includes('note') || 
               lowerCol.includes('details') || 
               lowerCol.includes('reference') ||
               lowerCol.includes('doc') ||
-              lowerCol.includes('memo/description') ||
               lowerCol.includes('memo/') ||
               lowerCol === 'memo'
             )) {
@@ -596,8 +596,8 @@ export default function Dashboard() {
           
           // Fallback to first 3 columns if detection fails
           if (!dateField && columns.length > 0) dateField = columns[0];
-          if (!amountField && columns.length > 1) amountField = columns[1];
           if (!descriptionField && columns.length > 2) descriptionField = columns[2];
+          if (!amountField && columns.length > 1) amountField = columns[1];
           
           console.log('Dashboard column mapping:', { dateField, descriptionField, amountField });
 
