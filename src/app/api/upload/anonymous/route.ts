@@ -303,8 +303,7 @@ export async function POST(request: NextRequest) {
             '• Description column (Description, Memo/Description, Memo, Details, Doc, etc.)',
             '• Valid numeric amounts (not empty or zero)'
           ],
-          suggestion: 'Download our sample CSV to see the correct format',
-          detectedColumns: columns || []
+          suggestion: 'Download our sample CSV to see the correct format'
         },
         { status: 400 }
       );
