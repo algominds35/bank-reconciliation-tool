@@ -111,13 +111,13 @@ export class SingleFileMatcher {
     const patterns: SingleFileMatch[] = []
     const vendorGroups = this.groupByVendor(transactions)
     
-    for (const [vendor, vendorTransactions] of vendorGroups.entries()) {
+    for (const [vendor, vendorTransactions] of Array.from(vendorGroups.entries())) {
       if (vendorTransactions.length < 3) continue // Need at least 3 transactions to be a pattern
       
       // Group by amount to find recurring payments
       const amountGroups = this.groupByAmount(vendorTransactions)
       
-      for (const [amount, amountTransactions] of amountGroups.entries()) {
+      for (const [amount, amountTransactions] of Array.from(amountGroups.entries())) {
         if (amountTransactions.length >= 3) {
           // Check if these are regularly spaced (monthly, weekly, etc.)
           const isRegular = this.isRegularPattern(amountTransactions)
@@ -146,7 +146,7 @@ export class SingleFileMatcher {
     const suggestions: SingleFileMatch[] = []
     const vendorGroups = this.groupByVendor(transactions)
     
-    for (const [vendor, vendorTransactions] of vendorGroups.entries()) {
+    for (const [vendor, vendorTransactions] of Array.from(vendorGroups.entries())) {
       if (vendorTransactions.length < 2) continue
       
       const suggestedCategory = this.suggestCategory(vendor)
