@@ -157,7 +157,7 @@ function processParsedResults(results: any): Transaction[] {
   let descriptionField = '';
   
     // Smart column detection - expanded to handle more formats
-    columns.forEach(col => {
+    columns.forEach((col: string) => {
       const lowerCol = col.toLowerCase();
       
       // Date field detection (more variations)
