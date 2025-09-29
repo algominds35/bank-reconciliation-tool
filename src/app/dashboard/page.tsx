@@ -600,6 +600,8 @@ export default function Dashboard() {
           if (!amountField && columns.length > 1) amountField = columns[1];
           
           console.log('Dashboard column mapping:', { dateField, descriptionField, amountField });
+          console.log('DEBUG: Available columns:', columns);
+          console.log('DEBUG: First row sample:', firstRow);
 
           if (!dateField || !descriptionField || !amountField) {
             throw new Error(`CSV must have columns: date, description, amount. Found columns: ${columns.join(', ')}`)
