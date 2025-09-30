@@ -65,6 +65,25 @@ export default function QuickBooksCSVImportErrorsPage() {
           </div>
         </div>
 
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+          <h3 className="text-lg font-semibold text-blue-800 mb-3">📹 Watch: CSV Import in Action</h3>
+          <p className="text-blue-700 mb-4">
+            See exactly how to fix common CSV import errors with this step-by-step video tutorial:
+          </p>
+          <div className="aspect-video w-full max-w-2xl mx-auto">
+            <iframe 
+              width="100%" 
+              height="100%" 
+              src="https://www.youtube.com/embed/5ptuxIMUI6A" 
+              title="QuickBooks CSV Import Errors Fix Tutorial" 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen
+              className="rounded-lg"
+            ></iframe>
+          </div>
+        </div>
+
         <h2 className="text-2xl font-bold text-gray-900 mt-8 mb-4">
           Why CSV Import Errors Happen in QuickBooks
         </h2>
