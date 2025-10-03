@@ -75,30 +75,13 @@ function SignUpForm() {
       } else if (data.user) {
         console.log('Signup successful:', data.user.email)
         
+        setSuccess(true)
+        // For beta users, redirect to login page
         if (isBetaSignup) {
-          // For beta users, sign them in immediately and redirect
-          try {
-            const { error: signInError } = await supabase.auth.signInWithPassword({
-              email,
-              password,
-            })
-            
-            if (signInError) {
-              console.error('Auto signin failed:', signInError)
-              setError('Account created but auto-login failed. Please try logging in manually.')
-            } else {
-              setSuccess(true)
-              // Redirect to dashboard immediately
-              setTimeout(() => {
-                router.push('/dashboard')
-              }, 1000)
-            }
-          } catch (autoSignInError) {
-            console.error('Auto signin error:', autoSignInError)
-            setError('Account created but auto-login failed. Please try logging in manually.')
-          }
+          setTimeout(() => {
+            router.push('/auth/login?message=Account created! Please log in with your new credentials.')
+          }, 2000)
         } else {
-          setSuccess(true)
           // Redirect to dashboard after successful signup
           setTimeout(() => {
             router.push('/dashboard')
@@ -127,7 +110,10 @@ function SignUpForm() {
                 Account Created!
               </CardTitle>
               <p className="text-gray-600 mt-2">
-                Welcome to ReconcileBook! Redirecting to your dashboard...
+                {isBetaSignup 
+                  ? "Welcome to the Beta Program! Redirecting to login..."
+                  : "Welcome to ReconcileBook! Redirecting to your dashboard..."
+                }
               </p>
             </CardHeader>
             <CardContent className="text-center">
