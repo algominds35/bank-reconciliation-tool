@@ -71,27 +71,9 @@ function SignUpForm() {
           }
         })
         
-        // If signup worked, immediately try to sign them in
-        if (signUpResult.data.user && !signUpResult.error) {
-          // Try to sign in immediately
-          const signInResult = await supabase.auth.signInWithPassword({
-            email,
-            password,
-          })
-          
-          if (signInResult.data.user) {
-            // Success! User is now signed in
-            data = signInResult.data
-            error = null
-          } else {
-            // Sign in failed, but account exists
-            data = signUpResult.data
-            error = signUpResult.error
-          }
-        } else {
-          data = signUpResult.data
-          error = signUpResult.error
-        }
+        // Just use the signup result - don't try to auto-login
+        data = signUpResult.data
+        error = signUpResult.error
       } else {
         // Regular signup with email confirmation
         const signUpResult = await supabase.auth.signUp({
@@ -130,10 +112,17 @@ function SignUpForm() {
         console.log('Signup successful:', data.user.email)
         
         setSuccess(true)
-        // Redirect to dashboard immediately for all users
-        setTimeout(() => {
-          router.push('/dashboard')
-        }, 2000)
+        // For beta users, redirect to login page
+        if (isBetaSignup) {
+          setTimeout(() => {
+            router.push('/auth/login')
+          }, 2000)
+        } else {
+          // Redirect to dashboard after successful signup
+          setTimeout(() => {
+            router.push('/dashboard')
+          }, 2000)
+        }
       } else {
         setError('Signup failed - no user created')
       }
