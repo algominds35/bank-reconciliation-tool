@@ -8,6 +8,7 @@ export default function CSVFirstHero() {
   const router = useRouter();
 
   const handleBetaSignup = () => {
+    console.log('Beta signup clicked!');
     router.push('/auth/signup?beta=true');
   };
 
