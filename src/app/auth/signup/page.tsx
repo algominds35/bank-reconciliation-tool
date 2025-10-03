@@ -59,6 +59,9 @@ function SignUpForm() {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: isBetaSignup ? undefined : `${window.location.origin}/auth/callback`
+        }
       })
 
       // If successful signup, mark as beta user if applicable
@@ -91,11 +94,36 @@ function SignUpForm() {
         setError(error.message)
       } else if (data.user) {
         console.log('Signup successful:', data.user.email)
-        setSuccess(true)
-        // Redirect to dashboard after successful signup
-        setTimeout(() => {
-          router.push('/dashboard')
-        }, 2000)
+        
+        if (isBetaSignup) {
+          // For beta users, sign them in immediately and redirect
+          try {
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+              email,
+              password,
+            })
+            
+            if (signInError) {
+              console.error('Auto signin failed:', signInError)
+              setError('Account created but auto-login failed. Please try logging in manually.')
+            } else {
+              setSuccess(true)
+              // Redirect to dashboard immediately
+              setTimeout(() => {
+                router.push('/dashboard')
+              }, 1000)
+            }
+          } catch (autoSignInError) {
+            console.error('Auto signin error:', autoSignInError)
+            setError('Account created but auto-login failed. Please try logging in manually.')
+          }
+        } else {
+          setSuccess(true)
+          // Redirect to dashboard after successful signup
+          setTimeout(() => {
+            router.push('/dashboard')
+          }, 2000)
+        }
       } else {
         setError('Signup failed - no user created')
       }
