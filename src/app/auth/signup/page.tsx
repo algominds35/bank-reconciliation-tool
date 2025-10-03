@@ -56,45 +56,31 @@ function SignUpForm() {
         }
       }
 
-      let data, error
-      
-      if (isBetaSignup) {
-        // For beta users, try to sign in directly (bypass email confirmation)
-        const signInResult = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        })
-        
-        if (signInResult.data.user) {
-          // User already exists, sign them in
-          data = signInResult.data
-          error = signInResult.error
-        } else {
-          // User doesn't exist, create account
-          const signUpResult = await supabase.auth.signUp({
-            email,
-            password,
-          })
-          data = signUpResult.data
-          error = signUpResult.error
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: isBetaSignup ? undefined : `${window.location.origin}/auth/callback`
         }
-      } else {
-        // Regular signup with email confirmation
-        const signUpResult = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`
-          }
-        })
-        data = signUpResult.data
-        error = signUpResult.error
-      }
+      })
 
       // If successful signup, mark as beta user if applicable
       if (data.user && isBetaSignup) {
-        // Skip beta table creation for now - just log it
         console.log('Beta user signup successful:', data.user.email)
+        
+        // Try to sign them in immediately
+        try {
+          const { error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+          })
+          
+          if (signInError) {
+            console.log('Auto signin failed, but account created:', signInError.message)
+          }
+        } catch (autoSignInError) {
+          console.log('Auto signin error:', autoSignInError)
+        }
       }
 
       if (error) {
@@ -103,10 +89,17 @@ function SignUpForm() {
         console.log('Signup successful:', data.user.email)
         
         setSuccess(true)
-        // Redirect to dashboard immediately
-        setTimeout(() => {
-          router.push('/dashboard')
-        }, 2000)
+        // For beta users, redirect to login page
+        if (isBetaSignup) {
+          setTimeout(() => {
+            router.push('/auth/login')
+          }, 2000)
+        } else {
+          // Redirect to dashboard after successful signup
+          setTimeout(() => {
+            router.push('/dashboard')
+          }, 2000)
+        }
       } else {
         setError('Signup failed - no user created')
       }
