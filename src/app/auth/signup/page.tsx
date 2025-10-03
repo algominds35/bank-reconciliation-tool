@@ -56,13 +56,40 @@ function SignUpForm() {
         }
       }
 
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: isBetaSignup ? undefined : `${window.location.origin}/auth/callback`
+      let data, error
+      
+      if (isBetaSignup) {
+        // For beta users, try to sign in directly (bypass email confirmation)
+        const signInResult = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        })
+        
+        if (signInResult.data.user) {
+          // User already exists, sign them in
+          data = signInResult.data
+          error = signInResult.error
+        } else {
+          // User doesn't exist, create account
+          const signUpResult = await supabase.auth.signUp({
+            email,
+            password,
+          })
+          data = signUpResult.data
+          error = signUpResult.error
         }
-      })
+      } else {
+        // Regular signup with email confirmation
+        const signUpResult = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`
+          }
+        })
+        data = signUpResult.data
+        error = signUpResult.error
+      }
 
       // If successful signup, mark as beta user if applicable
       if (data.user && isBetaSignup) {
@@ -76,17 +103,10 @@ function SignUpForm() {
         console.log('Signup successful:', data.user.email)
         
         setSuccess(true)
-        // For beta users, redirect to login page
-        if (isBetaSignup) {
-          setTimeout(() => {
-            router.push('/auth/login?message=Account created! Please log in with your new credentials.')
-          }, 2000)
-        } else {
-          // Redirect to dashboard after successful signup
-          setTimeout(() => {
-            router.push('/dashboard')
-          }, 2000)
-        }
+        // Redirect to dashboard immediately
+        setTimeout(() => {
+          router.push('/dashboard')
+        }, 2000)
       } else {
         setError('Signup failed - no user created')
       }
@@ -111,7 +131,7 @@ function SignUpForm() {
               </CardTitle>
               <p className="text-gray-600 mt-2">
                 {isBetaSignup 
-                  ? "Welcome to the Beta Program! Redirecting to login..."
+                  ? "Welcome to the Beta Program! Redirecting to your dashboard..."
                   : "Welcome to ReconcileBook! Redirecting to your dashboard..."
                 }
               </p>
