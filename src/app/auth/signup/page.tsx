@@ -66,28 +66,8 @@ function SignUpForm() {
 
       // If successful signup, mark as beta user if applicable
       if (data.user && isBetaSignup) {
-        try {
-          // Create beta user record
-          const { error: betaError } = await supabase
-            .from('beta_users')
-            .insert({
-              user_id: data.user.id,
-              email: email,
-              signup_date: new Date().toISOString(),
-              signup_source: 'beta_program',
-              status: 'active'
-            })
-
-          if (betaError) {
-            console.error('Error creating beta user record:', betaError)
-            // Don't fail the signup if beta user record creation fails
-          } else {
-            console.log('Beta user record created successfully')
-          }
-        } catch (betaTableError) {
-          console.error('Beta users table might not exist yet:', betaTableError)
-          // Continue with signup even if beta table doesn't exist
-        }
+        // Skip beta table creation for now - just log it
+        console.log('Beta user signup successful:', data.user.email)
       }
 
       if (error) {
