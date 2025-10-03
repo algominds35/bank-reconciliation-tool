@@ -112,17 +112,10 @@ function SignUpForm() {
         console.log('Signup successful:', data.user.email)
         
         setSuccess(true)
-        // For beta users, redirect to login page
-        if (isBetaSignup) {
-          setTimeout(() => {
-            router.push('/auth/login')
-          }, 2000)
-        } else {
-          // Redirect to dashboard after successful signup
-          setTimeout(() => {
-            router.push('/dashboard')
-          }, 2000)
-        }
+        // Redirect to dashboard immediately for ALL users
+        setTimeout(() => {
+          router.push('/dashboard')
+        }, 2000)
       } else {
         setError('Signup failed - no user created')
       }
