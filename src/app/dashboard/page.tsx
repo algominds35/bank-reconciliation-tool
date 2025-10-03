@@ -22,6 +22,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Papa from 'papaparse'
 import jsPDF from 'jspdf'
 import { SingleFileMatcher } from '@/lib/single-file-matcher'
+import BetaFeedback from '@/components/BetaFeedback'
 
 // Function to detect complex multi-month report format
 function isComplexReportFormat(csvContent: string): boolean {
@@ -666,10 +667,35 @@ export default function Dashboard() {
       setSingleFileMatches(matches)
       setShowSingleFileMatches(true)
       
+      // Track feature usage for beta users
+      if (user) {
+        await trackBetaUserActivity('single_file_analysis', { matches_found: matches.length })
+      }
+      
       return matches
     } catch (error) {
       console.error('Error in single-file matching:', error)
       return []
+    }
+  }
+
+  // Track beta user activity
+  const trackBetaUserActivity = async (activity: string, metadata: any = {}) => {
+    if (!user) return
+    
+    try {
+      const { error } = await supabase
+        .from('beta_user_activity')
+        .insert({
+          user_id: user.id,
+          activity,
+          metadata,
+          timestamp: new Date().toISOString()
+        })
+
+      if (error) console.error('Error tracking beta activity:', error)
+    } catch (error) {
+      console.error('Error tracking beta activity:', error)
     }
   }
 
@@ -1348,6 +1374,11 @@ export default function Dashboard() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading your dashboard...</p>
         </div>
+        
+        {/* Beta Feedback Component */}
+        {user && (
+          <BetaFeedback userId={user.id} userEmail={user.email} />
+        )}
       </div>
     )
   }
@@ -1922,6 +1953,11 @@ export default function Dashboard() {
           </TabsContent>
         </Tabs>
       </div>
+      
+      {/* Beta Feedback Component */}
+      {user && (
+        <BetaFeedback userId={user.id} userEmail={user.email} />
+      )}
     </div>
     </TrialGuard>
     </AccessGuard>

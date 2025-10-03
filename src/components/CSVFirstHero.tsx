@@ -1,9 +1,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { TrendingUp, Star, Upload, FileText, Clock, CheckCircle } from 'lucide-react';
+import { TrendingUp, Star, Upload, FileText, Clock, CheckCircle, Users } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function CSVFirstHero() {
+  const router = useRouter();
+
+  const handleBetaSignup = () => {
+    router.push('/auth/signup?beta=true');
+  };
+
   return (
     <section className="relative pt-32 pb-24 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -76,13 +83,67 @@ export default function CSVFirstHero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.6 }}
-              className="flex items-center gap-2 text-sm text-slate-600"
+              className="flex items-center gap-2 text-sm text-slate-600 mb-8"
             >
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 fill-[#F45B49] text-[#F45B49]" />
                 <span className="font-semibold text-slate-900">4.9/5</span>
               </div>
               <span>stars from 500+ bookkeepers</span>
+            </motion.div>
+
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4"
+            >
+              {/* Beta Signup Button */}
+              <button
+                onClick={handleBetaSignup}
+                className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-[#F45B49] to-[#E63946] rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              >
+                <Users className="w-5 h-5 mr-2" />
+                Join Beta Testing
+                <span className="absolute -top-2 -right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">
+                  FREE
+                </span>
+              </button>
+
+              {/* Regular Signup Button */}
+              <button
+                onClick={() => router.push('/auth/signup')}
+                className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-[#F45B49] bg-white border-2 border-[#F45B49] rounded-xl hover:bg-[#F45B49] hover:text-white transition-all duration-300"
+              >
+                <Upload className="w-5 h-5 mr-2" />
+                Get Started
+              </button>
+            </motion.div>
+
+            {/* Beta Program Info */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Users className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-slate-900 mb-1">Beta Testing Program</h3>
+                  <p className="text-sm text-slate-600 mb-2">
+                    Help shape the future of reconciliation! Get early access to new features and influence product development.
+                  </p>
+                  <div className="flex flex-wrap gap-2 text-xs">
+                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full">Free Access</span>
+                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Early Features</span>
+                    <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Direct Feedback</span>
+                  </div>
+                </div>
+              </div>
             </motion.div>
 
                    {/* Demo Video Section */}
