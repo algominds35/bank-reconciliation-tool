@@ -98,7 +98,7 @@ export default function CSVFirstHero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.6 }}
-              className="flex justify-center"
+              className="flex flex-col sm:flex-row gap-4"
             >
               {/* Beta Signup Button */}
               <button
@@ -110,6 +110,15 @@ export default function CSVFirstHero() {
                 <span className="absolute -top-2 -right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">
                   FREE
                 </span>
+              </button>
+
+              {/* Try for Free Button */}
+              <button
+                onClick={handleBetaSignup}
+                className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-[#F45B49] bg-white border-2 border-[#F45B49] rounded-xl hover:bg-[#F45B49] hover:text-white transition-all duration-300"
+              >
+                <Upload className="w-5 h-5 mr-2" />
+                Try for Free
               </button>
             </motion.div>
 
