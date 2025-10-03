@@ -63,30 +63,41 @@ function SignUpForm() {
 
       // If successful signup, mark as beta user if applicable
       if (data.user && isBetaSignup) {
-        // Create beta user record
-        const { error: betaError } = await supabase
-          .from('beta_users')
-          .insert({
-            user_id: data.user.id,
-            email: email,
-            signup_date: new Date().toISOString(),
-            signup_source: 'beta_program',
-            status: 'active'
-          })
+        try {
+          // Create beta user record
+          const { error: betaError } = await supabase
+            .from('beta_users')
+            .insert({
+              user_id: data.user.id,
+              email: email,
+              signup_date: new Date().toISOString(),
+              signup_source: 'beta_program',
+              status: 'active'
+            })
 
-        if (betaError) {
-          console.error('Error creating beta user record:', betaError)
+          if (betaError) {
+            console.error('Error creating beta user record:', betaError)
+            // Don't fail the signup if beta user record creation fails
+          } else {
+            console.log('Beta user record created successfully')
+          }
+        } catch (betaTableError) {
+          console.error('Beta users table might not exist yet:', betaTableError)
+          // Continue with signup even if beta table doesn't exist
         }
       }
 
       if (error) {
         setError(error.message)
-      } else {
+      } else if (data.user) {
+        console.log('Signup successful:', data.user.email)
         setSuccess(true)
         // Redirect to dashboard after successful signup
         setTimeout(() => {
           router.push('/dashboard')
         }, 2000)
+      } else {
+        setError('Signup failed - no user created')
       }
     } catch (error) {
       setError('An unexpected error occurred')
