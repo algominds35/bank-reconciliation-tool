@@ -19,6 +19,58 @@ interface Transaction {
   reference?: string;
 }
 
+// Function to parse OFX file
+async function parseOFXFile(file: File): Promise<Transaction[]> {
+  try {
+    console.log('Parsing OFX file:', file.name, file.size, 'bytes');
+    
+    const text = await file.text();
+    const transactions: Transaction[] = [];
+    
+    // Simple OFX parsing - look for STMTTRN (statement transactions)
+    const stmttrnRegex = /<STMTTRN>([\s\S]*?)<\/STMTTRN>/g;
+    let match;
+    
+    while ((match = stmttrnRegex.exec(text)) !== null) {
+      const transactionData = match[1];
+      
+      // Extract transaction details
+      const dateMatch = transactionData.match(/<DTPOSTED>(\d{8})/);
+      const amountMatch = transactionData.match(/<TRNAMT>([+-]?\d+\.?\d*)/);
+      const descriptionMatch = transactionData.match(/<NAME>([^<]+)/);
+      const typeMatch = transactionData.match(/<TRNTYPE>([^<]+)/);
+      
+      if (dateMatch && amountMatch && descriptionMatch) {
+        const dateStr = dateMatch[1];
+        const year = dateStr.substring(0, 4);
+        const month = dateStr.substring(4, 6);
+        const day = dateStr.substring(6, 8);
+        const formattedDate = `${year}-${month}-${day}`;
+        
+        const amount = parseFloat(amountMatch[1]);
+        const description = descriptionMatch[1].trim();
+        const type = typeMatch ? typeMatch[1] : (amount > 0 ? 'CREDIT' : 'DEBIT');
+        
+        transactions.push({
+          id: `ofx_${Date.now()}_${transactions.length}`,
+          amount: Math.abs(amount), // Make positive for consistency
+          description: description,
+          date: formattedDate,
+          type: type,
+          reference: `OFX_${transactions.length}`
+        });
+      }
+    }
+    
+    console.log(`Parsed ${transactions.length} transactions from OFX file`);
+    return transactions;
+    
+  } catch (error) {
+    console.error('Error parsing OFX file:', error);
+    throw new Error(`Failed to parse OFX file: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
 // Function to convert Excel file to CSV string
 async function convertExcelToCSV(file: File): Promise<string> {
   try {
@@ -334,13 +386,13 @@ export async function POST(request: NextRequest) {
     
     // Check file type (support CSV, TXT, and Excel files)
     const fileName = file.name.toLowerCase();
-    const validExtensions = ['.csv', '.txt', '.xlsx', '.xls'];
+    const validExtensions = ['.csv', '.txt', '.xlsx', '.xls', '.ofx', '.qfx'];
     const isValidFile = validExtensions.some(ext => fileName.endsWith(ext));
     
     if (!isValidFile) {
       console.log('Invalid file type:', file.name);
       return NextResponse.json(
-        { error: 'File must be a CSV, TXT, or Excel file (.xlsx, .xls)' },
+        { error: 'File must be a CSV, TXT, Excel, or OFX file (.xlsx, .xls, .ofx, .qfx)' },
         { status: 400 }
       );
     }
@@ -367,6 +419,37 @@ export async function POST(request: NextRequest) {
     if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
       console.log('Processing Excel file:', file.name);
       csvContent = await convertExcelToCSV(file);
+    } else if (fileName.endsWith('.ofx') || fileName.endsWith('.qfx')) {
+      console.log('Processing OFX file:', file.name);
+      const ofxTransactions = await parseOFXFile(file);
+      
+      if (ofxTransactions.length === 0) {
+        return NextResponse.json(
+          { error: 'No transactions found in OFX file. Please check the file format.' },
+          { status: 400 }
+        );
+      }
+      
+      // Convert OFX transactions to our standard format and store
+      const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Store the results temporarily
+      await storeTemporaryResults(sessionId, ofxTransactions, 'bank');
+      
+      // Clean up expired results
+      await cleanupExpiredResults();
+      
+      return NextResponse.json({
+        sessionId,
+        summary: {
+          totalTransactions: ofxTransactions.length,
+          duplicatesFound: 0,
+          unmatchedCount: ofxTransactions.length,
+          timeSaved: ofxTransactions.length * 2 // Estimate 2 minutes per transaction
+        },
+        transactions: ofxTransactions.slice(0, 50), // Return first 50 for preview
+        message: `Successfully imported ${ofxTransactions.length} transactions from OFX file`
+      });
     } else {
       console.log('Processing CSV/TXT file:', file.name);
       csvContent = await file.text();

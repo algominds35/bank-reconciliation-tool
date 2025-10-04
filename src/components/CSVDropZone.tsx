@@ -154,7 +154,7 @@ export default function CSVDropZone() {
         <input
           id="csv-upload"
           type="file"
-          accept=".csv,.txt,.xlsx,.xls"
+          accept=".csv,.txt,.xlsx,.xls,.ofx,.qfx"
           onChange={handleFileSelect}
           className="hidden"
           disabled={isProcessing}
@@ -228,7 +228,7 @@ export default function CSVDropZone() {
                 <div className="flex items-center justify-center gap-4 text-xs text-slate-500">
                   <div className="flex items-center gap-1">
                     <FileText className="h-3 w-3" />
-                    <span>CSV, Excel files • Max 10MB</span>
+                    <span>CSV, Excel, OFX files • Max 10MB</span>
                   </div>
                   <a 
                     href="/sample-bank-transactions.csv" 
