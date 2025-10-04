@@ -722,6 +722,7 @@ export default function Dashboard() {
     if (!file) return
 
     console.log('Starting file upload:', file.name, 'Type:', transactionType)
+    console.log('Dashboard version: 2024-10-05-02 - Using API endpoint for all file types')
     setUploading(true)
     
     try {
