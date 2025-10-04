@@ -434,10 +434,22 @@ export async function POST(request: NextRequest) {
       const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       
       // Store the results temporarily
-      await storeTemporaryResults(sessionId, ofxTransactions, 'bank');
+      storeTemporaryResults(sessionId, {
+        transactions: ofxTransactions,
+        duplicates: [],
+        unmatched: ofxTransactions,
+        timeSaved: ofxTransactions.length * 2,
+        processedAt: new Date().toISOString(),
+        summary: {
+          totalTransactions: ofxTransactions.length,
+          duplicatesFound: 0,
+          unmatchedCount: ofxTransactions.length,
+          timeSaved: ofxTransactions.length * 2
+        }
+      });
       
       // Clean up expired results
-      await cleanupExpiredResults();
+      cleanupExpiredResults();
       
       return NextResponse.json({
         sessionId,
