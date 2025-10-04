@@ -762,7 +762,7 @@ export default function Dashboard() {
                 date: transaction.date,
                 description: transaction.description,
                 amount: transaction.amount,
-                type: transaction.type || (transaction.amount >= 0 ? 'credit' : 'debit'),
+                type: transaction.type === 'CREDIT' ? 'credit' : 'debit',
                 category: transaction.category || null,
                 account: transaction.account || null,
                 reference: transaction.reference || null,
