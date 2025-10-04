@@ -610,6 +610,24 @@ export default function Dashboard() {
 
       setClients([...clients, data])
       alert('Client created successfully!')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
     } catch (error) {
       console.error('Error creating client:', error)
       alert('Failed to create client. Please try again.')
@@ -706,293 +724,86 @@ export default function Dashboard() {
     console.log('Starting file upload:', file.name, 'Type:', transactionType)
     setUploading(true)
     
-    // Read file content for complex format detection
-    let fileContent = await file.text();
-    
-    // Check if this is messy CSV data that needs cleaning
-    const hasDoubleQuotes = fileContent.includes('""');
-    if (hasDoubleQuotes) {
-      console.log('Detected messy CSV with double quotes - cleaning data');
-      console.log('Original content sample:', fileContent.substring(0, 200));
-      fileContent = cleanMessyCSV(fileContent);
-      console.log('Cleaned content sample:', fileContent.substring(0, 200));
-    }
-    
-    // Parse the cleaned content directly
-    Papa.parse(fileContent, {
-      header: true,
-      skipEmptyLines: true,
-      complete: async (results) => {
-        console.log('CSV parsing completed:', results)
-        
-        try {
-          // Check if this is a complex multi-month report format FIRST
-          if (isComplexReportFormat(fileContent)) {
-            console.log('Detected complex report format - using custom parser');
-            return parseComplexReportFormat(fileContent);
-          }
-          
-          // Check if CSV has data
-          if (!results.data || results.data.length === 0) {
-            throw new Error('CSV file is empty or has no valid data')
-          }
-
-          console.log('CSV data found:', results.data.length, 'rows')
-
-          // Check for required columns in first row
-          const firstRow = results.data[0] as any
-          console.log('First row:', firstRow)
-          
-          if (!firstRow || typeof firstRow !== 'object') {
-            throw new Error('Invalid CSV format - no valid data rows found')
-          }
-
-          // Smart column detection for dashboard uploads
-          const columns = Object.keys(firstRow);
-          console.log('Dashboard CSV columns:', columns);
-          
-          let dateField = '';
-          let descriptionField = '';
-          let amountField = '';
-          
-          // Enhanced column detection
-          columns.forEach((col: string) => {
-            const lowerCol = col.toLowerCase();
-            
-            // Date field detection
-            if (!dateField && (
-              lowerCol.includes('date') || 
-              lowerCol.includes('posted dt') ||
-              lowerCol.includes('transaction date') ||
-              lowerCol.includes('doc dt') ||
-              lowerCol.includes('effective date') ||
-              lowerCol.includes('posted') ||
-              lowerCol === 'dt'
-            )) {
-              dateField = col;
-            }
-            
-            // Amount field detection
-            if (!amountField && (
-              lowerCol.includes('amount') || 
-              lowerCol.includes('txn amt') ||
-              lowerCol.includes('value') || 
-              lowerCol.includes('total') || 
-              lowerCol.includes('debit') || 
-              lowerCol.includes('credit') ||
-              lowerCol.includes('balance') ||
-              lowerCol === 'amt' ||
-              lowerCol === 'txn'
-            )) {
-              amountField = col;
-            }
-            
-            // Description field detection - prioritize Memo/Description
-            if (!descriptionField && (
-              lowerCol.includes('memo/description') ||  // Highest priority
-              lowerCol.includes('memo') || 
-              lowerCol.includes('description') || 
-              lowerCol.includes('note') || 
-              lowerCol.includes('details') || 
-              lowerCol.includes('reference') ||
-              lowerCol.includes('doc') ||
-              lowerCol.includes('memo/') ||
-              lowerCol === 'memo'
-            )) {
-              descriptionField = col;
-            }
-          });
-          
-          // DIRECT FIX: Handle the client's specific format
-          if (columns.includes('Posted dt.') && columns.includes('Memo/Description') && columns.includes('Txn amt')) {
-            dateField = 'Posted dt.';
-            descriptionField = 'Memo/Description';
-            amountField = 'Txn amt';
-            console.log('DIRECT FIX: Using client format mapping');
-          } else {
-            // Fallback to first 3 columns if detection fails
-            if (!dateField && columns.length > 0) dateField = columns[0];
-            if (!descriptionField && columns.length > 2) descriptionField = columns[2];
-            if (!amountField && columns.length > 1) amountField = columns[1];
-          }
-          
-          console.log('Dashboard column mapping:', { dateField, descriptionField, amountField });
-          console.log('DEBUG: Available columns:', columns);
-          console.log('DEBUG: First row sample:', firstRow);
-
-          if (!dateField || !descriptionField || !amountField) {
-            throw new Error(`CSV must have columns: date, description, amount. Found columns: ${columns.join(', ')}`)
-          }
-
-          console.log('CSV validation passed, processing rows...')
-          
-          let processedCount = 0
-          
-          for (const row of results.data as any[]) {
-            // Skip empty rows
-            if (!row || typeof row !== 'object') {
-              continue
-            }
-
-            // Get values from row using detected column names
-            const date = row[dateField]
-            const description = row[descriptionField]
-            const amountStr = row[amountField]
-
-            if (!date || !description || !amountStr) {
-              console.warn('Skipping incomplete row:', row)
-              continue
-            }
-
-            // Parse amount - handle currency symbols and commas
-            let amount: number
-            try {
-              const cleanAmount = String(amountStr).replace(/[$,\s]/g, '')
-              amount = parseFloat(cleanAmount)
-              
-              if (isNaN(amount)) {
-                console.warn(`Skipping row with invalid amount: ${amountStr}`)
-                continue
-              }
-            } catch (e) {
-              console.warn(`Error parsing amount ${amountStr}:`, e)
-              continue
-            }
-
-            const transaction: Transaction = {
-              id: crypto.randomUUID(),
-              user_id: user?.id || 'anonymous',
-              client_id: selectedClientId || undefined,
-              date: String(date),
-              description: String(description),
-              amount: amount,
-              transaction_type: transactionType,
-              category: row.category || row.Category || null,
-              notes: row.notes || row.Notes || null,
-              is_reconciled: false
-            }
-
-            console.log('Processing transaction:', transaction)
-
-            try {
-              // Insert directly without client requirement - like it was working before
-              const tableName = transactionType === 'bank' ? 'bank_transactions' : 'book_transactions'
-              
-              const { error } = await supabase
-                .from(tableName)
-                .insert({
-                  user_id: user.id, // CRITICAL: Store the user_id to isolate data
-                  client_id: null, // Allow null client_id like before
-                  date: String(date),
-                  description: String(description),
-                  amount: amount,
-                  type: amount >= 0 ? 'credit' : 'debit',
-                  category: row.category || row.Category || null,
-                  account: row.account || row.Account || null,
-                  reference: row.reference || row.Reference || null,
-                  is_reconciled: false
-                })
-
-              if (error) {
-                console.error('Supabase insert error:', error)
-                throw new Error(`Database error: ${error.message}`)
-              }
-              
-              processedCount++
-            } catch (dbError) {
-              console.error('Database error for transaction:', transaction, dbError)
-              throw dbError
-            }
-          }
-
-          console.log(`Successfully processed ${processedCount} transactions`)
-
-          if (processedCount === 0) {
-            throw new Error('No valid transactions found in CSV file')
-          }
-
-          // Check for duplicates in the uploaded file and store them for Smart Matching
-          console.log('=== STARTING DUPLICATE DETECTION ===')
-          console.log('CSV data rows:', results.data.length)
-          console.log('First few rows:', results.data.slice(0, 3))
-          const duplicateCount = await checkForDuplicatesInFile(results.data, transactionType)
-          console.log('=== DUPLICATE DETECTION COMPLETE ===')
-          console.log('Total duplicates found:', duplicateCount)
-          
-          // Store duplicates in localStorage for Smart Matching interface
-          if (duplicateCount > 0) {
-            console.log('=== STORING DUPLICATES IN LOCALSTORAGE ===')
-            const duplicates = await getDuplicatesForSmartMatching(results.data, transactionType)
-            console.log('Duplicates to store:', duplicates)
-            
-            const storageData = {
-              duplicates,
-              transactionType,
-              uploadedAt: new Date().toISOString()
-            }
-            console.log('Storage data:', storageData)
-            
-            localStorage.setItem('pendingDuplicates', JSON.stringify(storageData))
-            console.log('✅ Duplicates stored in localStorage')
-            
-            // Verify storage
-            const stored = localStorage.getItem('pendingDuplicates')
-            console.log('✅ Verification - stored data:', stored)
-          } else {
-            console.log('❌ No duplicates found, not storing anything')
-          }
-
-          // Refresh the transactions list
-          await fetchTransactions()
-          await fetchClients()
-
-          // Success message
-          if (duplicateCount > 0) {
-            alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!\n\n🚨 Found ${duplicateCount} duplicates! Go to Smart Matching tab to review them.`)
-          } else {
-          alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!`)
-          }
-          
-        } catch (error) {
-          console.error('Upload error details:', error)
-          
-          let errorMessage = 'Unknown error occurred'
-          if (error instanceof Error) {
-            errorMessage = error.message
-          } else if (typeof error === 'string') {
-            errorMessage = error
-          } else if (error && typeof error === 'object' && 'message' in error) {
-            errorMessage = String(error.message)
-          }
-          
-          alert(`Error uploading transactions: ${errorMessage}`)
-        } finally {
-          // Run single-file auto-matching for bank transactions
-          if (transactionType === 'bank') {
-            console.log('Running single-file matching for bank transactions...')
-            // Fetch the latest transactions and run matching
-            setTimeout(async () => {
-              await fetchTransactions()
-              // Run matching on all transactions since we don't have type filtering
-              const latestTransactions = transactions.filter(t => t.amount && t.description)
-              if (latestTransactions.length > 0) {
-                await runSingleFileMatching(latestTransactions)
-              }
-            }, 1000)
-          }
-          
-          setUploading(false)
-          // Reset file input
-          event.target.value = ''
-        }
-      },
-      error: (parseError: any) => {
-        console.error('CSV parsing error:', parseError)
-        alert(`Error reading CSV file: ${parseError.message}. Please check your file format.`)
-        setUploading(false)
-        event.target.value = ''
+    try {
+      // Use the API endpoint that handles all file types (CSV, Excel, OFX)
+      const formData = new FormData()
+      formData.append('csv', file)
+      
+      const response = await fetch('/api/upload/anonymous', {
+        method: 'POST',
+        body: formData
+      })
+      
+      const result = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Upload failed')
       }
-    })
+      
+      console.log('Upload successful:', result)
+      
+      // Store the session ID for later use
+      const sessionId = result.sessionId
+      
+      // Process the transactions from the API response
+      if (result.transactions && result.transactions.length > 0) {
+        let processedCount = 0
+        
+        for (const transaction of result.transactions) {
+          try {
+            const tableName = transactionType === 'bank' ? 'bank_transactions' : 'book_transactions'
+            
+            const { error } = await supabase
+              .from(tableName)
+              .insert({
+                user_id: user.id,
+                client_id: null,
+                date: transaction.date,
+                description: transaction.description,
+                amount: transaction.amount,
+                type: transaction.type || (transaction.amount >= 0 ? 'credit' : 'debit'),
+                category: transaction.category || null,
+                account: transaction.account || null,
+                reference: transaction.reference || null,
+                is_reconciled: false
+              })
+
+            if (error) {
+              console.error('Supabase insert error:', error)
+              throw new Error(`Database error: ${error.message}`)
+            }
+            
+            processedCount++
+          } catch (dbError) {
+            console.error('Database error for transaction:', transaction, dbError)
+            throw dbError
+          }
+        }
+
+        console.log(`Successfully processed ${processedCount} transactions`)
+
+        if (processedCount === 0) {
+          throw new Error('No valid transactions found in file')
+        }
+
+        // Refresh the transactions list
+        await fetchTransactions()
+        await fetchClients()
+
+        // Success message
+        alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!`)
+        
+      } else {
+        throw new Error('No transactions found in file')
+      }
+      
+    } catch (error) {
+      console.error('Upload error:', error)
+      alert(`Error uploading file: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+      setUploading(false)
+      event.target.value = ''
+    }
   }
 
   const handleTransactionSelect = (transactionId: string) => {
@@ -1682,7 +1493,7 @@ export default function Dashboard() {
                 <input
                           id="bank-upload"
                   type="file"
-                  accept=".csv"
+                  accept=".csv,.xlsx,.xls,.ofx,.qfx"
                   className="hidden"
                           onChange={(e) => handleFileUpload(e, 'bank')}
                   disabled={uploading}
@@ -1701,7 +1512,7 @@ export default function Dashboard() {
                         <input
                           id="bookkeeping-upload"
                           type="file"
-                          accept=".csv"
+                          accept=".csv,.xlsx,.xls,.ofx,.qfx"
                           className="hidden"
                           onChange={(e) => handleFileUpload(e, 'bookkeeping')}
                           disabled={uploading}
