@@ -46,7 +46,7 @@ async function findExistingDuplicates(transactions: Transaction[], userId: strin
   // Create a lookup map for existing transactions
   const existingMap = new Map<string, boolean>();
   existingTransactions?.forEach(existing => {
-    const key = `${existing.date}_${existing.amount}_${existing.description?.toLowerCase().trim()}`;
+    const key = `${existing.transaction_date}_${existing.amount}_${existing.description?.toLowerCase().trim()}`;
     existingMap.set(key, true);
   });
   
