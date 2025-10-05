@@ -256,6 +256,27 @@ export async function POST(request: NextRequest) {
     
     console.log('API: About to check duplicates. userId:', userId, 'transactions count:', transactions.length);
     
+    // ALWAYS run intra-file duplicate detection (duplicates within the same file)
+    console.log('API: Running intra-file duplicate detection...');
+    const seenInFile = new Map<string, boolean>();
+    newTransactions = [];
+    duplicates = [];
+    
+    transactions.forEach((transaction, index) => {
+      const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
+      
+      if (seenInFile.has(key)) {
+        duplicates.push(transaction);
+        console.log(`✅ Found duplicate within file: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
+      } else {
+        newTransactions.push(transaction);
+        seenInFile.set(key, true);
+        console.log(`✅ Adding new transaction: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
+      }
+    });
+    
+    console.log(`Intra-file duplicate detection: ${newTransactions.length} new, ${duplicates.length} duplicates within file`);
+    
     if (userId) {
       console.log('API: Running enhanced duplicate detection against existing records...');
       
@@ -276,30 +297,25 @@ export async function POST(request: NextRequest) {
           existingMap.set(key, true);
         });
 
-        // Also create a map for intra-file duplicates (duplicates within the same upload)
-        const seenInFile = new Map<string, boolean>();
+        // Check each new transaction against existing database records
+        const finalNewTransactions = [];
+        const databaseDuplicates = [];
         
-        // Check each new transaction against existing ones AND within the same file
-        newTransactions = [];
-        transactions.forEach((transaction, index) => {
+        newTransactions.forEach((transaction, index) => {
           const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
-          console.log(`Processing transaction ${index + 1}: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
-          console.log(`Key: ${key}`);
-          console.log(`Already seen in file: ${seenInFile.has(key)}`);
-          console.log(`Already in database: ${existingMap.has(key)}`);
           
           if (existingMap.has(key)) {
-            duplicates.push(transaction);
+            databaseDuplicates.push(transaction);
             console.log(`✅ Found duplicate against database: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
-          } else if (seenInFile.has(key)) {
-            duplicates.push(transaction);
-            console.log(`✅ Found duplicate within file: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
           } else {
-            newTransactions.push(transaction);
-            seenInFile.set(key, true);
+            finalNewTransactions.push(transaction);
             console.log(`✅ Adding new transaction: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
           }
         });
+        
+        // Update the arrays
+        newTransactions = finalNewTransactions;
+        duplicates = [...duplicates, ...databaseDuplicates]; // Combine intra-file and database duplicates
 
         console.log(`Enhanced duplicate detection: ${newTransactions.length} new, ${duplicates.length} duplicates (${duplicates.filter(d => existingMap.has(`${d.date}_${d.amount}_${d.description?.toLowerCase().trim()}`)).length} from database, ${duplicates.length - duplicates.filter(d => existingMap.has(`${d.date}_${d.amount}_${d.description?.toLowerCase().trim()}`)).length} within file)`);
         console.log(`Existing transactions in database: ${existingTransactions?.length || 0}`);

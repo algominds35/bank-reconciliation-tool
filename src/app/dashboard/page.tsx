@@ -782,21 +782,29 @@ export default function Dashboard() {
       // Just show success message and refresh the data
       console.log('API processed transactions successfully')
       
-      // Refresh the transactions list
-      await fetchTransactions()
-      await fetchClients()
+      // Refresh the transactions list to show updated data
+          await fetchTransactions()
+          await fetchClients()
 
-      // Success message with filtering info
+      // Show detailed success message with duplicate info
       const message = result.message || `Successfully uploaded ${result.transactions?.length || 0} ${transactionType} transactions!`;
       alert(message);
+      
+      // Log the results for debugging
+      console.log('Upload Results:', {
+        totalProcessed: result.totalProcessed,
+        newTransactions: result.newTransactions,
+        duplicates: result.duplicates,
+        message: result.message
+      });
       
     } catch (error) {
       console.error('Upload error:', error)
       alert(`Error uploading file: ${error instanceof Error ? error.message : 'Unknown error'}`)
-    } finally {
-      setUploading(false)
-      event.target.value = ''
-    }
+        } finally {
+          setUploading(false)
+          event.target.value = ''
+        }
   }
 
   const handleTransactionSelect = (transactionId: string) => {
@@ -1479,7 +1487,7 @@ export default function Dashboard() {
                       )}
                     </Button>
                     
-
+                    
                     {/* Upload Buttons */}
                     <div className="flex gap-2">
               <div>
