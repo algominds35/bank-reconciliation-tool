@@ -1008,11 +1008,21 @@ export default function Dashboard() {
     }
 
     try {
+      // Clear bank_transactions_sync (where manual uploads are stored) - ONLY FOR THIS USER
+      const { error: bankSyncError } = await supabase
+        .from('bank_transactions_sync')
+        .delete()
+        .eq('user_id', user.id)
+
+      if (bankSyncError) {
+        console.error('Error clearing bank_transactions_sync:', bankSyncError)
+      }
+
       // Clear bank transactions - ONLY FOR THIS USER
       const { error: bankError } = await supabase
         .from('bank_transactions')
         .delete()
-        .eq('user_id', user.id) // CRITICAL: Only delete transactions belonging to this user
+        .eq('user_id', user.id)
 
       if (bankError) {
         console.error('Error clearing bank transactions:', bankError)
@@ -1022,7 +1032,7 @@ export default function Dashboard() {
       const { error: bookError } = await supabase
         .from('book_transactions')
         .delete()
-        .eq('user_id', user.id) // CRITICAL: Only delete transactions belonging to this user
+        .eq('user_id', user.id)
 
       if (bookError) {
         console.error('Error clearing book transactions:', bookError)
