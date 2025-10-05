@@ -768,20 +768,20 @@ export default function Dashboard() {
         await fetchClients()
 
         // Success message with filtering info
-        const message = result.message || `Successfully uploaded ${result.transactions?.length || 0} ${transactionType} transactions!`
-        alert(message)
-          
+        const message = result.message || `Successfully uploaded ${result.transactions?.length || 0} ${transactionType} transactions!`;
+        alert(message);
+        
       } else {
-        throw new Error('No transactions found in file')
+        throw new Error('No transactions found in file');
       }
       
     } catch (error) {
       console.error('Upload error:', error)
       alert(`Error uploading file: ${error instanceof Error ? error.message : 'Unknown error'}`)
-        } finally {
-          setUploading(false)
-          event.target.value = ''
-        }
+    } finally {
+      setUploading(false)
+      event.target.value = ''
+    }
   }
 
   const handleTransactionSelect = (transactionId: string) => {
