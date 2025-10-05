@@ -72,7 +72,8 @@ function buildSuccessMessage(
   filteredOutCount: number,
   newTransactions: number,
   existingDuplicates: number,
-  lastImportDate: string | null
+  lastImportDate: string | null,
+  insertedCount: number
 ): string {
   let message = `Successfully processed ${totalTransactions} transactions.`;
   
@@ -81,9 +82,11 @@ function buildSuccessMessage(
   }
   
   if (existingDuplicates > 0) {
-    message += ` ${newTransactions} new transactions, ${existingDuplicates} duplicates found against existing records.`;
+    message += ` ${insertedCount} new transactions imported, ${existingDuplicates} duplicates found against existing records.`;
   } else if (newTransactions !== filteredTransactions) {
-    message += ` ${newTransactions} transactions ready for import.`;
+    message += ` ${insertedCount} transactions imported successfully.`;
+  } else {
+    message += ` ${insertedCount} transactions imported successfully.`;
   }
   
   return message;
@@ -638,6 +641,79 @@ export async function POST(request: NextRequest) {
     // Clean up expired results
     cleanupExpiredResults();
     
+    // Insert new transactions into database if user ID is provided
+    let insertedCount = 0;
+    if (userId && newTransactions.length > 0) {
+      console.log(`Inserting ${newTransactions.length} new transactions into database...`);
+      
+      // Create or get client for this user
+      let clientId = null;
+      
+      // Check if client exists for this user
+      const { data: existingClient } = await supabase
+        .from('clients')
+        .select('id')
+        .eq('user_id', userId)
+        .single();
+      
+      if (existingClient) {
+        clientId = existingClient.id;
+      } else {
+        // Create a default client for this user
+        const { data: newClient, error: clientError } = await supabase
+          .from('clients')
+          .insert({
+            user_id: userId,
+            name: 'Default Client',
+            email: '',
+            status: 'active'
+          })
+          .select('id')
+          .single();
+        
+        if (clientError) {
+          console.error('Error creating client:', clientError);
+          // Continue without client if creation fails
+        } else {
+          clientId = newClient.id;
+        }
+      }
+      
+      // Insert transactions
+      for (const transaction of newTransactions) {
+        try {
+          const insertData = {
+            user_id: userId,
+            client_id: clientId,
+            date: transaction.date,
+            description: transaction.description,
+            amount: transaction.amount,
+            type: transaction.amount > 0 ? 'credit' : 'debit',
+            category: transaction.category || null,
+            account: transaction.account || null,
+            reference: transaction.reference || null,
+            is_reconciled: false
+          };
+          
+          const { error } = await supabase
+            .from('bank_transactions')
+            .insert(insertData);
+          
+          if (error) {
+            console.error('Error inserting transaction:', error);
+            // Continue with other transactions
+          } else {
+            insertedCount++;
+          }
+        } catch (insertError) {
+          console.error('Error processing transaction:', insertError);
+          // Continue with other transactions
+        }
+      }
+      
+      console.log(`Successfully inserted ${insertedCount} transactions into database`);
+    }
+
     return NextResponse.json({
       sessionId,
       summary,
@@ -646,7 +722,7 @@ export async function POST(request: NextRequest) {
       unmatched: unmatched.slice(0, 10), // Return first 10 for preview
       filteredOut: filteredOutTransactions.slice(0, 10), // Show filtered out transactions
       existingDuplicates: existingDuplicates.slice(0, 10), // Show duplicates against existing records
-      message: buildSuccessMessage(transactions.length, filteredTransactions.length, filteredOutTransactions.length, newTransactions.length, existingDuplicates.length, lastImportDate),
+      message: buildSuccessMessage(transactions.length, filteredTransactions.length, filteredOutTransactions.length, newTransactions.length, existingDuplicates.length, lastImportDate, insertedCount),
     });
     
   } catch (error) {

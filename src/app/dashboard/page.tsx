@@ -759,91 +759,17 @@ export default function Dashboard() {
       // Store the session ID for later use
       const sessionId = result.sessionId
       
-        // Process the NEW transactions from the API response (already filtered and deduplicated)
-        if (result.transactions && result.transactions.length > 0) {
-          let processedCount = 0
-          
-          for (const transaction of result.transactions) {
-          try {
-              const tableName = transactionType === 'bank' ? 'bank_transactions' : 'book_transactions'
-            
-            // First, ensure we have a client record for this user
-            let clientId = null
-            
-            // Check if client exists for this user
-            const { data: existingClient } = await supabase
-              .from('clients')
-              .select('id')
-              .eq('user_id', user.id)
-              .single()
-            
-            if (existingClient) {
-              clientId = existingClient.id
-            } else {
-              // Create a default client for this user
-              const { data: newClient, error: clientError } = await supabase
-                .from('clients')
-                .insert({
-                  user_id: user.id,
-                  name: 'Default Client',
-                  email: user.email || '',
-                  status: 'active'
-                })
-                .select('id')
-                .single()
-              
-              if (clientError) {
-                console.error('Error creating client:', clientError)
-                throw new Error(`Failed to create client: ${clientError.message}`)
-              }
-              
-              clientId = newClient.id
-            }
+        // The API has already processed and inserted the transactions
+        // Just show success message and refresh the data
+        console.log('API processed transactions successfully')
+        
+        // Refresh the transactions list
+        await fetchTransactions()
+        await fetchClients()
 
-            const insertData = {
-              user_id: user.id,
-              client_id: clientId,
-              date: transaction.date,
-              description: transaction.description,
-              amount: transaction.amount,
-              type: transaction.amount > 0 ? 'credit' : 'debit', // Set based on amount
-              category: transaction.category || null,
-              account: transaction.account || null,
-              reference: transaction.reference || null,
-              is_reconciled: false
-            }
-            
-            console.log('Inserting transaction data:', insertData)
-              
-              const { error } = await supabase
-                .from(tableName)
-              .insert(insertData)
-
-              if (error) {
-                console.error('Supabase insert error:', error)
-                throw new Error(`Database error: ${error.message}`)
-              }
-              
-              processedCount++
-            } catch (dbError) {
-              console.error('Database error for transaction:', transaction, dbError)
-              throw dbError
-            }
-          }
-
-          console.log(`Successfully processed ${processedCount} transactions`)
-
-          if (processedCount === 0) {
-          throw new Error('No valid transactions found in file')
-          }
-
-          // Refresh the transactions list
-          await fetchTransactions()
-          await fetchClients()
-
-          // Success message with filtering info
-          const message = result.message || `Successfully uploaded ${processedCount} ${transactionType} transactions!`
-          alert(message)
+        // Success message with filtering info
+        const message = result.message || `Successfully uploaded ${result.transactions?.length || 0} ${transactionType} transactions!`
+        alert(message)
           
       } else {
         throw new Error('No transactions found in file')
