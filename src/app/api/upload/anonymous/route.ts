@@ -247,10 +247,50 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert transactions into database if user ID is provided
+    // Enhanced duplicate detection against existing database records
+    let newTransactions = transactions;
+    let duplicates: Transaction[] = [];
+    
+    if (userId) {
+      console.log('Running enhanced duplicate detection against existing records...');
+      
+      // Get existing transactions from database for this user
+      const { data: existingTransactions, error } = await supabase
+        .from('bank_transactions_sync')
+        .select('transaction_date, amount, description')
+        .eq('user_id', userId);
+
+      if (error) {
+        console.error('Error fetching existing transactions:', error);
+        // If we can't check, assume all are new
+      } else {
+        // Create a lookup map for existing transactions
+        const existingMap = new Map<string, boolean>();
+        existingTransactions?.forEach(existing => {
+          const key = `${existing.transaction_date}_${existing.amount}_${existing.description?.toLowerCase().trim()}`;
+          existingMap.set(key, true);
+        });
+
+        // Check each new transaction against existing ones
+        newTransactions = [];
+        transactions.forEach(transaction => {
+          const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
+          
+          if (existingMap.has(key)) {
+            duplicates.push(transaction);
+          } else {
+            newTransactions.push(transaction);
+          }
+        });
+
+        console.log(`Enhanced duplicate detection: ${newTransactions.length} new, ${duplicates.length} duplicates against existing records`);
+      }
+    }
+
+    // Insert only NEW transactions into database if user ID is provided
     let insertedCount = 0;
-    if (userId && transactions.length > 0) {
-      console.log(`Inserting ${transactions.length} transactions into database...`);
+    if (userId && newTransactions.length > 0) {
+      console.log(`Inserting ${newTransactions.length} new transactions into database...`);
 
       // First, ensure user has a default bank account
       let bankAccountId = userId;
@@ -328,9 +368,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       sessionId,
-      transactions: transactions.slice(0, 10), // Return first 10 transactions for preview
-      message: `Successfully uploaded ${transactions.length} transactions! ${insertedCount} saved to database.`,
-      insertedCount
+      transactions: newTransactions.slice(0, 10), // Return first 10 new transactions for preview
+      message: `Successfully processed ${transactions.length} transactions. ${newTransactions.length} new transactions imported, ${duplicates.length} duplicates found against existing records.`,
+      insertedCount,
+      duplicates: duplicates.length,
+      totalProcessed: transactions.length,
+      newTransactions: newTransactions.length
     });
     
   } catch (error) {
