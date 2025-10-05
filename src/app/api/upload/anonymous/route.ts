@@ -196,6 +196,9 @@ export async function POST(request: NextRequest) {
     const file = formData.get('csv') as File;
     const userId = formData.get('userId') as string;
     
+    console.log('API: Received userId:', userId);
+    console.log('API: File name:', file?.name);
+    
     if (!file) {
       console.log('No file provided');
       return NextResponse.json(
@@ -251,8 +254,10 @@ export async function POST(request: NextRequest) {
     let newTransactions = transactions;
     let duplicates: Transaction[] = [];
     
+    console.log('API: About to check duplicates. userId:', userId, 'transactions count:', transactions.length);
+    
     if (userId) {
-      console.log('Running enhanced duplicate detection against existing records...');
+      console.log('API: Running enhanced duplicate detection against existing records...');
       
       // Get existing transactions from database for this user
       const { data: existingTransactions, error } = await supabase
@@ -295,6 +300,8 @@ export async function POST(request: NextRequest) {
         console.log(`Existing transactions in database: ${existingTransactions?.length || 0}`);
         console.log(`Total transactions in upload: ${transactions.length}`);
       }
+    } else {
+      console.log('API: No userId provided, skipping duplicate detection. All transactions will be processed.');
     }
 
     // Insert only NEW transactions into database if user ID is provided
