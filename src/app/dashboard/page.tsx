@@ -448,15 +448,15 @@ export default function Dashboard() {
         allTransactions.push(...bankSyncResult.data.map(t => ({
           id: t.id,
           user_id: user?.id || 'demo-user',
-          client_id: null, // bank_transactions_sync doesn't have client_id
+          client_id: undefined, // bank_transactions_sync doesn't have client_id
           date: t.transaction_date,
           description: t.description,
           amount: t.amount,
           transaction_type: 'bank' as const,
           category: t.category,
-          notes: t.reference || null,
+          notes: t.reference || undefined,
           is_reconciled: t.is_reconciled || false,
-          reconciliation_group: null
+          reconciliation_group: undefined
         })))
       }
 
