@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
-import { createClient } from '@supabase/supabase-js'
 import { Transaction, ReconciliationSummary, Client } from '@/types'
 import { ClientSelector } from '@/components/client-selector'
 import { TransactionTable } from '@/components/transaction-table'
@@ -1011,56 +1010,22 @@ export default function Dashboard() {
     try {
       console.log('Starting to clear all transactions for user:', user.id)
       
-      // Create service role client for admin operations
-      const serviceSupabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-      )
-      
-      // Clear bank_transactions_sync (where manual uploads are stored) - ONLY FOR THIS USER
-      const { data: bankSyncData, error: bankSyncError } = await serviceSupabase
-        .from('bank_transactions_sync')
-        .delete()
-        .eq('user_id', user.id)
-        .select()
+      // Call the server-side API route for clearing transactions
+      const response = await fetch('/api/clear-transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user.id })
+      });
 
-      if (bankSyncError) {
-        console.error('Error clearing bank_transactions_sync:', bankSyncError)
-        alert('Error clearing bank transactions: ' + bankSyncError.message)
-        return
-      } else {
-        console.log('Successfully cleared bank_transactions_sync:', bankSyncData)
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to clear transactions');
       }
 
-      // Clear bank transactions - ONLY FOR THIS USER
-      const { data: bankData, error: bankError } = await serviceSupabase
-        .from('bank_transactions')
-        .delete()
-        .eq('user_id', user.id)
-        .select()
-
-      if (bankError) {
-        console.error('Error clearing bank transactions:', bankError)
-        alert('Error clearing bank transactions: ' + bankError.message)
-        return
-      } else {
-        console.log('Successfully cleared bank_transactions:', bankData)
-      }
-
-      // Clear book transactions - ONLY FOR THIS USER
-      const { data: bookData, error: bookError } = await serviceSupabase
-        .from('book_transactions')
-        .delete()
-        .eq('user_id', user.id)
-        .select()
-
-      if (bookError) {
-        console.error('Error clearing book transactions:', bookError)
-        alert('Error clearing book transactions: ' + bookError.message)
-        return
-      } else {
-        console.log('Successfully cleared book_transactions:', bookData)
-      }
+      console.log('Clear transactions result:', result);
 
       // Refresh transactions
       console.log('Refreshing transactions after clearing...')
