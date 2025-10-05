@@ -425,6 +425,22 @@ export default function Dashboard() {
     }
   }
 
+  // Remove duplicates from transaction list
+  const removeDuplicates = (transactions: Transaction[]): Transaction[] => {
+    const seen = new Map<string, boolean>();
+    const unique: Transaction[] = [];
+    
+    transactions.forEach(transaction => {
+      const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
+      if (!seen.has(key)) {
+        seen.set(key, true);
+        unique.push(transaction);
+      }
+    });
+    
+    return unique;
+  };
+
   const fetchTransactions = async () => {
     try {
       if (!user?.id) {
@@ -499,9 +515,13 @@ export default function Dashboard() {
         })))
       }
 
+      // Filter out duplicates before displaying
+      const uniqueTransactions = removeDuplicates(allTransactions)
+      console.log(`Filtered ${allTransactions.length - uniqueTransactions.length} duplicates from display`)
+      
       console.log('Total transactions found:', allTransactions.length)
-      console.log('All transactions:', allTransactions)
-      setTransactions(allTransactions)
+      console.log('Unique transactions:', uniqueTransactions.length)
+      setTransactions(uniqueTransactions)
     } catch (error) {
       console.warn('Error fetching transactions:', error)
       setTransactions([])
