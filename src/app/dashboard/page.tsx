@@ -1687,22 +1687,28 @@ export default function Dashboard() {
                     {/* DUPLICATE TEST BUTTON - SHOULD BE VISIBLE */}
                     <Button
                       onClick={async () => {
+                        console.log('🔴 BUTTON CLICKED - STARTING DUPLICATE DETECTION & AUTO-MATCH');
                         console.log('=== MANUAL DUPLICATE DETECTION TEST ===');
                         console.log('Current transactions:', transactions.length);
                         console.log('Sample transactions:', transactions.slice(0, 3));
                         
-                        // Step 1: Detect and show duplicates
-                        const unique = removeDuplicates(transactions);
-                        console.log('Unique transactions:', unique.length);
-                        console.log('Duplicates found:', duplicatesFound);
-                        
-                        setTransactions(unique);
-                        
-                        // Step 2: Automatically run auto-matching
-                        console.log('=== AUTO-RUNNING SMART MATCHING ===');
                         try {
+                          // Step 1: Detect and show duplicates
+                          console.log('🔍 Step 1: Detecting duplicates...');
+                          const unique = removeDuplicates(transactions);
+                          console.log('Unique transactions:', unique.length);
+                          console.log('Duplicates found:', duplicatesFound);
+                          
+                          setTransactions(unique);
+                          
+                          // Step 2: Automatically run auto-matching
+                          console.log('🔍 Step 2: Running auto-matching...');
+                          console.log('=== AUTO-RUNNING SMART MATCHING ===');
+                          console.log('Calling runSingleFileMatching with', unique.length, 'transactions');
+                          
                           const matches = await runSingleFileMatching(unique);
-                          console.log('Auto-match completed. Found matches:', matches.length);
+                          console.log('✅ Auto-match completed. Found matches:', matches.length);
+                          console.log('Matches:', matches);
                           
                           if (matches.length > 0) {
                             alert(`✅ Found ${duplicatesFound} duplicates! Filtered from ${transactions.length} to ${unique.length} transactions.\n\n🎯 Auto-matched ${matches.length} transactions! Check the results below.`);
@@ -1710,8 +1716,9 @@ export default function Dashboard() {
                             alert(`✅ Found ${duplicatesFound} duplicates! Filtered from ${transactions.length} to ${unique.length} transactions.\n\n⚠️ No automatic matches found.`);
                           }
                         } catch (error) {
-                          console.error('Auto-match error:', error);
-                          alert(`✅ Found ${duplicatesFound} duplicates! Filtered from ${transactions.length} to ${unique.length} transactions.\n\n❌ Auto-match failed: ${error}`);
+                          console.error('❌ ERROR in button click:', error);
+                          console.error('Error details:', error);
+                          alert(`❌ ERROR: ${error}\n\nCheck console for details.`);
                         }
                       }}
                       disabled={transactions.length === 0}
