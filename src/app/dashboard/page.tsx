@@ -434,15 +434,26 @@ export default function Dashboard() {
     const unique: Transaction[] = [];
     let duplicateCount = 0;
     
-    transactions.forEach(transaction => {
+    console.log('=== DUPLICATE DETECTION DEBUG ===');
+    console.log('Total transactions to process:', transactions.length);
+    
+    transactions.forEach((transaction, index) => {
       const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
+      console.log(`Transaction ${index + 1}: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
+      console.log(`Key: "${key}"`);
+      console.log(`Already seen: ${seen.has(key)}`);
+      
       if (!seen.has(key)) {
         seen.set(key, true);
         unique.push(transaction);
+        console.log('✅ Added as unique');
       } else {
         duplicateCount++;
+        console.log('❌ DUPLICATE FOUND!');
       }
     });
+    
+    console.log(`=== RESULTS: ${unique.length} unique, ${duplicateCount} duplicates ===`);
     
     // Update duplicate tracking state
     setDuplicatesFound(duplicateCount);
@@ -1650,6 +1661,20 @@ export default function Dashboard() {
                     >
                       <Trash2 className="h-4 w-4" />
                       <span>Clear All</span>
+                    </Button>
+                    
+                    <Button
+                      onClick={() => {
+                        console.log('Manual duplicate detection triggered');
+                        const unique = removeDuplicates(transactions);
+                        setTransactions(unique);
+                        alert(`Found ${duplicatesFound} duplicates! Filtered to ${unique.length} unique transactions.`);
+                      }}
+                      disabled={transactions.length === 0}
+                      className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700"
+                    >
+                      <Zap className="h-4 w-4" />
+                      <span>Detect Duplicates</span>
                     </Button>
             </div>
           </div>
