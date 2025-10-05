@@ -83,7 +83,8 @@ export class SingleFileMatcher {
         
         if (processed.has(key2)) continue
         
-        if (this.isExactDuplicate(tx1, tx2)) {
+        // Use exact key matching for duplicates (same amount, description, date)
+        if (key1 === key2) {
           duplicateGroup.push(tx2)
           processed.add(key2)
         }
@@ -181,7 +182,8 @@ export class SingleFileMatcher {
    * Get a unique key for transaction grouping
    */
   private getTransactionKey(tx: Transaction): string {
-    return `${tx.amount}_${tx.description.toLowerCase()}_${tx.date}`
+    // Use exact match for duplicates - same amount, description, and date
+    return `${tx.amount}_${tx.description.toLowerCase().trim()}_${tx.date}`
   }
 
   /**

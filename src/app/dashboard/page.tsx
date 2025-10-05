@@ -838,42 +838,68 @@ export default function Dashboard() {
   };
 
   const runSingleFileMatching = async (transactions: any[]) => {
-    console.log('Running single-file auto-matching...')
+    console.log('🔍 === STARTING AUTO-MATCH ===')
     console.log('Input transactions:', transactions.length)
     console.log('Sample transaction:', transactions[0])
     
     try {
       // Transform transactions to match SingleFileMatcher format
-      const formattedTransactions = transactions.map(tx => ({
-        id: tx.id || crypto.randomUUID(),
-        amount: parseFloat(tx.amount) || 0,
-        description: String(tx.description || ''),
-        date: String(tx.date || ''),
-        category: tx.category || 'Unknown',
-        type: (parseFloat(tx.amount) >= 0) ? 'Credit' as const : 'Debit' as const
-      }))
+      const formattedTransactions = transactions.map(tx => {
+        const amount = parseFloat(String(tx.amount).replace(/[$,\s]/g, '')) || 0
+        return {
+          id: tx.id || crypto.randomUUID(),
+          amount: amount,
+          description: String(tx.description || '').trim(),
+          date: String(tx.date || '').trim(),
+          category: tx.category || 'Unknown',
+          type: (amount >= 0) ? 'Credit' as const : 'Debit' as const
+        }
+      }).filter(tx => tx.description && tx.date && tx.amount !== 0) // Filter out invalid transactions
       
-      console.log('Formatted transactions:', formattedTransactions.length)
+      console.log('✅ Formatted transactions:', formattedTransactions.length)
       console.log('Sample formatted transaction:', formattedTransactions[0])
       
+      if (formattedTransactions.length === 0) {
+        console.log('❌ No valid transactions to analyze')
+        return []
+      }
+      
       const matcher = new SingleFileMatcher()
+      console.log('🔍 Running matcher.findMatches...')
       const matches = matcher.findMatches(formattedTransactions)
       
-      console.log('Single-file matches found:', matches.length)
-      console.log('Matches:', matches)
+      console.log('🎯 Single-file matches found:', matches.length)
+      console.log('🎯 Match details:', matches.map(m => ({
+        type: m.type,
+        confidence: m.confidence,
+        reason: m.reason,
+        transactions: m.transactions.length
+      })))
       
-      setSingleFileMatches(matches)
+      // Ensure matches have proper structure
+      const validMatches = matches.map(match => ({
+        ...match,
+        id: match.id || crypto.randomUUID(),
+        confidence: match.confidence || 0.7,
+        transactions: match.transactions || [],
+        reason: match.reason || 'No reason provided'
+      }))
+      
+      setSingleFileMatches(validMatches)
       setShowSingleFileMatches(true)
+      
+      console.log('✅ Auto-match completed successfully!')
       
       // Track feature usage for beta users
       if (user) {
-        await trackBetaUserActivity('single_file_analysis', { matches_found: matches.length })
+        await trackBetaUserActivity('single_file_analysis', { matches_found: validMatches.length })
       }
       
-      return matches
+      return validMatches
     } catch (error) {
-      console.error('Error in single-file matching:', error)
-      console.error('Error details:', error)
+      console.error('❌ Error in single-file matching:', error)
+      console.error('❌ Error details:', error)
+      console.error('❌ Stack trace:', error instanceof Error ? error.stack : 'No stack trace')
       return []
     }
   }
@@ -1766,6 +1792,38 @@ export default function Dashboard() {
                       <span>Clear All</span>
                     </Button>
                     
+                    {/* TEST AUTO-MATCH WITH SAMPLE DATA */}
+                    <Button
+                      onClick={async () => {
+                        console.log('🧪 Testing auto-match with sample data...')
+                        
+                        // Create sample transactions for testing
+                        const sampleTransactions = [
+                          { id: '1', date: '2024-01-15', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
+                          { id: '2', date: '2024-01-16', description: 'Client Payment - ABC Corp', amount: 2500.00, category: 'Income' },
+                          { id: '3', date: '2024-01-17', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
+                          { id: '4', date: '2024-01-17', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
+                          { id: '5', date: '2024-01-18', description: 'Software Subscription', amount: 99.00, category: 'Technology' },
+                          { id: '6', date: '2024-01-19', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' },
+                          { id: '7', date: '2024-01-20', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
+                          { id: '8', date: '2024-01-21', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' },
+                          { id: '9', date: '2024-01-22', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
+                          { id: '10', date: '2024-01-23', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' }
+                        ]
+                        
+                        try {
+                          const matches = await runSingleFileMatching(sampleTransactions)
+                          alert(`🧪 TEST COMPLETE!\n\nFound ${matches.length} matches:\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n\nCheck the Smart Matching tab to see results!`)
+                        } catch (error) {
+                          alert(`❌ TEST FAILED: ${error}`)
+                        }
+                      }}
+                      className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white font-bold"
+                    >
+                      <Zap className="h-4 w-4" />
+                      <span>Test Auto-Match</span>
+                    </Button>
+
                     {/* DUPLICATE TEST BUTTON - SHOULD BE VISIBLE */}
                     <Button
                       onClick={() => {
