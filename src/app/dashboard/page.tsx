@@ -2074,6 +2074,74 @@ export default function Dashboard() {
                   </div>
                 </div>
 
+                {/* Auto-Match Button */}
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-green-800 mb-2">Run Auto-Match Analysis</h3>
+                  <p className="text-green-700 mb-3">
+                    Analyze your current transactions for duplicates, patterns, and category suggestions.
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={async () => {
+                        if (transactions.length === 0) {
+                          alert('No transactions found. Please upload a file first.');
+                          return;
+                        }
+                        
+                        try {
+                          console.log('🔍 Running auto-match from Smart Matching tab...');
+                          const matches = await runSingleFileMatching(transactions);
+                          
+                          if (matches.length > 0) {
+                            alert(`🎯 AUTO-MATCH COMPLETE!\n\nFound ${matches.length} smart matches:\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} recurring patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n\nResults are shown below!`);
+                          } else {
+                            alert(`⚠️ AUTO-MATCH COMPLETE!\n\nNo automatic matches found.\n\nThis could mean:\n• Your transactions are all unique (good!)\n• No recurring patterns detected\n• No category suggestions available`);
+                          }
+                        } catch (error) {
+                          console.error('❌ Auto-match error:', error);
+                          alert(`❌ AUTO-MATCH ERROR!\n\n${error}\n\nCheck console for details.`);
+                        }
+                      }}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                      disabled={transactions.length === 0}
+                    >
+                      <Zap className="h-4 w-4" />
+                      Run Auto-Match
+                    </Button>
+                    
+                    <Button
+                      onClick={async () => {
+                        console.log('🧪 Testing auto-match with sample data...')
+                        
+                        const sampleTransactions = [
+                          { id: '1', date: '2024-01-15', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
+                          { id: '2', date: '2024-01-16', description: 'Client Payment - ABC Corp', amount: 2500.00, category: 'Income' },
+                          { id: '3', date: '2024-01-17', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
+                          { id: '4', date: '2024-01-17', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
+                          { id: '5', date: '2024-01-18', description: 'Software Subscription', amount: 99.00, category: 'Technology' },
+                          { id: '6', date: '2024-01-19', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' },
+                          { id: '7', date: '2024-01-20', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
+                          { id: '8', date: '2024-01-21', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' },
+                          { id: '9', date: '2024-01-22', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
+                          { id: '10', date: '2024-01-23', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' }
+                        ]
+                        
+                        try {
+                          const matches = await runSingleFileMatching(sampleTransactions)
+                          alert(`🧪 TEST COMPLETE!\n\nFound ${matches.length} matches:\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n\nResults are shown below!`)
+                        } catch (error) {
+                          alert(`❌ TEST FAILED: ${error}`)
+                        }
+                      }}
+                      variant="outline"
+                      className="inline-flex items-center gap-2 px-4 py-2 border-green-600 text-green-600 hover:bg-green-50 transition-colors"
+                    >
+                      <Zap className="h-4 w-4" />
+                      Test with Sample Data
+                    </Button>
+                  </div>
+                </div>
+
                 {/* Auto-Match Info */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-blue-800 text-sm">
