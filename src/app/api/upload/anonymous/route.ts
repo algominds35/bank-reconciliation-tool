@@ -281,18 +281,23 @@ export async function POST(request: NextRequest) {
         
         // Check each new transaction against existing ones AND within the same file
         newTransactions = [];
-        transactions.forEach(transaction => {
+        transactions.forEach((transaction, index) => {
           const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
+          console.log(`Processing transaction ${index + 1}: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
+          console.log(`Key: ${key}`);
+          console.log(`Already seen in file: ${seenInFile.has(key)}`);
+          console.log(`Already in database: ${existingMap.has(key)}`);
           
           if (existingMap.has(key)) {
             duplicates.push(transaction);
-            console.log(`Found duplicate against database: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
+            console.log(`✅ Found duplicate against database: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
           } else if (seenInFile.has(key)) {
             duplicates.push(transaction);
-            console.log(`Found duplicate within file: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
+            console.log(`✅ Found duplicate within file: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
           } else {
             newTransactions.push(transaction);
             seenInFile.set(key, true);
+            console.log(`✅ Adding new transaction: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
           }
         });
 
@@ -386,7 +391,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       sessionId,
       transactions: newTransactions.slice(0, 10), // Return first 10 new transactions for preview
-      message: `Successfully processed ${transactions.length} transactions. ${newTransactions.length} new transactions imported, ${duplicates.length} duplicates found against existing records.`,
+      message: `Successfully processed ${transactions.length} transactions. ${newTransactions.length} new transactions imported, ${duplicates.length} duplicates filtered out (including duplicates within the file).`,
       insertedCount,
       duplicates: duplicates.length,
       totalProcessed: transactions.length,
