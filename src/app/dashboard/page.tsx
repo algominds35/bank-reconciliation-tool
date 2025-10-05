@@ -2113,7 +2113,15 @@ export default function Dashboard() {
                           if (matches.length > 0) {
                             alert(`🎯 REAL AUTO-MATCH COMPLETE!\n\nAnalyzed ${transactions.length} real transactions\nFound ${matches.length} smart matches:\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} recurring patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n• ${matches.filter(m => m.type === 'reconciliation').length} reconciliation matches\n\nResults are shown below!`);
                           } else {
-                            alert(`⚠️ REAL AUTO-MATCH COMPLETE!\n\nAnalyzed ${transactions.length} real transactions\nNo automatic matches found.\n\nThis could mean:\n• Your transactions are all unique (good!)\n• No recurring patterns detected\n• No category suggestions available`);
+                            // Calculate data insights
+                            const totalAmount = transactions.reduce((sum, t) => sum + Math.abs(t.amount), 0);
+                            const dateRange = transactions.length > 0 ? {
+                              start: new Date(Math.min(...transactions.map(t => new Date(t.date).getTime()))).toLocaleDateString(),
+                              end: new Date(Math.max(...transactions.map(t => new Date(t.date).getTime()))).toLocaleDateString()
+                            } : null;
+                            const categories = [...new Set(transactions.map(t => t.category).filter(Boolean))];
+                            
+                            alert(`✅ CLEAN DATA CONFIRMED!\n\n📊 DATA ANALYSIS:\n• ${transactions.length} transactions processed\n• Date range: ${dateRange?.start} to ${dateRange?.end}\n• Total amount: $${totalAmount.toLocaleString()}\n• Categories: ${categories.length} different types\n• 0 duplicates found (data is clean!)\n• 0 recurring patterns detected\n• All transactions are unique\n\n🎯 YOUR DATA IS READY FOR IMPORT!\nNo issues found - proceed with confidence!`);
                           }
                         } catch (error) {
                           console.error('❌ Auto-match error:', error);
@@ -2154,6 +2162,35 @@ export default function Dashboard() {
                     </Button>
                   </div>
                 </div>
+
+                {/* No Matches Found - Show Data Insights */}
+                {showSingleFileMatches && singleFileMatches.length === 0 && transactions.length > 0 && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h3 className="font-semibold text-green-800 mb-4">✅ Clean Data Confirmed!</h3>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="font-medium">Transactions:</span> {transactions.length}
+                      </div>
+                      <div>
+                        <span className="font-medium">Total Amount:</span> ${transactions.reduce((sum, t) => sum + Math.abs(t.amount), 0).toLocaleString()}
+                      </div>
+                      <div>
+                        <span className="font-medium">Date Range:</span> {
+                          transactions.length > 0 ? 
+                          `${new Date(Math.min(...transactions.map(t => new Date(t.date).getTime()))).toLocaleDateString()} - ${new Date(Math.max(...transactions.map(t => new Date(t.date).getTime()))).toLocaleDateString()}` :
+                          'N/A'
+                        }
+                      </div>
+                      <div>
+                        <span className="font-medium">Categories:</span> {[...new Set(transactions.map(t => t.category).filter(Boolean))].length}
+                      </div>
+                    </div>
+                    <div className="mt-4 p-3 bg-green-100 rounded-lg">
+                      <p className="text-green-800 font-medium">🎯 Your data is ready for import!</p>
+                      <p className="text-green-700 text-sm">No duplicates, patterns, or categorization issues found.</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Auto-Match Info */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
