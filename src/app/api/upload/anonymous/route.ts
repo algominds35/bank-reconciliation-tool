@@ -4,6 +4,28 @@ import { storeTemporaryResults, cleanupExpiredResults } from '@/lib/temporarySto
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 
+// Function to filter transactions by date
+function filterTransactionsByDate(transactions: Transaction[], lastImportDate: string): { filtered: Transaction[], filteredOut: Transaction[] } {
+  if (!lastImportDate) {
+    return { filtered: transactions, filteredOut: [] };
+  }
+  
+  const filterDate = new Date(lastImportDate);
+  const filtered: Transaction[] = [];
+  const filteredOut: Transaction[] = [];
+  
+  transactions.forEach(transaction => {
+    const transactionDate = new Date(transaction.date);
+    if (transactionDate > filterDate) {
+      filtered.push(transaction);
+    } else {
+      filteredOut.push(transaction);
+    }
+  });
+  
+  return { filtered, filteredOut };
+}
+
 // Initialize Supabase client
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -373,6 +395,7 @@ export async function POST(request: NextRequest) {
     
     const formData = await request.formData();
     const file = formData.get('csv') as File;
+    const lastImportDate = formData.get('lastImportDate') as string;
     
     if (!file) {
       console.log('No file provided');
@@ -473,7 +496,19 @@ export async function POST(request: NextRequest) {
     const transactions = parseCSV(csvContent);
     console.log('Parsed transactions:', transactions.length);
     
-    if (transactions.length === 0) {
+    // Apply date filtering if provided
+    let filteredTransactions = transactions;
+    let filteredOutTransactions: Transaction[] = [];
+    
+    if (lastImportDate) {
+      console.log('Applying date filter:', lastImportDate);
+      const filterResult = filterTransactionsByDate(transactions, lastImportDate);
+      filteredTransactions = filterResult.filtered;
+      filteredOutTransactions = filterResult.filteredOut;
+      console.log(`Date filtering: ${filteredTransactions.length} to import, ${filteredOutTransactions.length} filtered out`);
+    }
+    
+    if (filteredTransactions.length === 0) {
       console.log('No valid transactions found');
       return NextResponse.json(
         { 
@@ -491,9 +526,9 @@ export async function POST(request: NextRequest) {
     }
     
     // Process transactions
-    const duplicates = findDuplicates(transactions);
-    const unmatched = findUnmatched(transactions);
-    const timeSaved = calculateTimeSaved(transactions.length);
+    const duplicates = findDuplicates(filteredTransactions);
+    const unmatched = findUnmatched(filteredTransactions);
+    const timeSaved = calculateTimeSaved(filteredTransactions.length);
     
     // Generate temporary session ID
     const sessionId = crypto.randomUUID();
@@ -501,18 +536,22 @@ export async function POST(request: NextRequest) {
     // Store results temporarily (24 hours)
     const summary = {
       totalTransactions: transactions.length,
+      filteredTransactions: filteredTransactions.length,
+      filteredOutCount: filteredOutTransactions.length,
       duplicatesFound: duplicates.length,
       unmatchedCount: unmatched.length,
       timeSaved,
+      lastImportDate: lastImportDate || null,
     };
     
     const results = {
-      transactions,
+      transactions: filteredTransactions,
       duplicates,
       unmatched,
       timeSaved,
       processedAt: new Date().toISOString(),
       summary,
+      filteredOut: filteredOutTransactions,
     };
     
     storeTemporaryResults(sessionId, results);
@@ -523,9 +562,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       sessionId,
       summary,
-      transactions: transactions.slice(0, 10), // Return first 10 transactions for preview
+      transactions: filteredTransactions.slice(0, 10), // Return first 10 transactions for preview
       duplicates: duplicates.slice(0, 10), // Return first 10 for preview
       unmatched: unmatched.slice(0, 10), // Return first 10 for preview
+      filteredOut: filteredOutTransactions.slice(0, 10), // Show filtered out transactions
+      message: lastImportDate 
+        ? `Successfully processed ${transactions.length} transactions. ${filteredTransactions.length} imported after ${lastImportDate}, ${filteredOutTransactions.length} filtered out.`
+        : `Successfully processed ${filteredTransactions.length} transactions.`,
     });
     
   } catch (error) {

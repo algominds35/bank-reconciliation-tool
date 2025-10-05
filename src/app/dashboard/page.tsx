@@ -364,6 +364,7 @@ export default function Dashboard() {
   const [clearingDemoData, setClearingDemoData] = useState(false)
   const [singleFileMatches, setSingleFileMatches] = useState<any[]>([])
   const [showSingleFileMatches, setShowSingleFileMatches] = useState(false)
+  const [lastImportDate, setLastImportDate] = useState<string>('')
   
 
   
@@ -730,6 +731,12 @@ export default function Dashboard() {
       const formData = new FormData()
       formData.append('csv', file)
       
+      // Add date filter if provided
+      if (lastImportDate) {
+        formData.append('lastImportDate', lastImportDate)
+        console.log('Using date filter:', lastImportDate)
+      }
+      
       const response = await fetch('/api/upload/anonymous', {
         method: 'POST',
         body: formData
@@ -752,7 +759,7 @@ export default function Dashboard() {
         
         for (const transaction of result.transactions) {
           try {
-            const tableName = transactionType === 'bank' ? 'bank_transactions' : 'book_transactions'
+              const tableName = transactionType === 'bank' ? 'bank_transactions' : 'book_transactions'
             
             const insertData = {
               user_id: user.id,
@@ -768,36 +775,37 @@ export default function Dashboard() {
             }
             
             console.log('Inserting transaction data:', insertData)
-            
-            const { error } = await supabase
-              .from(tableName)
+              
+              const { error } = await supabase
+                .from(tableName)
               .insert(insertData)
 
-            if (error) {
-              console.error('Supabase insert error:', error)
-              throw new Error(`Database error: ${error.message}`)
+              if (error) {
+                console.error('Supabase insert error:', error)
+                throw new Error(`Database error: ${error.message}`)
+              }
+              
+              processedCount++
+            } catch (dbError) {
+              console.error('Database error for transaction:', transaction, dbError)
+              throw dbError
             }
-            
-            processedCount++
-          } catch (dbError) {
-            console.error('Database error for transaction:', transaction, dbError)
-            throw dbError
           }
-        }
 
-        console.log(`Successfully processed ${processedCount} transactions`)
+          console.log(`Successfully processed ${processedCount} transactions`)
 
-        if (processedCount === 0) {
+          if (processedCount === 0) {
           throw new Error('No valid transactions found in file')
-        }
+          }
 
-        // Refresh the transactions list
-        await fetchTransactions()
-        await fetchClients()
+          // Refresh the transactions list
+          await fetchTransactions()
+          await fetchClients()
 
-        // Success message
-        alert(`Successfully uploaded ${processedCount} ${transactionType} transactions!`)
-        
+          // Success message with filtering info
+          const message = result.message || `Successfully uploaded ${processedCount} ${transactionType} transactions!`
+          alert(message)
+          
       } else {
         throw new Error('No transactions found in file')
       }
@@ -805,10 +813,10 @@ export default function Dashboard() {
     } catch (error) {
       console.error('Upload error:', error)
       alert(`Error uploading file: ${error instanceof Error ? error.message : 'Unknown error'}`)
-    } finally {
-      setUploading(false)
-      event.target.value = ''
-    }
+        } finally {
+          setUploading(false)
+          event.target.value = ''
+        }
   }
 
   const handleTransactionSelect = (transactionId: string) => {
@@ -1483,6 +1491,34 @@ export default function Dashboard() {
                         </>
                       )}
                     </Button>
+                    
+                    {/* Date Filter for Preventing Duplicate Imports */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                      <h4 className="text-sm font-medium text-blue-800 mb-2">
+                        🚫 Prevent Duplicate Imports
+                      </h4>
+                      <p className="text-xs text-blue-600 mb-3">
+                        Set the last import date to filter out transactions that were already imported from previous files.
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <label htmlFor="last-import-date" className="text-sm font-medium text-blue-700">
+                          Last Import Date:
+                        </label>
+                        <input
+                          id="last-import-date"
+                          type="date"
+                          value={lastImportDate}
+                          onChange={(e) => setLastImportDate(e.target.value)}
+                          className="px-3 py-1 border border-blue-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Select date"
+                        />
+                        {lastImportDate && (
+                          <span className="text-xs text-blue-600">
+                            Only transactions after {new Date(lastImportDate).toLocaleDateString()} will be imported
+                          </span>
+                        )}
+                      </div>
+                    </div>
                     
                     {/* Upload Buttons */}
                     <div className="flex gap-2">
