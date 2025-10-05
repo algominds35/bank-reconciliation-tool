@@ -26,6 +26,69 @@ function filterTransactionsByDate(transactions: Transaction[], lastImportDate: s
   return { filtered, filteredOut };
 }
 
+// Function to detect duplicates against existing database records
+async function findExistingDuplicates(transactions: Transaction[], userId: string): Promise<{ newTransactions: Transaction[], duplicates: Transaction[] }> {
+  const newTransactions: Transaction[] = [];
+  const duplicates: Transaction[] = [];
+  
+  // Get existing transactions from database for this user
+  const { data: existingTransactions, error } = await supabase
+    .from('bank_transactions')
+    .select('date, amount, description')
+    .eq('user_id', userId);
+  
+  if (error) {
+    console.error('Error fetching existing transactions:', error);
+    // If we can't check, assume all are new
+    return { newTransactions: transactions, duplicates: [] };
+  }
+  
+  // Create a lookup map for existing transactions
+  const existingMap = new Map<string, boolean>();
+  existingTransactions?.forEach(existing => {
+    const key = `${existing.date}_${existing.amount}_${existing.description?.toLowerCase().trim()}`;
+    existingMap.set(key, true);
+  });
+  
+  // Check each new transaction against existing ones
+  transactions.forEach(transaction => {
+    const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
+    
+    if (existingMap.has(key)) {
+      duplicates.push(transaction);
+    } else {
+      newTransactions.push(transaction);
+    }
+  });
+  
+  console.log(`Enhanced duplicate detection: ${newTransactions.length} new, ${duplicates.length} duplicates against existing records`);
+  return { newTransactions, duplicates };
+}
+
+// Function to build success message with all filtering and duplicate detection info
+function buildSuccessMessage(
+  totalTransactions: number,
+  filteredTransactions: number,
+  filteredOutCount: number,
+  newTransactions: number,
+  existingDuplicates: number,
+  lastImportDate: string | null
+): string {
+  let message = `Successfully processed ${totalTransactions} transactions.`;
+  
+  if (lastImportDate) {
+    message += ` ${filteredTransactions} passed date filter (after ${lastImportDate}), ${filteredOutCount} filtered out by date.`;
+  }
+  
+  if (existingDuplicates > 0) {
+    message += ` ${newTransactions} new transactions, ${existingDuplicates} duplicates found against existing records.`;
+  } else if (newTransactions !== filteredTransactions) {
+    message += ` ${newTransactions} transactions ready for import.`;
+  }
+  
+  return message;
+}
+
 // Initialize Supabase client
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -396,6 +459,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('csv') as File;
     const lastImportDate = formData.get('lastImportDate') as string;
+    const userId = formData.get('userId') as string;
     
     if (!file) {
       console.log('No file provided');
@@ -525,10 +589,21 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Process transactions
-    const duplicates = findDuplicates(filteredTransactions);
-    const unmatched = findUnmatched(filteredTransactions);
-    const timeSaved = calculateTimeSaved(filteredTransactions.length);
+    // Enhanced duplicate detection against existing database records
+    let newTransactions = filteredTransactions;
+    let existingDuplicates: Transaction[] = [];
+    
+    if (userId) {
+      console.log('Running enhanced duplicate detection against existing records...');
+      const duplicateResult = await findExistingDuplicates(filteredTransactions, userId);
+      newTransactions = duplicateResult.newTransactions;
+      existingDuplicates = duplicateResult.duplicates;
+    }
+    
+    // Process transactions (traditional duplicate detection within file)
+    const duplicates = findDuplicates(newTransactions);
+    const unmatched = findUnmatched(newTransactions);
+    const timeSaved = calculateTimeSaved(newTransactions.length);
     
     // Generate temporary session ID
     const sessionId = crypto.randomUUID();
@@ -538,20 +613,24 @@ export async function POST(request: NextRequest) {
       totalTransactions: transactions.length,
       filteredTransactions: filteredTransactions.length,
       filteredOutCount: filteredOutTransactions.length,
+      newTransactions: newTransactions.length,
+      existingDuplicates: existingDuplicates.length,
       duplicatesFound: duplicates.length,
       unmatchedCount: unmatched.length,
       timeSaved,
       lastImportDate: lastImportDate || null,
+      enhancedDuplicateDetection: userId ? true : false,
     };
     
     const results = {
-      transactions: filteredTransactions,
+      transactions: newTransactions,
       duplicates,
       unmatched,
       timeSaved,
       processedAt: new Date().toISOString(),
       summary,
       filteredOut: filteredOutTransactions,
+      existingDuplicates,
     };
     
     storeTemporaryResults(sessionId, results);
@@ -562,13 +641,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       sessionId,
       summary,
-      transactions: filteredTransactions.slice(0, 10), // Return first 10 transactions for preview
+      transactions: newTransactions.slice(0, 10), // Return first 10 transactions for preview
       duplicates: duplicates.slice(0, 10), // Return first 10 for preview
       unmatched: unmatched.slice(0, 10), // Return first 10 for preview
       filteredOut: filteredOutTransactions.slice(0, 10), // Show filtered out transactions
-      message: lastImportDate 
-        ? `Successfully processed ${transactions.length} transactions. ${filteredTransactions.length} imported after ${lastImportDate}, ${filteredOutTransactions.length} filtered out.`
-        : `Successfully processed ${filteredTransactions.length} transactions.`,
+      existingDuplicates: existingDuplicates.slice(0, 10), // Show duplicates against existing records
+      message: buildSuccessMessage(transactions.length, filteredTransactions.length, filteredOutTransactions.length, newTransactions.length, existingDuplicates.length, lastImportDate),
     });
     
   } catch (error) {

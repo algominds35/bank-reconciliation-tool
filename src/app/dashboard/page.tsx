@@ -737,6 +737,12 @@ export default function Dashboard() {
         console.log('Using date filter:', lastImportDate)
       }
       
+      // Add user ID for enhanced duplicate detection
+      if (user?.id) {
+        formData.append('userId', user.id)
+        console.log('Using enhanced duplicate detection for user:', user.id)
+      }
+      
       const response = await fetch('/api/upload/anonymous', {
         method: 'POST',
         body: formData
@@ -753,11 +759,11 @@ export default function Dashboard() {
       // Store the session ID for later use
       const sessionId = result.sessionId
       
-      // Process the transactions from the API response
-      if (result.transactions && result.transactions.length > 0) {
-        let processedCount = 0
-        
-        for (const transaction of result.transactions) {
+        // Process the NEW transactions from the API response (already filtered and deduplicated)
+        if (result.transactions && result.transactions.length > 0) {
+          let processedCount = 0
+          
+          for (const transaction of result.transactions) {
           try {
               const tableName = transactionType === 'bank' ? 'bank_transactions' : 'book_transactions'
             
@@ -1519,7 +1525,17 @@ export default function Dashboard() {
                         )}
                       </div>
                     </div>
-                    
+
+                    {/* Enhanced Duplicate Detection Info */}
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                      <h4 className="text-sm font-medium text-green-800 mb-2">
+                        🔍 Smart Duplicate Detection
+                      </h4>
+                      <p className="text-xs text-green-600">
+                        Your tool will automatically compare new transactions against your existing database records to prevent importing duplicates.
+                      </p>
+                    </div>
+
                     {/* Upload Buttons */}
                     <div className="flex gap-2">
               <div>
