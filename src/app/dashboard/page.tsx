@@ -434,12 +434,18 @@ export default function Dashboard() {
         return
       }
 
+      console.log('Fetching transactions for user:', user.id)
+
       // Fetch from bank_transactions_sync, bank_transactions, and book_transactions tables - FILTERED BY USER ID
       const [bankSyncResult, bankResult, bookResult] = await Promise.all([
         supabase.from('bank_transactions_sync').select('*').eq('user_id', user.id),
         supabase.from('bank_transactions').select('*').eq('user_id', user.id),
         supabase.from('book_transactions').select('*').eq('user_id', user.id)
       ])
+
+      console.log('Bank sync result:', bankSyncResult)
+      console.log('Bank result:', bankResult)
+      console.log('Book result:', bookResult)
 
       let allTransactions: Transaction[] = []
 
@@ -494,6 +500,8 @@ export default function Dashboard() {
         })))
       }
 
+      console.log('Total transactions found:', allTransactions.length)
+      console.log('All transactions:', allTransactions)
       setTransactions(allTransactions)
     } catch (error) {
       console.warn('Error fetching transactions:', error)
