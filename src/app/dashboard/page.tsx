@@ -364,7 +364,6 @@ export default function Dashboard() {
   const [clearingDemoData, setClearingDemoData] = useState(false)
   const [singleFileMatches, setSingleFileMatches] = useState<any[]>([])
   const [showSingleFileMatches, setShowSingleFileMatches] = useState(false)
-  const [lastImportDate, setLastImportDate] = useState<string>('')
   
 
   
@@ -757,16 +756,10 @@ export default function Dashboard() {
       const formData = new FormData()
       formData.append('csv', file)
       
-      // Add date filter if provided
-      if (lastImportDate) {
-        formData.append('lastImportDate', lastImportDate)
-        console.log('Using date filter:', lastImportDate)
-      }
-      
-      // Add user ID for enhanced duplicate detection
+      // Add user ID for database insertion
       if (user?.id) {
         formData.append('userId', user.id)
-        console.log('Using enhanced duplicate detection for user:', user.id)
+        console.log('Processing file for user:', user.id)
       }
       
       const response = await fetch('/api/upload/anonymous', {
@@ -1479,43 +1472,6 @@ export default function Dashboard() {
                       )}
                     </Button>
                     
-                    {/* Date Filter for Preventing Duplicate Imports */}
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                      <h4 className="text-sm font-medium text-blue-800 mb-2">
-                        🚫 Prevent Duplicate Imports
-                      </h4>
-                      <p className="text-xs text-blue-600 mb-3">
-                        Set the last import date to filter out transactions that were already imported from previous files.
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <label htmlFor="last-import-date" className="text-sm font-medium text-blue-700">
-                          Last Import Date:
-                        </label>
-                        <input
-                          id="last-import-date"
-                          type="date"
-                          value={lastImportDate}
-                          onChange={(e) => setLastImportDate(e.target.value)}
-                          className="px-3 py-1 border border-blue-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Select date"
-                        />
-                        {lastImportDate && (
-                          <span className="text-xs text-blue-600">
-                            Only transactions after {new Date(lastImportDate).toLocaleDateString()} will be imported
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Enhanced Duplicate Detection Info */}
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                      <h4 className="text-sm font-medium text-green-800 mb-2">
-                        🔍 Smart Duplicate Detection
-                      </h4>
-                      <p className="text-xs text-green-600">
-                        Your tool will automatically compare new transactions against your existing database records to prevent importing duplicates.
-                      </p>
-                    </div>
 
                     {/* Upload Buttons */}
                     <div className="flex gap-2">
