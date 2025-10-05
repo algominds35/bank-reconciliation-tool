@@ -760,7 +760,7 @@ export default function Dashboard() {
               date: transaction.date,
               description: transaction.description,
               amount: transaction.amount,
-              type: 'debit', // Always use 'debit' for now to avoid constraint issues
+              // Remove type field - let database use default
               category: transaction.category || null,
               account: transaction.account || null,
               reference: transaction.reference || null,
