@@ -298,8 +298,8 @@ export async function POST(request: NextRequest) {
         });
 
         // Check each new transaction against existing database records
-        const finalNewTransactions = [];
-        const databaseDuplicates = [];
+        const finalNewTransactions: Transaction[] = [];
+        const databaseDuplicates: Transaction[] = [];
         
         newTransactions.forEach((transaction, index) => {
           const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
@@ -407,7 +407,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       sessionId,
       transactions: newTransactions.slice(0, 10), // Return first 10 new transactions for preview
-      message: `Successfully processed ${transactions.length} transactions. ${newTransactions.length} new transactions imported, ${duplicates.length} duplicates filtered out (including duplicates within the file).`,
+      message: `Successfully uploaded ${transactions.length} transactions. ${duplicates.length} duplicates found.`,
       insertedCount,
       duplicates: duplicates.length,
       totalProcessed: transactions.length,
