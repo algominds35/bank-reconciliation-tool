@@ -1011,6 +1011,8 @@ export default function Dashboard() {
       console.log('Starting to clear all transactions for user:', user.id)
       
       // Call the server-side API route for clearing transactions
+      console.log('Calling clear-transactions API with userId:', user.id);
+      
       const response = await fetch('/api/clear-transactions', {
         method: 'POST',
         headers: {
@@ -1019,13 +1021,15 @@ export default function Dashboard() {
         body: JSON.stringify({ userId: user.id })
       });
 
+      console.log('API response status:', response.status);
+      
       const result = await response.json();
+      console.log('API response result:', result);
 
       if (!response.ok) {
+        console.error('API error:', result);
         throw new Error(result.error || 'Failed to clear transactions');
       }
-
-      console.log('Clear transactions result:', result);
 
       // Refresh transactions
       console.log('Refreshing transactions after clearing...')
