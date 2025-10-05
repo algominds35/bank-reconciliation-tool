@@ -278,12 +278,15 @@ export async function POST(request: NextRequest) {
           
           if (existingMap.has(key)) {
             duplicates.push(transaction);
+            console.log(`Found duplicate: ${transaction.description} on ${transaction.date} for $${transaction.amount}`);
           } else {
             newTransactions.push(transaction);
           }
         });
 
         console.log(`Enhanced duplicate detection: ${newTransactions.length} new, ${duplicates.length} duplicates against existing records`);
+        console.log(`Existing transactions in database: ${existingTransactions?.length || 0}`);
+        console.log(`Total transactions in upload: ${transactions.length}`);
       }
     }
 
