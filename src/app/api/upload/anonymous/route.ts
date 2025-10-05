@@ -49,7 +49,7 @@ async function parseOFXFile(file: File): Promise<Transaction[]> {
         
         const amount = parseFloat(amountMatch[1]);
         const description = descriptionMatch[1].trim();
-        const type = typeMatch ? typeMatch[1] : (amount > 0 ? 'CREDIT' : 'DEBIT');
+        const type = typeMatch ? typeMatch[1].toLowerCase() : (amount > 0 ? 'credit' : 'debit');
         
         transactions.push({
           id: `ofx_${Date.now()}_${transactions.length}`,
