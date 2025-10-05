@@ -1874,7 +1874,7 @@ export default function Dashboard() {
                       className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-bold"
                     >
                       <Zap className="h-4 w-4" />
-                      <span>Test Duplicates & Auto-Match</span>
+                      <span>Test Duplicates</span>
                     </Button>
             </div>
           </div>
@@ -2169,7 +2169,7 @@ export default function Dashboard() {
                 {/* Auto-Match Info */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-blue-800 text-sm">
-                    💡 <strong>Tip:</strong> Use the "Test Duplicates & Auto-Match" button on the main transactions page to automatically detect duplicates and run smart matching in one click!
+                    💡 <strong>Tip:</strong> Use the "Test Duplicates" button on the main transactions page to detect duplicates, then use "Run Auto-Match" here for smart matching!
                   </p>
                 </div>
 
