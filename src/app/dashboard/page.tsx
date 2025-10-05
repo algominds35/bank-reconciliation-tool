@@ -434,13 +434,31 @@ export default function Dashboard() {
         return
       }
 
-      // Fetch from both bank_transactions and book_transactions tables - FILTERED BY USER ID
-      const [bankResult, bookResult] = await Promise.all([
+      // Fetch from bank_transactions_sync, bank_transactions, and book_transactions tables - FILTERED BY USER ID
+      const [bankSyncResult, bankResult, bookResult] = await Promise.all([
+        supabase.from('bank_transactions_sync').select('*').eq('user_id', user.id),
         supabase.from('bank_transactions').select('*').eq('user_id', user.id),
         supabase.from('book_transactions').select('*').eq('user_id', user.id)
       ])
 
       let allTransactions: Transaction[] = []
+
+      // Process bank_transactions_sync (manual uploads)
+      if (bankSyncResult.data) {
+        allTransactions.push(...bankSyncResult.data.map(t => ({
+          id: t.id,
+          user_id: user?.id || 'demo-user',
+          client_id: null, // bank_transactions_sync doesn't have client_id
+          date: t.transaction_date,
+          description: t.description,
+          amount: t.amount,
+          transaction_type: 'bank' as const,
+          category: t.category,
+          notes: t.reference || null,
+          is_reconciled: t.is_reconciled || false,
+          reconciliation_group: null
+        })))
+      }
 
       // Process bank transactions
       if (bankResult.data) {
