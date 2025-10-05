@@ -2104,13 +2104,16 @@ export default function Dashboard() {
                         }
                         
                         try {
-                          console.log('🔍 Running auto-match from Smart Matching tab...');
+                          console.log('🔍 Running auto-match with REAL transactions...');
+                          console.log('Real transaction count:', transactions.length);
+                          console.log('Sample real transaction:', transactions[0]);
+                          
                           const matches = await runSingleFileMatching(transactions);
                           
                           if (matches.length > 0) {
-                            alert(`🎯 AUTO-MATCH COMPLETE!\n\nFound ${matches.length} smart matches:\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} recurring patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n\nResults are shown below!`);
+                            alert(`🎯 REAL AUTO-MATCH COMPLETE!\n\nAnalyzed ${transactions.length} real transactions\nFound ${matches.length} smart matches:\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} recurring patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n• ${matches.filter(m => m.type === 'reconciliation').length} reconciliation matches\n\nResults are shown below!`);
                           } else {
-                            alert(`⚠️ AUTO-MATCH COMPLETE!\n\nNo automatic matches found.\n\nThis could mean:\n• Your transactions are all unique (good!)\n• No recurring patterns detected\n• No category suggestions available`);
+                            alert(`⚠️ REAL AUTO-MATCH COMPLETE!\n\nAnalyzed ${transactions.length} real transactions\nNo automatic matches found.\n\nThis could mean:\n• Your transactions are all unique (good!)\n• No recurring patterns detected\n• No category suggestions available`);
                           }
                         } catch (error) {
                           console.error('❌ Auto-match error:', error);
@@ -2128,22 +2131,17 @@ export default function Dashboard() {
                       onClick={async () => {
                         console.log('🧪 Testing auto-match with sample data...')
                         
-                        const sampleTransactions = [
-                          { id: '1', date: '2024-01-15', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
-                          { id: '2', date: '2024-01-16', description: 'Client Payment - ABC Corp', amount: 2500.00, category: 'Income' },
-                          { id: '3', date: '2024-01-17', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
-                          { id: '4', date: '2024-01-17', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
-                          { id: '5', date: '2024-01-18', description: 'Software Subscription', amount: 99.00, category: 'Technology' },
-                          { id: '6', date: '2024-01-19', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' },
-                          { id: '7', date: '2024-01-20', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
-                          { id: '8', date: '2024-01-21', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' },
-                          { id: '9', date: '2024-01-22', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
-                          { id: '10', date: '2024-01-23', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' }
-                        ]
+                        if (transactions.length === 0) {
+                          alert('No transactions found. Please upload a file first to test with real data.');
+                          return;
+                        }
+                        
+                        console.log('🧪 Testing auto-match with REAL data...')
+                        console.log('Real transactions:', transactions.length)
                         
                         try {
-                          const matches = await runSingleFileMatching(sampleTransactions)
-                          alert(`🧪 TEST COMPLETE!\n\nFound ${matches.length} matches:\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n\nResults are shown below!`)
+                          const matches = await runSingleFileMatching(transactions)
+                          alert(`🧪 REAL DATA TEST COMPLETE!\n\nAnalyzed ${transactions.length} real transactions\nFound ${matches.length} matches:\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n• ${matches.filter(m => m.type === 'reconciliation').length} reconciliation matches\n\nResults are shown below!`)
                         } catch (error) {
                           alert(`❌ TEST FAILED: ${error}`)
                         }
@@ -2152,7 +2150,7 @@ export default function Dashboard() {
                       className="inline-flex items-center gap-2 px-4 py-2 border-green-600 text-green-600 hover:bg-green-50 transition-colors"
                     >
                       <Zap className="h-4 w-4" />
-                      Test with Sample Data
+                      Test with Real Data
                     </Button>
                   </div>
                 </div>
