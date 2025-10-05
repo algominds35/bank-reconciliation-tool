@@ -2134,32 +2134,6 @@ export default function Dashboard() {
                       <Zap className="h-4 w-4" />
                       Run Auto-Match
                     </Button>
-                    
-                    <Button
-                      onClick={async () => {
-                        console.log('🧪 Testing auto-match with sample data...')
-                        
-                        if (transactions.length === 0) {
-                          alert('No transactions found. Please upload a file first to test with real data.');
-                          return;
-                        }
-                        
-                        console.log('🧪 Testing auto-match with REAL data...')
-                        console.log('Real transactions:', transactions.length)
-                        
-                        try {
-                          const matches = await runSingleFileMatching(transactions)
-                          alert(`🧪 REAL DATA TEST COMPLETE!\n\nAnalyzed ${transactions.length} real transactions\nFound ${matches.length} matches:\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n• ${matches.filter(m => m.type === 'reconciliation').length} reconciliation matches\n\nResults are shown below!`)
-                        } catch (error) {
-                          alert(`❌ TEST FAILED: ${error}`)
-                        }
-                      }}
-                      variant="outline"
-                      className="inline-flex items-center gap-2 px-4 py-2 border-green-600 text-green-600 hover:bg-green-50 transition-colors"
-                    >
-                      <Zap className="h-4 w-4" />
-                      Test with Real Data
-                    </Button>
                   </div>
                 </div>
 
