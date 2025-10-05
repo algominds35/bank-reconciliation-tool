@@ -2119,7 +2119,7 @@ export default function Dashboard() {
                               start: new Date(Math.min(...transactions.map(t => new Date(t.date).getTime()))).toLocaleDateString(),
                               end: new Date(Math.max(...transactions.map(t => new Date(t.date).getTime()))).toLocaleDateString()
                             } : null;
-                            const categories = [...new Set(transactions.map(t => t.category).filter(Boolean))];
+                            const categories = Array.from(new Set(transactions.map(t => t.category).filter(Boolean)));
                             
                             alert(`✅ CLEAN DATA CONFIRMED!\n\n📊 DATA ANALYSIS:\n• ${transactions.length} transactions processed\n• Date range: ${dateRange?.start} to ${dateRange?.end}\n• Total amount: $${totalAmount.toLocaleString()}\n• Categories: ${categories.length} different types\n• 0 duplicates found (data is clean!)\n• 0 recurring patterns detected\n• All transactions are unique\n\n🎯 YOUR DATA IS READY FOR IMPORT!\nNo issues found - proceed with confidence!`);
                           }
@@ -2182,7 +2182,7 @@ export default function Dashboard() {
                         }
                       </div>
                       <div>
-                        <span className="font-medium">Categories:</span> {[...new Set(transactions.map(t => t.category).filter(Boolean))].length}
+                        <span className="font-medium">Categories:</span> {Array.from(new Set(transactions.map(t => t.category).filter(Boolean))).length}
                       </div>
                     </div>
                     <div className="mt-4 p-3 bg-green-100 rounded-lg">
