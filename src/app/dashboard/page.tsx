@@ -390,6 +390,7 @@ export default function Dashboard() {
     calculateSummary()
   }, [transactions, filter, transactionTypeFilter])
 
+
   const checkUser = async () => {
     try {
     const { data: { session } } = await supabase.auth.getSession()
@@ -537,11 +538,13 @@ export default function Dashboard() {
       }
 
       // Filter out duplicates before displaying
+      console.log('=== AUTO-DUPLICATE FILTERING ===');
+      console.log('Raw transactions from database:', allTransactions.length);
       const uniqueTransactions = removeDuplicates(allTransactions)
       console.log(`Filtered ${allTransactions.length - uniqueTransactions.length} duplicates from display`)
+      console.log('Final unique transactions:', uniqueTransactions.length);
       
-      console.log('Total transactions found:', allTransactions.length)
-      console.log('Unique transactions:', uniqueTransactions.length)
+      // Set the filtered transactions
       setTransactions(uniqueTransactions)
     } catch (error) {
       console.warn('Error fetching transactions:', error)
