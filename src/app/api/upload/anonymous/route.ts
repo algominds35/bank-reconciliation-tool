@@ -662,10 +662,10 @@ export async function POST(request: NextRequest) {
             .insert({
               user_id: userId,
               account_id: `manual_${userId}`,
-              account_name: 'Manual Upload Account',
+              bank_name: 'Manual Upload Account',
               account_type: 'checking',
               status: 'active',
-              last_synced: new Date().toISOString()
+              last_sync: new Date().toISOString()
             })
             .select('id')
             .single();
