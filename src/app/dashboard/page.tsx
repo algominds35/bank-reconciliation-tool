@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 import { Transaction, ReconciliationSummary, Client } from '@/types'
 import { ClientSelector } from '@/components/client-selector'
 import { TransactionTable } from '@/components/transaction-table'
@@ -1010,8 +1011,14 @@ export default function Dashboard() {
     try {
       console.log('Starting to clear all transactions for user:', user.id)
       
+      // Create service role client for admin operations
+      const serviceSupabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      )
+      
       // Clear bank_transactions_sync (where manual uploads are stored) - ONLY FOR THIS USER
-      const { data: bankSyncData, error: bankSyncError } = await supabase
+      const { data: bankSyncData, error: bankSyncError } = await serviceSupabase
         .from('bank_transactions_sync')
         .delete()
         .eq('user_id', user.id)
@@ -1026,7 +1033,7 @@ export default function Dashboard() {
       }
 
       // Clear bank transactions - ONLY FOR THIS USER
-      const { data: bankData, error: bankError } = await supabase
+      const { data: bankData, error: bankError } = await serviceSupabase
         .from('bank_transactions')
         .delete()
         .eq('user_id', user.id)
@@ -1041,7 +1048,7 @@ export default function Dashboard() {
       }
 
       // Clear book transactions - ONLY FOR THIS USER
-      const { data: bookData, error: bookError } = await supabase
+      const { data: bookData, error: bookError } = await serviceSupabase
         .from('book_transactions')
         .delete()
         .eq('user_id', user.id)
