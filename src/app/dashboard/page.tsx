@@ -839,12 +839,29 @@ export default function Dashboard() {
 
   const runSingleFileMatching = async (transactions: any[]) => {
     console.log('Running single-file auto-matching...')
+    console.log('Input transactions:', transactions.length)
+    console.log('Sample transaction:', transactions[0])
     
     try {
+      // Transform transactions to match SingleFileMatcher format
+      const formattedTransactions = transactions.map(tx => ({
+        id: tx.id || crypto.randomUUID(),
+        amount: parseFloat(tx.amount) || 0,
+        description: String(tx.description || ''),
+        date: String(tx.date || ''),
+        category: tx.category || 'Unknown',
+        type: (parseFloat(tx.amount) >= 0) ? 'Credit' as const : 'Debit' as const
+      }))
+      
+      console.log('Formatted transactions:', formattedTransactions.length)
+      console.log('Sample formatted transaction:', formattedTransactions[0])
+      
       const matcher = new SingleFileMatcher()
-      const matches = matcher.findMatches(transactions)
+      const matches = matcher.findMatches(formattedTransactions)
       
       console.log('Single-file matches found:', matches.length)
+      console.log('Matches:', matches)
+      
       setSingleFileMatches(matches)
       setShowSingleFileMatches(true)
       
@@ -856,6 +873,7 @@ export default function Dashboard() {
       return matches
     } catch (error) {
       console.error('Error in single-file matching:', error)
+      console.error('Error details:', error)
       return []
     }
   }
@@ -1764,14 +1782,18 @@ export default function Dashboard() {
                         // Step 3: Auto-run matching
                         setTimeout(async () => {
                           try {
+                            console.log('🔍 Starting auto-match with transactions:', unique.length);
                             const matches = await runSingleFileMatching(unique);
+                            console.log('🔍 Auto-match results:', matches);
+                            
                             if (matches.length > 0) {
-                              alert(`🎯 AUTO-MATCH COMPLETE!\n\nFound ${matches.length} smart matches!\n\nCheck the results below.`);
+                              alert(`🎯 AUTO-MATCH COMPLETE!\n\nFound ${matches.length} smart matches!\n\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} recurring patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n\nCheck the results below!`);
                             } else {
-                              alert(`⚠️ AUTO-MATCH COMPLETE!\n\nNo automatic matches found.`);
+                              alert(`⚠️ AUTO-MATCH COMPLETE!\n\nNo automatic matches found.\n\nThis could mean:\n• Your transactions are all unique (good!)\n• No recurring patterns detected\n• No category suggestions available`);
                             }
                           } catch (error) {
-                            alert(`❌ AUTO-MATCH ERROR!\n\n${error}`);
+                            console.error('❌ Auto-match error:', error);
+                            alert(`❌ AUTO-MATCH ERROR!\n\n${error}\n\nCheck console for details.`);
                           }
                         }, 500);
                       }}
@@ -2000,6 +2022,61 @@ export default function Dashboard() {
                     💡 <strong>Tip:</strong> Use the "Test Duplicates & Auto-Match" button on the main transactions page to automatically detect duplicates and run smart matching in one click!
                   </p>
                 </div>
+
+                {/* Auto-Match Results */}
+                {showSingleFileMatches && singleFileMatches.length > 0 && (
+                  <div className="bg-white border border-gray-200 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-800 mb-4">🎯 Auto-Match Results ({singleFileMatches.length} found)</h3>
+                    <div className="space-y-3">
+                      {singleFileMatches.map((match, index) => (
+                        <div key={match.id} className="border rounded-lg p-4 bg-gray-50">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <Badge variant={match.type === 'duplicate' ? 'destructive' : match.type === 'pattern' ? 'default' : 'secondary'}>
+                                {match.type === 'duplicate' ? 'Duplicate' : match.type === 'pattern' ? 'Pattern' : 'Category'}
+                              </Badge>
+                              <Badge variant="outline">
+                                {Math.round(match.confidence * 100)}% confidence
+                              </Badge>
+                            </div>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => applySuggestion(match)}
+                            >
+                              Apply
+                            </Button>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-2">{match.reason}</p>
+                          {match.suggestion && (
+                            <p className="text-sm font-medium text-blue-700">{match.suggestion}</p>
+                          )}
+                          <div className="mt-2">
+                            <p className="text-xs text-gray-500">
+                              {match.transactions.length} transactions affected
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="flex gap-2 pt-2">
+                        <Button 
+                          size="sm" 
+                          className="bg-blue-600 hover:bg-blue-700"
+                          onClick={() => applyAllSuggestions()}
+                        >
+                          Apply All Suggestions
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          onClick={() => setShowSingleFileMatches(false)}
+                        >
+                          Dismiss
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Results */}
                 {transactions.length === 0 ? (
