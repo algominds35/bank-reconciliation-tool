@@ -1008,42 +1008,63 @@ export default function Dashboard() {
     }
 
     try {
+      console.log('Starting to clear all transactions for user:', user.id)
+      
       // Clear bank_transactions_sync (where manual uploads are stored) - ONLY FOR THIS USER
-      const { error: bankSyncError } = await supabase
+      const { data: bankSyncData, error: bankSyncError } = await supabase
         .from('bank_transactions_sync')
         .delete()
         .eq('user_id', user.id)
+        .select()
 
       if (bankSyncError) {
         console.error('Error clearing bank_transactions_sync:', bankSyncError)
+        alert('Error clearing bank transactions: ' + bankSyncError.message)
+        return
+      } else {
+        console.log('Successfully cleared bank_transactions_sync:', bankSyncData)
       }
 
       // Clear bank transactions - ONLY FOR THIS USER
-      const { error: bankError } = await supabase
+      const { data: bankData, error: bankError } = await supabase
         .from('bank_transactions')
         .delete()
         .eq('user_id', user.id)
+        .select()
 
       if (bankError) {
         console.error('Error clearing bank transactions:', bankError)
+        alert('Error clearing bank transactions: ' + bankError.message)
+        return
+      } else {
+        console.log('Successfully cleared bank_transactions:', bankData)
       }
 
       // Clear book transactions - ONLY FOR THIS USER
-      const { error: bookError } = await supabase
+      const { data: bookData, error: bookError } = await supabase
         .from('book_transactions')
         .delete()
         .eq('user_id', user.id)
+        .select()
 
       if (bookError) {
         console.error('Error clearing book transactions:', bookError)
+        alert('Error clearing book transactions: ' + bookError.message)
+        return
+      } else {
+        console.log('Successfully cleared book_transactions:', bookData)
       }
 
       // Refresh transactions
+      console.log('Refreshing transactions after clearing...')
       await fetchTransactions()
       setSelectedTransactions([])
       calculateSummary()
+      
+      alert('All transactions cleared successfully!')
     } catch (error) {
       console.error('Error clearing transactions:', error)
+      alert('Error clearing transactions: ' + error)
     }
   }
 
