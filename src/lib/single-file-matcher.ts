@@ -5,7 +5,7 @@
 
 export interface SingleFileMatch {
   id: string
-  type: 'duplicate' | 'pattern' | 'category_suggestion'
+  type: 'duplicate' | 'pattern' | 'category_suggestion' | 'reconciliation'
   confidence: number
   transactions: Transaction[]
   suggestion?: string
@@ -41,7 +41,7 @@ export class SingleFileMatcher {
     
     const matches: SingleFileMatch[] = []
     
-    // 1. Find exact duplicates
+    // 1. Find exact duplicates (bank feed duplicates)
     const duplicates = this.findExactDuplicates(transactions)
     matches.push(...duplicates)
     
@@ -49,14 +49,19 @@ export class SingleFileMatcher {
     const patterns = this.findPatternMatches(transactions)
     matches.push(...patterns)
     
-    // 3. Generate category suggestions
+    // 3. Generate category suggestions (inconsistent categorization)
     const categories = this.generateCategorySuggestions(transactions)
     matches.push(...categories)
+    
+    // 4. Find reconciliation matches (deposits vs payments)
+    const reconciliations = this.findReconciliationMatches(transactions)
+    matches.push(...reconciliations)
     
     console.log(`Found ${matches.length} total matches:`, {
       duplicates: duplicates.length,
       patterns: patterns.length,
-      categories: categories.length
+      categories: categories.length,
+      reconciliations: reconciliations.length
     })
     
     return matches
@@ -167,15 +172,96 @@ export class SingleFileMatcher {
   }
 
   /**
-   * Check if two transactions are exact duplicates
+   * Find bank reconciliation matches (deposits vs payments)
+   */
+  private findReconciliationMatches(transactions: Transaction[]): SingleFileMatch[] {
+    const matches: SingleFileMatch[] = []
+    const deposits = transactions.filter(t => t.amount > 0)
+    const payments = transactions.filter(t => t.amount < 0)
+    
+    // Match deposits with corresponding payments (same amount, similar description)
+    for (const deposit of deposits) {
+      const matchingPayments = payments.filter(payment => {
+        const amountMatch = Math.abs(deposit.amount + payment.amount) < 0.01 // Opposite amounts
+        const descSimilarity = this.calculateDescriptionSimilarity(deposit.description, payment.description)
+        return amountMatch && descSimilarity > 0.7
+      })
+      
+      if (matchingPayments.length > 0) {
+        matches.push({
+          id: `reconciliation_${deposit.id}`,
+          type: 'reconciliation',
+          confidence: 0.9,
+          transactions: [deposit, ...matchingPayments],
+          suggestion: `Reconcile deposit and payment: ${deposit.description} ↔ ${matchingPayments[0].description}`,
+          reason: `Found matching deposit (${deposit.amount}) and payment (${Math.abs(matchingPayments[0].amount)}) with similar descriptions`
+        })
+      }
+    }
+    
+    return matches
+  }
+
+  /**
+   * Calculate similarity between two descriptions
+   */
+  private calculateDescriptionSimilarity(desc1: string, desc2: string): number {
+    const words1 = desc1.toLowerCase().split(/\s+/)
+    const words2 = desc2.toLowerCase().split(/\s+/)
+    
+    const commonWords = words1.filter(word => words2.includes(word))
+    const totalWords = new Set([...words1, ...words2]).size
+    
+    return totalWords > 0 ? commonWords.length / totalWords : 0
+  }
+
+  /**
+   * Check if two transactions are duplicates (real-world scenarios)
    */
   private isExactDuplicate(tx1: Transaction, tx2: Transaction): boolean {
+    // Same amount (within tolerance)
     const amountMatch = Math.abs(tx1.amount - tx2.amount) < this.duplicate_amount_tolerance
-    const descMatch = tx1.description.toLowerCase() === tx2.description.toLowerCase()
+    
+    // Same date (within tolerance)
     const dateDiff = Math.abs(new Date(tx1.date).getTime() - new Date(tx2.date).getTime()) / (1000 * 60 * 60 * 24)
     const dateMatch = dateDiff <= this.date_tolerance_days
     
+    // Smart description matching (ignore reference numbers, case, extra spaces)
+    const descMatch = this.isDescriptionDuplicate(tx1.description, tx2.description)
+    
     return amountMatch && descMatch && dateMatch
+  }
+
+  /**
+   * Smart description matching for duplicates
+   */
+  private isDescriptionDuplicate(desc1: string, desc2: string): boolean {
+    // Normalize descriptions
+    const normalize = (desc: string) => {
+      return desc
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, ' ') // Multiple spaces to single space
+        .replace(/#\d+/g, '') // Remove reference numbers like #1234
+        .replace(/\b\d{4}\b/g, '') // Remove 4-digit numbers (often reference codes)
+        .replace(/[^\w\s]/g, '') // Remove special characters except spaces
+        .trim()
+    }
+    
+    const norm1 = normalize(desc1)
+    const norm2 = normalize(desc2)
+    
+    // Exact match after normalization
+    if (norm1 === norm2) return true
+    
+    // Check if one is a subset of the other (for cases like "Office Depot" vs "Office Depot Store")
+    if (norm1.includes(norm2) || norm2.includes(norm1)) {
+      // Only consider it a duplicate if the difference is small (like "Store" suffix)
+      const diff = Math.abs(norm1.length - norm2.length)
+      return diff <= 10 // Allow small differences
+    }
+    
+    return false
   }
 
   /**

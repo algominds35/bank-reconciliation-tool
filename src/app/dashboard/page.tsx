@@ -430,12 +430,12 @@ export default function Dashboard() {
     }
   }
 
-  // Apply a single suggestion (duplicate removal or category assignment)
+  // Apply a single suggestion (duplicate removal, category assignment, or reconciliation)
   const applySuggestion = async (match: any) => {
     try {
       if (match.type === 'duplicate') {
         // Remove duplicate transactions from database
-        const duplicateIds = match.duplicates?.map((d: any) => d.id) || [];
+        const duplicateIds = match.transactions?.slice(1).map((d: any) => d.id) || []; // Keep first, remove rest
         if (duplicateIds.length > 0) {
           const { error } = await supabase
             .from('bank_transactions_sync')
@@ -447,7 +447,7 @@ export default function Dashboard() {
           alert(`✅ Removed ${duplicateIds.length} duplicate transactions!`);
           fetchTransactions(); // Refresh the list
         }
-      } else if (match.type === 'category') {
+      } else if (match.type === 'category_suggestion') {
         // Update category for matching transactions
         const transactionIds = match.transactions?.map((t: any) => t.id) || [];
         const newCategory = match.suggestion?.split('"')[1] || 'Other';
@@ -461,6 +461,21 @@ export default function Dashboard() {
           if (error) throw error;
           
           alert(`✅ Updated ${transactionIds.length} transactions to category: ${newCategory}`);
+          fetchTransactions(); // Refresh the list
+        }
+      } else if (match.type === 'reconciliation') {
+        // Mark transactions as reconciled
+        const transactionIds = match.transactions?.map((t: any) => t.id) || [];
+        
+        if (transactionIds.length > 0) {
+          const { error } = await supabase
+            .from('bank_transactions_sync')
+            .update({ is_reconciled: true })
+            .in('id', transactionIds);
+          
+          if (error) throw error;
+          
+          alert(`✅ Reconciled ${transactionIds.length} matching transactions!`);
           fetchTransactions(); // Refresh the list
         }
       }
@@ -1559,8 +1574,8 @@ export default function Dashboard() {
                     <div key={match.id} className="border rounded-lg p-4 bg-white">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <Badge variant={match.type === 'duplicate' ? 'destructive' : match.type === 'pattern' ? 'default' : 'secondary'}>
-                            {match.type === 'duplicate' ? 'Duplicate' : match.type === 'pattern' ? 'Pattern' : 'Category'}
+                          <Badge variant={match.type === 'duplicate' ? 'destructive' : match.type === 'pattern' ? 'default' : match.type === 'reconciliation' ? 'outline' : 'secondary'}>
+                            {match.type === 'duplicate' ? 'Duplicate' : match.type === 'pattern' ? 'Pattern' : match.type === 'reconciliation' ? 'Reconciliation' : 'Category'}
                           </Badge>
                           <Badge variant="outline">
                             {Math.round(match.confidence * 100)}% confidence
@@ -2158,8 +2173,8 @@ export default function Dashboard() {
                         <div key={match.id} className="border rounded-lg p-4 bg-gray-50">
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
-                              <Badge variant={match.type === 'duplicate' ? 'destructive' : match.type === 'pattern' ? 'default' : 'secondary'}>
-                                {match.type === 'duplicate' ? 'Duplicate' : match.type === 'pattern' ? 'Pattern' : 'Category'}
+                              <Badge variant={match.type === 'duplicate' ? 'destructive' : match.type === 'pattern' ? 'default' : match.type === 'reconciliation' ? 'outline' : 'secondary'}>
+                                {match.type === 'duplicate' ? 'Duplicate' : match.type === 'pattern' ? 'Pattern' : match.type === 'reconciliation' ? 'Reconciliation' : 'Category'}
                               </Badge>
                               <Badge variant="outline">
                                 {Math.round(match.confidence * 100)}% confidence
