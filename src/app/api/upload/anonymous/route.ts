@@ -104,6 +104,7 @@ interface Transaction {
   description: string;
   date: string;
   type?: string;
+  category?: string;
   reference?: string;
 }
 
