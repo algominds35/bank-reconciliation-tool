@@ -540,6 +540,15 @@ export default function Dashboard() {
       // Filter out duplicates before displaying
       console.log('=== AUTO-DUPLICATE FILTERING ===');
       console.log('Raw transactions from database:', allTransactions.length);
+      
+      // Log first few transactions to see what we're working with
+      console.log('First 3 transactions:', allTransactions.slice(0, 3).map(t => ({
+        id: t.id,
+        date: t.date,
+        description: t.description,
+        amount: t.amount
+      })));
+      
       const uniqueTransactions = removeDuplicates(allTransactions)
       console.log(`Filtered ${allTransactions.length - uniqueTransactions.length} duplicates from display`)
       console.log('Final unique transactions:', uniqueTransactions.length);
@@ -1668,16 +1677,22 @@ export default function Dashboard() {
                     
                     <Button
                       onClick={() => {
-                        console.log('Manual duplicate detection triggered');
+                        console.log('=== MANUAL DUPLICATE DETECTION TEST ===');
+                        console.log('Current transactions:', transactions.length);
+                        console.log('Sample transactions:', transactions.slice(0, 3));
+                        
                         const unique = removeDuplicates(transactions);
+                        console.log('Unique transactions:', unique.length);
+                        console.log('Duplicates found:', duplicatesFound);
+                        
                         setTransactions(unique);
-                        alert(`Found ${duplicatesFound} duplicates! Filtered to ${unique.length} unique transactions.`);
+                        alert(`Found ${duplicatesFound} duplicates! Filtered from ${transactions.length} to ${unique.length} transactions.`);
                       }}
                       disabled={transactions.length === 0}
                       className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700"
                     >
                       <Zap className="h-4 w-4" />
-                      <span>Detect Duplicates</span>
+                      <span>Test Duplicates</span>
                     </Button>
             </div>
           </div>
