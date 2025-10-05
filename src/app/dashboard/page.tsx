@@ -1675,6 +1675,7 @@ export default function Dashboard() {
                       <span>Clear All</span>
                     </Button>
                     
+                    {/* DUPLICATE TEST BUTTON - SHOULD BE VISIBLE */}
                     <Button
                       onClick={() => {
                         console.log('=== MANUAL DUPLICATE DETECTION TEST ===');
@@ -1689,7 +1690,7 @@ export default function Dashboard() {
                         alert(`Found ${duplicatesFound} duplicates! Filtered from ${transactions.length} to ${unique.length} transactions.`);
                       }}
                       disabled={transactions.length === 0}
-                      className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700"
+                      className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-bold"
                     >
                       <Zap className="h-4 w-4" />
                       <span>Test Duplicates</span>
