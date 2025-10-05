@@ -756,11 +756,11 @@ export default function Dashboard() {
             
             const insertData = {
               user_id: user.id,
-              client_id: null,
+              client_id: user.id, // Use user_id as client_id for now
               date: transaction.date,
               description: transaction.description,
               amount: transaction.amount,
-              // Remove type field - let database use default
+              type: transaction.amount > 0 ? 'credit' : 'debit', // Set based on amount
               category: transaction.category || null,
               account: transaction.account || null,
               reference: transaction.reference || null,
