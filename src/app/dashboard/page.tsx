@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase'
 import { Transaction, ReconciliationSummary, Client } from '@/types'
 import { ClientSelector } from '@/components/client-selector'
 import { TransactionTable } from '@/components/transaction-table'
-import { MatchingInterface } from '@/components/matching-interface'
+// MatchingInterface removed - using inline duplicate detection interface
 // BankConnection removed - focusing on core CSV functionality
 import { TrialGuard } from '@/components/trial-guard'
 import { AccessGuard } from '@/components/access-guard'
@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Zap, Upload, AlertTriangle } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Papa from 'papaparse'
 import jsPDF from 'jspdf'
@@ -364,6 +365,8 @@ export default function Dashboard() {
   const [clearingDemoData, setClearingDemoData] = useState(false)
   const [singleFileMatches, setSingleFileMatches] = useState<any[]>([])
   const [showSingleFileMatches, setShowSingleFileMatches] = useState(false)
+  const [duplicatesFound, setDuplicatesFound] = useState<number>(0)
+  const [duplicateStatus, setDuplicateStatus] = useState<'active' | 'inactive'>('inactive')
   
 
   
@@ -429,14 +432,21 @@ export default function Dashboard() {
   const removeDuplicates = (transactions: Transaction[]): Transaction[] => {
     const seen = new Map<string, boolean>();
     const unique: Transaction[] = [];
+    let duplicateCount = 0;
     
     transactions.forEach(transaction => {
       const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
       if (!seen.has(key)) {
         seen.set(key, true);
         unique.push(transaction);
+      } else {
+        duplicateCount++;
       }
     });
+    
+    // Update duplicate tracking state
+    setDuplicatesFound(duplicateCount);
+    setDuplicateStatus(duplicateCount > 0 ? 'active' : 'inactive');
     
     return unique;
   };
@@ -720,6 +730,25 @@ export default function Dashboard() {
   }
 
   // Single-file auto-matching function
+  const runAutoMatch = async () => {
+    if (transactions.length === 0) {
+      alert('No transactions available for matching');
+      return;
+    }
+    
+    try {
+      const matches = await runSingleFileMatching(transactions);
+      if (matches.length > 0) {
+        alert(`Found ${matches.length} potential matches! Check the Single-File Auto-Matching Results section.`);
+      } else {
+        alert('No automatic matches found. Try manual matching or check your transaction data.');
+      }
+    } catch (error) {
+      console.error('Auto-match error:', error);
+      alert('Error running auto-match. Please try again.');
+    }
+  };
+
   const runSingleFileMatching = async (transactions: any[]) => {
     console.log('Running single-file auto-matching...')
     
@@ -1784,12 +1813,85 @@ export default function Dashboard() {
           </TabsContent>
 
           <TabsContent value="matching" className="space-y-6">
-            <MatchingInterface
-              bankTransactions={bankTransactions}
-              bookkeepingTransactions={bookkeepingTransactions}
-              onMatch={handleMatch}
-              loading={false}
-            />
+            {/* Smart Auto-Matching Section */}
+            <Card className="border-blue-200 bg-blue-50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-blue-800">
+                  <Zap className="h-5 w-5" />
+                  Smart Auto-Matching
+                </CardTitle>
+                <CardDescription>
+                  Automatically find and suggest transaction matches using smart algorithms. Review and accept/reject each suggestion individually.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Duplicate Detection Status */}
+                <div className="bg-blue-100 border border-blue-300 rounded-lg p-4">
+                  <h3 className="font-semibold text-blue-800 mb-2">Duplicate Detection Status:</h3>
+                  <div className="flex items-center gap-4">
+                    <span className="text-blue-700">Duplicates Found: {duplicatesFound}</span>
+                    <span className={`px-2 py-1 rounded text-sm font-medium ${
+                      duplicateStatus === 'active' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      Status: {duplicateStatus === 'active' ? 'Active' : 'Inactive'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Single File Duplicate Detection */}
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-yellow-800 mb-2">Single File Duplicate Detection</h3>
+                  <p className="text-yellow-700 mb-3">
+                    Upload a single CSV file to automatically detect and remove duplicates within that file.
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="file"
+                      accept=".csv,.xlsx,.xls"
+                      onChange={(e) => handleFileUpload(e, 'bank')}
+                      className="hidden"
+                      id="duplicate-detection-upload"
+                    />
+                    <label
+                      htmlFor="duplicate-detection-upload"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer transition-colors"
+                    >
+                      <Upload className="h-4 w-4" />
+                      Upload File for Duplicate Detection
+                    </label>
+                  </div>
+                </div>
+
+                {/* Auto-Match Button */}
+                <div className="flex justify-end">
+                  <Button 
+                    onClick={runAutoMatch}
+                    disabled={transactions.length === 0}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Zap className="h-4 w-4 mr-2" />
+                    Run Auto-Match
+                  </Button>
+                </div>
+
+                {/* Results */}
+                {transactions.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                    <p>No transactions found. Upload a file to get started.</p>
+                  </div>
+                ) : (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <p className="text-green-800">
+                      Found {transactions.length} unique transactions ready for matching.
+                      {duplicatesFound > 0 && ` ${duplicatesFound} duplicates were filtered out.`}
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>
