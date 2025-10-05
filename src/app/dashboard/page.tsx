@@ -367,6 +367,7 @@ export default function Dashboard() {
   const [showSingleFileMatches, setShowSingleFileMatches] = useState(false)
   const [duplicatesFound, setDuplicatesFound] = useState<number>(0)
   const [duplicateStatus, setDuplicateStatus] = useState<'active' | 'inactive'>('inactive')
+  const [duplicateTransactions, setDuplicateTransactions] = useState<Set<string>>(new Set())
   
 
   
@@ -429,9 +430,10 @@ export default function Dashboard() {
     }
   }
 
-  // Remove duplicates from transaction list
+  // Show duplicates instead of filtering them out
   const removeDuplicates = (transactions: Transaction[]): Transaction[] => {
     const seen = new Map<string, boolean>();
+    const duplicates: Transaction[] = [];
     const unique: Transaction[] = [];
     let duplicateCount = 0;
     
@@ -450,17 +452,24 @@ export default function Dashboard() {
         console.log('✅ Added as unique');
       } else {
         duplicateCount++;
-        console.log('❌ DUPLICATE FOUND!');
+        duplicates.push(transaction);
+        console.log('❌ DUPLICATE FOUND! Adding to duplicates list');
       }
     });
     
     console.log(`=== RESULTS: ${unique.length} unique, ${duplicateCount} duplicates ===`);
+    console.log('Duplicates found:', duplicates);
     
     // Update duplicate tracking state
     setDuplicatesFound(duplicateCount);
     setDuplicateStatus(duplicateCount > 0 ? 'active' : 'inactive');
     
-    return unique;
+    // Track which transactions are duplicates for highlighting
+    const duplicateIds = new Set(duplicates.map(d => d.id));
+    setDuplicateTransactions(duplicateIds);
+    
+    // Return ALL transactions (unique + duplicates) so you can see them
+    return [...unique, ...duplicates];
   };
 
   const fetchTransactions = async () => {
