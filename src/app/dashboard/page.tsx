@@ -18,7 +18,6 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Zap, Upload, AlertTriangle } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import Papa from 'papaparse'
 import jsPDF from 'jspdf'
@@ -182,7 +181,8 @@ import {
   Plus,
   Building2,
   CreditCard,
-  Zap
+  Zap,
+  AlertTriangle
 } from 'lucide-react'
 
 // Function to check for duplicates within a single CSV file
