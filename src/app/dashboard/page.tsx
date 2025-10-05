@@ -1686,23 +1686,39 @@ export default function Dashboard() {
                     
                     {/* DUPLICATE TEST BUTTON - SHOULD BE VISIBLE */}
                     <Button
-                      onClick={() => {
+                      onClick={async () => {
                         console.log('=== MANUAL DUPLICATE DETECTION TEST ===');
                         console.log('Current transactions:', transactions.length);
                         console.log('Sample transactions:', transactions.slice(0, 3));
                         
+                        // Step 1: Detect and show duplicates
                         const unique = removeDuplicates(transactions);
                         console.log('Unique transactions:', unique.length);
                         console.log('Duplicates found:', duplicatesFound);
                         
                         setTransactions(unique);
-                        alert(`Found ${duplicatesFound} duplicates! Filtered from ${transactions.length} to ${unique.length} transactions.`);
+                        
+                        // Step 2: Automatically run auto-matching
+                        console.log('=== AUTO-RUNNING SMART MATCHING ===');
+                        try {
+                          const matches = await runSingleFileMatching(unique);
+                          console.log('Auto-match completed. Found matches:', matches.length);
+                          
+                          if (matches.length > 0) {
+                            alert(`✅ Found ${duplicatesFound} duplicates! Filtered from ${transactions.length} to ${unique.length} transactions.\n\n🎯 Auto-matched ${matches.length} transactions! Check the results below.`);
+                          } else {
+                            alert(`✅ Found ${duplicatesFound} duplicates! Filtered from ${transactions.length} to ${unique.length} transactions.\n\n⚠️ No automatic matches found.`);
+                          }
+                        } catch (error) {
+                          console.error('Auto-match error:', error);
+                          alert(`✅ Found ${duplicatesFound} duplicates! Filtered from ${transactions.length} to ${unique.length} transactions.\n\n❌ Auto-match failed: ${error}`);
+                        }
                       }}
                       disabled={transactions.length === 0}
                       className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-bold"
                     >
                       <Zap className="h-4 w-4" />
-                      <span>Test Duplicates</span>
+                      <span>Test Duplicates & Auto-Match</span>
                     </Button>
             </div>
           </div>
@@ -1917,16 +1933,11 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                {/* Auto-Match Button */}
-                <div className="flex justify-end">
-                  <Button 
-                    onClick={runAutoMatch}
-                    disabled={transactions.length === 0}
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    <Zap className="h-4 w-4 mr-2" />
-                    Run Auto-Match
-                  </Button>
+                {/* Auto-Match Info */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-blue-800 text-sm">
+                    💡 <strong>Tip:</strong> Use the "Test Duplicates & Auto-Match" button on the main transactions page to automatically detect duplicates and run smart matching in one click!
+                  </p>
                 </div>
 
                 {/* Results */}
