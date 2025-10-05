@@ -767,9 +767,42 @@ export default function Dashboard() {
           try {
               const tableName = transactionType === 'bank' ? 'bank_transactions' : 'book_transactions'
             
+            // First, ensure we have a client record for this user
+            let clientId = null
+            
+            // Check if client exists for this user
+            const { data: existingClient } = await supabase
+              .from('clients')
+              .select('id')
+              .eq('user_id', user.id)
+              .single()
+            
+            if (existingClient) {
+              clientId = existingClient.id
+            } else {
+              // Create a default client for this user
+              const { data: newClient, error: clientError } = await supabase
+                .from('clients')
+                .insert({
+                  user_id: user.id,
+                  name: 'Default Client',
+                  email: user.email || '',
+                  status: 'active'
+                })
+                .select('id')
+                .single()
+              
+              if (clientError) {
+                console.error('Error creating client:', clientError)
+                throw new Error(`Failed to create client: ${clientError.message}`)
+              }
+              
+              clientId = newClient.id
+            }
+
             const insertData = {
               user_id: user.id,
-              client_id: user.id, // Use user_id as client_id for now
+              client_id: clientId,
               date: transaction.date,
               description: transaction.description,
               amount: transaction.amount,
