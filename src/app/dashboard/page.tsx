@@ -754,20 +754,24 @@ export default function Dashboard() {
           try {
             const tableName = transactionType === 'bank' ? 'bank_transactions' : 'book_transactions'
             
+            const insertData = {
+              user_id: user.id,
+              client_id: null,
+              date: transaction.date,
+              description: transaction.description,
+              amount: transaction.amount,
+              type: 'debit', // Always use 'debit' for now to avoid constraint issues
+              category: transaction.category || null,
+              account: transaction.account || null,
+              reference: transaction.reference || null,
+              is_reconciled: false
+            }
+            
+            console.log('Inserting transaction data:', insertData)
+            
             const { error } = await supabase
               .from(tableName)
-              .insert({
-                user_id: user.id,
-                client_id: null,
-                date: transaction.date,
-                description: transaction.description,
-                amount: transaction.amount,
-                type: transaction.type === 'CREDIT' ? 'credit' : 'debit',
-                category: transaction.category || null,
-                account: transaction.account || null,
-                reference: transaction.reference || null,
-                is_reconciled: false
-              })
+              .insert(insertData)
 
             if (error) {
               console.error('Supabase insert error:', error)
