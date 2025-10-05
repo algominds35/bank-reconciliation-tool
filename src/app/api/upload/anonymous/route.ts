@@ -33,8 +33,8 @@ async function findExistingDuplicates(transactions: Transaction[], userId: strin
   
   // Get existing transactions from database for this user
   const { data: existingTransactions, error } = await supabase
-    .from('bank_transactions')
-    .select('date, amount, description')
+    .from('bank_transactions_sync')
+    .select('transaction_date, amount, description')
     .eq('user_id', userId);
   
   if (error) {
@@ -646,57 +646,26 @@ export async function POST(request: NextRequest) {
     if (userId && newTransactions.length > 0) {
       console.log(`Inserting ${newTransactions.length} new transactions into database...`);
       
-      // Create or get client for this user
-      let clientId = null;
-      
-      // Check if client exists for this user
-      const { data: existingClient } = await supabase
-        .from('clients')
-        .select('id')
-        .eq('user_id', userId)
-        .single();
-      
-      if (existingClient) {
-        clientId = existingClient.id;
-      } else {
-        // Create a default client for this user
-        const { data: newClient, error: clientError } = await supabase
-          .from('clients')
-          .insert({
-            user_id: userId,
-            name: 'Default Client',
-            email: '',
-            status: 'active'
-          })
-          .select('id')
-          .single();
-        
-        if (clientError) {
-          console.error('Error creating client:', clientError);
-          // Continue without client if creation fails
-        } else {
-          clientId = newClient.id;
-        }
-      }
-      
-      // Insert transactions
+      // Insert transactions into bank_transactions_sync table (no clients table required)
       for (const transaction of newTransactions) {
         try {
           const insertData = {
             user_id: userId,
-            client_id: clientId,
-            date: transaction.date,
-            description: transaction.description,
+            bank_account_id: userId, // Use user_id as bank_account_id for now
+            stripe_transaction_id: `manual_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             amount: transaction.amount,
-            type: transaction.amount > 0 ? 'credit' : 'debit',
+            currency: 'usd',
+            description: transaction.description,
+            transaction_date: transaction.date,
+            transaction_type: transaction.amount > 0 ? 'credit' : 'debit',
             category: transaction.category || null,
-            account: transaction.account || null,
             reference: transaction.reference || null,
-            is_reconciled: false
+            is_reconciled: false,
+            raw_data: { source: 'manual_upload', original_transaction: transaction }
           };
           
           const { error } = await supabase
-            .from('bank_transactions')
+            .from('bank_transactions_sync')
             .insert(insertData);
           
           if (error) {

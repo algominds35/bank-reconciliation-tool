@@ -759,21 +759,17 @@ export default function Dashboard() {
       // Store the session ID for later use
       const sessionId = result.sessionId
       
-        // The API has already processed and inserted the transactions
-        // Just show success message and refresh the data
-        console.log('API processed transactions successfully')
-        
-        // Refresh the transactions list
-        await fetchTransactions()
-        await fetchClients()
+      // The API has already processed and inserted the transactions
+      // Just show success message and refresh the data
+      console.log('API processed transactions successfully')
+      
+      // Refresh the transactions list
+      await fetchTransactions()
+      await fetchClients()
 
-        // Success message with filtering info
-        const message = result.message || `Successfully uploaded ${result.transactions?.length || 0} ${transactionType} transactions!`;
-        alert(message);
-        
-      } else {
-        throw new Error('No transactions found in file');
-      }
+      // Success message with filtering info
+      const message = result.message || `Successfully uploaded ${result.transactions?.length || 0} ${transactionType} transactions!`;
+      alert(message);
       
     } catch (error) {
       console.error('Upload error:', error)
