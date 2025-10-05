@@ -430,6 +430,62 @@ export default function Dashboard() {
     }
   }
 
+  // Apply a single suggestion (duplicate removal or category assignment)
+  const applySuggestion = async (match: any) => {
+    try {
+      if (match.type === 'duplicate') {
+        // Remove duplicate transactions from database
+        const duplicateIds = match.duplicates?.map((d: any) => d.id) || [];
+        if (duplicateIds.length > 0) {
+          const { error } = await supabase
+            .from('bank_transactions_sync')
+            .delete()
+            .in('id', duplicateIds);
+          
+          if (error) throw error;
+          
+          alert(`✅ Removed ${duplicateIds.length} duplicate transactions!`);
+          fetchTransactions(); // Refresh the list
+        }
+      } else if (match.type === 'category') {
+        // Update category for matching transactions
+        const transactionIds = match.transactions?.map((t: any) => t.id) || [];
+        const newCategory = match.suggestion?.split('"')[1] || 'Other';
+        
+        if (transactionIds.length > 0) {
+          const { error } = await supabase
+            .from('bank_transactions_sync')
+            .update({ category: newCategory })
+            .in('id', transactionIds);
+          
+          if (error) throw error;
+          
+          alert(`✅ Updated ${transactionIds.length} transactions to category: ${newCategory}`);
+          fetchTransactions(); // Refresh the list
+        }
+      }
+      
+      // Remove this suggestion from the list
+      setSingleFileMatches(prev => prev.filter(m => m.id !== match.id));
+      
+    } catch (error) {
+      alert(`❌ Error applying suggestion: ${error}`);
+    }
+  };
+
+  // Apply all suggestions at once
+  const applyAllSuggestions = async () => {
+    try {
+      for (const match of singleFileMatches) {
+        await applySuggestion(match);
+      }
+      alert(`✅ Applied all ${singleFileMatches.length} suggestions!`);
+      setSingleFileMatches([]);
+    } catch (error) {
+      alert(`❌ Error applying suggestions: ${error}`);
+    }
+  };
+
   // Show duplicates instead of filtering them out
   const removeDuplicates = (transactions: Transaction[]): Transaction[] => {
     const seen = new Map<string, boolean>();
@@ -1466,7 +1522,11 @@ export default function Dashboard() {
                             {Math.round(match.confidence * 100)}% confidence
                           </Badge>
                         </div>
-                        <Button size="sm" variant="outline">
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => applySuggestion(match)}
+                        >
                           Apply
                         </Button>
                       </div>
@@ -1482,7 +1542,11 @@ export default function Dashboard() {
                     </div>
                   ))}
                   <div className="flex gap-2">
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    <Button 
+                      size="sm" 
+                      className="bg-blue-600 hover:bg-blue-700"
+                      onClick={() => applyAllSuggestions()}
+                    >
                       Apply All Suggestions
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => setShowSingleFileMatches(false)}>
@@ -1698,9 +1762,9 @@ export default function Dashboard() {
                         }
                         
                         // Step 3: Auto-run matching
-                        setTimeout(() => {
+                        setTimeout(async () => {
                           try {
-                            const matches = runSingleFileMatching(unique);
+                            const matches = await runSingleFileMatching(unique);
                             if (matches.length > 0) {
                               alert(`🎯 AUTO-MATCH COMPLETE!\n\nFound ${matches.length} smart matches!\n\nCheck the results below.`);
                             } else {
