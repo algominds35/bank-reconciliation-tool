@@ -642,47 +642,81 @@ export async function POST(request: NextRequest) {
     // Clean up expired results
     cleanupExpiredResults();
     
-    // Insert new transactions into database if user ID is provided
-    let insertedCount = 0;
-    if (userId && newTransactions.length > 0) {
-      console.log(`Inserting ${newTransactions.length} new transactions into database...`);
-      
-      // Insert transactions into bank_transactions_sync table (no clients table required)
-      for (const transaction of newTransactions) {
-        try {
-          const insertData = {
-            user_id: userId,
-            bank_account_id: userId, // Use user_id as bank_account_id for now
-            stripe_transaction_id: `manual_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            amount: transaction.amount,
-            currency: 'usd',
-            description: transaction.description,
-            transaction_date: transaction.date,
-            transaction_type: transaction.amount > 0 ? 'credit' : 'debit',
-            category: transaction.category || null,
-            reference: transaction.reference || null,
-            is_reconciled: false,
-            raw_data: { source: 'manual_upload', original_transaction: transaction }
-          };
-          
-          const { error } = await supabase
-            .from('bank_transactions_sync')
-            .insert(insertData);
-          
-          if (error) {
-            console.error('Error inserting transaction:', error);
-            // Continue with other transactions
-          } else {
-            insertedCount++;
+      // Insert new transactions into database if user ID is provided
+      let insertedCount = 0;
+      if (userId && newTransactions.length > 0) {
+        console.log(`Inserting ${newTransactions.length} new transactions into database...`);
+
+        // First, ensure user has a default bank account
+        let bankAccountId = userId;
+        const { data: existingAccount } = await supabase
+          .from('bank_accounts')
+          .select('id')
+          .eq('user_id', userId)
+          .limit(1);
+
+        if (!existingAccount || existingAccount.length === 0) {
+          // Create a default bank account for manual uploads
+          const { data: newAccount, error: accountError } = await supabase
+            .from('bank_accounts')
+            .insert({
+              user_id: userId,
+              account_id: `manual_${userId}`,
+              account_name: 'Manual Upload Account',
+              account_type: 'checking',
+              status: 'active',
+              last_synced: new Date().toISOString()
+            })
+            .select('id')
+            .single();
+
+          if (accountError) {
+            console.error('Error creating bank account:', accountError);
+            return NextResponse.json({ 
+              error: 'Failed to create bank account for transactions' 
+            }, { status: 500 });
           }
-        } catch (insertError) {
-          console.error('Error processing transaction:', insertError);
-          // Continue with other transactions
+          bankAccountId = newAccount.id;
+        } else {
+          bankAccountId = existingAccount[0].id;
         }
+
+        // Insert transactions into bank_transactions_sync table
+        for (const transaction of newTransactions) {
+          try {
+            const insertData = {
+              user_id: userId,
+              bank_account_id: bankAccountId,
+              stripe_transaction_id: `manual_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+              amount: transaction.amount,
+              currency: 'usd',
+              description: transaction.description,
+              transaction_date: transaction.date,
+              transaction_type: transaction.amount > 0 ? 'credit' : 'debit',
+              category: transaction.category || null,
+              reference: transaction.reference || null,
+              is_reconciled: false,
+              raw_data: { source: 'manual_upload', original_transaction: transaction }
+            };
+
+            const { error } = await supabase
+              .from('bank_transactions_sync')
+              .insert(insertData);
+
+            if (error) {
+              console.error('Error inserting transaction:', error);
+              // Continue with other transactions
+            } else {
+              insertedCount++;
+            }
+          } catch (insertError) {
+            console.error('Error processing transaction:', insertError);
+            // Continue with other transactions
+          }
+        }
+
+        console.log(`Successfully inserted ${insertedCount} transactions into database`);
       }
-      
-      console.log(`Successfully inserted ${insertedCount} transactions into database`);
-    }
 
     return NextResponse.json({
       sessionId,
