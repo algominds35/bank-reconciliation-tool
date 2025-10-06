@@ -1053,7 +1053,7 @@ export default function Dashboard() {
               🎯 Credit Card Overlaps Resolved (${result.overlapDetails.length} found)
             </div>
             <div style="max-height: 300px; overflow-y: auto;">
-              ${result.overlapDetails.map((overlap, index) => `
+              ${result.overlapDetails.map((overlap: any, index: number) => `
                 <div style="margin-bottom: 12px; padding: 8px; background: white; border-radius: 6px; border: 1px solid #3b82f6;">
                   <div style="font-weight: 600; margin-bottom: 6px; font-size: 14px;">
                     ⚠️ Overlap #${index + 1}: ${overlap.originalTransaction.description}
