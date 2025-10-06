@@ -96,12 +96,16 @@ export class SingleFileMatcher {
       }
       
       if (duplicateGroup.length > 1) {
+        // Create detailed description with actual transaction info
+        const firstTx = duplicateGroup[0];
+        const duplicateInfo = duplicateGroup.slice(1).map(tx => `${tx.date}`).join(', ');
+        
         duplicates.push({
           id: `duplicate_${tx1.id}`,
           type: 'duplicate',
           confidence: 0.95,
           transactions: duplicateGroup,
-          reason: `Found ${duplicateGroup.length} exact duplicates with same amount and description`
+          reason: `Found ${duplicateGroup.length} exact duplicates of "${firstTx.description}" - $${firstTx.amount} (dates: ${firstTx.date}, ${duplicateInfo})`
         })
         processed.add(key1)
       }
