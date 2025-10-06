@@ -308,12 +308,16 @@ export async function POST(request: NextRequest) {
     const messyCSVMode = formData.get('messyCSVMode') === 'true';
     const enableDateFilter = formData.get('enableDateFilter') === 'true';
     const lastImportDate = formData.get('lastImportDate') as string;
+    const enableFileComparison = formData.get('enableFileComparison') === 'true';
+    const existingDataFile = formData.get('existingDataFile') as File;
     
     console.log('API: Received userId:', userId);
     console.log('API: File name:', file?.name);
     console.log('API: Messy CSV mode:', messyCSVMode);
     console.log('API: Date filter enabled:', enableDateFilter);
     console.log('API: Last import date:', lastImportDate);
+    console.log('API: File comparison enabled:', enableFileComparison);
+    console.log('API: Existing data file:', existingDataFile?.name);
     
     if (!file) {
       console.log('No file provided');
@@ -386,6 +390,37 @@ export async function POST(request: NextRequest) {
       
       dateFilteredCount = originalCount - transactions.length;
       console.log(`🗓️ Date filter results: ${originalCount} total, ${dateFilteredCount} filtered out, ${transactions.length} remaining`);
+    }
+
+    // Apply file comparison if enabled (Reuven's feature request)
+    let fileComparisonDuplicates = 0;
+    if (enableFileComparison && existingDataFile && transactions.length > 0) {
+      console.log('🔄 Starting file comparison against existing data...');
+      try {
+        const existingDataContent = await existingDataFile.text();
+        const existingTransactions = parseCSV(existingDataContent);
+        
+        console.log(`📊 Comparing ${transactions.length} new transactions against ${existingTransactions.length} existing transactions`);
+        
+        // Build lookup map for existing transactions
+        const existingMap = new Map();
+        existingTransactions.forEach(tx => {
+          const key = `${tx.date}_${tx.amount}_${tx.description.toLowerCase().trim()}`;
+          existingMap.set(key, true);
+        });
+        
+        // Filter out transactions that already exist
+        const originalCount = transactions.length;
+        transactions = transactions.filter(tx => {
+          const key = `${tx.date}_${tx.amount}_${tx.description.toLowerCase().trim()}`;
+          return !existingMap.has(key);
+        });
+        
+        fileComparisonDuplicates = originalCount - transactions.length;
+        console.log(`🔄 File comparison results: ${originalCount} total, ${fileComparisonDuplicates} already exist in books, ${transactions.length} new transactions`);
+      } catch (error) {
+        console.error('Error processing existing data file:', error);
+      }
     }
 
     if (transactions.length === 0) {
@@ -550,10 +585,19 @@ export async function POST(request: NextRequest) {
     // Generate session ID
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-    // Build success message with date filtering info
+    // Build success message with filtering info
     let message = `Successfully uploaded ${transactions.length} transactions. ${duplicates.length} duplicates found.`;
+    
+    const filterMessages = [];
     if (enableDateFilter && lastImportDate && dateFilteredCount > 0) {
-      message = `Successfully uploaded ${transactions.length} transactions. ${duplicates.length} duplicates found. ${dateFilteredCount} old transactions filtered out (before ${lastImportDate}).`;
+      filterMessages.push(`${dateFilteredCount} old transactions filtered out (before ${lastImportDate})`);
+    }
+    if (enableFileComparison && fileComparisonDuplicates > 0) {
+      filterMessages.push(`${fileComparisonDuplicates} transactions already exist in your books`);
+    }
+    
+    if (filterMessages.length > 0) {
+      message += ` ${filterMessages.join(', ')}.`;
     }
 
     return NextResponse.json({
