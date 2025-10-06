@@ -1011,9 +1011,42 @@ export default function Dashboard() {
           await fetchTransactions()
           await fetchClients()
 
+      // If no transactions were uploaded (due to filtering), show explanation
+      if (result.totalProcessed === 0 && result.message) {
+        console.log('No transactions uploaded due to filtering - this is expected behavior');
+      }
+
       // Show detailed success message with duplicate info
       const message = result.message || `Successfully uploaded ${result.transactions?.length || 0} ${transactionType} transactions!`;
-      alert(message);
+      
+      // Create a more visible success message
+      const successDiv = document.createElement('div');
+      successDiv.innerHTML = `
+        <div style="
+          position: fixed; 
+          top: 20px; 
+          right: 20px; 
+          background: #10b981; 
+          color: white; 
+          padding: 16px 24px; 
+          border-radius: 8px; 
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          z-index: 1000;
+          max-width: 400px;
+          font-family: system-ui;
+        ">
+          <strong>✅ Upload Successful!</strong><br>
+          ${message}
+        </div>
+      `;
+      document.body.appendChild(successDiv);
+      
+      // Remove the message after 5 seconds
+      setTimeout(() => {
+        if (successDiv.parentNode) {
+          successDiv.parentNode.removeChild(successDiv);
+        }
+      }, 5000);
       
       // Log the results for debugging
       console.log('Upload Results:', {
@@ -1758,9 +1791,9 @@ export default function Dashboard() {
                           className="hidden"
                           onChange={(e) => handleFileUpload(e, 'bookkeeping')}
                           disabled={uploading}
-                />
-              </div>
-            </div>
+                        />
+                      </div>
+                    </div>
 
             {/* Messy CSV Mode Toggle */}
             <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
