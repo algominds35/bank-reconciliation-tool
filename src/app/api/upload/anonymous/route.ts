@@ -429,6 +429,12 @@ export async function POST(request: NextRequest) {
 
     // Apply credit card overlap handling if enabled (Reuven's feature request)
     let creditCardOverlaps = 0;
+    let overlapDetails: Array<{
+      originalTransaction: Transaction;
+      duplicateTransaction: Transaction;
+      reason: string;
+    }> = [];
+    
     if (enableCreditCardOverlap && statementEndDate && transactions.length > 0) {
       console.log('💳 Starting credit card overlap detection...');
       try {
@@ -474,6 +480,13 @@ export async function POST(request: NextRequest) {
             potentialDuplicates.forEach(dup => {
               transactionsToRemove.add(dup.id);
               creditCardOverlaps++;
+              
+              // Track overlap details for reporting
+              overlapDetails.push({
+                originalTransaction: overlapTx,
+                duplicateTransaction: dup,
+                reason: `Credit card overlap: Same transaction appeared on both current statement (${overlapTx.date}) and next statement (${dup.date})`
+              });
             });
             console.log(`💳 Found credit card overlap: "${overlapTx.description}" - removing later duplicate`);
           }
@@ -675,7 +688,11 @@ export async function POST(request: NextRequest) {
       insertedCount,
       duplicates: duplicates.length,
       totalProcessed: transactions.length,
-      newTransactions: newTransactions.length
+      newTransactions: newTransactions.length,
+      overlapDetails: overlapDetails, // Include detailed overlap information
+      dateFilteredCount,
+      fileComparisonDuplicates,
+      creditCardOverlaps
     });
     
   } catch (error) {

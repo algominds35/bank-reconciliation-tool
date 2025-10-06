@@ -375,6 +375,11 @@ export default function Dashboard() {
   const [existingDataFile, setExistingDataFile] = useState<File | null>(null)
   const [enableCreditCardOverlap, setEnableCreditCardOverlap] = useState(false)
   const [statementEndDate, setStatementEndDate] = useState('')
+  const [overlapDetails, setOverlapDetails] = useState<Array<{
+    originalTransaction: any;
+    duplicateTransaction: any;
+    reason: string;
+  }>>([])
   
 
   
@@ -1022,6 +1027,11 @@ export default function Dashboard() {
       if (result.totalProcessed === 0 && result.message) {
         console.log('No transactions uploaded due to filtering - this is expected behavior');
       }
+      
+      // Show overlap details if any were found
+      if (result.overlapDetails && result.overlapDetails.length > 0) {
+        console.log('Showing detailed overlap report:', result.overlapDetails.length, 'overlaps found');
+      }
 
       // Show detailed success message with duplicate info
       const message = result.message || `Successfully uploaded ${result.transactions?.length || 0} ${transactionType} transactions!`;
@@ -1055,12 +1065,19 @@ export default function Dashboard() {
         }
       }, 5000);
       
+      // Store overlap details for detailed reporting
+      if (result.overlapDetails) {
+        setOverlapDetails(result.overlapDetails);
+        console.log('Overlap Details:', result.overlapDetails);
+      }
+      
       // Log the results for debugging
       console.log('Upload Results:', {
         totalProcessed: result.totalProcessed,
         newTransactions: result.newTransactions,
         duplicates: result.duplicates,
-        message: result.message
+        message: result.message,
+        overlapDetails: result.overlapDetails
       });
       
     } catch (error) {
@@ -2445,6 +2462,46 @@ export default function Dashboard() {
       </div>
       
       {/* Beta Feedback Component */}
+      {/* Detailed Overlap Report */}
+      {overlapDetails.length > 0 && (
+        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h3 className="text-lg font-semibold text-blue-800 mb-4">
+            🎯 Credit Card Overlaps Resolved ({overlapDetails.length} found)
+          </h3>
+          <div className="space-y-3">
+            {overlapDetails.map((overlap, index) => (
+              <div key={index} className="bg-white border border-blue-200 rounded-lg p-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-sm font-medium text-blue-700">
+                    ⚠️ Overlap #{index + 1}: {overlap.originalTransaction.description}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                  <div className="bg-green-50 p-2 rounded">
+                    <span className="font-medium text-green-700">✅ KEPT (Current Statement):</span>
+                    <div className="text-green-600">
+                      {overlap.originalTransaction.date} - ${overlap.originalTransaction.amount}
+                    </div>
+                  </div>
+                  <div className="bg-red-50 p-2 rounded">
+                    <span className="font-medium text-red-700">🗑️ REMOVED (Next Statement):</span>
+                    <div className="text-red-600">
+                      {overlap.duplicateTransaction.date} - ${overlap.duplicateTransaction.amount}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 text-xs text-blue-600">
+                  {overlap.reason}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 p-3 bg-blue-100 rounded text-sm text-blue-700">
+            <strong>💡 How it works:</strong> Credit card transactions can appear on both the current statement (ending {statementEndDate}) and the next statement. This tool automatically removes the later duplicates to prevent double-importing the same transactions.
+          </div>
+        </div>
+      )}
+
       {user && (
         <BetaFeedback userId={user.id} userEmail={user.email} />
       )}
