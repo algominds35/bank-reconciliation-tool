@@ -18,6 +18,102 @@ interface Transaction {
   reference?: string;
 }
 
+// Function to parse messy multi-month CSV format
+function parseMessyMultiMonthCSV(content: string): Transaction[] {
+  console.log('🔧 Parsing messy multi-month CSV format...');
+  
+  const transactions: Transaction[] = [];
+  const rows = content.split('\n');
+  
+  // Define months to look for
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                  'July', 'August', 'September', 'October', 'November', 'December'];
+  
+  // Define patterns to skip
+  const skipPatterns = [
+    'TOTAL ALL', 'TOTAL GL', 'HIGHLIGHTED = PAID', 'NOT HIGHLIGHTED = ROLL FORWARD',
+    'PRIVATE', 'OOP', 'ok', 'SPIN', 'HIGHLIGHTED', 'NOT HIGHLIGJTED'
+  ];
+  
+  for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+    const row = rows[rowIndex].trim();
+    
+    // Skip empty rows
+    if (!row) continue;
+    
+    // Skip rows with skip patterns
+    if (skipPatterns.some(pattern => row.includes(pattern))) {
+      console.log(`⏭️ Skipping row ${rowIndex + 1}: contains skip pattern`);
+      continue;
+    }
+    
+    // Parse CSV row (handle quoted fields)
+    const cells = parseCSVRow(row);
+    console.log(`🔍 Processing row ${rowIndex + 1}: ${cells.length} cells`);
+    
+    // Look for month patterns in the row
+    let i = 0;
+    while (i < cells.length) {
+      const cell = cells[i]?.trim();
+      
+      // Check if this cell is a month
+      if (cell && months.includes(cell)) {
+        const month = cell;
+        const name = cells[i + 1]?.replace(/"/g, '').trim();
+        const amountStr = cells[i + 2]?.replace(/"/g, '').replace(/,/g, '').trim();
+        
+        // Validate we have name and amount
+        if (name && amountStr && !skipPatterns.some(pattern => name.includes(pattern))) {
+          const amount = parseFloat(amountStr);
+          
+          if (!isNaN(amount) && amount !== 0) {
+            transactions.push({
+              id: crypto.randomUUID(),
+              date: month, // Will convert to proper date later
+              description: name,
+              amount: amount,
+              type: amount > 0 ? 'Credit' : 'Debit',
+              category: 'Unknown'
+            });
+            
+            console.log(`✅ Extracted: ${month} - ${name} - $${amount}`);
+          }
+        }
+        
+        i += 3; // Move to next month triplet
+      } else {
+        i++; // Skip non-month cells
+      }
+    }
+  }
+  
+  console.log(`🎯 Messy CSV parser extracted ${transactions.length} transactions`);
+  return transactions;
+}
+
+// Helper function to parse CSV row handling quotes
+function parseCSVRow(row: string): string[] {
+  const result: string[] = [];
+  let current = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < row.length; i++) {
+    const char = row[i];
+    
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  
+  result.push(current); // Add the last field
+  return result;
+}
+
 // Function to parse OFX file
 async function parseOFXFile(file: File): Promise<Transaction[]> {
   try {
@@ -195,9 +291,11 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get('csv') as File;
     const userId = formData.get('userId') as string;
+    const messyCSVMode = formData.get('messyCSVMode') === 'true';
     
     console.log('API: Received userId:', userId);
     console.log('API: File name:', file?.name);
+    console.log('API: Messy CSV mode:', messyCSVMode);
     
     if (!file) {
       console.log('No file provided');
@@ -238,7 +336,21 @@ export async function POST(request: NextRequest) {
       console.log('File content length:', csvContent.length);
       console.log('First 200 chars:', csvContent.substring(0, 200));
       
-      transactions = parseCSV(csvContent);
+      // Check if this looks like messy multi-month format OR if user explicitly enabled messy mode
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                      'July', 'August', 'September', 'October', 'November', 'December'];
+      const hasMultipleMonths = months.filter(month => csvContent.includes(month)).length >= 3;
+      const hasQuotedNames = csvContent.includes('"') && csvContent.includes(',');
+      const hasSkipPatterns = ['TOTAL ALL', 'HIGHLIGHTED', 'PRIVATE'].some(pattern => csvContent.includes(pattern));
+      
+      if (messyCSVMode || (hasMultipleMonths && hasQuotedNames && hasSkipPatterns)) {
+        console.log('🔧 Using messy multi-month parser (user enabled or auto-detected)');
+        transactions = parseMessyMultiMonthCSV(csvContent);
+      } else {
+        console.log('📊 Using standard CSV parser');
+        transactions = parseCSV(csvContent);
+      }
+      
       console.log('Parsed transactions:', transactions.length);
     }
 

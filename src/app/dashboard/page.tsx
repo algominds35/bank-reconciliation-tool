@@ -368,6 +368,7 @@ export default function Dashboard() {
   const [duplicatesFound, setDuplicatesFound] = useState<number>(0)
   const [duplicateStatus, setDuplicateStatus] = useState<'active' | 'inactive'>('inactive')
   const [duplicateTransactions, setDuplicateTransactions] = useState<Set<string>>(new Set())
+  const [messyCSVMode, setMessyCSVMode] = useState(false)
   
 
   
@@ -957,6 +958,10 @@ export default function Dashboard() {
         formData.append('userId', user.id)
         console.log('Processing file for user:', user.id)
       }
+      
+      // Add messy CSV mode flag
+      formData.append('messyCSVMode', messyCSVMode.toString())
+      console.log('Messy CSV mode:', messyCSVMode)
       
       const response = await fetch('/api/upload/anonymous', {
         method: 'POST',
@@ -1729,9 +1734,28 @@ export default function Dashboard() {
                           className="hidden"
                           onChange={(e) => handleFileUpload(e, 'bookkeeping')}
                           disabled={uploading}
-                        />
-                      </div>
-                    </div>
+                />
+              </div>
+            </div>
+
+            {/* Messy CSV Mode Toggle */}
+            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="flex items-center gap-2">
+                <input 
+                  type="checkbox" 
+                  id="messy-csv-mode" 
+                  checked={messyCSVMode}
+                  onChange={(e) => setMessyCSVMode(e.target.checked)}
+                  className="w-4 h-4 text-yellow-600 border-yellow-300 rounded focus:ring-yellow-500"
+                />
+                <label htmlFor="messy-csv-mode" className="text-sm font-medium text-yellow-800">
+                  🔧 Messy Multi-Month Format
+                </label>
+              </div>
+              <p className="text-xs text-yellow-700 mt-1">
+                Enable this for complex bookkeeping files with multiple months per row (e.g., "April,Name,Amount,May,Name,Amount")
+              </p>
+            </div>
 
                     {/* Bank Connection removed - focusing on core CSV functionality */}
 
