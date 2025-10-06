@@ -310,6 +310,8 @@ export async function POST(request: NextRequest) {
     const lastImportDate = formData.get('lastImportDate') as string;
     const enableFileComparison = formData.get('enableFileComparison') === 'true';
     const existingDataFile = formData.get('existingDataFile') as File;
+    const enableCreditCardOverlap = formData.get('enableCreditCardOverlap') === 'true';
+    const statementEndDate = formData.get('statementEndDate') as string;
     
     console.log('API: Received userId:', userId);
     console.log('API: File name:', file?.name);
@@ -318,6 +320,8 @@ export async function POST(request: NextRequest) {
     console.log('API: Last import date:', lastImportDate);
     console.log('API: File comparison enabled:', enableFileComparison);
     console.log('API: Existing data file:', existingDataFile?.name);
+    console.log('API: Credit card overlap enabled:', enableCreditCardOverlap);
+    console.log('API: Statement end date:', statementEndDate);
     
     if (!file) {
       console.log('No file provided');
@@ -420,6 +424,67 @@ export async function POST(request: NextRequest) {
         console.log(`🔄 File comparison results: ${originalCount} total, ${fileComparisonDuplicates} already exist in books, ${transactions.length} new transactions`);
       } catch (error) {
         console.error('Error processing existing data file:', error);
+      }
+    }
+
+    // Apply credit card overlap handling if enabled (Reuven's feature request)
+    let creditCardOverlaps = 0;
+    if (enableCreditCardOverlap && statementEndDate && transactions.length > 0) {
+      console.log('💳 Starting credit card overlap detection...');
+      try {
+        const statementEnd = new Date(statementEndDate);
+        const overlapPeriod = 3; // Last 3 days of statement
+        
+        // Define overlap period (last 3 days of statement)
+        const overlapStart = new Date(statementEnd);
+        overlapStart.setDate(statementEnd.getDate() - overlapPeriod);
+        
+        console.log(`💳 Statement end: ${statementEndDate}, Overlap period: ${overlapStart.toISOString().split('T')[0]} to ${statementEndDate}`);
+        
+        // Find transactions in overlap period
+        const overlapTransactions = transactions.filter(tx => {
+          const txDate = new Date(tx.date);
+          return txDate >= overlapStart && txDate <= statementEnd;
+        });
+        
+        console.log(`💳 Found ${overlapTransactions.length} transactions in overlap period`);
+        
+        // For each overlap transaction, check if there's a potential duplicate in next period
+        const originalCount = transactions.length;
+        const transactionsToRemove = new Set();
+        
+        for (const overlapTx of overlapTransactions) {
+          // Look for similar transactions (same amount, similar description) in the next period
+          const nextPeriodStart = new Date(statementEnd);
+          nextPeriodStart.setDate(statementEnd.getDate() + 1);
+          const nextPeriodEnd = new Date(statementEnd);
+          nextPeriodEnd.setDate(statementEnd.getDate() + 30); // Next 30 days
+          
+          const potentialDuplicates = transactions.filter(tx => {
+            const txDate = new Date(tx.date);
+            const inNextPeriod = txDate >= nextPeriodStart && txDate <= nextPeriodEnd;
+            const similarAmount = Math.abs(tx.amount - overlapTx.amount) < 0.01;
+            const similarDescription = tx.description.toLowerCase().trim() === overlapTx.description.toLowerCase().trim();
+            
+            return inNextPeriod && similarAmount && similarDescription;
+          });
+          
+          if (potentialDuplicates.length > 0) {
+            // Remove the later duplicate (keep the earlier one from current statement)
+            potentialDuplicates.forEach(dup => {
+              transactionsToRemove.add(dup.id);
+              creditCardOverlaps++;
+            });
+            console.log(`💳 Found credit card overlap: "${overlapTx.description}" - removing later duplicate`);
+          }
+        }
+        
+        // Remove the identified duplicates
+        transactions = transactions.filter(tx => !transactionsToRemove.has(tx.id));
+        
+        console.log(`💳 Credit card overlap results: ${originalCount} total, ${creditCardOverlaps} overlaps resolved, ${transactions.length} remaining`);
+      } catch (error) {
+        console.error('Error processing credit card overlap:', error);
       }
     }
 
@@ -594,6 +659,9 @@ export async function POST(request: NextRequest) {
     }
     if (enableFileComparison && fileComparisonDuplicates > 0) {
       filterMessages.push(`${fileComparisonDuplicates} transactions already exist in your books`);
+    }
+    if (enableCreditCardOverlap && creditCardOverlaps > 0) {
+      filterMessages.push(`${creditCardOverlaps} credit card overlaps resolved`);
     }
     
     if (filterMessages.length > 0) {

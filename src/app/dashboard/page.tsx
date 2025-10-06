@@ -373,6 +373,8 @@ export default function Dashboard() {
   const [lastImportDate, setLastImportDate] = useState('')
   const [enableFileComparison, setEnableFileComparison] = useState(false)
   const [existingDataFile, setExistingDataFile] = useState<File | null>(null)
+  const [enableCreditCardOverlap, setEnableCreditCardOverlap] = useState(false)
+  const [statementEndDate, setStatementEndDate] = useState('')
   
 
   
@@ -986,6 +988,11 @@ export default function Dashboard() {
         formData.append('existingDataFile', existingDataFile)
         console.log('File comparison enabled with existing data:', existingDataFile.name)
       }
+      
+      // Add credit card overlap settings
+      formData.append('enableCreditCardOverlap', enableCreditCardOverlap.toString())
+      formData.append('statementEndDate', statementEndDate)
+      console.log('Credit card overlap enabled:', enableCreditCardOverlap, 'Statement end date:', statementEndDate)
       
       const response = await fetch('/api/upload/anonymous', {
         method: 'POST',
@@ -1881,6 +1888,43 @@ export default function Dashboard() {
                       ✅ Existing data loaded: {existingDataFile.name}
                     </div>
                   )}
+                </div>
+              )}
+            </div>
+
+            {/* Credit Card Overlap Handling (Reuven's Request) */}
+            <div className="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+              <div className="flex items-center gap-2 mb-2">
+                <input 
+                  type="checkbox" 
+                  id="enable-credit-card-overlap" 
+                  checked={enableCreditCardOverlap}
+                  onChange={(e) => setEnableCreditCardOverlap(e.target.checked)}
+                  className="w-4 h-4 text-purple-600 border-purple-300 rounded focus:ring-purple-500"
+                />
+                <label htmlFor="enable-credit-card-overlap" className="text-sm font-medium text-purple-800">
+                  💳 Credit Card Overlap Handling
+                </label>
+              </div>
+              {enableCreditCardOverlap && (
+                <div className="mt-2 space-y-2">
+                  <div>
+                    <label className="block text-sm font-medium text-purple-700 mb-1">
+                      Statement End Date
+                    </label>
+                    <input 
+                      type="date" 
+                      value={statementEndDate}
+                      onChange={(e) => setStatementEndDate(e.target.value)}
+                      className="w-full px-3 py-2 border border-purple-300 rounded-md text-sm"
+                    />
+                    <p className="text-xs text-purple-600 mt-1">
+                      Handle overlapping transactions that appear on both current and next statement
+                    </p>
+                  </div>
+                  <div className="p-2 bg-purple-100 rounded text-sm text-purple-700">
+                    <strong>How it works:</strong> Detects transactions in the last 3 days of your statement that might also appear on the next statement, and removes the later duplicates.
+                  </div>
                 </div>
               )}
             </div>
