@@ -67,16 +67,30 @@ function parseMessyMultiMonthCSV(content: string): Transaction[] {
           const amount = parseFloat(amountStr);
           
           if (!isNaN(amount) && amount !== 0) {
+            // Convert month name to proper date (using current year, first day of month)
+            const monthToDate = (monthName: string) => {
+              const monthMap: { [key: string]: number } = {
+                'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
+                'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+              };
+              const currentYear = new Date().getFullYear();
+              const monthIndex = monthMap[monthName];
+              if (monthIndex !== undefined) {
+                return new Date(currentYear, monthIndex, 1).toISOString().split('T')[0];
+              }
+              return monthName; // Fallback to original if not found
+            };
+            
             transactions.push({
               id: crypto.randomUUID(),
-              date: month, // Will convert to proper date later
+              date: monthToDate(month),
               description: name,
               amount: amount,
               type: amount > 0 ? 'Credit' : 'Debit',
               category: 'Unknown'
             });
             
-            console.log(`✅ Extracted: ${month} - ${name} - $${amount}`);
+            console.log(`✅ Extracted: ${month} - ${name} - $${amount} (converted to ${monthToDate(month)})`);
           }
         }
         
