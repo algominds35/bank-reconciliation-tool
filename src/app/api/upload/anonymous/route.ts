@@ -373,6 +373,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Apply date filter if enabled (Reuven's feature request)
+    let dateFilteredCount = 0;
     if (enableDateFilter && lastImportDate && transactions.length > 0) {
       console.log(`🗓️ Applying date filter: removing transactions before ${lastImportDate}`);
       const filterDate = new Date(lastImportDate);
@@ -383,8 +384,8 @@ export async function POST(request: NextRequest) {
         return transactionDate >= filterDate;
       });
       
-      const filteredCount = originalCount - transactions.length;
-      console.log(`🗓️ Date filter results: ${originalCount} total, ${filteredCount} filtered out, ${transactions.length} remaining`);
+      dateFilteredCount = originalCount - transactions.length;
+      console.log(`🗓️ Date filter results: ${originalCount} total, ${dateFilteredCount} filtered out, ${transactions.length} remaining`);
     }
 
     if (transactions.length === 0) {
@@ -551,12 +552,8 @@ export async function POST(request: NextRequest) {
 
     // Build success message with date filtering info
     let message = `Successfully uploaded ${transactions.length} transactions. ${duplicates.length} duplicates found.`;
-    if (enableDateFilter && lastImportDate) {
-      const originalCount = transactions.length + (duplicates.length || 0);
-      const filteredCount = originalCount - transactions.length;
-      if (filteredCount > 0) {
-        message = `Successfully uploaded ${transactions.length} transactions. ${duplicates.length} duplicates found. ${filteredCount} old transactions filtered out (before ${lastImportDate}).`;
-      }
+    if (enableDateFilter && lastImportDate && dateFilteredCount > 0) {
+      message = `Successfully uploaded ${transactions.length} transactions. ${duplicates.length} duplicates found. ${dateFilteredCount} old transactions filtered out (before ${lastImportDate}).`;
     }
 
     return NextResponse.json({
