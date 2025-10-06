@@ -1031,6 +1031,72 @@ export default function Dashboard() {
       // Show overlap details if any were found
       if (result.overlapDetails && result.overlapDetails.length > 0) {
         console.log('Showing detailed overlap report:', result.overlapDetails.length, 'overlaps found');
+        
+        // Create overlap report notification that appears immediately
+        const overlapReportDiv = document.createElement('div');
+        overlapReportDiv.innerHTML = `
+          <div style="
+            position: fixed; 
+            top: 80px; 
+            right: 20px; 
+            background: #dbeafe; 
+            color: #1e40af; 
+            padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            max-width: 500px;
+            font-family: system-ui;
+            border: 2px solid #3b82f6;
+          ">
+            <div style="font-weight: bold; font-size: 16px; margin-bottom: 12px;">
+              🎯 Credit Card Overlaps Resolved (${result.overlapDetails.length} found)
+            </div>
+            <div style="max-height: 300px; overflow-y: auto;">
+              ${result.overlapDetails.map((overlap, index) => `
+                <div style="margin-bottom: 12px; padding: 8px; background: white; border-radius: 6px; border: 1px solid #3b82f6;">
+                  <div style="font-weight: 600; margin-bottom: 6px; font-size: 14px;">
+                    ⚠️ Overlap #${index + 1}: ${overlap.originalTransaction.description}
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px;">
+                    <div style="background: #dcfce7; padding: 6px; border-radius: 4px; font-size: 12px;">
+                      <span style="font-weight: 600; color: #166534;">✅ KEPT:</span><br>
+                      <span style="color: #16a34a;">${overlap.originalTransaction.date} - $${overlap.originalTransaction.amount}</span>
+                    </div>
+                    <div style="background: #fef2f2; padding: 6px; border-radius: 4px; font-size: 12px;">
+                      <span style="font-weight: 600; color: #dc2626;">🗑️ REMOVED:</span><br>
+                      <span style="color: #dc2626;">${overlap.duplicateTransaction.date} - $${overlap.duplicateTransaction.amount}</span>
+                    </div>
+                  </div>
+                  <div style="font-size: 11px; color: #6b7280;">
+                    ${overlap.reason}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            <div style="margin-top: 12px; padding: 8px; background: #bfdbfe; border-radius: 6px; font-size: 12px;">
+              <strong>💡 How it works:</strong> Credit card transactions can appear on both statements. This tool automatically removes the later duplicates.
+            </div>
+            <button onclick="this.parentElement.parentElement.remove()" style="
+              position: absolute; 
+              top: 8px; 
+              right: 8px; 
+              background: none; 
+              border: none; 
+              font-size: 18px; 
+              cursor: pointer; 
+              color: #6b7280;
+            ">×</button>
+          </div>
+        `;
+        document.body.appendChild(overlapReportDiv);
+        
+        // Remove the overlap report after 15 seconds
+        setTimeout(() => {
+          if (overlapReportDiv.parentNode) {
+            overlapReportDiv.parentNode.removeChild(overlapReportDiv);
+          }
+        }, 15000);
       }
 
       // Show detailed success message with duplicate info
@@ -2462,45 +2528,6 @@ export default function Dashboard() {
       </div>
       
       {/* Beta Feedback Component */}
-      {/* Detailed Overlap Report */}
-      {overlapDetails.length > 0 && (
-        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-blue-800 mb-4">
-            🎯 Credit Card Overlaps Resolved ({overlapDetails.length} found)
-          </h3>
-          <div className="space-y-3">
-            {overlapDetails.map((overlap, index) => (
-              <div key={index} className="bg-white border border-blue-200 rounded-lg p-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-sm font-medium text-blue-700">
-                    ⚠️ Overlap #{index + 1}: {overlap.originalTransaction.description}
-                  </span>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                  <div className="bg-green-50 p-2 rounded">
-                    <span className="font-medium text-green-700">✅ KEPT (Current Statement):</span>
-                    <div className="text-green-600">
-                      {overlap.originalTransaction.date} - ${overlap.originalTransaction.amount}
-                    </div>
-                  </div>
-                  <div className="bg-red-50 p-2 rounded">
-                    <span className="font-medium text-red-700">🗑️ REMOVED (Next Statement):</span>
-                    <div className="text-red-600">
-                      {overlap.duplicateTransaction.date} - ${overlap.duplicateTransaction.amount}
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-2 text-xs text-blue-600">
-                  {overlap.reason}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 p-3 bg-blue-100 rounded text-sm text-blue-700">
-            <strong>💡 How it works:</strong> Credit card transactions can appear on both the current statement (ending {statementEndDate}) and the next statement. This tool automatically removes the later duplicates to prevent double-importing the same transactions.
-          </div>
-        </div>
-      )}
 
       {user && (
         <BetaFeedback userId={user.id} userEmail={user.email} />
