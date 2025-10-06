@@ -306,10 +306,14 @@ export async function POST(request: NextRequest) {
     const file = formData.get('csv') as File;
     const userId = formData.get('userId') as string;
     const messyCSVMode = formData.get('messyCSVMode') === 'true';
+    const enableDateFilter = formData.get('enableDateFilter') === 'true';
+    const lastImportDate = formData.get('lastImportDate') as string;
     
     console.log('API: Received userId:', userId);
     console.log('API: File name:', file?.name);
     console.log('API: Messy CSV mode:', messyCSVMode);
+    console.log('API: Date filter enabled:', enableDateFilter);
+    console.log('API: Last import date:', lastImportDate);
     
     if (!file) {
       console.log('No file provided');
@@ -366,6 +370,21 @@ export async function POST(request: NextRequest) {
       }
       
       console.log('Parsed transactions:', transactions.length);
+    }
+
+    // Apply date filter if enabled (Reuven's feature request)
+    if (enableDateFilter && lastImportDate && transactions.length > 0) {
+      console.log(`🗓️ Applying date filter: removing transactions before ${lastImportDate}`);
+      const filterDate = new Date(lastImportDate);
+      const originalCount = transactions.length;
+      
+      transactions = transactions.filter(transaction => {
+        const transactionDate = new Date(transaction.date);
+        return transactionDate >= filterDate;
+      });
+      
+      const filteredCount = originalCount - transactions.length;
+      console.log(`🗓️ Date filter results: ${originalCount} total, ${filteredCount} filtered out, ${transactions.length} remaining`);
     }
 
     if (transactions.length === 0) {
@@ -530,10 +549,20 @@ export async function POST(request: NextRequest) {
     // Generate session ID
     const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
+    // Build success message with date filtering info
+    let message = `Successfully uploaded ${transactions.length} transactions. ${duplicates.length} duplicates found.`;
+    if (enableDateFilter && lastImportDate) {
+      const originalCount = transactions.length + (duplicates.length || 0);
+      const filteredCount = originalCount - transactions.length;
+      if (filteredCount > 0) {
+        message = `Successfully uploaded ${transactions.length} transactions. ${duplicates.length} duplicates found. ${filteredCount} old transactions filtered out (before ${lastImportDate}).`;
+      }
+    }
+
     return NextResponse.json({
       sessionId,
       transactions: newTransactions.slice(0, 10), // Return first 10 new transactions for preview
-      message: `Successfully uploaded ${transactions.length} transactions. ${duplicates.length} duplicates found.`,
+      message,
       insertedCount,
       duplicates: duplicates.length,
       totalProcessed: transactions.length,

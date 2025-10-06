@@ -369,6 +369,8 @@ export default function Dashboard() {
   const [duplicateStatus, setDuplicateStatus] = useState<'active' | 'inactive'>('inactive')
   const [duplicateTransactions, setDuplicateTransactions] = useState<Set<string>>(new Set())
   const [messyCSVMode, setMessyCSVMode] = useState(false)
+  const [enableDateFilter, setEnableDateFilter] = useState(false)
+  const [lastImportDate, setLastImportDate] = useState('')
   
 
   
@@ -962,6 +964,11 @@ export default function Dashboard() {
       // Add messy CSV mode flag
       formData.append('messyCSVMode', messyCSVMode.toString())
       console.log('Messy CSV mode:', messyCSVMode)
+      
+      // Add date filter settings
+      formData.append('enableDateFilter', enableDateFilter.toString())
+      formData.append('lastImportDate', lastImportDate)
+      console.log('Date filter enabled:', enableDateFilter, 'Last import date:', lastImportDate)
       
       const response = await fetch('/api/upload/anonymous', {
         method: 'POST',
@@ -1755,6 +1762,38 @@ export default function Dashboard() {
               <p className="text-xs text-yellow-700 mt-1">
                 Enable this for complex bookkeeping files with multiple months per row (e.g., "April,Name,Amount,May,Name,Amount")
               </p>
+            </div>
+
+            {/* Date Filter for Reuven's Feature Request */}
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-center gap-2 mb-2">
+                <input 
+                  type="checkbox" 
+                  id="enable-date-filter" 
+                  checked={enableDateFilter}
+                  onChange={(e) => setEnableDateFilter(e.target.checked)}
+                  className="w-4 h-4 text-blue-600 border-blue-300 rounded focus:ring-blue-500"
+                />
+                <label htmlFor="enable-date-filter" className="text-sm font-medium text-blue-800">
+                  📅 Date Filter (Prevent Re-importing Old Data)
+                </label>
+              </div>
+              {enableDateFilter && (
+                <div className="mt-2">
+                  <label className="block text-sm font-medium text-blue-700 mb-1">
+                    Last Import Date
+                  </label>
+                  <input 
+                    type="date" 
+                    value={lastImportDate}
+                    onChange={(e) => setLastImportDate(e.target.value)}
+                    className="w-full px-3 py-2 border border-blue-300 rounded-md text-sm"
+                  />
+                  <p className="text-xs text-blue-600 mt-1">
+                    Remove all transactions before this date to prevent re-importing old data
+                  </p>
+                </div>
+              )}
             </div>
 
                     {/* Bank Connection removed - focusing on core CSV functionality */}
