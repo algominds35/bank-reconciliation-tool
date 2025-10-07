@@ -53,6 +53,7 @@ export interface User {
 
 export interface ReconciliationSummary {
   total: number;
+  totalAmount: number;
   reconciled: number;
   unreconciled: number;
   bankTransactions: number;

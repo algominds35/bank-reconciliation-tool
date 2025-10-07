@@ -351,6 +351,7 @@ export default function Dashboard() {
   const [transactionTypeFilter, setTransactionTypeFilter] = useState<'all' | 'bank' | 'bookkeeping' | 'quickbooks'>('all')
   const [summary, setSummary] = useState<ReconciliationSummary>({ 
     total: 0, 
+    totalAmount: 0,
     reconciled: 0, 
     unreconciled: 0,
     bankTransactions: 0,
@@ -724,13 +725,14 @@ export default function Dashboard() {
 
   const calculateSummary = () => {
     const total = transactions.length
+    const totalAmount = transactions.reduce((sum, t) => sum + Math.abs(t.amount), 0)
     const reconciled = transactions.filter(t => t.is_reconciled).length
     const unreconciled = total - reconciled
     const bankTransactions = transactions.filter(t => t.transaction_type === 'bank').length
     const bookkeepingTransactions = transactions.filter(t => t.transaction_type === 'bookkeeping').length
     const quickbooksTransactions = transactions.filter(t => t.transaction_type === 'quickbooks').length
 
-    setSummary({ total, reconciled, unreconciled, bankTransactions, bookkeepingTransactions, quickbooksTransactions })
+    setSummary({ total, totalAmount, reconciled, unreconciled, bankTransactions, bookkeepingTransactions, quickbooksTransactions })
   }
 
   const fetchInvoiceStats = async () => {
@@ -1629,8 +1631,10 @@ export default function Dashboard() {
               <div className="flex items-center space-x-2">
                 <FileText className="h-4 w-4 text-gray-500" />
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total</p>
+                  <p className="text-sm font-medium text-gray-600">Total Transactions</p>
                   <p className="text-2xl font-bold">{summary.total}</p>
+                  <p className="text-sm font-medium text-gray-600">Total Amount</p>
+                  <p className="text-lg font-bold text-green-600">${summary.totalAmount.toLocaleString()}</p>
                 </div>
               </div>
             </CardContent>
@@ -1777,6 +1781,8 @@ export default function Dashboard() {
                     <div>
                       <div className="text-2xl font-bold text-blue-600">{summary.total}</div>
                       <div className="text-sm text-slate-600">Total Transactions</div>
+                      <div className="text-lg font-semibold text-green-600">${summary.totalAmount.toLocaleString()}</div>
+                      <div className="text-xs text-slate-500">Total Amount</div>
                     </div>
                   </div>
                 </CardContent>
