@@ -157,30 +157,29 @@ export default function CSVFirstHero() {
             className="relative"
           >
             <div className="relative z-10">
-              {/* Demo Video Section */}
+              {/* YouTube Demo Video */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
-                className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] overflow-hidden mb-6"
+                className="bg-white rounded-2xl border border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.06)] overflow-hidden"
               >
                 <div className="p-6">
-                  {/* Video Headlines */}
                   <div className="text-center mb-6">
-                    <h2 className="text-2xl font-bold text-slate-900 mb-2">
-                      How Bookkeepers Reconcile Smarter with ReconcileBook
-                    </h2>
-                    <p className="text-lg text-slate-600 font-medium">
-                      The only tool that transforms messy client files into clean, reconciled books in seconds
+                    <h3 className="text-xl font-semibold text-slate-900 mb-2">
+                      See How It Works
+                    </h3>
+                    <p className="text-slate-600 text-sm">
+                      Watch how transactions are matched and duplicates are flagged in real time.
                     </p>
                   </div>
                   
                   {/* YouTube Video Embed */}
-                  <div className="relative w-full h-80 bg-slate-100 rounded-xl overflow-hidden">
+                  <div className="relative w-full h-64 bg-slate-100 rounded-xl overflow-hidden">
                     <iframe
                       className="w-full h-full"
-                      src="https://www.youtube.com/embed/qq6GZ6SEuXs?autoplay=1&mute=1&loop=1&playlist=qq6GZ6SEuXs&controls=1&modestbranding=1&rel=0"
-                      title="How Bookkeepers Reconcile Smarter with ReconcileBook"
+                      src="https://www.youtube.com/embed/5ptuxIMUI6A?autoplay=1&mute=1&loop=1&playlist=5ptuxIMUI6A&controls=1&modestbranding=1&rel=0"
+                      title="ReconcileBook Demo"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
@@ -189,7 +188,7 @@ export default function CSVFirstHero() {
                   
                   <div className="mt-4 text-center">
                     <p className="text-xs text-slate-500">
-                      Demo Video • Watch how messy files become clean books instantly
+                      2:08 min demo • Updated Today
                     </p>
                   </div>
                 </div>
