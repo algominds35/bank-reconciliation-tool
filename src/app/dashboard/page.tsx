@@ -182,7 +182,10 @@ import {
   Building2,
   CreditCard,
   Zap,
-  AlertTriangle
+  AlertTriangle,
+  Undo,
+  Check,
+  X
 } from 'lucide-react'
 
 // Function to check for duplicates within a single CSV file
@@ -381,6 +384,17 @@ export default function Dashboard() {
     duplicateTransaction: any;
     reason: string;
   }>>([])
+  
+  // Trust & Safety Features
+  const [actionHistory, setActionHistory] = useState<Array<{
+    id: string;
+    action: string;
+    timestamp: Date;
+    data: any;
+  }>>([])
+  const [showReviewStep, setShowReviewStep] = useState(false)
+  const [pendingMatches, setPendingMatches] = useState<any[]>([])
+  const [canUndo, setCanUndo] = useState(false)
   
 
   
@@ -847,6 +861,89 @@ export default function Dashboard() {
   }
 
   // Single-file auto-matching function
+  // 🛡️ TRUST FEATURE: Undo Function
+  const undoLastAction = () => {
+    if (actionHistory.length === 0) return;
+    
+    const lastAction = actionHistory[actionHistory.length - 1];
+    
+    if (lastAction.action === 'auto-match') {
+      // Restore original transactions
+      setTransactions(lastAction.data.originalTransactions);
+      setSingleFileMatches([]);
+      setShowSingleFileMatches(false);
+      setShowReviewStep(false);
+      setPendingMatches([]);
+    }
+    
+    // Remove last action from history
+    setActionHistory(prev => prev.slice(0, -1));
+    setCanUndo(actionHistory.length > 1);
+    
+    // Show success message
+    const undoDiv = document.createElement('div');
+    undoDiv.innerHTML = `
+      <div style="
+        position: fixed; top: 20px; right: 20px; z-index: 10000;
+        background: #10b981; color: white; padding: 16px 20px;
+        border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 14px; font-weight: 500; max-width: 300px;
+        border-left: 4px solid #059669;
+      ">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 16px;">↶</span>
+          <span>Last action undone successfully</span>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(undoDiv);
+    setTimeout(() => {
+      if (undoDiv.parentNode) {
+        undoDiv.parentNode.removeChild(undoDiv);
+      }
+    }, 3000);
+  };
+
+  // 🛡️ TRUST FEATURE: Apply Matches
+  const applyMatches = () => {
+    setSingleFileMatches(pendingMatches);
+    setShowSingleFileMatches(true);
+    setShowReviewStep(false);
+    setPendingMatches([]);
+    
+    // Show success message
+    const applyDiv = document.createElement('div');
+    applyDiv.innerHTML = `
+      <div style="
+        position: fixed; top: 20px; right: 20px; z-index: 10000;
+        background: #10b981; color: white; padding: 16px 20px;
+        border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 14px; font-weight: 500; max-width: 300px;
+        border-left: 4px solid #059669;
+      ">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 16px;">✓</span>
+          <span>${pendingMatches.length} matches applied successfully</span>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(applyDiv);
+    setTimeout(() => {
+      if (applyDiv.parentNode) {
+        applyDiv.parentNode.removeChild(applyDiv);
+      }
+    }, 3000);
+  };
+
+  // 🛡️ TRUST FEATURE: Cancel Review
+  const cancelReview = () => {
+    setShowReviewStep(false);
+    setPendingMatches([]);
+    setCanUndo(false);
+  };
+
   const runAutoMatch = async () => {
     if (transactions.length === 0) {
       alert('No transactions available for matching');
@@ -855,11 +952,7 @@ export default function Dashboard() {
     
     try {
       const matches = await runSingleFileMatching(transactions);
-      if (matches.length > 0) {
-        alert(`Found ${matches.length} potential matches! Check the Single-File Auto-Matching Results section.`);
-      } else {
-        alert('No automatic matches found. Try manual matching or check your transaction data.');
-      }
+      // Note: runSingleFileMatching now shows review step instead of direct results
     } catch (error) {
       console.error('Auto-match error:', error);
       alert('Error running auto-match. Please try again.');
@@ -914,10 +1007,25 @@ export default function Dashboard() {
         reason: match.reason || 'No reason provided'
       }))
       
-      setSingleFileMatches(validMatches)
-      setShowSingleFileMatches(true)
+      // 🛡️ TRUST FEATURE: Show Review Step
+      setPendingMatches(validMatches)
+      setShowReviewStep(true)
       
-      console.log('✅ Auto-match completed successfully!')
+      // Save to action history for undo
+      const actionId = crypto.randomUUID()
+      const historyEntry = {
+        id: actionId,
+        action: 'auto-match',
+        timestamp: new Date(),
+        data: {
+          originalTransactions: [...transactions],
+          matches: validMatches
+        }
+      }
+      setActionHistory(prev => [...prev, historyEntry])
+      setCanUndo(true)
+      
+      console.log('✅ Auto-match completed - showing review step')
       
       // Track feature usage for beta users
       if (user) {
@@ -938,9 +1046,9 @@ export default function Dashboard() {
     if (!user) return
     
     try {
-      const { error } = await supabase
+              const { error } = await supabase
         .from('beta_user_activity')
-        .insert({
+                .insert({
           user_id: user.id,
           activity,
           metadata,
@@ -1713,6 +1821,109 @@ export default function Dashboard() {
           </TabsList>
 
           <TabsContent value="transactions" className="space-y-6">
+            {/* 🛡️ TRUST FEATURE: Review Step */}
+            {showReviewStep && pendingMatches.length > 0 && (
+              <Card className="border-amber-200 bg-amber-50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-amber-800">
+                    <Shield className="h-5 w-5" />
+                    Review Auto-Match Results
+                  </CardTitle>
+                  <CardDescription>
+                    We found {pendingMatches.length} potential matches. Review them before applying.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {/* Match Summary */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="bg-white p-3 rounded-lg border">
+                        <div className="text-2xl font-bold text-red-600">
+                          {pendingMatches.filter(m => m.type === 'duplicate').length}
+                        </div>
+                        <div className="text-sm text-gray-600">Duplicates</div>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg border">
+                        <div className="text-2xl font-bold text-blue-600">
+                          {pendingMatches.filter(m => m.type === 'pattern').length}
+                        </div>
+                        <div className="text-sm text-gray-600">Patterns</div>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg border">
+                        <div className="text-2xl font-bold text-green-600">
+                          {pendingMatches.filter(m => m.type === 'category_suggestion').length}
+                        </div>
+                        <div className="text-sm text-gray-600">Categories</div>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg border">
+                        <div className="text-2xl font-bold text-purple-600">
+                          {pendingMatches.filter(m => m.type === 'reconciliation').length}
+                        </div>
+                        <div className="text-sm text-gray-600">Reconciliations</div>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Button
+                        onClick={applyMatches}
+                        className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                      >
+                        <Check className="h-4 w-4 mr-2" />
+                        Apply {pendingMatches.length} Matches
+                      </Button>
+                      <Button
+                        onClick={cancelReview}
+                        variant="outline"
+                        className="flex-1"
+                      >
+                        <X className="h-4 w-4 mr-2" />
+                        Cancel
+                      </Button>
+                    </div>
+
+                    {/* Safety Notice */}
+                    <div className="bg-blue-100 border border-blue-200 rounded-lg p-3">
+                      <div className="flex items-start gap-2">
+                        <Shield className="h-4 w-4 text-blue-600 mt-0.5" />
+                        <div className="text-sm text-blue-800">
+                          <strong>Safe & Reversible:</strong> You can undo this action anytime using the undo button below.
+                          Your original data is always preserved.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Undo Button */}
+            {canUndo && (
+              <Card className="border-orange-200 bg-orange-50">
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Undo className="h-5 w-5 text-orange-600" />
+                      <div>
+                        <div className="font-medium text-orange-800">Last Action Available</div>
+                        <div className="text-sm text-orange-600">
+                          You can undo your last auto-match action
+                        </div>
+                      </div>
+                    </div>
+                    <Button
+                      onClick={undoLastAction}
+                      variant="outline"
+                      className="border-orange-300 text-orange-700 hover:bg-orange-100"
+                    >
+                      <Undo className="h-4 w-4 mr-2" />
+                      Undo
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Single-File Auto-Matching Results */}
             {showSingleFileMatches && singleFileMatches.length > 0 && (
               <Card className="border-blue-200 bg-blue-50">
@@ -2457,6 +2668,109 @@ export default function Dashboard() {
                     💡 <strong>Tip:</strong> Use the "Test Duplicates" button on the main transactions page to detect duplicates, then use "Run Auto-Match" here for smart matching!
                   </p>
                 </div>
+
+                {/* 🛡️ TRUST FEATURE: Review Step in Smart Matching */}
+                {showReviewStep && pendingMatches.length > 0 && (
+                  <Card className="border-amber-200 bg-amber-50">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-amber-800">
+                        <Shield className="h-5 w-5" />
+                        Review Auto-Match Results
+                      </CardTitle>
+                      <CardDescription>
+                        We found {pendingMatches.length} potential matches. Review them before applying.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {/* Match Summary */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <div className="bg-white p-3 rounded-lg border">
+                            <div className="text-2xl font-bold text-red-600">
+                              {pendingMatches.filter(m => m.type === 'duplicate').length}
+                            </div>
+                            <div className="text-sm text-gray-600">Duplicates</div>
+                          </div>
+                          <div className="bg-white p-3 rounded-lg border">
+                            <div className="text-2xl font-bold text-blue-600">
+                              {pendingMatches.filter(m => m.type === 'pattern').length}
+                            </div>
+                            <div className="text-sm text-gray-600">Patterns</div>
+                          </div>
+                          <div className="bg-white p-3 rounded-lg border">
+                            <div className="text-2xl font-bold text-green-600">
+                              {pendingMatches.filter(m => m.type === 'category_suggestion').length}
+                            </div>
+                            <div className="text-sm text-gray-600">Categories</div>
+                          </div>
+                          <div className="bg-white p-3 rounded-lg border">
+                            <div className="text-2xl font-bold text-purple-600">
+                              {pendingMatches.filter(m => m.type === 'reconciliation').length}
+                            </div>
+                            <div className="text-sm text-gray-600">Reconciliations</div>
+                          </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex flex-col sm:flex-row gap-3">
+                          <Button
+                            onClick={applyMatches}
+                            className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                          >
+                            <Check className="h-4 w-4 mr-2" />
+                            Apply {pendingMatches.length} Matches
+                          </Button>
+                          <Button
+                            onClick={cancelReview}
+                            variant="outline"
+                            className="flex-1"
+                          >
+                            <X className="h-4 w-4 mr-2" />
+                            Cancel
+                          </Button>
+                        </div>
+
+                        {/* Safety Notice */}
+                        <div className="bg-blue-100 border border-blue-200 rounded-lg p-3">
+                          <div className="flex items-start gap-2">
+                            <Shield className="h-4 w-4 text-blue-600 mt-0.5" />
+                            <div className="text-sm text-blue-800">
+                              <strong>Safe & Reversible:</strong> You can undo this action anytime using the undo button.
+                              Your original data is always preserved.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Undo Button in Smart Matching */}
+                {canUndo && (
+                  <Card className="border-orange-200 bg-orange-50">
+                    <CardContent className="pt-6">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Undo className="h-5 w-5 text-orange-600" />
+                          <div>
+                            <div className="font-medium text-orange-800">Last Action Available</div>
+                            <div className="text-sm text-orange-600">
+                              You can undo your last auto-match action
+                            </div>
+                          </div>
+                        </div>
+                        <Button
+                          onClick={undoLastAction}
+                          variant="outline"
+                          className="border-orange-300 text-orange-700 hover:bg-orange-100"
+                        >
+                          <Undo className="h-4 w-4 mr-2" />
+                          Undo
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
 
                 {/* Auto-Match Results */}
                 {showSingleFileMatches && singleFileMatches.length > 0 && (
