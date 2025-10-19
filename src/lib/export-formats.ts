@@ -77,7 +77,7 @@ export function exportAsQBOnlineCSV(transactions: Transaction[]): string {
     const description = (txn.description || 'Transaction').replace(/,/g, ';')
     const amount = txn.amount || 0
     const category = (txn.category || 'Uncategorized').replace(/,/g, ';')
-    const payee = (txn.vendor || '').replace(/,/g, ';')
+    const payee = ''  // Transaction type doesn't have vendor/payee field
     
     return `${date},"${description}",${amount},"${category}","Checking","${payee}","Non"`
   }).join('\n')
