@@ -45,10 +45,10 @@ export function exportAsQBDesktopIIF(transactions: Transaction[]): string {
     const amount = txn.amount || 0
     const description = (txn.description || 'Transaction').replace(/\t/g, ' ')
     const category = (txn.category || 'Uncategorized').replace(/\t/g, ' ')
-    const type = txn.type || 'Bank'
+    const transactionType = txn.transaction_type || 'bank'
     
     // Determine if this is income or expense
-    const isExpense = amount < 0 || type === 'Expense'
+    const isExpense = amount < 0
     const absAmount = Math.abs(amount)
     
     // TRNS line (main transaction)
@@ -95,7 +95,7 @@ export function exportAsXeroCSV(transactions: Transaction[]): string {
     const date = formatDateForQB(txn.date)
     const description = (txn.description || 'Transaction').replace(/,/g, ';')
     const amount = Math.abs(txn.amount || 0)
-    const payee = (txn.vendor || '').replace(/,/g, ';')
+    const payee = ''  // Transaction type doesn't have vendor/payee field
     const category = txn.category || '200' // Default expense code
     
     return `${date},${amount},"${payee}","${description}","","${category}","Tax Exempt",0.00`
@@ -108,16 +108,15 @@ export function exportAsXeroCSV(transactions: Transaction[]): string {
  * Export transactions as generic CSV
  */
 export function exportAsGenericCSV(transactions: Transaction[]): string {
-  const headers = 'Date,Description,Amount,Type,Category,Vendor,Status'
+  const headers = 'Date,Description,Amount,Type,Category,Status'
   
   const rows = transactions.map(txn => {
     const description = (txn.description || '').replace(/,/g, ';')
     const category = (txn.category || '').replace(/,/g, ';')
-    const vendor = (txn.vendor || '').replace(/,/g, ';')
-    const type = txn.type || 'Bank'
-    const status = txn.status || 'Unreconciled'
+    const type = txn.transaction_type || 'bank'
+    const status = txn.is_reconciled ? 'Reconciled' : 'Unreconciled'
     
-    return `${txn.date},"${description}",${txn.amount || 0},"${type}","${category}","${vendor}","${status}"`
+    return `${txn.date},"${description}",${txn.amount || 0},"${type}","${category}","${status}"`
   }).join('\n')
   
   return `${headers}\n${rows}`
