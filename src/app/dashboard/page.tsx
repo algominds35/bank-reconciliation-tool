@@ -19,10 +19,18 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu'
 import Papa from 'papaparse'
 import jsPDF from 'jspdf'
 import { SingleFileMatcher } from '@/lib/single-file-matcher'
 import BetaFeedback from '@/components/BetaFeedback'
+import { 
+  exportAsQBDesktopIIF, 
+  exportAsQBOnlineCSV, 
+  exportAsXeroCSV, 
+  exportAsGenericCSV,
+  downloadFile 
+} from '@/lib/export-formats'
 
 // Function to detect complex multi-month report format
 function isComplexReportFormat(csvContent: string): boolean {
@@ -185,7 +193,8 @@ import {
   AlertTriangle,
   Undo,
   Check,
-  X
+  X,
+  ChevronDown
 } from 'lucide-react'
 
 // Function to check for duplicates within a single CSV file
@@ -2273,25 +2282,102 @@ export default function Dashboard() {
                       <span>Reconcile Selected ({selectedTransactions.length})</span>
                     </Button>
 
-                    <Button
-                      variant="outline"
-                onClick={exportReconciled}
-                disabled={summary.reconciled === 0}
-                      className="flex items-center space-x-2"
-              >
-                      <Download className="h-4 w-4" />
-                      <span>Export CSV</span>
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                onClick={exportReconciledPDF}
-                disabled={summary.reconciled === 0}
-                      className="flex items-center space-x-2"
-              >
-                      <FileText className="h-4 w-4" />
-                      <span>Export PDF</span>
-                    </Button>
+                    {/* Export Dropdown Menu */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          disabled={transactions.length === 0}
+                          className="flex items-center space-x-2"
+                        >
+                          <Download className="h-4 w-4" />
+                          <span>Export</span>
+                          <ChevronDown className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-56">
+                        <DropdownMenuLabel>QuickBooks Formats</DropdownMenuLabel>
+                        <DropdownMenuItem 
+                          onClick={() => {
+                            const iif = exportAsQBDesktopIIF(transactions)
+                            downloadFile(iif, 'reconciled_transactions.iif', 'text/plain')
+                            alert('✅ Exported as QuickBooks Desktop IIF format!\n\nDouble-click the file to import directly into QuickBooks Desktop.')
+                          }}
+                          className="flex items-center space-x-2"
+                        >
+                          <div className="flex items-center space-x-2 w-full">
+                            <span className="text-green-600">💚</span>
+                            <div className="flex flex-col">
+                              <span className="font-medium">QB Desktop (IIF)</span>
+                              <span className="text-xs text-gray-500">Double-click to import</span>
+                            </div>
+                          </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={() => {
+                            const csv = exportAsQBOnlineCSV(transactions)
+                            downloadFile(csv, 'reconciled_transactions_qbo.csv', 'text/csv')
+                            alert('✅ Exported as QuickBooks Online CSV format!\n\nUpload this file to QB Online for instant import.')
+                          }}
+                          className="flex items-center space-x-2"
+                        >
+                          <div className="flex items-center space-x-2 w-full">
+                            <span className="text-green-600">💚</span>
+                            <div className="flex flex-col">
+                              <span className="font-medium">QB Online (CSV)</span>
+                              <span className="text-xs text-gray-500">Optimized for QBO import</span>
+                            </div>
+                          </div>
+                        </DropdownMenuItem>
+                        
+                        <DropdownMenuSeparator />
+                        <DropdownMenuLabel>Other Formats</DropdownMenuLabel>
+                        
+                        <DropdownMenuItem 
+                          onClick={() => {
+                            const csv = exportAsXeroCSV(transactions)
+                            downloadFile(csv, 'reconciled_transactions_xero.csv', 'text/csv')
+                            alert('✅ Exported as Xero CSV format!')
+                          }}
+                          className="flex items-center space-x-2"
+                        >
+                          <div className="flex items-center space-x-2 w-full">
+                            <span className="text-blue-600">💙</span>
+                            <div className="flex flex-col">
+                              <span className="font-medium">Xero (CSV)</span>
+                              <span className="text-xs text-gray-500">Ready for Xero import</span>
+                            </div>
+                          </div>
+                        </DropdownMenuItem>
+                        
+                        <DropdownMenuItem 
+                          onClick={exportReconciled}
+                          className="flex items-center space-x-2"
+                        >
+                          <div className="flex items-center space-x-2 w-full">
+                            <Download className="h-4 w-4" />
+                            <div className="flex flex-col">
+                              <span className="font-medium">Generic CSV</span>
+                              <span className="text-xs text-gray-500">Universal format</span>
+                            </div>
+                          </div>
+                        </DropdownMenuItem>
+                        
+                        <DropdownMenuItem 
+                          onClick={exportReconciledPDF}
+                          disabled={summary.reconciled === 0}
+                          className="flex items-center space-x-2"
+                        >
+                          <div className="flex items-center space-x-2 w-full">
+                            <FileText className="h-4 w-4" />
+                            <div className="flex flex-col">
+                              <span className="font-medium">PDF Report</span>
+                              <span className="text-xs text-gray-500">For sharing/printing</span>
+                            </div>
+                          </div>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
 
                     <Button
                       variant="destructive"

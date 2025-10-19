@@ -12,13 +12,13 @@ export default function Benefits() {
     },
     {
       icon: FileText,
-      title: 'Excel Reports',
-      description: 'Professional Balance Sheet & Cash Flow reports'
+      title: 'QuickBooks Compatible',
+      description: 'Export directly to QB Desktop & QB Online with one click'
     },
     {
       icon: BarChart3,
-      title: 'Real-time Analytics',
-      description: 'Track performance with live dashboards'
+      title: 'Multi-Format Export',
+      description: 'Export to QuickBooks, Xero, or generic CSV instantly'
     },
     {
       icon: Clock,
