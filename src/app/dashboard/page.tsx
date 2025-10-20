@@ -2285,15 +2285,16 @@ export default function Dashboard() {
                     {/* Export Dropdown Menu */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="outline"
+                    <Button
+                      variant="outline"
                           disabled={transactions.length === 0}
-                          className="flex items-center space-x-2"
-                        >
-                          <Download className="h-4 w-4" />
-                          <span>Export</span>
+                      className="flex items-center space-x-2"
+                          title="Export all transactions in current view"
+              >
+                      <Download className="h-4 w-4" />
+                          <span>Export ({transactions.length})</span>
                           <ChevronDown className="h-4 w-4" />
-                        </Button>
+                    </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-56">
                         <DropdownMenuLabel>QuickBooks Formats</DropdownMenuLabel>
@@ -2364,12 +2365,12 @@ export default function Dashboard() {
                         </DropdownMenuItem>
                         
                         <DropdownMenuItem 
-                          onClick={exportReconciledPDF}
-                          disabled={summary.reconciled === 0}
-                          className="flex items-center space-x-2"
-                        >
+                onClick={exportReconciledPDF}
+                disabled={summary.reconciled === 0}
+                      className="flex items-center space-x-2"
+              >
                           <div className="flex items-center space-x-2 w-full">
-                            <FileText className="h-4 w-4" />
+                      <FileText className="h-4 w-4" />
                             <div className="flex flex-col">
                               <span className="font-medium">PDF Report</span>
                               <span className="text-xs text-gray-500">For sharing/printing</span>
