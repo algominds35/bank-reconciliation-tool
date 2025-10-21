@@ -2389,38 +2389,6 @@ export default function Dashboard() {
                       <Trash2 className="h-4 w-4" />
                       <span>Clear All</span>
                     </Button>
-                    
-                    {/* TEST AUTO-MATCH WITH SAMPLE DATA */}
-                    <Button
-                      onClick={async () => {
-                        console.log('🧪 Testing auto-match with sample data...')
-                        
-                        // Create sample transactions for testing
-                        const sampleTransactions = [
-                          { id: '1', date: '2024-01-15', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
-                          { id: '2', date: '2024-01-16', description: 'Client Payment - ABC Corp', amount: 2500.00, category: 'Income' },
-                          { id: '3', date: '2024-01-17', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
-                          { id: '4', date: '2024-01-17', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
-                          { id: '5', date: '2024-01-18', description: 'Software Subscription', amount: 99.00, category: 'Technology' },
-                          { id: '6', date: '2024-01-19', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' },
-                          { id: '7', date: '2024-01-20', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
-                          { id: '8', date: '2024-01-21', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' },
-                          { id: '9', date: '2024-01-22', description: 'Office Supplies Purchase', amount: 150.00, category: 'Expenses' },
-                          { id: '10', date: '2024-01-23', description: 'Netflix Subscription', amount: 15.99, category: 'Entertainment' }
-                        ]
-                        
-                        try {
-                          const matches = await runSingleFileMatching(sampleTransactions)
-                          alert(`🧪 TEST COMPLETE!\n\nFound ${matches.length} matches:\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n\nCheck the Smart Matching tab to see results!`)
-                        } catch (error) {
-                          alert(`❌ TEST FAILED: ${error}`)
-                        }
-                      }}
-                      className="flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white font-bold"
-                    >
-                      <Zap className="h-4 w-4" />
-                      <span>Test Auto-Match</span>
-                    </Button>
 
                     {/* DUPLICATE TEST BUTTON - SHOULD BE VISIBLE */}
                     <Button
