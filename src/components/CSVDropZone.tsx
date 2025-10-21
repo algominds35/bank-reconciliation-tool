@@ -55,8 +55,9 @@ export default function CSVDropZone() {
   }, []);
 
   const processFile = async (file: File) => {
-    if (!file.name.toLowerCase().endsWith('.csv')) {
-      setError('Please upload a CSV file');
+    const fileName = file.name.toLowerCase();
+    if (!fileName.endsWith('.csv') && !fileName.endsWith('.pdf')) {
+      setError('Please upload a CSV or PDF file');
       return;
     }
 

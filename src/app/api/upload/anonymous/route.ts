@@ -333,19 +333,56 @@ export async function POST(request: NextRequest) {
 
     console.log('File received:', file.name, file.size, 'bytes');
     
-    const validExtensions = ['.csv', '.txt', '.xlsx', '.xls', '.ofx', '.qfx'];
+    const validExtensions = ['.csv', '.txt', '.xlsx', '.xls', '.ofx', '.qfx', '.pdf'];
     const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
     
     if (!validExtensions.includes(fileExtension)) {
       return NextResponse.json(
-        { error: `Unsupported file type: ${fileExtension}. Please upload a CSV, Excel, or OFX file.` },
+        { error: `Unsupported file type: ${fileExtension}. Please upload a CSV, Excel, PDF, or OFX file.` },
         { status: 400 }
       );
     }
 
     let transactions: Transaction[] = [];
 
-    if (fileExtension === '.ofx' || fileExtension === '.qfx') {
+    if (fileExtension === '.pdf') {
+      console.log('Processing PDF file:', file.name);
+      try {
+        const { pdfProcessor } = await import('@/lib/pdf-processor');
+        const result = await pdfProcessor.processPDF(file);
+        
+        if (result.errors.length > 0) {
+          console.log('PDF processing warnings:', result.errors);
+        }
+        
+        if (result.transactions.length === 0) {
+          return NextResponse.json(
+            { error: 'No transactions found in PDF. Please make sure this is a bank statement PDF with transaction data.' },
+            { status: 400 }
+          );
+        }
+        
+        // Convert PDF transactions to our standard format
+        transactions = result.transactions.map((tx, index) => ({
+          id: tx.id || `pdf-${index}`,
+          date: tx.date,
+          description: tx.description,
+          amount: tx.amount,
+          type: tx.type as 'debit' | 'credit',
+          category: '',
+          account: result.accountNumber || '',
+          is_reconciled: false
+        }));
+        
+        console.log(`✅ Extracted ${transactions.length} transactions from PDF`);
+      } catch (error) {
+        console.error('PDF processing failed:', error);
+        return NextResponse.json(
+          { error: 'Failed to process PDF. This might be a scanned image or unsupported format. Please try uploading a CSV file instead.' },
+          { status: 400 }
+        );
+      }
+    } else if (fileExtension === '.ofx' || fileExtension === '.qfx') {
       console.log('Processing OFX/QFX file:', file.name);
       transactions = await parseOFXFile(file);
     } else if (fileExtension === '.xlsx' || fileExtension === '.xls') {

@@ -2077,14 +2077,14 @@ export default function Dashboard() {
                           <Button asChild disabled={uploading}>
                             <span className="flex items-center space-x-2">
                               <Upload className="h-4 w-4" />
-                              <span>{uploading ? 'Uploading...' : 'Upload Bank CSV'}</span>
+                              <span>{uploading ? 'Uploading...' : 'Upload Bank Statement (CSV/PDF)'}</span>
                             </span>
                           </Button>
                 </label>
                 <input
                           id="bank-upload"
                   type="file"
-                  accept=".csv,.xlsx,.xls,.ofx,.qfx"
+                  accept=".csv,.xlsx,.xls,.ofx,.qfx,.pdf"
                   className="hidden"
                           onChange={(e) => handleFileUpload(e, 'bank')}
                   disabled={uploading}
@@ -2096,14 +2096,14 @@ export default function Dashboard() {
                           <Button variant="outline" asChild disabled={uploading}>
                             <span className="flex items-center space-x-2">
                               <Upload className="h-4 w-4" />
-                              <span>Upload Bookkeeping CSV</span>
+                              <span>Upload Bookkeeping Data (CSV/PDF)</span>
                             </span>
                           </Button>
                         </label>
                         <input
                           id="bookkeeping-upload"
                           type="file"
-                          accept=".csv,.xlsx,.xls,.ofx,.qfx"
+                          accept=".csv,.xlsx,.xls,.ofx,.qfx,.pdf"
                           className="hidden"
                           onChange={(e) => handleFileUpload(e, 'bookkeeping')}
                           disabled={uploading}
@@ -2625,7 +2625,7 @@ export default function Dashboard() {
                   <div className="flex gap-2">
                     <input
                       type="file"
-                      accept=".csv,.xlsx,.xls"
+                      accept=".csv,.xlsx,.xls,.pdf"
                       onChange={(e) => handleFileUpload(e, 'bank')}
                       className="hidden"
                       id="duplicate-detection-upload"
