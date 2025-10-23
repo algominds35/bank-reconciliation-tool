@@ -1,14 +1,19 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Calculator, FileText, BarChart3, Clock } from 'lucide-react'
+import { Calculator, FileText, BarChart3, Clock, AlertTriangle, CheckCircle } from 'lucide-react'
 
 export default function Benefits() {
   const features = [
     {
       icon: Calculator,
-      title: 'Automated CSV Matching',
-      description: 'Smart transaction matching with 99% accuracy'
+      title: 'Automated CSV & PDF Matching',
+      description: 'Smart transaction matching with 99% accuracy - supports both CSV and PDF uploads'
+    },
+    {
+      icon: AlertTriangle,
+      title: 'Find Missing Transactions',
+      description: 'Automatically detect transactions missing from QuickBooks or your bank statement'
     },
     {
       icon: FileText,
@@ -23,7 +28,12 @@ export default function Benefits() {
     {
       icon: Clock,
       title: 'Save 10+ Hours',
-      description: 'Automate manual reconciliation tasks'
+      description: 'Automate manual reconciliation tasks every month'
+    },
+    {
+      icon: CheckCircle,
+      title: '100% Coverage',
+      description: 'Never miss a discrepancy - every transaction is accounted for'
     }
   ]
 
@@ -64,7 +74,7 @@ export default function Benefits() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {features.map((feature, index) => (
             <motion.div

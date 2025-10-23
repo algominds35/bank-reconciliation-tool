@@ -55,7 +55,7 @@ export default function CSVFirstHero() {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="text-xl text-slate-600 mb-8 leading-relaxed"
             >
-              ReconcileBook uploads your bank-statement CSV, auto-matches transactions, flags duplicates, and cleans errors instantly — so your books are accurate without the manual grind.
+              Upload bank statements (CSV or PDF), auto-match transactions, find missing entries, and flag duplicates instantly — so your books are accurate without the manual grind.
             </motion.p>
 
             {/* Value Props */}
