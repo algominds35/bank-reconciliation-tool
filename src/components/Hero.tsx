@@ -45,7 +45,7 @@ export default function Hero() {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="text-xl text-slate-600 mb-8 leading-relaxed"
             >
-              Upload bank statements (CSV or PDF), match transactions automatically, and discover missing entries — all in seconds, not hours.
+              Our system matches transactions, removes duplicates, and generates clean reports — in seconds, not hours.
             </motion.p>
 
             {/* CTAs */}
