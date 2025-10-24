@@ -2103,6 +2103,18 @@ export default function Dashboard() {
                           disabled={uploading}
                         />
                       </div>
+
+                      {/* QuickBooks Connect Button */}
+                      <div>
+                        <Link href="/settings/qbo">
+                          <Button variant="outline" className="flex items-center space-x-2 border-green-600 text-green-600 hover:bg-green-50">
+                            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                              <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            <span>Connect QuickBooks</span>
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
 
             {/* Messy CSV Mode Toggle */}
