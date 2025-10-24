@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { decrypt } from '@/lib/crypto'
 
 // QuickBooks API functions
 async function fetchAccountsFromQBO(accessToken: string, realmId: string) {
@@ -173,9 +174,13 @@ export async function POST(req: NextRequest) {
     try {
       console.log('🚀 Starting REAL QuickBooks data sync...')
       
+      // Decrypt the access token
+      const accessToken = decrypt(connection.access_token_encrypted)
+      console.log('✅ Decrypted access token')
+      
       // Fetch accounts from QuickBooks
       console.log('Fetching accounts from QuickBooks...')
-      const accounts = await fetchAccountsFromQBO(connection.access_token_encrypted, realmId)
+      const accounts = await fetchAccountsFromQBO(accessToken, realmId)
       console.log(`✅ Fetched ${accounts.length} accounts from QuickBooks`)
       
       // Save accounts to Supabase
@@ -189,7 +194,7 @@ export async function POST(req: NextRequest) {
         new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)     // 7 days
       
       console.log('Fetching transactions since:', sinceDate)
-      const transactions = await fetchTransactionsFromQBO(connection.access_token_encrypted, realmId, sinceDate)
+      const transactions = await fetchTransactionsFromQBO(accessToken, realmId, sinceDate)
       console.log(`✅ Fetched ${transactions.length} transactions from QuickBooks since ${sinceDate}`)
       
       // Save transactions to Supabase
@@ -282,12 +287,15 @@ export async function GET(req: NextRequest) {
           continue
         }
         
+        // Decrypt the access token
+        const accessToken = decrypt(connection.access_token_encrypted)
+        
         // Fetch accounts from QuickBooks
-        const accounts = await fetchAccountsFromQBO(connection.access_token_encrypted, connection.realm_id)
+        const accounts = await fetchAccountsFromQBO(accessToken, connection.realm_id)
         
         // Fetch transactions from QuickBooks (full sync for cron)
         const sinceDate = new Date(Date.now() - 730 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10) // 24 months
-        const transactions = await fetchTransactionsFromQBO(connection.access_token_encrypted, connection.realm_id, sinceDate)
+        const transactions = await fetchTransactionsFromQBO(accessToken, connection.realm_id, sinceDate)
         
         // Save to database
         await saveAccountsToSupabase(supabase, accounts, connection.realm_id)
