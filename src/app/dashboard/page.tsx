@@ -380,18 +380,6 @@ export default function Dashboard() {
   const [duplicatesFound, setDuplicatesFound] = useState<number>(0)
   const [duplicateStatus, setDuplicateStatus] = useState<'active' | 'inactive'>('inactive')
   const [duplicateTransactions, setDuplicateTransactions] = useState<Set<string>>(new Set())
-  const [messyCSVMode, setMessyCSVMode] = useState(false)
-  const [enableDateFilter, setEnableDateFilter] = useState(false)
-  const [lastImportDate, setLastImportDate] = useState('')
-  const [enableFileComparison, setEnableFileComparison] = useState(false)
-  const [existingDataFile, setExistingDataFile] = useState<File | null>(null)
-  const [enableCreditCardOverlap, setEnableCreditCardOverlap] = useState(false)
-  const [statementEndDate, setStatementEndDate] = useState('')
-  const [overlapDetails, setOverlapDetails] = useState<Array<{
-    originalTransaction: any;
-    duplicateTransaction: any;
-    reason: string;
-  }>>([])
   
   // Trust & Safety Features
   const [actionHistory, setActionHistory] = useState<Array<{
@@ -1069,14 +1057,6 @@ export default function Dashboard() {
     }
   }
 
-  const handleExistingDataUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setExistingDataFile(file);
-      console.log('Existing data file selected:', file.name);
-    }
-  };
-
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>, transactionType: 'bank' | 'bookkeeping') => {
     const file = event.target.files?.[0]
     if (!file) return
@@ -1095,27 +1075,6 @@ export default function Dashboard() {
         formData.append('userId', user.id)
         console.log('Processing file for user:', user.id)
       }
-      
-      // Add messy CSV mode flag
-      formData.append('messyCSVMode', messyCSVMode.toString())
-      console.log('Messy CSV mode:', messyCSVMode)
-      
-      // Add date filter settings
-      formData.append('enableDateFilter', enableDateFilter.toString())
-      formData.append('lastImportDate', lastImportDate)
-      console.log('Date filter enabled:', enableDateFilter, 'Last import date:', lastImportDate)
-      
-      // Add file comparison settings
-      formData.append('enableFileComparison', enableFileComparison.toString())
-      if (enableFileComparison && existingDataFile) {
-        formData.append('existingDataFile', existingDataFile)
-        console.log('File comparison enabled with existing data:', existingDataFile.name)
-      }
-      
-      // Add credit card overlap settings
-      formData.append('enableCreditCardOverlap', enableCreditCardOverlap.toString())
-      formData.append('statementEndDate', statementEndDate)
-      console.log('Credit card overlap enabled:', enableCreditCardOverlap, 'Statement end date:', statementEndDate)
       
       const response = await fetch('/api/upload/anonymous', {
         method: 'POST',
@@ -1144,77 +1103,6 @@ export default function Dashboard() {
       // If no transactions were uploaded (due to filtering), show explanation
       if (result.totalProcessed === 0 && result.message) {
         console.log('No transactions uploaded due to filtering - this is expected behavior');
-      }
-      
-      // Show overlap details if any were found
-      if (result.overlapDetails && result.overlapDetails.length > 0) {
-        console.log('Showing detailed overlap report:', result.overlapDetails.length, 'overlaps found');
-        
-        // Create overlap report notification that appears immediately
-        const overlapReportDiv = document.createElement('div');
-        overlapReportDiv.innerHTML = `
-          <div style="
-            position: fixed; 
-            top: 80px; 
-            right: 20px; 
-            background: #dbeafe; 
-            color: #1e40af; 
-            padding: 20px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 1001;
-            max-width: 500px;
-            font-family: system-ui;
-            border: 2px solid #3b82f6;
-          ">
-            <div style="font-weight: bold; font-size: 16px; margin-bottom: 12px;">
-              🎯 Credit Card Overlaps Resolved (${result.overlapDetails.length} found)
-            </div>
-            <div style="max-height: 300px; overflow-y: auto;">
-              ${result.overlapDetails.map((overlap: any, index: number) => `
-                <div style="margin-bottom: 12px; padding: 8px; background: white; border-radius: 6px; border: 1px solid #3b82f6;">
-                  <div style="font-weight: 600; margin-bottom: 6px; font-size: 14px;">
-                    ⚠️ Overlap #${index + 1}: ${overlap.originalTransaction.description}
-                  </div>
-                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px;">
-                    <div style="background: #dcfce7; padding: 6px; border-radius: 4px; font-size: 12px;">
-                      <span style="font-weight: 600; color: #166534;">✅ KEPT:</span><br>
-                      <span style="color: #16a34a;">${overlap.originalTransaction.date} - $${overlap.originalTransaction.amount}</span>
-                    </div>
-                    <div style="background: #fef2f2; padding: 6px; border-radius: 4px; font-size: 12px;">
-                      <span style="font-weight: 600; color: #dc2626;">🗑️ REMOVED:</span><br>
-                      <span style="color: #dc2626;">${overlap.duplicateTransaction.date} - $${overlap.duplicateTransaction.amount}</span>
-                    </div>
-                  </div>
-                  <div style="font-size: 11px; color: #6b7280;">
-                    ${overlap.reason}
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-            <div style="margin-top: 12px; padding: 8px; background: #bfdbfe; border-radius: 6px; font-size: 12px;">
-              <strong>💡 How it works:</strong> Credit card transactions can appear on both statements. This tool automatically removes the later duplicates.
-            </div>
-            <button onclick="this.parentElement.parentElement.remove()" style="
-              position: absolute; 
-              top: 8px; 
-              right: 8px; 
-              background: none; 
-              border: none; 
-              font-size: 18px; 
-              cursor: pointer; 
-              color: #6b7280;
-            ">×</button>
-          </div>
-        `;
-        document.body.appendChild(overlapReportDiv);
-        
-        // Remove the overlap report after 15 seconds
-        setTimeout(() => {
-          if (overlapReportDiv.parentNode) {
-            overlapReportDiv.parentNode.removeChild(overlapReportDiv);
-          }
-        }, 15000);
       }
 
       // Show detailed success message with duplicate info
@@ -1248,21 +1136,6 @@ export default function Dashboard() {
           successDiv.parentNode.removeChild(successDiv);
         }
       }, 5000);
-      
-      // Store overlap details for detailed reporting
-      if (result.overlapDetails) {
-        setOverlapDetails(result.overlapDetails);
-        console.log('Overlap Details:', result.overlapDetails);
-      }
-      
-      // Log the results for debugging
-      console.log('Upload Results:', {
-        totalProcessed: result.totalProcessed,
-        newTransactions: result.newTransactions,
-        duplicates: result.duplicates,
-        message: result.message,
-        overlapDetails: result.overlapDetails
-      });
       
     } catch (error) {
       console.error('Upload error:', error)
@@ -2116,133 +1989,6 @@ export default function Dashboard() {
                         </Link>
                       </div>
                     </div>
-
-            {/* Messy CSV Mode Toggle */}
-            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <div className="flex items-center gap-2">
-                <input 
-                  type="checkbox" 
-                  id="messy-csv-mode" 
-                  checked={messyCSVMode}
-                  onChange={(e) => setMessyCSVMode(e.target.checked)}
-                  className="w-4 h-4 text-yellow-600 border-yellow-300 rounded focus:ring-yellow-500"
-                />
-                <label htmlFor="messy-csv-mode" className="text-sm font-medium text-yellow-800">
-                  🔧 Messy Multi-Month Format
-                </label>
-              </div>
-              <p className="text-xs text-yellow-700 mt-1">
-                Enable this for complex bookkeeping files with multiple months per row (e.g., "April,Name,Amount,May,Name,Amount")
-              </p>
-            </div>
-
-            {/* Date Filter for Reuven's Feature Request */}
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <input 
-                  type="checkbox" 
-                  id="enable-date-filter" 
-                  checked={enableDateFilter}
-                  onChange={(e) => setEnableDateFilter(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 border-blue-300 rounded focus:ring-blue-500"
-                />
-                <label htmlFor="enable-date-filter" className="text-sm font-medium text-blue-800">
-                  📅 Date Filter (Prevent Re-importing Old Data)
-                </label>
-              </div>
-              {enableDateFilter && (
-                <div className="mt-2">
-                  <label className="block text-sm font-medium text-blue-700 mb-1">
-                    Last Import Date
-                  </label>
-                  <input 
-                    type="date" 
-                    value={lastImportDate}
-                    onChange={(e) => setLastImportDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-blue-300 rounded-md text-sm"
-                  />
-                  <p className="text-xs text-blue-600 mt-1">
-                    Remove all transactions before this date to prevent re-importing old data
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* File Comparison Feature (Reuven's Request) */}
-            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <input 
-                  type="checkbox" 
-                  id="enable-file-comparison" 
-                  checked={enableFileComparison}
-                  onChange={(e) => setEnableFileComparison(e.target.checked)}
-                  className="w-4 h-4 text-green-600 border-green-300 rounded focus:ring-green-500"
-                />
-                <label htmlFor="enable-file-comparison" className="text-sm font-medium text-green-800">
-                  🔄 File Comparison (Compare Against Existing Data)
-                </label>
-              </div>
-              {enableFileComparison && (
-                <div className="mt-2 space-y-2">
-                  <div>
-                    <label className="block text-sm font-medium text-green-700 mb-1">
-                      Upload Existing QuickBooks Data (CSV/Excel)
-                    </label>
-                    <input 
-                      type="file" 
-                      accept=".csv,.xlsx,.xls"
-                      onChange={handleExistingDataUpload}
-                      className="w-full px-3 py-2 border border-green-300 rounded-md text-sm"
-                    />
-                    <p className="text-xs text-green-600 mt-1">
-                      Upload your existing QuickBooks export to prevent importing duplicates
-                    </p>
-                  </div>
-                  {existingDataFile && (
-                    <div className="p-2 bg-green-100 rounded text-sm text-green-700">
-                      ✅ Existing data loaded: {existingDataFile.name}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Credit Card Overlap Handling (Reuven's Request) */}
-            <div className="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <input 
-                  type="checkbox" 
-                  id="enable-credit-card-overlap" 
-                  checked={enableCreditCardOverlap}
-                  onChange={(e) => setEnableCreditCardOverlap(e.target.checked)}
-                  className="w-4 h-4 text-purple-600 border-purple-300 rounded focus:ring-purple-500"
-                />
-                <label htmlFor="enable-credit-card-overlap" className="text-sm font-medium text-purple-800">
-                  💳 Credit Card Overlap Handling
-                </label>
-              </div>
-              {enableCreditCardOverlap && (
-                <div className="mt-2 space-y-2">
-                  <div>
-                    <label className="block text-sm font-medium text-purple-700 mb-1">
-                      Statement End Date
-                    </label>
-                    <input 
-                      type="date" 
-                      value={statementEndDate}
-                      onChange={(e) => setStatementEndDate(e.target.value)}
-                      className="w-full px-3 py-2 border border-purple-300 rounded-md text-sm"
-                    />
-                    <p className="text-xs text-purple-600 mt-1">
-                      Handle overlapping transactions that appear on both current and next statement
-                    </p>
-                  </div>
-                  <div className="p-2 bg-purple-100 rounded text-sm text-purple-700">
-                    <strong>How it works:</strong> Detects transactions in the last 3 days of your statement that might also appear on the next statement, and removes the later duplicates.
-                  </div>
-                </div>
-              )}
-            </div>
 
                     {/* Bank Connection removed - focusing on core CSV functionality */}
 
