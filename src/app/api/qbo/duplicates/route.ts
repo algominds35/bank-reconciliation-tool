@@ -45,9 +45,9 @@ export async function GET(req: NextRequest) {
     // Find duplicates within QB
     const duplicates = duplicateDetector.findDuplicatesInQB(transactions)
 
-    // Return only high-confidence duplicates (likely or exact)
+    // Return high-confidence duplicates (possible, likely, or exact)
     const significantDuplicates = duplicates.filter(
-      (dup) => dup.confidence >= 0.85
+      (dup) => dup.confidence >= 0.75
     )
 
     return NextResponse.json({
