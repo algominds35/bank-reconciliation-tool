@@ -31,12 +31,35 @@ interface QboDashboardProps {
   realmId: string
 }
 
+interface BankTransaction {
+  date: string
+  amount: number
+  description: string
+}
+
+interface DiscrepancyReport {
+  inBankOnly: BankTransaction[]
+  inQuickBooksOnly: QboTransaction[]
+  duplicatesAcrossSystems: any[]
+  summary: {
+    totalBankTransactions: number
+    totalQBTransactions: number
+    matched: number
+    missingFromQB: number
+    missingFromBank: number
+  }
+}
+
 export default function QboDashboard({ realmId }: QboDashboardProps) {
   const [accounts, setAccounts] = useState<QboAccount[]>([])
   const [transactions, setTransactions] = useState<QboTransaction[]>([])
   const [duplicates, setDuplicates] = useState<Duplicate[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [bankFile, setBankFile] = useState<File | null>(null)
+  const [bankTransactions, setBankTransactions] = useState<BankTransaction[]>([])
+  const [discrepancyReport, setDiscrepancyReport] = useState<DiscrepancyReport | null>(null)
+  const [comparing, setComparing] = useState(false)
 
   useEffect(() => {
     if (realmId) {
@@ -75,6 +98,89 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleBankFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setBankFile(file)
+
+    // Parse CSV
+    const text = await file.text()
+    const lines = text.split('\n').filter(line => line.trim())
+    const headers = lines[0].toLowerCase().split(',')
+    
+    const parsed: BankTransaction[] = []
+    for (let i = 1; i < lines.length; i++) {
+      const values = lines[i].split(',')
+      const dateIdx = headers.findIndex(h => h.includes('date'))
+      const amountIdx = headers.findIndex(h => h.includes('amount'))
+      const descIdx = headers.findIndex(h => h.includes('desc') || h.includes('memo') || h.includes('payee'))
+      
+      if (dateIdx >= 0 && amountIdx >= 0) {
+        parsed.push({
+          date: values[dateIdx]?.trim() || '',
+          amount: parseFloat(values[amountIdx]?.replace(/[^0-9.-]/g, '') || '0'),
+          description: values[descIdx]?.trim() || ''
+        })
+      }
+    }
+    
+    setBankTransactions(parsed)
+    console.log(`Parsed ${parsed.length} bank transactions`)
+  }
+
+  const generateDiscrepancyReport = async () => {
+    if (bankTransactions.length === 0) {
+      alert('Please upload a bank statement first')
+      return
+    }
+
+    setComparing(true)
+    try {
+      const response = await fetch('/api/qbo/discrepancy-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          realmId,
+          bankTransactions
+        })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setDiscrepancyReport(data.report)
+      } else {
+        alert('Failed to generate discrepancy report')
+      }
+    } catch (err) {
+      console.error('Discrepancy report error:', err)
+      alert('Failed to generate report')
+    } finally {
+      setComparing(false)
+    }
+  }
+
+  const exportDiscrepancyReport = () => {
+    if (!discrepancyReport) return
+
+    let csv = 'Category,Date,Description,Amount\n'
+    
+    discrepancyReport.inBankOnly.forEach(tx => {
+      csv += `Missing from QuickBooks,${tx.date},"${tx.description}",${tx.amount}\n`
+    })
+    
+    discrepancyReport.inQuickBooksOnly.forEach(tx => {
+      csv += `Missing from Bank,${tx.transaction_date},"${tx.memo}",${tx.amount}\n`
+    })
+
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `discrepancy-report-${new Date().toISOString().split('T')[0]}.csv`
+    a.click()
   }
 
   if (loading) {
@@ -207,7 +313,7 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
       </div>
 
       {/* Recent Transactions Section */}
-      <div>
+      <div style={{ marginBottom: '30px' }}>
         <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '15px' }}>Recent Transactions</h3>
         {transactions.length > 0 ? (
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', overflow: 'hidden' }}>
@@ -277,6 +383,179 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
           </div>
         ) : (
           <p style={{ color: '#64748b', fontStyle: 'italic' }}>No transactions found. Try running a sync first.</p>
+        )}
+      </div>
+
+      {/* Bank Statement Upload & Reconciliation */}
+      <div style={{ marginTop: '40px', paddingTop: '40px', borderTop: '2px solid #e2e8f0' }}>
+        <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '20px' }}>
+          Bank Reconciliation
+        </h2>
+        
+        {/* Upload Section */}
+        <div style={{ background: '#fff', border: '2px dashed #cbd5e1', borderRadius: '8px', padding: '30px', marginBottom: '20px', textAlign: 'center' }}>
+          <div style={{ marginBottom: '15px' }}>
+            <svg style={{ width: '48px', height: '48px', color: '#64748b', margin: '0 auto' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+          </div>
+          <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px' }}>Upload Bank Statement</h3>
+          <p style={{ color: '#64748b', marginBottom: '15px' }}>Upload your bank CSV to find missing transactions</p>
+          <input
+            type="file"
+            accept=".csv"
+            onChange={handleBankFileUpload}
+            style={{ display: 'none' }}
+            id="bank-csv-upload"
+          />
+          <label
+            htmlFor="bank-csv-upload"
+            style={{
+              display: 'inline-block',
+              padding: '10px 20px',
+              background: '#3b82f6',
+              color: '#fff',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontWeight: '500'
+            }}
+          >
+            Choose CSV File
+          </label>
+          {bankFile && (
+            <div style={{ marginTop: '15px', color: '#16a34a' }}>
+              ✅ {bankFile.name} ({bankTransactions.length} transactions)
+            </div>
+          )}
+        </div>
+
+        {/* Compare Button */}
+        {bankTransactions.length > 0 && (
+          <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+            <button
+              onClick={generateDiscrepancyReport}
+              disabled={comparing}
+              style={{
+                padding: '12px 30px',
+                background: comparing ? '#94a3b8' : '#10b981',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: comparing ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {comparing ? 'Comparing...' : '🔍 Compare Bank vs QuickBooks'}
+            </button>
+          </div>
+        )}
+
+        {/* Discrepancy Report */}
+        {discrepancyReport && (
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: '600' }}>Reconciliation Report</h3>
+              <button
+                onClick={exportDiscrepancyReport}
+                style={{
+                  padding: '8px 16px',
+                  background: '#3b82f6',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: '500'
+                }}
+              >
+                📥 Export Report
+              </button>
+            </div>
+
+            {/* Summary Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginBottom: '30px' }}>
+              <div style={{ background: '#dcfce7', border: '1px solid #16a34a', borderRadius: '8px', padding: '15px' }}>
+                <div style={{ fontSize: '14px', color: '#166534', marginBottom: '5px' }}>✅ Matched</div>
+                <div style={{ fontSize: '28px', fontWeight: '700', color: '#166534' }}>{discrepancyReport.summary.matched}</div>
+              </div>
+              <div style={{ background: '#fef3c7', border: '1px solid #f59e0b', borderRadius: '8px', padding: '15px' }}>
+                <div style={{ fontSize: '14px', color: '#92400e', marginBottom: '5px' }}>⚠️ Missing from QB</div>
+                <div style={{ fontSize: '28px', fontWeight: '700', color: '#92400e' }}>{discrepancyReport.summary.missingFromQB}</div>
+              </div>
+              <div style={{ background: '#fee2e2', border: '1px solid #ef4444', borderRadius: '8px', padding: '15px' }}>
+                <div style={{ fontSize: '14px', color: '#991b1b', marginBottom: '5px' }}>❗ Missing from Bank</div>
+                <div style={{ fontSize: '28px', fontWeight: '700', color: '#991b1b' }}>{discrepancyReport.summary.missingFromBank}</div>
+              </div>
+            </div>
+
+            {/* Missing from QuickBooks */}
+            {discrepancyReport.inBankOnly.length > 0 && (
+              <div style={{ marginBottom: '30px' }}>
+                <h4 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '10px', color: '#92400e' }}>
+                  ⚠️ Missing from QuickBooks ({discrepancyReport.inBankOnly.length})
+                </h4>
+                <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '15px' }}>
+                  These transactions are in your bank statement but not in QuickBooks. You may need to add them.
+                </p>
+                <div style={{ background: '#fff', border: '1px solid #fbbf24', borderRadius: '8px', overflow: 'hidden' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead style={{ background: '#fef3c7' }}>
+                      <tr>
+                        <th style={{ padding: '10px', textAlign: 'left', fontSize: '14px', fontWeight: '500' }}>Date</th>
+                        <th style={{ padding: '10px', textAlign: 'left', fontSize: '14px', fontWeight: '500' }}>Description</th>
+                        <th style={{ padding: '10px', textAlign: 'right', fontSize: '14px', fontWeight: '500' }}>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {discrepancyReport.inBankOnly.slice(0, 10).map((tx, idx) => (
+                        <tr key={idx}>
+                          <td style={{ padding: '10px', borderBottom: '1px solid #fef3c7' }}>{tx.date}</td>
+                          <td style={{ padding: '10px', borderBottom: '1px solid #fef3c7' }}>{tx.description}</td>
+                          <td style={{ padding: '10px', borderBottom: '1px solid #fef3c7', textAlign: 'right', fontWeight: '500' }}>
+                            ${Math.abs(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Missing from Bank */}
+            {discrepancyReport.inQuickBooksOnly.length > 0 && (
+              <div>
+                <h4 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '10px', color: '#991b1b' }}>
+                  ❗ Missing from Bank Statement ({discrepancyReport.inQuickBooksOnly.length})
+                </h4>
+                <p style={{ fontSize: '14px', color: '#64748b', marginBottom: '15px' }}>
+                  These transactions are in QuickBooks but not in your bank statement. They may be pending or errors.
+                </p>
+                <div style={{ background: '#fff', border: '1px solid #ef4444', borderRadius: '8px', overflow: 'hidden' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <thead style={{ background: '#fee2e2' }}>
+                      <tr>
+                        <th style={{ padding: '10px', textAlign: 'left', fontSize: '14px', fontWeight: '500' }}>Date</th>
+                        <th style={{ padding: '10px', textAlign: 'left', fontSize: '14px', fontWeight: '500' }}>Description</th>
+                        <th style={{ padding: '10px', textAlign: 'right', fontSize: '14px', fontWeight: '500' }}>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {discrepancyReport.inQuickBooksOnly.slice(0, 10).map((tx, idx) => (
+                        <tr key={idx}>
+                          <td style={{ padding: '10px', borderBottom: '1px solid #fee2e2' }}>{tx.transaction_date}</td>
+                          <td style={{ padding: '10px', borderBottom: '1px solid #fee2e2' }}>{tx.memo || 'No description'}</td>
+                          <td style={{ padding: '10px', borderBottom: '1px solid #fee2e2', textAlign: 'right', fontWeight: '500' }}>
+                            ${Math.abs(tx.amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </div>
     </div>
