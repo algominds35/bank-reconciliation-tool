@@ -20,10 +20,7 @@ export async function GET(req: NextRequest) {
     
     const { data: transactions, error } = await supabase
       .from('qbo_transactions')
-      .select(`
-        *,
-        qbo_accounts(account_name)
-      `)
+      .select('*')
       .eq('realm_id', realmId)
       .order('transaction_date', { ascending: false })
       .range(offset, offset + limit - 1)

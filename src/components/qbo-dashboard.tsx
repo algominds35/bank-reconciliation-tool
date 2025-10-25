@@ -13,10 +13,10 @@ interface QboAccount {
 interface QboTransaction {
   id: string
   transaction_date: string
+  transaction_type: string
   amount: number
-  description: string
-  category_name: string
-  is_reconciled: boolean
+  memo: string
+  reference_number: string
 }
 
 interface QboDashboardProps {
@@ -78,8 +78,6 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
   }
 
   const totalBalance = accounts.reduce((sum, account) => sum + (account.balance || 0), 0)
-  const reconciledCount = transactions.filter(t => t.is_reconciled).length
-  const unreconciledCount = transactions.length - reconciledCount
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px' }}>
@@ -104,16 +102,9 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
         </div>
         
         <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px' }}>
-          <h3 style={{ fontSize: '14px', color: '#64748b', margin: '0 0 8px 0' }}>Reconciled Transactions</h3>
+          <h3 style={{ fontSize: '14px', color: '#64748b', margin: '0 0 8px 0' }}>Total Transactions</h3>
           <p style={{ fontSize: '24px', fontWeight: '600', margin: '0', color: '#16a34a' }}>
-            {reconciledCount}
-          </p>
-        </div>
-        
-        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px' }}>
-          <h3 style={{ fontSize: '14px', color: '#64748b', margin: '0 0 8px 0' }}>Pending Reconciliation</h3>
-          <p style={{ fontSize: '24px', fontWeight: '600', margin: '0', color: '#dc2626' }}>
-            {unreconciledCount}
+            {transactions.length}
           </p>
         </div>
       </div>
@@ -171,16 +162,16 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
                     Date
                   </th>
                   <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #e2e8f0', fontSize: '14px', fontWeight: '500' }}>
+                    Type
+                  </th>
+                  <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #e2e8f0', fontSize: '14px', fontWeight: '500' }}>
                     Description
                   </th>
                   <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #e2e8f0', fontSize: '14px', fontWeight: '500' }}>
-                    Category
+                    Reference
                   </th>
                   <th style={{ padding: '12px 16px', textAlign: 'right', borderBottom: '1px solid #e2e8f0', fontSize: '14px', fontWeight: '500' }}>
                     Amount
-                  </th>
-                  <th style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #e2e8f0', fontSize: '14px', fontWeight: '500' }}>
-                    Status
                   </th>
                 </tr>
               </thead>
@@ -191,25 +182,25 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
                       {new Date(transaction.transaction_date).toLocaleDateString()}
                     </td>
                     <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', fontSize: '14px' }}>
-                      {transaction.description}
-                    </td>
-                    <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', fontSize: '14px', color: '#64748b' }}>
-                      {transaction.category_name || 'Uncategorized'}
-                    </td>
-                    <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', textAlign: 'right', fontWeight: '500' }}>
-                      ${Math.abs(transaction.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                    </td>
-                    <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', textAlign: 'center' }}>
                       <span style={{
                         padding: '4px 8px',
                         borderRadius: '4px',
                         fontSize: '12px',
                         fontWeight: '500',
-                        background: transaction.is_reconciled ? '#dcfce7' : '#fef3c7',
-                        color: transaction.is_reconciled ? '#16a34a' : '#d97706'
+                        background: '#e0e7ff',
+                        color: '#3730a3'
                       }}>
-                        {transaction.is_reconciled ? 'Reconciled' : 'Pending'}
+                        {transaction.transaction_type}
                       </span>
+                    </td>
+                    <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', fontSize: '14px' }}>
+                      {transaction.memo || 'No description'}
+                    </td>
+                    <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', fontSize: '14px', color: '#64748b' }}>
+                      {transaction.reference_number || '-'}
+                    </td>
+                    <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', textAlign: 'right', fontWeight: '500' }}>
+                      ${Math.abs(transaction.amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
                 ))}
