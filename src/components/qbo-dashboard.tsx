@@ -500,9 +500,19 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
                       <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', fontSize: '14px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           {hasDuplicate && (
-                            <span title="Potential duplicate transaction" style={{ color: '#d97706', fontSize: '16px' }}>
-                              ⚠️
-                            </span>
+                            <>
+                              <span title="Potential duplicate transaction" style={{ color: '#d97706', fontSize: '16px' }}>
+                                ⚠️
+                              </span>
+                              <span style={{ 
+                                color: '#d97706', 
+                                fontSize: '11px', 
+                                fontWeight: '600',
+                                letterSpacing: '0.5px'
+                              }}>
+                                [DUPLICATE]
+                              </span>
+                            </>
                           )}
                           {new Date(transaction.transaction_date).toLocaleDateString()}
                         </div>
