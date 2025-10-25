@@ -27,20 +27,35 @@ async function fetchAccountsFromQBO(accessToken: string, realmId: string) {
 
 async function fetchTransactionsFromQBO(accessToken: string, realmId: string, sinceDate: string) {
   try {
-    const response = await fetch(`https://quickbooks.api.intuit.com/v3/company/${realmId}/query?query=SELECT * FROM Transaction WHERE TxnDate >= '${sinceDate}' ORDER BY TxnDate DESC&minorversion=65`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+    const entityTypes = ['Purchase', 'Invoice', 'Payment', 'Deposit', 'SalesReceipt', 'BillPayment', 'JournalEntry']
+    const allTransactions: any[] = []
+    
+    for (const entityType of entityTypes) {
+      try {
+        const query = `SELECT * FROM ${entityType} WHERE TxnDate >= '${sinceDate}' MAXRESULTS 1000`
+        const response = await fetch(
+          `https://quickbooks.api.intuit.com/v3/company/${realmId}/query?query=${encodeURIComponent(query)}&minorversion=65`,
+          {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+
+        if (response.ok) {
+          const data = await response.json()
+          const items = data.QueryResponse?.[entityType] || []
+          allTransactions.push(...items.map((item: any) => ({ ...item, EntityType: entityType })))
+        }
+      } catch (err) {
+        console.log(`Skipping ${entityType}:`, err)
+        // Continue with other types even if one fails
       }
-    })
-
-    if (!response.ok) {
-      throw new Error(`QuickBooks API error: ${response.status} ${response.statusText}`)
     }
-
-    const data = await response.json()
-    return data.QueryResponse?.Transaction || []
+    
+    return allTransactions
   } catch (error) {
     console.error('Error fetching transactions from QuickBooks:', error)
     throw error
