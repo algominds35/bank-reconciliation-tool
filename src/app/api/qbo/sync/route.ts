@@ -101,18 +101,37 @@ async function saveAccountsToSupabase(supabase: any, accounts: any[], realmId: s
 
 async function saveTransactionsToSupabase(supabase: any, transactions: any[], realmId: string) {
   try {
-    const transactionsToInsert = transactions.map(txn => ({
-      realm_id: realmId,
-      transaction_id: txn.Id,
-      transaction_date: txn.TxnDate,
-      transaction_type: txn.TxnType,
-      reference_number: txn.DocNumber,
-      memo: txn.Memo,
-      amount: txn.TotalAmt,
-      currency: txn.CurrencyRef?.value || 'USD',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }))
+    const transactionsToInsert = transactions.map(txn => {
+      // EntityType was added by fetchTransactionsFromQBO
+      const entityType = txn.EntityType
+      
+      // Get amount based on entity type
+      let amount = txn.TotalAmt || txn.Total || 0
+      
+      // Get memo/description based on entity type
+      let memo = txn.PrivateNote || txn.Memo || txn.Description || ''
+      
+      // For Purchase transactions, get the first line's description if no memo
+      if (entityType === 'Purchase' && !memo && txn.Line && txn.Line[0]) {
+        memo = txn.Line[0].Description || ''
+      }
+      
+      return {
+        realm_id: realmId,
+        transaction_id: txn.Id,
+        transaction_date: txn.TxnDate,
+        transaction_type: entityType, // Use the EntityType we added
+        reference_number: txn.DocNumber || txn.TxnNumber || '',
+        memo: memo,
+        amount: amount,
+        currency: txn.CurrencyRef?.value || 'USD',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+    })
+
+    console.log(`💾 Preparing to save ${transactionsToInsert.length} transactions...`)
+    console.log('Sample transaction:', JSON.stringify(transactionsToInsert[0], null, 2))
 
     // Delete existing transactions for this realm
     await supabase
