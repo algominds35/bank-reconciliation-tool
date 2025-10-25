@@ -60,6 +60,8 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
   const [bankTransactions, setBankTransactions] = useState<BankTransaction[]>([])
   const [discrepancyReport, setDiscrepancyReport] = useState<DiscrepancyReport | null>(null)
   const [comparing, setComparing] = useState(false)
+  const [selectedTransactions, setSelectedTransactions] = useState<string[]>([])
+  const [reconciledTransactions, setReconciledTransactions] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     if (realmId) {
@@ -208,6 +210,69 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
     )
   }
 
+  // Reconciliation handlers
+  const handleSelectTransaction = (txId: string) => {
+    setSelectedTransactions(prev => 
+      prev.includes(txId) 
+        ? prev.filter(id => id !== txId)
+        : [...prev, txId]
+    )
+  }
+
+  const handleSelectAll = () => {
+    if (selectedTransactions.length === transactions.length) {
+      setSelectedTransactions([])
+    } else {
+      setSelectedTransactions(transactions.map(t => t.id))
+    }
+  }
+
+  const handleReconcileSelected = () => {
+    if (selectedTransactions.length === 0) {
+      alert('Please select transactions to reconcile')
+      return
+    }
+
+    const newReconciled = new Set(reconciledTransactions)
+    selectedTransactions.forEach(id => newReconciled.add(id))
+    setReconciledTransactions(newReconciled)
+    setSelectedTransactions([])
+    
+    alert(`✅ Reconciled ${selectedTransactions.length} transaction(s)!`)
+  }
+
+  const handleClearAll = () => {
+    setSelectedTransactions([])
+  }
+
+  const handleExportTransactions = () => {
+    if (transactions.length === 0) {
+      alert('No transactions to export')
+      return
+    }
+
+    // Create CSV content
+    const headers = ['Date', 'Type', 'Description', 'Reference', 'Amount', 'Status']
+    const rows = transactions.map(tx => [
+      new Date(tx.transaction_date).toLocaleDateString(),
+      tx.transaction_type,
+      tx.memo || 'No description',
+      tx.reference_number || '-',
+      Math.abs(tx.amount || 0).toFixed(2),
+      reconciledTransactions.has(tx.id) ? 'Reconciled' : 'Unreconciled'
+    ])
+
+    const csv = [headers, ...rows].map(row => row.join(',')).join('\n')
+    
+    // Download CSV
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `quickbooks-transactions-${new Date().toISOString().split('T')[0]}.csv`
+    a.click()
+  }
+
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px' }}>
       <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '20px' }}>
@@ -250,21 +315,28 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
         </div>
         
         <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px' }}>
-          <h3 style={{ fontSize: '14px', color: '#64748b', margin: '0 0 8px 0' }}>Connected Accounts</h3>
-          <p style={{ fontSize: '24px', fontWeight: '600', margin: '0', color: '#0f172a' }}>
-            {accounts.length}
-          </p>
-        </div>
-        
-        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px' }}>
           <h3 style={{ fontSize: '14px', color: '#64748b', margin: '0 0 8px 0' }}>Total Transactions</h3>
-          <p style={{ fontSize: '24px', fontWeight: '600', margin: '0', color: '#16a34a' }}>
+          <p style={{ fontSize: '24px', fontWeight: '600', margin: '0', color: '#0f172a' }}>
             {transactions.length}
           </p>
         </div>
 
+        <div style={{ background: '#dcfce7', border: '1px solid #16a34a', borderRadius: '8px', padding: '20px' }}>
+          <h3 style={{ fontSize: '14px', color: '#166534', margin: '0 0 8px 0' }}>✓ Reconciled</h3>
+          <p style={{ fontSize: '24px', fontWeight: '600', margin: '0', color: '#16a34a' }}>
+            {reconciledTransactions.size}
+          </p>
+        </div>
+
+        <div style={{ background: '#fee2e2', border: '1px solid #dc2626', borderRadius: '8px', padding: '20px' }}>
+          <h3 style={{ fontSize: '14px', color: '#991b1b', margin: '0 0 8px 0' }}>Unreconciled</h3>
+          <p style={{ fontSize: '24px', fontWeight: '600', margin: '0', color: '#dc2626' }}>
+            {transactions.length - reconciledTransactions.size}
+          </p>
+        </div>
+        
         <div style={{ background: duplicates.length > 0 ? '#fef3c7' : '#f8fafc', border: `1px solid ${duplicates.length > 0 ? '#fbbf24' : '#e2e8f0'}`, borderRadius: '8px', padding: '20px' }}>
-          <h3 style={{ fontSize: '14px', color: '#64748b', margin: '0 0 8px 0' }}>Potential Duplicates</h3>
+          <h3 style={{ fontSize: '14px', color: '#64748b', margin: '0 0 8px 0' }}>⚠️ Potential Duplicates</h3>
           <p style={{ fontSize: '24px', fontWeight: '600', margin: '0', color: duplicates.length > 0 ? '#d97706' : '#16a34a' }}>
             {duplicates.length}
           </p>
@@ -315,11 +387,78 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
       {/* Recent Transactions Section */}
       <div style={{ marginBottom: '30px' }}>
         <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '15px' }}>Recent Transactions</h3>
+        
+        {/* Action Buttons */}
+        {transactions.length > 0 && (
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '15px', flexWrap: 'wrap' }}>
+            <button
+              onClick={handleReconcileSelected}
+              disabled={selectedTransactions.length === 0}
+              style={{
+                padding: '10px 20px',
+                background: selectedTransactions.length === 0 ? '#94a3b8' : '#10b981',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                fontWeight: '500',
+                cursor: selectedTransactions.length === 0 ? 'not-allowed' : 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+            >
+              ✓ Reconcile Selected ({selectedTransactions.length})
+            </button>
+            
+            <button
+              onClick={handleExportTransactions}
+              style={{
+                padding: '10px 20px',
+                background: '#3b82f6',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+            >
+              ↓ Export ({transactions.length})
+            </button>
+            
+            <button
+              onClick={handleClearAll}
+              disabled={selectedTransactions.length === 0}
+              style={{
+                padding: '10px 20px',
+                background: selectedTransactions.length === 0 ? '#f1f5f9' : '#ef4444',
+                color: selectedTransactions.length === 0 ? '#94a3b8' : '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                fontWeight: '500',
+                cursor: selectedTransactions.length === 0 ? 'not-allowed' : 'pointer'
+              }}
+            >
+              Clear All
+            </button>
+          </div>
+        )}
+        
         {transactions.length > 0 ? (
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '8px', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead style={{ background: '#f8fafc' }}>
                 <tr>
+                  <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #e2e8f0', fontSize: '14px', fontWeight: '500', width: '40px' }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedTransactions.length === transactions.length && transactions.length > 0}
+                      onChange={handleSelectAll}
+                      style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                    />
+                  </th>
                   <th style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #e2e8f0', fontSize: '14px', fontWeight: '500' }}>
                     Date
                   </th>
@@ -335,15 +474,29 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
                   <th style={{ padding: '12px 16px', textAlign: 'right', borderBottom: '1px solid #e2e8f0', fontSize: '14px', fontWeight: '500' }}>
                     Amount
                   </th>
+                  <th style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #e2e8f0', fontSize: '14px', fontWeight: '500' }}>
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {transactions.slice(0, 20).map((transaction) => {
                   const hasDuplicate = isDuplicate(transaction.id)
-                  const rowStyle = hasDuplicate ? { background: '#fef3c7' } : {}
+                  const isReconciled = reconciledTransactions.has(transaction.id)
+                  const isSelected = selectedTransactions.includes(transaction.id)
+                  const rowStyle = hasDuplicate ? { background: '#fef3c7' } : isReconciled ? { background: '#dcfce7' } : {}
                   
                   return (
                     <tr key={transaction.id} style={rowStyle}>
+                      <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', fontSize: '14px' }}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => handleSelectTransaction(transaction.id)}
+                          style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                          disabled={isReconciled}
+                        />
+                      </td>
                       <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', fontSize: '14px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           {hasDuplicate && (
@@ -374,6 +527,31 @@ export default function QboDashboard({ realmId }: QboDashboardProps) {
                       </td>
                       <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', textAlign: 'right', fontWeight: '500' }}>
                         ${Math.abs(transaction.amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </td>
+                      <td style={{ padding: '12px 16px', borderBottom: '1px solid #f1f5f9', textAlign: 'center' }}>
+                        {isReconciled ? (
+                          <span style={{
+                            padding: '4px 12px',
+                            borderRadius: '12px',
+                            fontSize: '12px',
+                            fontWeight: '500',
+                            background: '#dcfce7',
+                            color: '#166534'
+                          }}>
+                            ✓ Reconciled
+                          </span>
+                        ) : (
+                          <span style={{
+                            padding: '4px 12px',
+                            borderRadius: '12px',
+                            fontSize: '12px',
+                            fontWeight: '500',
+                            background: '#fee2e2',
+                            color: '#991b1b'
+                          }}>
+                            Unreconciled
+                          </span>
+                        )}
                       </td>
                     </tr>
                   )
