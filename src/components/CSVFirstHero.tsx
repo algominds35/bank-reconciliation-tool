@@ -178,7 +178,7 @@ export default function CSVFirstHero() {
                   <div className="relative w-full h-64 bg-slate-100 rounded-xl overflow-hidden">
                     <iframe
                       className="w-full h-full"
-                      src="https://www.youtube.com/embed/5ptuxIMUI6A?autoplay=1&mute=1&loop=1&playlist=5ptuxIMUI6A&controls=1&modestbranding=1&rel=0"
+                      src="https://www.youtube.com/embed/GrZ9yhpa7to?autoplay=0&mute=0&controls=1&modestbranding=1&rel=0"
                       title="ReconcileBook Demo"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
