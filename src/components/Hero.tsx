@@ -105,7 +105,7 @@ export default function Hero() {
                   {/* YouTube Video Embed */}
                   <iframe
                     className="absolute inset-0 w-full h-full rounded-t-2xl"
-                    src="https://www.youtube.com/embed/DYNIy7zt36Q?autoplay=0&modestbranding=1&rel=0&showinfo=0&controls=1"
+                    src="https://www.youtube.com/embed/DYNIy7zt36Q?autoplay=1&mute=1&modestbranding=1&rel=0&showinfo=0&controls=1"
                     title="Automated CSV Matching Demo"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
