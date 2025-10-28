@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Calculator, FileText, BarChart3, Clock, AlertTriangle, CheckCircle } from 'lucide-react'
+import { Calculator, FileText, BarChart3, Clock, AlertTriangle, CheckCircle, FileWarning } from 'lucide-react'
 
 export default function Benefits() {
   const features = [
@@ -14,6 +14,11 @@ export default function Benefits() {
       icon: AlertTriangle,
       title: 'Find Missing Transactions',
       description: 'Automatically detect transactions missing from QuickBooks or your bank statement'
+    },
+    {
+      icon: FileWarning,
+      title: 'Handles Messy Client Files',
+      description: 'Clients send multi-month spreadsheets with random columns and notes? Our smart parser extracts clean transactions from even the messiest formats — saving you 30 minutes of data cleanup per file'
     },
     {
       icon: FileText,

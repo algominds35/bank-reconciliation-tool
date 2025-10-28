@@ -48,14 +48,24 @@ export default function CSVFirstHero() {
               <span className="text-[#F45B49]">seconds</span>
             </motion.h1>
 
-            {/* Description */}
+            {/* Target Audience */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6 }}
+              className="text-lg text-slate-700 mb-4 leading-relaxed font-medium"
+            >
+              Built for bookkeepers handling client onboarding, cleanup work, and delegated reconciliation.
+            </motion.p>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45, duration: 0.6 }}
               className="text-xl text-slate-600 mb-8 leading-relaxed"
             >
-              Upload bank statements (CSV or PDF), auto-match transactions, find missing entries, and flag duplicates instantly — so your books are accurate without the manual grind.
+              Upload CSV or PDF bank statements or connect QuickBooks. Automatically match transactions, find missing entries, flag duplicates, and generate a clean reconciliation ready for posting.
             </motion.p>
 
             {/* Value Props */}
