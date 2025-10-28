@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Calculator, FileText, BarChart3, Clock, AlertTriangle, CheckCircle, FileWarning } from 'lucide-react'
+import { Calculator, FileText, BarChart3, Clock, AlertTriangle, CheckCircle, FileWarning, Link2 } from 'lucide-react'
 
 export default function Benefits() {
   const features = [
@@ -9,6 +9,11 @@ export default function Benefits() {
       icon: Calculator,
       title: 'Automated CSV & PDF Matching',
       description: 'Smart transaction matching with 99% accuracy - supports both CSV and PDF uploads'
+    },
+    {
+      icon: Link2,
+      title: 'QuickBooks Integration',
+      description: 'One-click OAuth connection to QuickBooks Online. Auto-sync all accounts and transactions with 24-month history — no manual exports ever again'
     },
     {
       icon: AlertTriangle,
