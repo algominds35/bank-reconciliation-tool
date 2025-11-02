@@ -5,29 +5,29 @@ export default function HowItWorks() {
     {
       number: 1,
       title: "Do you have messy CSV files like this?",
-      description: "Clients send multi-month CSVs with random columns, notes, and messy formatting. Hundreds of rows that are impossible to read.",
-      image: "/images/Screenshot 2025-10-29 205827.png",
-      label: "RAW CSV"
+      description: "Clients send multi-month CSVs with random columns, notes, and messy formatting. Hundreds of rows of raw text that are impossible to read.",
+      image: "/images/qb-integration-screenshot.png",
+      label: "RAW MESSY CSV"
     },
     {
       number: 2,
       title: "We automatically parse and clean it",
-      description: "Our smart parser extracts transactions from even the messiest formats. Everything organized in a clean table with checkboxes instantly.",
-      image: "/images/Screenshot 2025-10-29 210550.png",
+      description: "Our smart parser extracts transactions from even the messiest formats. Everything organized in a clean table with red 'Unreconciled' badges instantly.",
+      image: "/images/messy-statement.png",
       label: "CLEAN TABLE"
     },
     {
       number: 3,
       title: "Connect QuickBooks in one click",
-      description: "OAuth connection to QuickBooks Online. Auto-sync all accounts and 24 months of transaction history. Dashboard shows duplicates and reconciliation status.",
-      image: "/images/Screenshot 2025-10-29 205337.png",
+      description: "OAuth connection to QuickBooks Online. Auto-sync all accounts and 24 months of transaction history. See your dashboard instantly.",
+      image: "/images/qb-connected.png",
       label: "CONNECT QB"
     },
     {
       number: 4,
-      title: "Detect duplicates instantly",
-      description: "Yellow [DUPLICATE] badges flag potential duplicate transactions automatically. Export clean results and you're done.",
-      image: "/images/Screenshot 2025-10-29 205843.png",
+      title: "Detect duplicates automatically",
+      description: "Yellow [DUPLICATE] badges flag potential duplicate transactions instantly. No more manual scanning. Export clean results and you're done.",
+      image: "/images/duplicates-detected.png",
       label: "DETECT DUPLICATES"
     }
   ]
