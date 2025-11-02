@@ -6,7 +6,7 @@ import Benefits from '@/components/Benefits'
 import QuickBooksVsReconcileBook from '@/components/QuickBooksVsReconcileBook'
 import Testimonials from '@/components/Testimonials'
 import Logos from '@/components/Logos'
-import DemoScreenshots from '@/components/DemoScreenshots'
+import HowItWorks from '@/components/HowItWorks'
 import Pricing from '@/components/Pricing'
 import FAQ from '@/components/FAQ'
 import CTA from '@/components/CTA'
@@ -22,7 +22,7 @@ export default function Home() {
       <CSVFirstHero />
       <Benefits />
       <QuickBooksVsReconcileBook />
-      <DemoScreenshots />
+      <HowItWorks />
       <Testimonials />
       <Logos />
       <Pricing />
