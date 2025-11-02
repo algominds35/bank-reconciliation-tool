@@ -5,30 +5,30 @@ export default function HowItWorks() {
     {
       number: 1,
       title: "Do you have messy bank statements like this?",
-      description: "Clients send multi-month CSVs with random columns, notes, and messy formatting. Our smart parser handles it all.",
+      description: "Clients send unreconciled CSVs with hundreds of transactions. All showing 'Unreconciled' and taking hours to process manually.",
       image: "/images/messy-statement.png",
       label: "MESSY CSV/PDF"
     },
     {
       number: 2,
-      title: "Connect QuickBooks in one click",
-      description: "OAuth connection to QuickBooks Online. Auto-sync all accounts and 24 months of transaction history.",
-      image: "/images/qb-connected.png",
-      label: "CONNECT QB"
+      title: "Connect QuickBooks and see your dashboard",
+      description: "One-click OAuth connection syncs all your QuickBooks accounts and transactions. See everything in a clean dashboard instantly.",
+      image: "/images/clean-dashboard.png",
+      label: "DASHBOARD"
     },
     {
       number: 3,
-      title: "Automatically detect duplicates and mismatches",
-      description: "AI-powered matching engine finds duplicates, flags discrepancies, and identifies missing transactions instantly.",
+      title: "Automatically detect duplicates",
+      description: "Our AI engine instantly flags duplicate transactions with yellow [DUPLICATE] warnings. No more manual scanning through hundreds of entries.",
       image: "/images/duplicates-detected.png",
-      label: "DETECT ISSUES"
+      label: "DETECT DUPLICATES"
     },
     {
       number: 4,
-      title: "Get clean results ready for posting",
-      description: "Export reconciled transactions to CSV or push directly to QuickBooks. Clean books in minutes, not hours.",
-      image: "/images/clean-dashboard.png",
-      label: "DONE"
+      title: "Compare bank vs QuickBooks and get clean results",
+      description: "Upload bank statement, compare against QB data, and get instant reconciliation report: Matched, Missing from QB, Missing from Bank. Export and done.",
+      image: "/images/qb-connected.png",
+      label: "COMPARE & DONE"
     }
   ]
 
