@@ -4,8 +4,8 @@ export default function HowItWorks() {
   const steps = [
     {
       number: 1,
-      title: "Connect QuickBooks in one click",
-      description: "OAuth connection to QuickBooks Online. Auto-sync all accounts and 24 months of transaction history. See your dashboard instantly.",
+      title: "Do you have messy CSV files like this?",
+      description: "Clients send multi-month CSVs with random columns and messy formatting. Our smart parser handles it all.",
       image: "/images/Screenshot 2025-10-29 205827.png",
       label: "RAW MESSY CSV"
     },
@@ -18,8 +18,8 @@ export default function HowItWorks() {
     },
     {
       number: 3,
-      title: "Connect QuickBooks in one click",
-      description: "OAuth connection to QuickBooks Online. Auto-sync all accounts and 24 months of transaction history. See your dashboard instantly.",
+      title: "Connect QuickBooks and sync",
+      description: "One-click OAuth connection. Auto-sync all accounts and 24 months of transaction history. See your dashboard and start reconciling.",
       image: "/images/qb-connected.png",
       label: "CONNECT QB"
     },
