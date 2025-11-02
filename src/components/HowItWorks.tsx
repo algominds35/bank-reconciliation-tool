@@ -19,7 +19,7 @@ export default function HowItWorks() {
     {
       number: 3,
       title: "Connect QuickBooks in one click",
-      description: "One-click OAuth connection. Instantly sync all your QuickBooks accounts and 24 months of transactions.",
+      description: "OAuth connection to QuickBooks Online. Auto-sync all accounts and 24 months of transaction history. See your dashboard instantly.",
       image: "/images/qb-connected.png",
       label: "CONNECT QB"
     },
