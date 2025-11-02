@@ -7,28 +7,28 @@ export default function HowItWorks() {
       title: "Do you have messy CSV files like this?",
       description: "Clients send multi-month CSVs with random columns, notes, and messy formatting. Hundreds of rows that are impossible to read.",
       image: "/images/Screenshot 2025-10-29 205827.png",
-      label: "MESSY CSV"
+      label: "RAW CSV"
     },
     {
       number: 2,
       title: "We automatically parse and clean it",
-      description: "Our smart parser extracts transactions from even the messiest formats. Everything organized in a clean table instantly.",
-      image: "/images/messy-statement.png",
-      label: "PARSED"
+      description: "Our smart parser extracts transactions from even the messiest formats. Everything organized in a clean table with checkboxes instantly.",
+      image: "/images/Screenshot 2025-10-29 210550.png",
+      label: "CLEAN TABLE"
     },
     {
       number: 3,
       title: "Connect QuickBooks in one click",
-      description: "OAuth connection to QuickBooks Online. Auto-sync all accounts and 24 months of transaction history.",
-      image: "/images/qb-connected.png",
+      description: "OAuth connection to QuickBooks Online. Auto-sync all accounts and 24 months of transaction history. Dashboard shows duplicates and reconciliation status.",
+      image: "/images/Screenshot 2025-10-29 205337.png",
       label: "CONNECT QB"
     },
     {
       number: 4,
-      title: "Detect duplicates and compare with QuickBooks",
-      description: "Instantly flag duplicate transactions and compare bank vs QB data. Get reconciliation report: Matched, Missing from QB, Missing from Bank.",
-      image: "/images/duplicates-detected.png",
-      label: "DETECT & COMPARE"
+      title: "Detect duplicates instantly",
+      description: "Yellow [DUPLICATE] badges flag potential duplicate transactions automatically. Export clean results and you're done.",
+      image: "/images/Screenshot 2025-10-29 205843.png",
+      label: "DETECT DUPLICATES"
     }
   ]
 
