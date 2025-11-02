@@ -6,7 +6,7 @@ export default function HowItWorks() {
       number: 1,
       title: "Do you have messy CSV files like this?",
       description: "Clients send multi-month CSVs with random columns, notes, and messy formatting. Hundreds of rows of raw text that are impossible to read.",
-      image: "/images/qb-integration-screenshot.png",
+      image: "/images/Screenshot 2025-10-29 205827.png",
       label: "RAW MESSY CSV"
     },
     {
