@@ -4,31 +4,31 @@ export default function HowItWorks() {
   const steps = [
     {
       number: 1,
-      title: "Do you have messy bank statements like this?",
-      description: "Clients send unreconciled CSVs with hundreds of transactions. All showing 'Unreconciled' and taking hours to process manually.",
-      image: "/images/messy-statement.png",
-      label: "MESSY CSV/PDF"
+      title: "Do you have messy CSV files like this?",
+      description: "Clients send multi-month CSVs with random columns, notes, and messy formatting. Hundreds of rows that are impossible to read.",
+      image: "/images/Screenshot 2025-10-29 205827.png",
+      label: "MESSY CSV"
     },
     {
       number: 2,
-      title: "Connect QuickBooks and see your dashboard",
-      description: "One-click OAuth connection syncs all your QuickBooks accounts and transactions. See everything in a clean dashboard instantly.",
-      image: "/images/clean-dashboard.png",
-      label: "DASHBOARD"
+      title: "We automatically parse and clean it",
+      description: "Our smart parser extracts transactions from even the messiest formats. Everything organized in a clean table instantly.",
+      image: "/images/messy-statement.png",
+      label: "PARSED"
     },
     {
       number: 3,
-      title: "Automatically detect duplicates",
-      description: "Our AI engine instantly flags duplicate transactions with yellow [DUPLICATE] warnings. No more manual scanning through hundreds of entries.",
-      image: "/images/duplicates-detected.png",
-      label: "DETECT DUPLICATES"
+      title: "Connect QuickBooks in one click",
+      description: "OAuth connection to QuickBooks Online. Auto-sync all accounts and 24 months of transaction history.",
+      image: "/images/qb-connected.png",
+      label: "CONNECT QB"
     },
     {
       number: 4,
-      title: "Compare bank vs QuickBooks and get clean results",
-      description: "Upload bank statement, compare against QB data, and get instant reconciliation report: Matched, Missing from QB, Missing from Bank. Export and done.",
-      image: "/images/qb-connected.png",
-      label: "COMPARE & DONE"
+      title: "Detect duplicates and compare with QuickBooks",
+      description: "Instantly flag duplicate transactions and compare bank vs QB data. Get reconciliation report: Matched, Missing from QB, Missing from Bank.",
+      image: "/images/duplicates-detected.png",
+      label: "DETECT & COMPARE"
     }
   ]
 
@@ -81,8 +81,8 @@ export default function HowItWorks() {
                     <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
                       step.number === 1 ? 'bg-red-100 text-red-700' :
                       step.number === 2 ? 'bg-blue-100 text-blue-700' :
-                      step.number === 3 ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-green-100 text-green-700'
+                      step.number === 3 ? 'bg-green-100 text-green-700' :
+                      'bg-yellow-100 text-yellow-700'
                     }`}>
                       {step.label}
                     </span>
