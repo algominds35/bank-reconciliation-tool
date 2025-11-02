@@ -4,10 +4,10 @@ export default function HowItWorks() {
   const steps = [
     {
       number: 1,
-      title: "Do you have messy CSV files like this?",
-      description: "Clients send multi-month CSVs with random columns and messy formatting. Our smart parser handles it all.",
-      image: "/images/Screenshot 2025-10-29 205827.png",
-      label: "RAW MESSY CSV"
+      title: "Connect QuickBooks and sync",
+      description: "One-click OAuth connection. Auto-sync all accounts and 24 months of transaction history. See your dashboard and start reconciling.",
+      image: "/images/qb-connected.png",
+      label: "CONNECT QB"
     },
     {
       number: 2,
@@ -18,10 +18,10 @@ export default function HowItWorks() {
     },
     {
       number: 3,
-      title: "Connect QuickBooks and sync",
-      description: "One-click OAuth connection. Auto-sync all accounts and 24 months of transaction history. See your dashboard and start reconciling.",
-      image: "/images/qb-connected.png",
-      label: "CONNECT QB"
+      title: "Do you have messy CSV files like this?",
+      description: "Clients send multi-month CSVs with random columns and messy formatting. Our smart parser handles it all.",
+      image: "/images/Screenshot 2025-10-29 205827.png",
+      label: "RAW MESSY CSV"
     },
     {
       number: 4,
@@ -79,9 +79,9 @@ export default function HowItWorks() {
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-gray-500">ReconcileBook Pro</span>
                     <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                      step.number === 1 ? 'bg-red-100 text-red-700' :
+                      step.number === 1 ? 'bg-green-100 text-green-700' :
                       step.number === 2 ? 'bg-blue-100 text-blue-700' :
-                      step.number === 3 ? 'bg-green-100 text-green-700' :
+                      step.number === 3 ? 'bg-red-100 text-red-700' :
                       'bg-yellow-100 text-yellow-700'
                     }`}>
                       {step.label}
