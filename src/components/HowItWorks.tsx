@@ -18,10 +18,10 @@ export default function HowItWorks() {
     },
     {
       number: 3,
-      title: "Connect QuickBooks and sync",
-      description: "One-click OAuth connection. Auto-sync all accounts and 24 months of transaction history. See your dashboard and start reconciling.",
-      image: "/images/qb-connected.png",
-      label: "CONNECT QB"
+      title: "We automatically parse and clean it",
+      description: "Our smart parser extracts transactions from messy formats. Everything organized in a clean table with red 'Unreconciled' badges instantly.",
+      image: "/images/clean-dashboard.png",
+      label: "CLEAN TABLE"
     },
     {
       number: 4,
