@@ -4,10 +4,10 @@ export default function HowItWorks() {
   const steps = [
     {
       number: 1,
-      title: "Do you have messy CSV files like this?",
-      description: "Clients send multi-month CSVs with random columns and messy formatting. Our smart parser handles it all.",
-      image: "/images/Screenshot 2025-10-29 205827.png",
-      label: "RAW MESSY CSV"
+      title: "Connect QuickBooks in one click",
+      description: "OAuth connection to QuickBooks Online. Auto-sync all accounts and 24 months of transaction history. See your dashboard instantly.",
+      image: "/images/Screenshot 2025-11-03 113804.png",
+      label: "CONNECT QUICKBOOKS"
     },
     {
       number: 2,
