@@ -13,7 +13,7 @@ export default function HowItWorks() {
       number: 2,
       title: "Do clients give you messy files like this?",
       description: "Bookkeepers get spreadsheets with mixed formats, random columns, multi-month data. ReconcileBook handles it all—no matter how messy the CSV.",
-      image: "/images/messy-statement.png",
+      image: "/images/messy csv statement.png",
       label: "MESSY CSV"
     },
     {
