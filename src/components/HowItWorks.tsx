@@ -11,10 +11,10 @@ export default function HowItWorks() {
     },
     {
       number: 2,
-      title: "We automatically parse and clean it",
-      description: "Our smart parser extracts transactions from even the messiest formats. Everything organized in a clean table with red 'Unreconciled' badges instantly.",
+      title: "Do clients give you messy files like this?",
+      description: "Bookkeepers get spreadsheets with mixed formats, random columns, multi-month data. ReconcileBook handles it all—no matter how messy the CSV.",
       image: "/images/messy-statement.png",
-      label: "CLEAN TABLE"
+      label: "MESSY CSV"
     },
     {
       number: 3,
