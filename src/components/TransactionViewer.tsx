@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -48,11 +48,23 @@ export default function TransactionViewer({ bankAccountId }: TransactionViewerPr
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState<'all' | 'credit' | 'debit'>('all')
   const [filterReconciled, setFilterReconciled] = useState<'all' | 'reconciled' | 'unreconciled'>('all')
+  const [dateOrder, setDateOrder] = useState<'asc' | 'desc'>('desc')
   const { toast } = useToast()
 
   useEffect(() => {
     loadTransactions()
   }, [bankAccountId])
+
+  useEffect(() => {
+    const storedOrder = localStorage.getItem('transactionDateOrder')
+    if (storedOrder === 'asc' || storedOrder === 'desc') {
+      setDateOrder(storedOrder)
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('transactionDateOrder', dateOrder)
+  }, [dateOrder])
 
   const loadTransactions = async () => {
     try {
@@ -141,6 +153,22 @@ export default function TransactionViewer({ bankAccountId }: TransactionViewerPr
     
     return matchesSearch && matchesType && matchesReconciled
   })
+
+  const getComparableDate = (value?: string | null) => {
+    if (!value) return 0
+    const time = new Date(value).getTime()
+    return Number.isNaN(time) ? 0 : time
+  }
+
+  const orderedTransactions = useMemo(() => {
+    const sorter = (a: BankTransaction, b: BankTransaction) => {
+      const dateA = getComparableDate(a.transaction_date)
+      const dateB = getComparableDate(b.transaction_date)
+      return dateOrder === 'desc' ? dateB - dateA : dateA - dateB
+    }
+
+    return [...filteredTransactions].sort(sorter)
+  }, [filteredTransactions, dateOrder])
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -244,7 +272,7 @@ export default function TransactionViewer({ bankAccountId }: TransactionViewerPr
             </div>
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button
               variant={filterType === 'all' ? 'default' : 'outline'}
               size="sm"
@@ -268,7 +296,24 @@ export default function TransactionViewer({ bankAccountId }: TransactionViewerPr
             </Button>
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant={dateOrder === 'desc' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setDateOrder('desc')}
+            >
+              Newest → Oldest
+            </Button>
+            <Button
+              variant={dateOrder === 'asc' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setDateOrder('asc')}
+            >
+              Oldest → Newest
+            </Button>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
             <Button
               variant={filterReconciled === 'all' ? 'default' : 'outline'}
               size="sm"
@@ -310,7 +355,7 @@ export default function TransactionViewer({ bankAccountId }: TransactionViewerPr
 
         {/* Transactions List */}
         <div className="space-y-2">
-          {filteredTransactions.length === 0 ? (
+          {orderedTransactions.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
               {searchTerm || filterType !== 'all' || filterReconciled !== 'all' 
                 ? 'No transactions match your filters'
@@ -318,7 +363,7 @@ export default function TransactionViewer({ bankAccountId }: TransactionViewerPr
               }
             </div>
           ) : (
-            filteredTransactions.map((transaction) => (
+            orderedTransactions.map((transaction) => (
               <motion.div
                 key={transaction.id}
                 initial={{ opacity: 0, y: 20 }}

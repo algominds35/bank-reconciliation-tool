@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Transaction } from '@/types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -35,6 +35,28 @@ export function MatchingInterface({
   const [processingAutoMatch, setProcessingAutoMatch] = useState(false)
   const [duplicateMatches, setDuplicateMatches] = useState<any[]>([])
   const [hasDuplicates, setHasDuplicates] = useState(false)
+  const [dateOrder, setDateOrder] = useState<'asc' | 'desc'>('desc')
+
+  const unreconciledBank = useMemo(
+    () => bankTransactions.filter(t => !t.is_reconciled),
+    [bankTransactions]
+  )
+
+  const unreconciledBookkeeping = useMemo(
+    () => bookkeepingTransactions.filter(t => !t.is_reconciled),
+    [bookkeepingTransactions]
+  )
+
+  useEffect(() => {
+    const storedOrder = localStorage.getItem('transactionDateOrder')
+    if (storedOrder === 'asc' || storedOrder === 'desc') {
+      setDateOrder(storedOrder)
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('transactionDateOrder', dateOrder)
+  }, [dateOrder])
 
   // Check for pending duplicates from localStorage
   useEffect(() => {
@@ -110,9 +132,6 @@ export function MatchingInterface({
 
   // Auto-matching algorithm
   const findAutoMatches = (): AutoMatch[] => {
-    const unreconciledBank = bankTransactions.filter(t => !t.is_reconciled)
-    const unreconciledBookkeeping = bookkeepingTransactions.filter(t => !t.is_reconciled)
-    
     const matches: AutoMatch[] = []
     
     unreconciledBank.forEach(bankTrans => {
@@ -289,10 +308,24 @@ export function MatchingInterface({
     </div>
   )
 
-  const unreconciled = {
-    bank: bankTransactions.filter(t => !t.is_reconciled),
-    bookkeeping: bookkeepingTransactions.filter(t => !t.is_reconciled)
+  const getComparableDate = (value?: string | null) => {
+    if (!value) return 0
+    const time = new Date(value).getTime()
+    return Number.isNaN(time) ? 0 : time
   }
+
+  const sortedUnreconciled = useMemo(() => {
+    const sorter = (a: Transaction, b: Transaction) => {
+      const dateA = getComparableDate(a.date)
+      const dateB = getComparableDate(b.date)
+      return dateOrder === 'desc' ? dateB - dateA : dateA - dateB
+    }
+
+    return {
+      bank: [...unreconciledBank].sort(sorter),
+      bookkeeping: [...unreconciledBookkeeping].sort(sorter)
+    }
+  }, [unreconciledBank, unreconciledBookkeeping, dateOrder])
 
   return (
     <div className="space-y-6">
@@ -307,7 +340,7 @@ export function MatchingInterface({
             <div className="flex items-center space-x-2">
               <Button 
                 onClick={runAutoMatch}
-                disabled={processingAutoMatch || unreconciled.bank.length === 0 || unreconciled.bookkeeping.length === 0}
+                  disabled={processingAutoMatch || unreconciledBank.length === 0 || unreconciledBookkeeping.length === 0}
                 className="flex items-center space-x-2"
               >
                 {processingAutoMatch ? (
@@ -516,16 +549,34 @@ export function MatchingInterface({
           <p className="text-gray-600 mb-4">
             Manually select and match transactions. Click one transaction from each side to create a match.
           </p>
+
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <span className="text-sm text-gray-600">Sort by date:</span>
+            <Button
+              size="sm"
+              variant={dateOrder === 'desc' ? 'default' : 'outline'}
+              onClick={() => setDateOrder('desc')}
+            >
+              Newest → Oldest
+            </Button>
+            <Button
+              size="sm"
+              variant={dateOrder === 'asc' ? 'default' : 'outline'}
+              onClick={() => setDateOrder('asc')}
+            >
+              Oldest → Newest
+            </Button>
+          </div>
           
           <div className="grid md:grid-cols-2 gap-6">
             {/* Bank Transactions */}
             <div>
               <h3 className="text-lg font-semibold mb-4 flex items-center space-x-2">
                 <DollarSign className="h-4 w-4" />
-                <span>Bank Transactions ({unreconciled.bank.length})</span>
+                <span>Bank Transactions ({unreconciledBank.length})</span>
               </h3>
               <div className="space-y-3 max-h-96 overflow-y-auto">
-                {unreconciled.bank.map((transaction) => (
+                {sortedUnreconciled.bank.map((transaction) => (
                   <TransactionCard
                     key={transaction.id}
                     transaction={transaction}
@@ -541,10 +592,10 @@ export function MatchingInterface({
             <div>
               <h3 className="text-lg font-semibold mb-4 flex items-center space-x-2">
                 <Link className="h-4 w-4" />
-                <span>Bookkeeping Transactions ({unreconciled.bookkeeping.length})</span>
+                <span>Bookkeeping Transactions ({unreconciledBookkeeping.length})</span>
               </h3>
               <div className="space-y-3 max-h-96 overflow-y-auto">
-                {unreconciled.bookkeeping.map((transaction) => (
+                {sortedUnreconciled.bookkeeping.map((transaction) => (
                   <TransactionCard
                     key={transaction.id}
                     transaction={transaction}
