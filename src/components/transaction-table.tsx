@@ -1,13 +1,13 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { Transaction } from '@/types'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Card, CardContent } from '@/components/ui/card'
-import { Calendar, DollarSign, FileText, Unlink } from 'lucide-react'
+import { Calendar, DollarSign, FileText, Unlink, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 
 interface TransactionTableProps {
   transactions: Transaction[]
@@ -24,6 +24,33 @@ export function TransactionTable({
   onUnreconcileGroup,
   loading 
 }: TransactionTableProps) {
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+
+  // Load sort order from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem('transactionDateOrder')
+    if (stored === 'asc' || stored === 'desc') {
+      setSortOrder(stored)
+    }
+  }, [])
+
+  // Save sort order to localStorage
+  useEffect(() => {
+    localStorage.setItem('transactionDateOrder', sortOrder)
+  }, [sortOrder])
+
+  // Sort transactions by date
+  const sortedTransactions = useMemo(() => {
+    return [...transactions].sort((a, b) => {
+      const dateA = new Date(a.date).getTime()
+      const dateB = new Date(b.date).getTime()
+      return sortOrder === 'desc' ? dateB - dateA : dateA - dateB
+    })
+  }, [transactions, sortOrder])
+
+  const toggleSort = () => {
+    setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')
+  }
   const formatAmount = (amount: number) => {
     const formatted = Math.abs(amount).toFixed(2)
     return amount >= 0 ? `$${formatted}` : `-$${formatted}`
@@ -90,10 +117,18 @@ export function TransactionTable({
                   <span className="sr-only">Select</span>
                 </TableHead>
                 <TableHead>
-                  <div className="flex items-center space-x-1">
+                  <button 
+                    onClick={toggleSort}
+                    className="flex items-center space-x-1 hover:text-blue-600 transition-colors"
+                  >
                     <Calendar className="h-4 w-4" />
                     <span>Date</span>
-                  </div>
+                    {sortOrder === 'desc' ? (
+                      <ArrowDown className="h-4 w-4" />
+                    ) : (
+                      <ArrowUp className="h-4 w-4" />
+                    )}
+                  </button>
                 </TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>
@@ -109,7 +144,7 @@ export function TransactionTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {transactions.map((transaction) => (
+              {sortedTransactions.map((transaction) => (
                 <TableRow 
                   key={transaction.id}
                   className={selectedTransactions.includes(transaction.id) ? 'bg-blue-50' : ''}
