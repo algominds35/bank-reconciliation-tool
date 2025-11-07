@@ -567,35 +567,58 @@ export default function Dashboard() {
   };
 
   const deleteAllDuplicates = async () => {
+    console.log('🗑️ deleteAllDuplicates called');
+    console.log('Duplicate transactions set size:', duplicateTransactions.size);
+    console.log('Duplicate IDs:', Array.from(duplicateTransactions));
+    
     if (duplicateTransactions.size === 0) {
       alert('No duplicates found. Click "Test Duplicates" first to detect them.');
       return;
     }
 
-    if (!confirm(`Are you sure you want to delete ${duplicateTransactions.size} duplicate transaction(s)?\n\nThis will keep the first occurrence of each duplicate group and remove all others.\n\nThis cannot be undone.`)) {
+    const confirmed = confirm(`Are you sure you want to delete ${duplicateTransactions.size} duplicate transaction(s)?\n\nThis will keep the first occurrence of each duplicate group and remove all others.\n\nThis cannot be undone.`);
+    console.log('User confirmation:', confirmed);
+    
+    if (!confirmed) {
+      console.log('User canceled deletion');
       return;
     }
 
     try {
-      console.log('Deleting duplicate transactions:', Array.from(duplicateTransactions));
-      
+      console.log('🗑️ Starting deletion process...');
       const duplicateIds = Array.from(duplicateTransactions);
+      console.log(`Deleting ${duplicateIds.length} transactions:`, duplicateIds);
       
-      // Delete each duplicate transaction
+      let deletedCount = 0;
+      
+      // Delete each duplicate transaction from ALL possible tables
       for (const transactionId of duplicateIds) {
-        const { error } = await supabase
-          .from('transactions')
-          .delete()
-          .eq('id', transactionId)
-          .eq('user_id', user.id);
+        console.log(`Deleting transaction ${transactionId}...`);
+        
+        // Try deleting from all three tables
+        const [syncResult, bankResult, bookResult] = await Promise.all([
+          supabase.from('bank_transactions_sync').delete().eq('id', transactionId).eq('user_id', user.id),
+          supabase.from('bank_transactions').delete().eq('id', transactionId).eq('user_id', user.id),
+          supabase.from('book_transactions').delete().eq('id', transactionId).eq('user_id', user.id)
+        ]);
 
-        if (error) {
-          console.error('Error deleting transaction:', transactionId, error);
-          throw error;
+        // Check if any succeeded
+        const deleted = !syncResult.error || !bankResult.error || !bookResult.error;
+        
+        if (!deleted && syncResult.error && bankResult.error && bookResult.error) {
+          console.error('❌ Failed to delete from any table:', {
+            sync: syncResult.error,
+            bank: bankResult.error,
+            book: bookResult.error
+          });
+          throw new Error(`Failed to delete transaction ${transactionId}`);
         }
+        
+        deletedCount++;
+        console.log(`✅ Deleted transaction ${transactionId} (${deletedCount}/${duplicateIds.length})`);
       }
-
-      const deletedCount = duplicateIds.length;
+      
+      console.log(`✅ Successfully deleted ${deletedCount} transactions`);
       
       // Clear duplicate tracking
       setDuplicateTransactions(new Set());
@@ -603,13 +626,14 @@ export default function Dashboard() {
       setDuplicateStatus('inactive');
       
       // Refresh transactions
+      console.log('Refreshing transaction list...');
       await fetchTransactions();
       calculateSummary();
       
       alert(`✅ Successfully deleted ${deletedCount} duplicate transaction(s)!`);
     } catch (error) {
-      console.error('Error deleting duplicates:', error);
-      alert('Error deleting duplicates: ' + error);
+      console.error('❌ Error deleting duplicates:', error);
+      alert(`Error deleting duplicates: ${error}\n\nCheck console for details.`);
     }
   };
 
