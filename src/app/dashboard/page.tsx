@@ -1349,6 +1349,46 @@ export default function Dashboard() {
     }
   }
 
+  const deleteSelectedTransactions = async () => {
+    if (selectedTransactions.length === 0) {
+      alert('Please select transactions to delete')
+      return
+    }
+
+    if (!confirm(`Are you sure you want to delete ${selectedTransactions.length} selected transaction(s)? This cannot be undone.`)) {
+      return
+    }
+
+    try {
+      console.log('Deleting selected transactions:', selectedTransactions)
+      
+      // Delete each selected transaction
+      for (const transactionId of selectedTransactions) {
+        const { error } = await supabase
+          .from('transactions')
+          .delete()
+          .eq('id', transactionId)
+          .eq('user_id', user.id)
+
+        if (error) {
+          console.error('Error deleting transaction:', transactionId, error)
+          throw error
+        }
+      }
+
+      // Refresh transactions
+      console.log('Refreshing transactions after deleting...')
+      await fetchTransactions()
+      setSelectedTransactions([])
+      calculateSummary()
+      
+      alert(`Successfully deleted ${selectedTransactions.length} transaction(s)!`)
+    } catch (error) {
+      console.error('Error deleting transactions:', error)
+      alert('Error deleting transactions: ' + error)
+    }
+  }
+
   const clearAllTransactions = async () => {
     if (!confirm('Are you sure you want to clear all transactions? This cannot be undone.')) {
       return
@@ -2032,6 +2072,16 @@ export default function Dashboard() {
               >
                       <CheckCircle className="h-4 w-4" />
                       <span>Reconcile Selected ({selectedTransactions.length})</span>
+                    </Button>
+
+                    <Button
+                      variant="destructive"
+                      onClick={deleteSelectedTransactions}
+                      disabled={selectedTransactions.length === 0}
+                      className={`flex items-center space-x-2 ${selectedTransactions.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span>Delete Selected ({selectedTransactions.length})</span>
                     </Button>
 
                     {/* Export Dropdown Menu */}
