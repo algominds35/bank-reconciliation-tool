@@ -2255,17 +2255,6 @@ export default function Dashboard() {
                       </DropdownMenuContent>
                     </DropdownMenu>
 
-                    {duplicatesFound > 0 && (
-                      <Button
-                        variant="destructive"
-                        onClick={deleteAllDuplicates}
-                        className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span>Delete All Duplicates ({duplicatesFound})</span>
-                      </Button>
-                    )}
-
                     <Button
                       variant="destructive"
                       onClick={clearAllTransactions}
@@ -2276,36 +2265,81 @@ export default function Dashboard() {
                       <span>Clear All</span>
                     </Button>
 
-                    {/* DUPLICATE TEST BUTTON - SHOULD BE VISIBLE */}
+                    {/* Show delete button when duplicates exist */}
+                    {duplicatesFound > 0 && (
+                      <Button
+                        variant="destructive"
+                        onClick={async () => {
+                          // Re-detect duplicates to get fresh list
+                          const seen = new Map<string, Transaction[]>();
+                          const duplicateList: Transaction[] = [];
+                          
+                          transactions.forEach((transaction) => {
+                            const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
+                            if (!seen.has(key)) {
+                              seen.set(key, [transaction]);
+                            } else {
+                              seen.get(key)!.push(transaction);
+                            }
+                          });
+                          
+                          seen.forEach((group) => {
+                            if (group.length > 1) {
+                              duplicateList.push(...group.slice(1));
+                            }
+                          });
+                          
+                          if (duplicateList.length === 0) {
+                            alert('No duplicates found to delete.');
+                            return;
+                          }
+                          
+                          const confirmed = confirm(`🗑️ DELETE ${duplicateList.length} DUPLICATES?\n\nThis will keep the first occurrence of each duplicate group and remove all others.\n\nThis cannot be undone.`);
+                          
+                          if (!confirmed) return;
+                          
+                          try {
+                            let deletedCount = 0;
+                            
+                            for (const duplicate of duplicateList) {
+                              const [syncResult, bankResult, bookResult] = await Promise.all([
+                                supabase.from('bank_transactions_sync').delete().eq('id', duplicate.id).eq('user_id', user.id),
+                                supabase.from('bank_transactions').delete().eq('id', duplicate.id).eq('user_id', user.id),
+                                supabase.from('book_transactions').delete().eq('id', duplicate.id).eq('user_id', user.id)
+                              ]);
+                              
+                              if (!syncResult.error || !bankResult.error || !bookResult.error) {
+                                deletedCount++;
+                              }
+                            }
+                            
+                            await fetchTransactions();
+                            calculateSummary();
+                            setDuplicatesFound(0);
+                            setDuplicateStatus('inactive');
+                            
+                            alert(`✅ SUCCESS!\n\nDeleted ${deletedCount} duplicate transactions!`);
+                          } catch (error) {
+                            alert(`❌ ERROR: ${error}`);
+                          }
+                        }}
+                        className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        <span>Delete All Duplicates ({duplicatesFound})</span>
+                      </Button>
+                    )}
+
+                    {/* TEST DUPLICATES BUTTON */}
                     <Button
                       onClick={() => {
-                        // Step 1: Detect duplicates
                         const unique = removeDuplicates(transactions);
                         
-                        // Step 2: Show results immediately
                         if (duplicatesFound > 0) {
-                          alert(`✅ FOUND ${duplicatesFound} DUPLICATES!\n\nDuplicates are now highlighted in RED in the table below.\n\nClick "Delete All Duplicates" to remove them instantly.`);
+                          alert(`✅ FOUND ${duplicatesFound} DUPLICATES!\n\nDuplicates are highlighted in RED in the table below.\n\nClick "Delete All Duplicates" to remove them.`);
                         } else {
                           alert(`✅ NO DUPLICATES FOUND!\n\nAll ${transactions.length} transactions are unique.`);
                         }
-                        
-                        // Step 3: Auto-run matching
-                        setTimeout(async () => {
-                          try {
-                            console.log('🔍 Starting auto-match with transactions:', unique.length);
-                            const matches = await runSingleFileMatching(unique);
-                            console.log('🔍 Auto-match results:', matches);
-                            
-                            if (matches.length > 0) {
-                              alert(`🎯 AUTO-MATCH COMPLETE!\n\nFound ${matches.length} smart matches!\n\n• ${matches.filter(m => m.type === 'duplicate').length} duplicates\n• ${matches.filter(m => m.type === 'pattern').length} recurring patterns\n• ${matches.filter(m => m.type === 'category_suggestion').length} category suggestions\n\nCheck the results below!`);
-                            } else {
-                              alert(`⚠️ AUTO-MATCH COMPLETE!\n\nNo automatic matches found.\n\nThis could mean:\n• Your transactions are all unique (good!)\n• No recurring patterns detected\n• No category suggestions available`);
-                            }
-                          } catch (error) {
-                            console.error('❌ Auto-match error:', error);
-                            alert(`❌ AUTO-MATCH ERROR!\n\n${error}\n\nCheck console for details.`);
-                          }
-                        }, 500);
                       }}
                       disabled={transactions.length === 0}
                       className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-bold"
