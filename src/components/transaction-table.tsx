@@ -164,8 +164,15 @@ export function TransactionTable({
                     {new Date(transaction.date).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
-                    <div className="max-w-xs truncate" title={transaction.description}>
-                      {transaction.description}
+                    <div className="flex items-center gap-2">
+                      <div className="max-w-xs truncate" title={transaction.description}>
+                        {transaction.description}
+                      </div>
+                      {isDuplicate && (
+                        <Badge variant="destructive" className="text-xs font-bold bg-red-600">
+                          DUPLICATE
+                        </Badge>
+                      )}
                     </div>
                     {transaction.notes && (
                       <div className="text-xs text-gray-500 mt-1 truncate">

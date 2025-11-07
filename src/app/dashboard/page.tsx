@@ -355,6 +355,38 @@ export default function Dashboard() {
   })
   const [selectedTransactions, setSelectedTransactions] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
+
+  // Auto-detect duplicates whenever transactions change
+  useEffect(() => {
+    if (transactions.length > 0) {
+      const seen = new Map<string, Transaction[]>();
+      
+      transactions.forEach((transaction) => {
+        const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
+        if (!seen.has(key)) {
+          seen.set(key, [transaction]);
+        } else {
+          seen.get(key)!.push(transaction);
+        }
+      });
+      
+      const duplicateIds = new Set<string>();
+      let duplicateCount = 0;
+      
+      seen.forEach((group) => {
+        if (group.length > 1) {
+          group.slice(1).forEach(t => {
+            duplicateIds.add(t.id);
+            duplicateCount++;
+          });
+        }
+      });
+      
+      setDuplicateTransactions(duplicateIds);
+      setDuplicatesFound(duplicateCount);
+      setDuplicateStatus(duplicateCount > 0 ? 'active' : 'inactive');
+    }
+  }, [transactions])
   
 
   const [uploading, setUploading] = useState(false)
