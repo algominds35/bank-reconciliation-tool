@@ -567,9 +567,11 @@ export default function Dashboard() {
   };
 
   const deleteAllDuplicates = async () => {
+    alert('🗑️ DELETE FUNCTION CALLED - Check console for details');
     console.log('🗑️ deleteAllDuplicates called');
     console.log('Duplicate transactions set size:', duplicateTransactions.size);
     console.log('Duplicate IDs:', Array.from(duplicateTransactions));
+    console.log('User ID:', user?.id);
     
     if (duplicateTransactions.size === 0) {
       alert('No duplicates found. Click "Test Duplicates" first to detect them.');
