@@ -566,6 +566,53 @@ export default function Dashboard() {
     return [...unique, ...duplicates];
   };
 
+  const deleteAllDuplicates = async () => {
+    if (duplicateTransactions.size === 0) {
+      alert('No duplicates found. Click "Test Duplicates" first to detect them.');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ${duplicateTransactions.size} duplicate transaction(s)?\n\nThis will keep the first occurrence of each duplicate group and remove all others.\n\nThis cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      console.log('Deleting duplicate transactions:', Array.from(duplicateTransactions));
+      
+      const duplicateIds = Array.from(duplicateTransactions);
+      
+      // Delete each duplicate transaction
+      for (const transactionId of duplicateIds) {
+        const { error } = await supabase
+          .from('transactions')
+          .delete()
+          .eq('id', transactionId)
+          .eq('user_id', user.id);
+
+        if (error) {
+          console.error('Error deleting transaction:', transactionId, error);
+          throw error;
+        }
+      }
+
+      const deletedCount = duplicateIds.length;
+      
+      // Clear duplicate tracking
+      setDuplicateTransactions(new Set());
+      setDuplicatesFound(0);
+      setDuplicateStatus('inactive');
+      
+      // Refresh transactions
+      await fetchTransactions();
+      calculateSummary();
+      
+      alert(`✅ Successfully deleted ${deletedCount} duplicate transaction(s)!`);
+    } catch (error) {
+      console.error('Error deleting duplicates:', error);
+      alert('Error deleting duplicates: ' + error);
+    }
+  };
+
   const fetchTransactions = async () => {
     try {
       if (!user?.id) {
@@ -2182,6 +2229,17 @@ export default function Dashboard() {
                       </DropdownMenuContent>
                     </DropdownMenu>
 
+                    {duplicatesFound > 0 && (
+                      <Button
+                        variant="destructive"
+                        onClick={deleteAllDuplicates}
+                        className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        <span>Delete All Duplicates ({duplicatesFound})</span>
+                      </Button>
+                    )}
+
                     <Button
                       variant="destructive"
                       onClick={clearAllTransactions}
@@ -2200,7 +2258,7 @@ export default function Dashboard() {
                         
                         // Step 2: Show results immediately
                         if (duplicatesFound > 0) {
-                          alert(`✅ FOUND ${duplicatesFound} DUPLICATES!\n\nFiltered from ${transactions.length} to ${unique.length} transactions.\n\nDuplicates have been removed from the list.`);
+                          alert(`✅ FOUND ${duplicatesFound} DUPLICATES!\n\nDuplicates are now highlighted in RED in the table below.\n\nClick "Delete All Duplicates" to remove them instantly.`);
                         } else {
                           alert(`✅ NO DUPLICATES FOUND!\n\nAll ${transactions.length} transactions are unique.`);
                         }
@@ -2240,6 +2298,7 @@ export default function Dashboard() {
               selectedTransactions={selectedTransactions}
               onTransactionSelect={handleTransactionSelect}
               onUnreconcileGroup={unreconcileGroup}
+              duplicateTransactions={duplicateTransactions}
               loading={false}
             />
           </TabsContent>

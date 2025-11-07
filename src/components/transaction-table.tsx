@@ -14,6 +14,7 @@ interface TransactionTableProps {
   selectedTransactions: string[]
   onTransactionSelect: (transactionId: string) => void
   onUnreconcileGroup?: (reconciliationGroup: string) => void
+  duplicateTransactions?: Set<string>
   loading?: boolean
 }
 
@@ -22,6 +23,7 @@ export function TransactionTable({
   selectedTransactions, 
   onTransactionSelect,
   onUnreconcileGroup,
+  duplicateTransactions = new Set(),
   loading 
 }: TransactionTableProps) {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
@@ -144,10 +146,13 @@ export function TransactionTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {sortedTransactions.map((transaction) => (
+              {sortedTransactions.map((transaction) => {
+                const isDuplicate = duplicateTransactions.has(transaction.id)
+                const isSelected = selectedTransactions.includes(transaction.id)
+                return (
                 <TableRow 
                   key={transaction.id}
-                  className={selectedTransactions.includes(transaction.id) ? 'bg-blue-50' : ''}
+                  className={`${isDuplicate ? 'bg-red-50 border-l-4 border-l-red-500' : ''} ${isSelected ? 'bg-blue-50' : ''}`}
                 >
                   <TableCell>
                     <Checkbox
@@ -199,7 +204,8 @@ export function TransactionTable({
                     )}
                   </TableCell>
                 </TableRow>
-              ))}
+                )
+              })}
             </TableBody>
           </Table>
         </div>
