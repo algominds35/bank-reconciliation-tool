@@ -457,18 +457,29 @@ export default function Dashboard() {
   const applySuggestion = async (match: any) => {
     try {
       if (match.type === 'duplicate') {
-        // Remove duplicate transactions from database
-        const duplicateIds = match.transactions?.slice(1).map((d: any) => d.id) || []; // Keep first, remove rest
-        if (duplicateIds.length > 0) {
-          const { error } = await supabase
-            .from('bank_transactions_sync')
-            .delete()
-            .in('id', duplicateIds);
+        // Remove duplicate transactions from ALL tables
+        const duplicatesToDelete = match.transactions || []; // These are the duplicate transactions to delete
+        if (duplicatesToDelete.length > 0) {
+          let deletedCount = 0;
           
-          if (error) throw error;
+          // Delete from all 3 tables
+          for (const duplicate of duplicatesToDelete) {
+            const [syncResult, bankResult, bookResult] = await Promise.all([
+              supabase.from('bank_transactions_sync').delete().eq('id', duplicate.id).eq('user_id', user.id),
+              supabase.from('bank_transactions').delete().eq('id', duplicate.id).eq('user_id', user.id),
+              supabase.from('book_transactions').delete().eq('id', duplicate.id).eq('user_id', user.id)
+            ]);
+            
+            if (!syncResult.error || !bankResult.error || !bookResult.error) {
+              deletedCount++;
+            }
+          }
           
-          alert(`✅ Removed ${duplicateIds.length} duplicate transactions!`);
-          fetchTransactions(); // Refresh the list
+          alert(`✅ Removed ${deletedCount} duplicate transaction(s)!`);
+          await fetchTransactions(); // Refresh the list
+          
+          // Remove this match from the display
+          setSingleFileMatches(prev => prev.filter(m => m.id !== match.id));
         }
       } else if (match.type === 'category_suggestion') {
         // Update category for matching transactions
@@ -2332,11 +2343,50 @@ export default function Dashboard() {
 
                     {/* TEST DUPLICATES BUTTON */}
                     <Button
-                      onClick={() => {
-                        const unique = removeDuplicates(transactions);
+                      onClick={async () => {
+                        // Detect duplicates and format for display
+                        const seen = new Map<string, Transaction[]>();
                         
-                        if (duplicatesFound > 0) {
-                          alert(`✅ FOUND ${duplicatesFound} DUPLICATES!\n\nDuplicates are highlighted in RED in the table below.\n\nClick "Delete All Duplicates" to remove them.`);
+                        transactions.forEach((transaction) => {
+                          const key = `${transaction.date}_${transaction.amount}_${transaction.description?.toLowerCase().trim()}`;
+                          if (!seen.has(key)) {
+                            seen.set(key, [transaction]);
+                          } else {
+                            seen.get(key)!.push(transaction);
+                          }
+                        });
+                        
+                        // Create match objects for each duplicate group
+                        const matches: any[] = [];
+                        let duplicateCount = 0;
+                        
+                        seen.forEach((group) => {
+                          if (group.length > 1) {
+                            const original = group[0];
+                            const duplicates = group.slice(1);
+                            duplicateCount += duplicates.length;
+                            
+                            matches.push({
+                              id: `duplicate_${original.id}`,
+                              type: 'duplicate',
+                              confidence: 0.95,
+                              reason: `Found ${group.length} exact duplicates of "${original.description}" - $${original.amount} (dates: ${group.map(t => t.date).join(', ')})`,
+                              suggestion: `Keep first occurrence, delete ${duplicates.length} duplicate${duplicates.length > 1 ? 's' : ''}`,
+                              transactions: duplicates,
+                              original: original
+                            });
+                          }
+                        });
+                        
+                        // Update state
+                        setDuplicatesFound(duplicateCount);
+                        setDuplicateStatus(duplicateCount > 0 ? 'active' : 'inactive');
+                        setSingleFileMatches(matches);
+                        setShowSingleFileMatches(true);
+                        
+                        // Show alert
+                        if (matches.length > 0) {
+                          alert(`✅ FOUND ${duplicateCount} DUPLICATES!\n\nScroll down to see the detailed list with "Apply" buttons.`);
                         } else {
                           alert(`✅ NO DUPLICATES FOUND!\n\nAll ${transactions.length} transactions are unique.`);
                         }
