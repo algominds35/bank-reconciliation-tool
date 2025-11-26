@@ -7,9 +7,8 @@ import { useRouter } from 'next/navigation';
 export default function CSVFirstHero() {
   const router = useRouter();
 
-  const handleBetaSignup = () => {
-    console.log('Beta signup clicked!');
-    router.push('/auth/signup?beta=true');
+  const handleSignup = () => {
+    router.push('/auth/signup');
   };
 
   return (
@@ -110,29 +109,23 @@ export default function CSVFirstHero() {
               transition={{ delay: 0.7, duration: 0.6 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              {/* Beta Signup Button */}
               <button
-                onClick={handleBetaSignup}
+                onClick={handleSignup}
                 className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-[#F45B49] to-[#E63946] rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
               >
                 <Users className="w-5 h-5 mr-2" />
-                Join Beta Testing
-                <span className="absolute -top-2 -right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">
-                  FREE
-                </span>
+                Start Free Trial
               </button>
 
-              {/* Try for Free Button */}
               <button
-                onClick={handleBetaSignup}
+                onClick={() => router.push('/demo')}
                 className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-[#F45B49] bg-white border-2 border-[#F45B49] rounded-xl hover:bg-[#F45B49] hover:text-white transition-all duration-300"
               >
                 <Upload className="w-5 h-5 mr-2" />
-                Try for Free
+                Watch Demo
               </button>
             </motion.div>
 
-            {/* Beta Program Info */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -144,14 +137,14 @@ export default function CSVFirstHero() {
                   <Users className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-1">Beta Testing Program</h3>
+                  <h3 className="font-semibold text-slate-900 mb-1">Fast-Track Onboarding</h3>
                   <p className="text-sm text-slate-600 mb-2">
-                    Help shape the future of reconciliation! Get early access to new features and influence product development.
+                    Get white-glove setup, live training, and priority support so your team can reconcile real books on day one.
                   </p>
                   <div className="flex flex-wrap gap-2 text-xs">
-                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full">Free Access</span>
-                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Early Features</span>
-                    <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Direct Feedback</span>
+                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full">No credit card</span>
+                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Live concierge</span>
+                    <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Priority support</span>
                   </div>
                 </div>
               </div>

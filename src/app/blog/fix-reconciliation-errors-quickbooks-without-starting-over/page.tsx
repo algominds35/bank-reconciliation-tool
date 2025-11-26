@@ -380,7 +380,7 @@ export default function BlogPost() {
             </p>
             
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
-              <h3 className="text-2xl font-bold mb-4">What You Get (Free Beta Access):</h3>
+              <h3 className="text-2xl font-bold mb-4">What You Get During Trial:</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <span className="text-2xl">✓</span>
@@ -407,10 +407,10 @@ export default function BlogPost() {
             
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
-                href="/auth/signup?beta=true"
+                href="/auth/signup"
                 className="inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-[#F45B49] bg-white rounded-xl hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
-                Start Free Beta Trial →
+                Start Free Trial →
               </a>
               <a 
                 href="/demo"

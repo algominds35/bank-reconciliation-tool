@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useState, useEffect, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import React, { useState, Suspense } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { UserPlus, CheckCircle, ArrowRight, LogIn, Users, Sparkles } from 'lucide-react'
+import { UserPlus, CheckCircle, ArrowRight } from 'lucide-react'
 
 function SignUpForm() {
   const [email, setEmail] = useState('')
@@ -15,17 +15,7 @@ function SignUpForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
-  const [isBetaSignup, setIsBetaSignup] = useState(false)
   const router = useRouter()
-  const searchParams = useSearchParams()
-
-  useEffect(() => {
-    // Check if this is a beta signup
-    const beta = searchParams.get('beta')
-    if (beta === 'true') {
-      setIsBetaSignup(true)
-    }
-  }, [searchParams])
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,72 +29,30 @@ function SignUpForm() {
     }
 
     try {
-      // Skip Stripe verification for beta users
-      if (!isBetaSignup) {
-        // First, verify the email matches a Stripe customer
-        const verifyResponse = await fetch('/api/verify-stripe-customer', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        })
+      // First, verify the email matches a Stripe customer so we can link billing
+      const verifyResponse = await fetch('/api/verify-stripe-customer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
 
-        if (!verifyResponse.ok) {
-          const errorData = await verifyResponse.json()
-          setError(errorData.error || 'Email not found in our payment records. Please use the exact email you used for payment.')
-          setLoading(false)
-          return
+      if (!verifyResponse.ok) {
+        const errorData = await verifyResponse.json()
+        setError(errorData.error || 'Email not found in our payment records. Please use the exact email you used for payment.')
+        setLoading(false)
+        return
+      }
+
+      // Regular signup with email confirmation
+      const signUpResult = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`
         }
-      }
-
-      let data, error
-      
-      if (isBetaSignup) {
-        // For beta users, create account WITHOUT email confirmation
-        const signUpResult = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: undefined,
-            data: {
-              beta_user: true
-            }
-          }
-        })
-        
-        // Just use the signup result - don't try to auto-login
-        data = signUpResult.data
-        error = signUpResult.error
-      } else {
-        // Regular signup with email confirmation
-        const signUpResult = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`
-          }
-        })
-        data = signUpResult.data
-        error = signUpResult.error
-      }
-
-      // If successful signup, mark as beta user if applicable
-      if (data.user && isBetaSignup) {
-        console.log('Beta user signup successful:', data.user.email)
-        
-        // Try to sign them in immediately
-        try {
-          const { error: signInError } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-          })
-          
-          if (signInError) {
-            console.log('Auto signin failed, but account created:', signInError.message)
-          }
-        } catch (autoSignInError) {
-          console.log('Auto signin error:', autoSignInError)
-        }
-      }
+      })
+      const data = signUpResult.data
+      const error = signUpResult.error
 
       if (error) {
         setError(error.message)
@@ -139,10 +87,7 @@ function SignUpForm() {
                 Account Created!
               </CardTitle>
               <p className="text-gray-600 mt-2">
-                {isBetaSignup 
-                  ? "Welcome to the Beta Program! Redirecting to your dashboard..."
-                  : "Welcome to ReconcileBook! Redirecting to your dashboard..."
-                }
+                Welcome to ReconcileBook! Redirecting to your dashboard...
               </p>
             </CardHeader>
             <CardContent className="text-center">
@@ -163,73 +108,47 @@ function SignUpForm() {
               <UserPlus className="h-8 w-8 text-blue-600" />
             </div>
             <CardTitle className="text-3xl font-bold text-gray-900">
-              {isBetaSignup ? 'Join Beta Testing' : 'Create Your Account'}
+              Create Your Account
             </CardTitle>
             <p className="text-gray-600 mt-2">
-              {isBetaSignup 
-                ? 'Welcome to the ReconcileBook Beta Program! Help shape the future of reconciliation.'
-                : 'Welcome to ReconcileBook! Create your account to get started.'
-              }
+              Welcome to ReconcileBook! Create your account to get started.
             </p>
-
-            {isBetaSignup && (
-              <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4 mt-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-purple-900 mb-1">Beta Tester Benefits</h3>
-                    <ul className="text-sm text-purple-700 space-y-1">
-                      <li>• Free access to all features</li>
-                      <li>• Early access to new features</li>
-                      <li>• Direct influence on product development</li>
-                      <li>• Priority support and feedback</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            )}
             
             {/* Important Notice - Only show for paid signups */}
-            {!isBetaSignup && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0">
-                    <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-sm font-medium text-blue-900">
-                      Important: Use Your Payment Email
-                    </h3>
-                    <p className="text-sm text-blue-800 mt-1">
-                      You must use the <strong>exact same email address</strong> you used when paying via Stripe. This links your subscription to your account automatically.
-                    </p>
-                  </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-blue-900">
+                    Important: Use Your Payment Email
+                  </h3>
+                  <p className="text-sm text-blue-800 mt-1">
+                    You must use the <strong>exact same email address</strong> you used when paying via Stripe. This links your subscription to your account automatically.
+                  </p>
                 </div>
               </div>
-            )}
+            </div>
           </CardHeader>
           <CardContent className="space-y-6">
             <form onSubmit={handleSignUp} className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email Address {!isBetaSignup && "(Must match your Stripe payment email)"}
+                  Email Address (Must match your Stripe payment email)
                 </label>
                 <input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={isBetaSignup ? "Enter your email address" : "Enter the EXACT email you used for payment"}
+                  placeholder="Enter the EXACT email you used for payment"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
-                {!isBetaSignup && (
-                  <p className="text-xs text-blue-600 mt-1">
-                    ⚠️ This must be identical to your Stripe payment email for automatic subscription linking
-                  </p>
-                )}
+                <p className="text-xs text-blue-600 mt-1">
+                  ⚠️ This must be identical to your Stripe payment email for automatic subscription linking
+                </p>
               </div>
               
               <div>
@@ -274,11 +193,8 @@ function SignUpForm() {
                 disabled={loading}
                 size="lg"
               >
-                {loading 
-                  ? (isBetaSignup ? 'Joining Beta Program...' : 'Creating Account...') 
-                  : (isBetaSignup ? 'Join Beta Program' : 'Create Account')
-                }
-                {isBetaSignup ? <Users className="ml-2 h-4 w-4" /> : <ArrowRight className="ml-2 h-4 w-4" />}
+                {loading ? 'Creating Account...' : 'Create Account'}
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </form>
 

@@ -1139,37 +1139,12 @@ export default function Dashboard() {
       
       console.log('✅ Auto-match completed - showing review step')
       
-      // Track feature usage for beta users
-      if (user) {
-        await trackBetaUserActivity('single_file_analysis', { matches_found: validMatches.length })
-      }
-      
       return validMatches
     } catch (error) {
       console.error('❌ Error in single-file matching:', error)
       console.error('❌ Error details:', error)
       console.error('❌ Stack trace:', error instanceof Error ? error.stack : 'No stack trace')
       return []
-    }
-  }
-
-  // Track beta user activity
-  const trackBetaUserActivity = async (activity: string, metadata: any = {}) => {
-    if (!user) return
-    
-    try {
-              const { error } = await supabase
-        .from('beta_user_activity')
-                .insert({
-          user_id: user.id,
-          activity,
-          metadata,
-          timestamp: new Date().toISOString()
-        })
-
-      if (error) console.error('Error tracking beta activity:', error)
-    } catch (error) {
-      console.error('Error tracking beta activity:', error)
     }
   }
 

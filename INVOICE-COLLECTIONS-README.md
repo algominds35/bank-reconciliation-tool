@@ -208,7 +208,7 @@ Ensure dashboard works perfectly on mobile devices.
 ### **Immediate Goals:**
 - [ ] Complete email service integration
 - [ ] Set up automated daily sync
-- [ ] Test with 5-10 beta users
+- [ ] Test with 5-10 pilot accounts
 - [ ] Measure collection rate improvement
 
 ### **3-Month Goals:**

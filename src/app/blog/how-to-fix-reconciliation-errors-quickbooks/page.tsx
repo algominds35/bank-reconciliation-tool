@@ -275,7 +275,7 @@ export default function BlogPost() {
         <div className="bg-gradient-to-r from-[#F45B49] to-[#E63946] rounded-xl p-8 text-white">
           <h2 className="text-3xl font-bold mb-6">Ready to Simplify Your Reconciliation Process?</h2>
           <p className="text-lg mb-6 opacity-90">
-            If you're tired of spending hours fixing reconciliation errors and want to streamline your bookkeeping workflow, consider trying a modern reconciliation tool like ReconcileBook. Our beta program offers bookkeepers and accountants the opportunity to test advanced reconciliation features that can save hours of work each month.
+            If you're tired of spending hours fixing reconciliation errors and want to streamline your bookkeeping workflow, consider trying a modern reconciliation tool like ReconcileBook. You can start a free trial today and put the exact features described in this guide to work on your own client files.
           </p>
           
           <h3 className="text-xl font-semibold mb-4">Key Features Include:</h3>
@@ -288,15 +288,15 @@ export default function BlogPost() {
           </ul>
           
           <p className="text-lg mb-6 opacity-90">
-            Join our free beta program and discover how modern reconciliation tools can transform your workflow. Share your feedback and help us build the solution that bookkeepers actually need.
+            Spin up a free trial and see how modern reconciliation tools can transform your workflow. Bring your toughest files, invite your team, and validate the results before you commit.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
             <a 
-              href="/auth/signup?beta=true"
+              href="/auth/signup"
               className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-[#F45B49] bg-white rounded-xl hover:bg-gray-50 transition-all duration-300"
             >
-              Try ReconcileBook Free Beta
+              Start ReconcileBook Free Trial
             </a>
             <a 
               href="/contact"
